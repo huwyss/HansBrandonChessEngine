@@ -18,6 +18,11 @@ namespace BaracudaChessEngine
                               "pppppppp" +
                               "rnbqkbnr"; // zeile 8 schwarz
 
+        Definitions.ChessColor SideToMove { get; set; }
+        int EnPassantField { get; set; }
+        bool CastlingRightFirstMover { get; set; }
+        bool CastlingRightSecondMover { get; set; }
+
         /// <summary>
         /// Constructor. Board is empty.
         /// </summary>
@@ -28,6 +33,11 @@ namespace BaracudaChessEngine
             {
                 _board[i] = ' ';
             }
+
+            SideToMove = Definitions.ChessColor.White;
+            EnPassantField = 0;
+            CastlingRightFirstMover = true;
+            CastlingRightSecondMover = true;
         }
 
         /// <summary>
@@ -39,6 +49,11 @@ namespace BaracudaChessEngine
             {
                 _board[i] = initPosition[i];
             }
+
+            SideToMove = Definitions.ChessColor.White;
+            EnPassantField = 0;
+            CastlingRightFirstMover = true;
+            CastlingRightSecondMover = true;
         }
 
         /// <summary>
@@ -84,6 +99,8 @@ namespace BaracudaChessEngine
         {
             SetPiece(piece, fileChar - 'a' + 1, rank);
         }
+
+        
 
 
     }

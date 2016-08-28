@@ -65,5 +65,38 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual('r', target.GetPiece('h', 8));
         }
 
+        [TestMethod]
+        public void MoveTest_WhenPawnMovesNormal_ThenNewPositionOk()
+        {
+            var target = new Board();
+            target.SetInitialPosition();
+
+            target.Move('e', 2, 'e', 4);
+            Assert.AreEqual(' ', target.GetPiece('e', 2));
+            Assert.AreEqual('P', target.GetPiece('e', 4));
+        }
+
+        [TestMethod]
+        public void MoveTest_WhenQueenCapturesPiece_ThenNewPositionOk()
+        {
+            var target = new Board();
+            target.SetInitialPosition();
+            target.SetPiece(' ', 'd', 2);
+            
+            target.Move('d', 1, 'd', 7);
+            Assert.AreEqual(' ', target.GetPiece('d', 1));
+            Assert.AreEqual('Q', target.GetPiece('d', 7));
+        }
+
+        [TestMethod]
+        public void GetColorTest()
+        {
+            var target = new Board();
+            target.SetInitialPosition();
+            Assert.AreEqual(Definitions.ChessColor.White, target.GetColor(5, 2));
+            Assert.AreEqual(Definitions.ChessColor.Empty, target.GetColor(5, 3));
+            Assert.AreEqual(Definitions.ChessColor.Black, target.GetColor(5, 7));
+            Assert.AreEqual(Definitions.ChessColor.Empty, target.GetColor(5, 5));
+        }
     }
 }

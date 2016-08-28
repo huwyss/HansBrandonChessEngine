@@ -100,7 +100,43 @@ namespace BaracudaChessEngine
             SetPiece(piece, fileChar - 'a' + 1, rank);
         }
 
-        
+        public void Move(char sourceFileChar, int sourceRank, char targetFileChar, int targetRank)
+        {
+            Move(sourceFileChar - 'a' + 1, sourceRank, targetFileChar - 'a' + 1, targetRank);
+        }
+
+        public void Move(int sourceFile, int sourceRank, int targetFile, int targetRank)
+        {
+            char pieceToMove = GetPiece(sourceFile, sourceRank);
+            if (GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty)
+            {
+                SetPiece(pieceToMove, targetFile, targetRank);
+                SetPiece(' ', sourceFile, sourceRank);
+            }
+            else if (GetColor(targetFile, targetRank) == Definitions.ChessColor.Black)
+            {
+                SetPiece(pieceToMove, targetFile, targetRank);
+                SetPiece(' ', sourceFile, sourceRank);
+                // todo store move and captured piece
+            }
+        }
+
+        public Definitions.ChessColor GetColor(int file, int rank)
+        {
+            char piece = GetPiece(file, rank);
+            if (piece >= 'a' && piece <= 'z')
+            {
+                return Definitions.ChessColor.Black;
+            }
+            else if (piece >= 'A' && piece <= 'Z')
+            {
+                return Definitions.ChessColor.White;
+            }
+            else
+            {
+                return Definitions.ChessColor.Empty;
+            }
+        }
 
 
     }

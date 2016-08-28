@@ -22,6 +22,7 @@ namespace BaracudaChessEngine
             SourceRank = sourceRank;
             TargetFile = targetFile;
             TargetRank = targetRank;
+            CapturedPiece = capturedPiece;
         }
 
         public override bool Equals(System.Object obj)
@@ -44,6 +45,22 @@ namespace BaracudaChessEngine
             equal &= TargetFile == other.TargetFile;
             equal &= TargetRank == other.TargetRank;
             return equal;
+        }
+
+        public override string ToString()
+        {
+            string moveString = "";
+            moveString += Helper.FileToFileChar(SourceFile);
+            moveString += SourceRank.ToString();
+            moveString += Helper.FileToFileChar(TargetFile);
+            moveString += TargetRank;
+            moveString += CapturedPiece;
+            return moveString;
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
         }
     }
 }

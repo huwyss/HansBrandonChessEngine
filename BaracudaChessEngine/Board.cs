@@ -120,6 +120,7 @@ namespace BaracudaChessEngine
             SetPiece(' ', sourceFile, sourceRank);
         }
 
+        // unused ...
         public Definitions.ChessColor GetColor(int file, int rank)
         {
             char piece = GetPiece(file, rank);

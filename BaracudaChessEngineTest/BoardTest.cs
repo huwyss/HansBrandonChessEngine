@@ -86,6 +86,10 @@ namespace BaracudaChessEngineTest
             target.Move('d', 1, 'd', 7);
             Assert.AreEqual(' ', target.GetPiece('d', 1));
             Assert.AreEqual('Q', target.GetPiece('d', 7));
+
+            var moveList = target.Moves;
+            Assert.AreEqual(1, target.Moves.Count);
+            Assert.AreEqual(new Move(4, 1, 4, 7, 'p'), target.Moves[0]);
         }
 
         [TestMethod]

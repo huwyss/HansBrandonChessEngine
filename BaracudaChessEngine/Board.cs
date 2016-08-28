@@ -18,10 +18,12 @@ namespace BaracudaChessEngine
                               "pppppppp" +
                               "rnbqkbnr"; // zeile 8 schwarz
 
-        Definitions.ChessColor SideToMove { get; set; }
-        int EnPassantField { get; set; }
-        bool CastlingRightFirstMover { get; set; }
-        bool CastlingRightSecondMover { get; set; }
+        public Definitions.ChessColor SideToMove { get; set; }
+        public int EnPassantField { get; set; }
+        public bool CastlingRightFirstMover { get; set; }
+        public bool CastlingRightSecondMover { get; set; }
+
+        public List<Move> Moves { get; set; }
 
         /// <summary>
         /// Constructor. Board is empty.
@@ -38,6 +40,7 @@ namespace BaracudaChessEngine
             EnPassantField = 0;
             CastlingRightFirstMover = true;
             CastlingRightSecondMover = true;
+            Moves = new List<Move>();
         }
 
         /// <summary>
@@ -108,17 +111,13 @@ namespace BaracudaChessEngine
         public void Move(int sourceFile, int sourceRank, int targetFile, int targetRank)
         {
             char pieceToMove = GetPiece(sourceFile, sourceRank);
-            if (GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty)
-            {
-                SetPiece(pieceToMove, targetFile, targetRank);
-                SetPiece(' ', sourceFile, sourceRank);
-            }
-            else if (GetColor(targetFile, targetRank) == Definitions.ChessColor.Black)
-            {
-                SetPiece(pieceToMove, targetFile, targetRank);
-                SetPiece(' ', sourceFile, sourceRank);
-                // todo store move and captured piece
-            }
+            char capturedPiece = GetPiece(targetFile, targetRank);
+
+            var currentMove = new Move(sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
+            Moves.Add(currentMove);
+
+            SetPiece(pieceToMove, targetFile, targetRank);
+            SetPiece(' ', sourceFile, sourceRank);
         }
 
         public Definitions.ChessColor GetColor(int file, int rank)

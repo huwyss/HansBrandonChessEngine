@@ -13,6 +13,12 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual("e2e4 ", new Move(5, 2, 5, 4, ' ').ToString());
             Assert.AreEqual("e4d5p", new Move(5, 4, 4, 5, 'p').ToString());
         }
+
+        [TestMethod]
+        public void EqualsTest_WhenComparingTwoEqualMoves_ThenEqualsReturnsTrue()
+        {
+            Assert.AreEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 2, 5, 4, 'p'));
+        }
     }
 
 }

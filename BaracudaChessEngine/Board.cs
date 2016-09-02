@@ -37,7 +37,7 @@ namespace BaracudaChessEngine
             }
 
             SideToMove = Definitions.ChessColor.White;
-            EnPassantField = 0;
+            EnPassantField = -1;
             CastlingRightFirstMover = true;
             CastlingRightSecondMover = true;
             Moves = new List<Move>();
@@ -54,7 +54,7 @@ namespace BaracudaChessEngine
             }
 
             SideToMove = Definitions.ChessColor.White;
-            EnPassantField = 0;
+            EnPassantField = -1;
             CastlingRightFirstMover = true;
             CastlingRightSecondMover = true;
         }

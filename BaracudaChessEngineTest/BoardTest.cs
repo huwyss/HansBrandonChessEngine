@@ -63,6 +63,10 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual('b', target.GetPiece('f', 8));
             Assert.AreEqual('n', target.GetPiece('g', 8));
             Assert.AreEqual('r', target.GetPiece('h', 8));
+
+            Assert.AreEqual(-1, target.EnPassantField);
+            Assert.AreEqual(true, target.CastlingRightFirstMover); // white
+            Assert.AreEqual(true, target.CastlingRightSecondMover); // black
         }
 
         [TestMethod]

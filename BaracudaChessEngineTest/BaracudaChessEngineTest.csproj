@@ -51,6 +51,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BoardTest.cs" />
+    <Compile Include="MoveGeneratorTest.cs" />
     <Compile Include="MoveTest.cs" />
     <Compile Include="HelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

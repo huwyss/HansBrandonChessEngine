@@ -19,5 +19,53 @@ namespace BaracudaChessEngine
             int file = fileChar + 1 - 'a';
             return file;
         }
+
+        public static List<string> GetMoveDirectionSequence(char piece)
+        {
+            List<string> sequence;
+            switch (piece)
+            {
+                case ('n'): // knight
+                    sequence = new List<string>() { "uul", "uur", "rru", "rrd", "ddr", "ddl", "lld", "llu" }; // up up left, up up right, ...
+                    break;
+
+                default:
+                    sequence = new List<string>();
+                    break;
+            }
+
+            return sequence;
+        }
+
+        public static void GetEndPosition(int file, int rank, string sequence, out int targetFile, out int targetRank, out bool valid)
+        {
+            targetFile = file;
+            targetRank = rank;
+
+            for (int i = 0; i < sequence.Length; i++)
+            {
+                char direction = sequence[i];
+                switch (direction)
+                {
+                    case 'u':
+                        targetRank++;
+                        break;
+                    case 'r':
+                        targetFile++;
+                        break;
+                    case 'd':
+                        targetRank--;
+                        break;
+                    case 'l':
+                        targetFile--;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            valid = targetFile >= 1 && targetFile <= 8 &&
+                    targetRank >= 1 && targetRank <= 8;
+        }
     }
 }

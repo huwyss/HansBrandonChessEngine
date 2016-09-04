@@ -30,7 +30,8 @@ namespace BaracudaChessEngine
             bool valid;
             Definitions.ChessColor pieceColor = _board.GetColor(file, rank);
             List<string> directionSequences;
-            switch (piece.ToString().ToLower()[0])
+            char pieceLower = piece.ToString().ToLower()[0];
+            switch (pieceLower)
             {
                 case 'n': // Knight
                     directionSequences = Helper.GetMoveDirectionSequence('n');
@@ -45,7 +46,9 @@ namespace BaracudaChessEngine
                     break;
 
                 case 'r': // Rook
-                    directionSequences = Helper.GetMoveDirectionSequence('r');
+                case 'q': // queen
+                case 'b': // Bishop
+                    directionSequences = Helper.GetMoveDirectionSequence(pieceLower);
                     foreach (string sequence in directionSequences)
                     {
                         int currentFile = file;

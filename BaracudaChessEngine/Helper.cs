@@ -25,11 +25,14 @@ namespace BaracudaChessEngine
             List<string> sequence;
             switch (piece)
             {
-                case ('n'): // knight
+                case 'n': // knight
                     sequence = new List<string>() { "uul", "uur", "rru", "rrd", "ddr", "ddl", "lld", "llu" }; // up up left, up up right, ...
                     break;
-                case ('r'): // rook
+                case 'r': // rook
                     sequence = new List<string>() { "u", "r", "d", "l" }; // up, right, down, left
+                    break;
+                case 'q': // queen
+                    sequence = new List<string>() { "u", "ur", "r", "rd", "d", "dl", "l", "lu" }; // up, up right, right, right down, ...
                     break;
 
                 default:

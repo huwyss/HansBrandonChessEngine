@@ -28,6 +28,7 @@ namespace BaracudaChessEngine
             int targetRank;
             int targetFile;
             bool valid;
+            Definitions.ChessColor pieceColor = _board.GetColor(file, rank);
 
             switch (piece.ToString().ToLower()[0])
             {
@@ -36,7 +37,7 @@ namespace BaracudaChessEngine
                     foreach (string sequence in directionSequences)
                     {
                         Helper.GetEndPosition(file, rank, sequence, out targetFile, out targetRank, out valid);
-                        if (valid)
+                        if (valid && pieceColor != _board.GetColor(targetFile, targetRank)) // capture or empty field
                         {
                             moves.Add(new Move(file, rank, targetFile, targetRank, _board.GetPiece(targetFile, targetRank)));
                         }

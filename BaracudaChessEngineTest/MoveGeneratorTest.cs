@@ -18,8 +18,8 @@ namespace BaracudaChessEngineTest
             var moves = target.GetMoves(Helper.FileCharToFile('b'), 1); // knight
 
             Assert.AreEqual(2, moves.Count);
-            Assert.AreEqual("b1a3 ", moves[0]);
-            Assert.AreEqual("b1c3 ", moves[1]);
+            Assert.AreEqual("b1a3 ", moves[0].ToString());
+            Assert.AreEqual("b1c3 ", moves[1].ToString());
         }
 
     }

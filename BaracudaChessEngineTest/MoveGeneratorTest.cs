@@ -84,6 +84,32 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual("b2a3 ", moves[8].ToString());
         }
 
+        [TestMethod]
+        public void GetMoves_WhenBishop_ThenAllMoves()
+        {
+            MoveGenerator target = new MoveGenerator();
+            Board board = new Board();
+            string position = "        " +
+                              "        " +
+                              "        " +
+                              "        " +
+                              "r   N   " +
+                              "        " +
+                              "  B     " +
+                              "        ";
+            board.SetPosition(position);
+            target.SetBoard(board);
+
+            var moves = target.GetMoves(Helper.FileCharToFile('c'), 2); // bishop
+
+            Assert.AreEqual(5, moves.Count);
+            Assert.AreEqual("c2d3 ", moves[0].ToString());
+            Assert.AreEqual("c2d1 ", moves[1].ToString());
+            Assert.AreEqual("c2b1 ", moves[2].ToString());
+            Assert.AreEqual("c2b3 ", moves[3].ToString());
+            Assert.AreEqual("c2a4r", moves[4].ToString());
+        }
+
     }
 
 }

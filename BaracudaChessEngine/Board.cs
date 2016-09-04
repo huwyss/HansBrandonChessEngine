@@ -9,14 +9,14 @@ namespace BaracudaChessEngine
     public class Board
     {
         char[] _board;
-        string initPosition = "RNBQKBNR" + // zeile 1 weiss
-                              "PPPPPPPP" +
-                              "        " +
-                              "        " +
-                              "        " +
-                              "        " +
+        string initPosition = "rnbqkbnr" + // black a8-h8
                               "pppppppp" +
-                              "rnbqkbnr"; // zeile 8 schwarz
+                              "        " +
+                              "        " +
+                              "        " +
+                              "        " +
+                              "PPPPPPPP" +
+                              "RNBQKBNR"; // white a1-h1
 
         public Definitions.ChessColor SideToMove { get; set; }
         public int EnPassantField { get; set; }
@@ -48,15 +48,28 @@ namespace BaracudaChessEngine
         /// </summary>
         public void  SetInitialPosition()
         {
-            for (int i = 0; i < 64; i++)
-            {
-                _board[i] = initPosition[i];
-            }
+            SetPosition(initPosition);
 
             SideToMove = Definitions.ChessColor.White;
             EnPassantField = -1;
             CastlingRightFirstMover = true;
             CastlingRightSecondMover = true;
+        }
+
+        public void SetPosition(string position)
+        {
+            if (position.Length != 64)
+            {
+                return;
+            }
+
+            for (int rank0 = 0; rank0 < 8; rank0++)
+            {
+                for (int file0 = 0; file0 < 8; file0++)
+                {
+                    _board[8 * rank0 + file0] = position[8 * (7 - rank0) + file0];
+                }
+            }
         }
 
         /// <summary>

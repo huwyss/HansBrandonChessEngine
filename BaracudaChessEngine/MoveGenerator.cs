@@ -21,6 +21,14 @@ namespace BaracudaChessEngine
         //    return moves;
         //}
 
+        /// <summary>
+        /// Returns all moves of that piece.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="rank"></param>
+        /// <returns></returns>
+        /// todo: castling
+        /// todo: pawn moves: move straight, move straight 2x, capture diagonal, capture en passant
         public List<Move> GetMoves(int file, int rank)
         {
             List<Move> moves = new List<Move>();

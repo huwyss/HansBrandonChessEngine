@@ -29,17 +29,50 @@ namespace BaracudaChessEngine
             int targetFile;
             bool valid;
             Definitions.ChessColor pieceColor = _board.GetColor(file, rank);
-
+            List<string> directionSequences;
             switch (piece.ToString().ToLower()[0])
             {
-                case 'n':
-                    var directionSequences = Helper.GetMoveDirectionSequence('n');
+                case 'n': // Knight
+                    directionSequences = Helper.GetMoveDirectionSequence('n');
                     foreach (string sequence in directionSequences)
                     {
                         Helper.GetEndPosition(file, rank, sequence, out targetFile, out targetRank, out valid);
                         if (valid && pieceColor != _board.GetColor(targetFile, targetRank)) // capture or empty field
                         {
                             moves.Add(new Move(file, rank, targetFile, targetRank, _board.GetPiece(targetFile, targetRank)));
+                        }
+                    }
+                    break;
+
+                case 'r': // Rook
+                    directionSequences = Helper.GetMoveDirectionSequence('r');
+                    foreach (string sequence in directionSequences)
+                    {
+                        int currentFile = file;
+                        int currentRank = rank;
+                        for (int i = 1; i < 8; i++) // walk in the direction until off board or captured or next is own piece
+                        {
+                            Helper.GetEndPosition(currentFile, currentRank, sequence, out targetFile, out targetRank, out valid);
+                            if (!valid)
+                            {
+                                break;
+                            }
+                            Definitions.ChessColor targetColor = _board.GetColor(targetFile, targetRank);
+                            if (pieceColor == targetColor)
+                            {
+                                break;
+                            }
+
+                            char targetPiece = _board.GetPiece(targetFile, targetRank);
+                            moves.Add(new Move(file, rank, targetFile, targetRank, targetPiece));
+                            
+                            if (Definitions.ChessColor.Empty != targetColor)
+                            {
+                                break;
+                            }
+
+                            currentFile = targetFile;
+                            currentRank = targetRank;
                         }
                     }
                     break;

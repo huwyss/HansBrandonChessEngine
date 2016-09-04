@@ -28,6 +28,9 @@ namespace BaracudaChessEngine
                 case ('n'): // knight
                     sequence = new List<string>() { "uul", "uur", "rru", "rrd", "ddr", "ddl", "lld", "llu" }; // up up left, up up right, ...
                     break;
+                case ('r'): // rook
+                    sequence = new List<string>() { "u", "r", "d", "l" }; // up, right, down, left
+                    break;
 
                 default:
                     sequence = new List<string>();

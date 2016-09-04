@@ -34,7 +34,8 @@ namespace BaracudaChessEngine
             switch (pieceLower)
             {
                 case 'n': // Knight
-                    directionSequences = Helper.GetMoveDirectionSequence('n');
+                case 'k': // King
+                    directionSequences = Helper.GetMoveDirectionSequence(pieceLower);
                     foreach (string sequence in directionSequences)
                     {
                         Helper.GetEndPosition(file, rank, sequence, out targetFile, out targetRank, out valid);

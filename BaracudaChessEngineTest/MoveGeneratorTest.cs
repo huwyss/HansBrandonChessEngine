@@ -110,6 +110,30 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual("c2a4r", moves[4].ToString());
         }
 
+        [TestMethod]
+        public void GetMoves_WhenKing_ThenAllMoves() // castling not included ! todo!
+        {
+            MoveGenerator target = new MoveGenerator();
+            Board board = new Board();
+            string position = "        " +
+                              "        " +
+                              "        " +
+                              "        " +
+                              "        " +
+                              "        " +
+                              " rB     " +
+                              " KP     ";
+            board.SetPosition(position);
+            target.SetBoard(board);
+
+            var moves = target.GetMoves(Helper.FileCharToFile('b'), 1); // king
+
+            Assert.AreEqual(3, moves.Count);
+            Assert.AreEqual("b1b2r", moves[0].ToString());
+            Assert.AreEqual("b1a1 ", moves[1].ToString());
+            Assert.AreEqual("b1a2 ", moves[2].ToString());
+        }
+
     }
 
 }

@@ -183,6 +183,8 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual("c2d3b", moves[2].ToString());
         }
 
+        // todo: pawn move for black
+
     }
 
 }

@@ -15,6 +15,7 @@ namespace BaracudaChessEngine
             Empty
         }
 
+        public static char EmptyField = '.';
 
     }
 }

@@ -11,10 +11,10 @@ namespace BaracudaChessEngine
         char[] _board;
         string initPosition = "rnbqkbnr" + // black a8-h8
                               "pppppppp" +
-                              "        " +
-                              "        " +
-                              "        " +
-                              "        " +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
                               "PPPPPPPP" +
                               "RNBQKBNR"; // white a1-h1
 
@@ -33,7 +33,7 @@ namespace BaracudaChessEngine
             _board = new char[64];
             for (int i = 0; i < 64; i++)
             {
-                _board[i] = ' ';
+                _board[i] = Definitions.EmptyField;
             }
 
             SideToMove = Definitions.ChessColor.White;
@@ -109,18 +109,24 @@ namespace BaracudaChessEngine
         /// Sets a chess piece to the field.
         /// </summary>
         /// <param name="piece">chess piece: p-pawn, k-king, q-queen, r-rook, n-knight, b-bishop, r-rook, ' '-empty. small=black, capital=white</param>
-        /// <param name="file">'a' to 'h'</param>
+        /// <param name="fileChar">'a' to 'h'</param>
         /// <param name="rank">1 to 8</param>
         public void SetPiece(char piece, char fileChar, int rank)
         {
             SetPiece(piece, Helper.FileCharToFile(fileChar), rank);
         }
 
+        /// <summary>
+        /// Do a move and update the board.
+        /// </summary>
         public void Move(char sourceFileChar, int sourceRank, char targetFileChar, int targetRank)
         {
             Move(Helper.FileCharToFile(sourceFileChar), sourceRank, Helper.FileCharToFile(targetFileChar), targetRank);
         }
 
+        /// <summary>
+        /// Do a move and update the board.
+        /// </summary>
         public void Move(int sourceFile, int sourceRank, int targetFile, int targetRank)
         {
             char pieceToMove = GetPiece(sourceFile, sourceRank);
@@ -130,7 +136,7 @@ namespace BaracudaChessEngine
             Moves.Add(currentMove);
 
             SetPiece(pieceToMove, targetFile, targetRank);
-            SetPiece(' ', sourceFile, sourceRank);
+            SetPiece(Definitions.EmptyField, sourceFile, sourceRank);
         }
 
         public Definitions.ChessColor GetColor(int file, int rank)
@@ -149,7 +155,6 @@ namespace BaracudaChessEngine
                 return Definitions.ChessColor.Empty;
             }
         }
-
 
     }
 }

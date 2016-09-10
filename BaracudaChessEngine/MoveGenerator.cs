@@ -106,7 +106,7 @@ namespace BaracudaChessEngine
                         {
                             if (valid && _board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty) // empty field
                             {
-                                moves.Add(new Move(file, rank, targetFile, targetRank, ' '));
+                                moves.Add(new Move(file, rank, targetFile, targetRank, Definitions.EmptyField));
                             }
                         }
                         else if (currentSequence == "ul" || currentSequence == "ur" ||

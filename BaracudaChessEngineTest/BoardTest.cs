@@ -30,7 +30,7 @@ namespace BaracudaChessEngineTest
         {
             var target = new Board();
             char piece = target.GetPiece('d', 8);
-            Assert.AreEqual(' ', piece);
+            Assert.AreEqual(Definitions.EmptyField, piece);
         }
 
         [TestMethod]
@@ -49,10 +49,10 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual('R', target.GetPiece('h', 1));
 
             Assert.AreEqual('P', target.GetPiece('b', 2)); // white pawn
-            Assert.AreEqual(' ', target.GetPiece('c', 3)); // empty
-            Assert.AreEqual(' ', target.GetPiece('d', 4)); // empty
-            Assert.AreEqual(' ', target.GetPiece('e', 5)); // empty
-            Assert.AreEqual(' ', target.GetPiece('f', 6)); // empty
+            Assert.AreEqual(Definitions.EmptyField, target.GetPiece('c', 3)); // empty
+            Assert.AreEqual(Definitions.EmptyField, target.GetPiece('d', 4)); // empty
+            Assert.AreEqual(Definitions.EmptyField, target.GetPiece('e', 5)); // empty
+            Assert.AreEqual(Definitions.EmptyField, target.GetPiece('f', 6)); // empty
             Assert.AreEqual('p', target.GetPiece('g', 7)); // black pawn
 
             Assert.AreEqual('r', target.GetPiece('a', 8));
@@ -76,7 +76,7 @@ namespace BaracudaChessEngineTest
             target.SetInitialPosition();
 
             target.Move('e', 2, 'e', 4);
-            Assert.AreEqual(' ', target.GetPiece('e', 2));
+            Assert.AreEqual(Definitions.EmptyField, target.GetPiece('e', 2));
             Assert.AreEqual('P', target.GetPiece('e', 4));
         }
 
@@ -85,10 +85,10 @@ namespace BaracudaChessEngineTest
         {
             var target = new Board();
             target.SetInitialPosition();
-            target.SetPiece(' ', 'd', 2);
+            target.SetPiece(Definitions.EmptyField, 'd', 2);
             
             target.Move('d', 1, 'd', 7);
-            Assert.AreEqual(' ', target.GetPiece('d', 1));
+            Assert.AreEqual(Definitions.EmptyField, target.GetPiece('d', 1));
             Assert.AreEqual('Q', target.GetPiece('d', 7));
 
             var moveList = target.Moves;

@@ -209,5 +209,4 @@ namespace BaracudaChessEngineTest
         }
 
     }
-
 }

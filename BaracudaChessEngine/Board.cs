@@ -91,7 +91,7 @@ namespace BaracudaChessEngine
         /// <returns></returns>
         public char GetPiece(char fileChar, int rank)
         {
-            return GetPiece(fileChar - 'a' + 1, rank);
+            return GetPiece(Helper.FileCharToFile(fileChar), rank);
         }
 
         /// <summary>
@@ -113,12 +113,12 @@ namespace BaracudaChessEngine
         /// <param name="rank">1 to 8</param>
         public void SetPiece(char piece, char fileChar, int rank)
         {
-            SetPiece(piece, fileChar - 'a' + 1, rank);
+            SetPiece(piece, Helper.FileCharToFile(fileChar), rank);
         }
 
         public void Move(char sourceFileChar, int sourceRank, char targetFileChar, int targetRank)
         {
-            Move(sourceFileChar - 'a' + 1, sourceRank, targetFileChar - 'a' + 1, targetRank);
+            Move(Helper.FileCharToFile(sourceFileChar), sourceRank, Helper.FileCharToFile(targetFileChar), targetRank);
         }
 
         public void Move(int sourceFile, int sourceRank, int targetFile, int targetRank)
@@ -133,7 +133,6 @@ namespace BaracudaChessEngine
             SetPiece(' ', sourceFile, sourceRank);
         }
 
-        // unused ...
         public Definitions.ChessColor GetColor(int file, int rank)
         {
             char piece = GetPiece(file, rank);

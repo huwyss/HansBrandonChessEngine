@@ -183,7 +183,33 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual("c2d3b", moves[2].ToString());
         }
 
-        // todo: pawn move for black
+        [TestMethod]
+        public void GetMoves_WhenBlackPawn_ThenAllMoves()
+        {
+            MoveGenerator target = new MoveGenerator();
+            Board board = new Board();
+            string position = "        " +
+                              "  p     " +
+                              " R B    " +
+                              "        " +
+                              "        " +
+                              "        " +
+                              "        " +
+                              "        ";
+            board.SetPosition(position);
+            target.SetBoard(board);
+
+            var moves = target.GetMoves(Helper.FileCharToFile('c'), 7); // black pawn
+
+            Assert.AreEqual(4, moves.Count);
+            Assert.AreEqual("c7c6 ", moves[0].ToString());
+            Assert.AreEqual("c7c5 ", moves[1].ToString());
+            Assert.AreEqual("c7b6R", moves[2].ToString());
+            Assert.AreEqual("c7d6B", moves[3].ToString());
+        }
+
+        // todo: en passant
+        // todo: pawn promotion
 
     }
 

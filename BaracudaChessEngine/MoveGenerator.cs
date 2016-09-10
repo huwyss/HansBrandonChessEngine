@@ -93,15 +93,23 @@ namespace BaracudaChessEngine
                     directionSequences = Helper.GetMoveDirectionSequence(pieceLower);
                     foreach (string sequence in directionSequences)
                     {
-                        Helper.GetEndPosition(file, rank, sequence, out targetFile, out targetRank, out valid);
-                        if (sequence == "u" || sequence == "uu") // walk straight
+                        string currentSequence = sequence;
+                        if (pieceColor == Definitions.ChessColor.Black)
+                        {
+                            currentSequence = sequence.Replace('u', 'd');
+                        }
+
+                        Helper.GetEndPosition(file, rank, currentSequence, out targetFile, out targetRank, out valid);
+                        if (currentSequence == "u" || currentSequence == "uu" ||
+                            currentSequence == "d" || currentSequence == "dd") // walk straight
                         {
                             if (valid && _board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty) // empty field
                             {
                                 moves.Add(new Move(file, rank, targetFile, targetRank, ' '));
                             }
                         }
-                        else if (sequence == "ul" || sequence == "ur") // capture
+                        else if (currentSequence == "ul" || currentSequence == "ur" ||
+                                 currentSequence == "dl" || currentSequence == "dr") // capture
                         {
                             if (valid && pieceColor != _board.GetColor(targetFile, targetRank) && _board.GetColor(targetFile, targetRank) != Definitions.ChessColor.Empty) // other color
                             {

@@ -28,7 +28,8 @@ namespace BaracudaChessEngine
         /// <param name="rank"></param>
         /// <returns></returns>
         /// todo: castling
-        /// todo: pawn moves: move straight, move straight 2x, capture diagonal, capture en passant
+        /// todo: capture en passant
+        /// todo: pawn promotion
         public List<Move> GetMoves(int file, int rank)
         {
             List<Move> moves = new List<Move>();
@@ -77,7 +78,7 @@ namespace BaracudaChessEngine
 
                             char targetPiece = _board.GetPiece(targetFile, targetRank);
                             moves.Add(new Move(file, rank, targetFile, targetRank, targetPiece));
-                            
+
                             if (Definitions.ChessColor.Empty != targetColor)
                             {
                                 break;
@@ -118,7 +119,6 @@ namespace BaracudaChessEngine
                         }
                     }
                     break;
-
             }
 
             return moves;

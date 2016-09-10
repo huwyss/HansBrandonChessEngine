@@ -208,9 +208,6 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual("c7d6B", moves[3].ToString());
         }
 
-        // todo: en passant
-        // todo: pawn promotion
-
     }
 
 }

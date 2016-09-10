@@ -134,6 +134,55 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual("b1a2 ", moves[2].ToString());
         }
 
+        [TestMethod]
+        public void GetMoves_WhenPawn_ThenAllMoves() // en passant not included
+        {
+            MoveGenerator target = new MoveGenerator();
+            Board board = new Board();
+            string position = "        " +
+                              "        " +
+                              "        " +
+                              "        " +
+                              "        " +
+                              " r b    " +
+                              "  P     " +
+                              "        ";
+            board.SetPosition(position);
+            target.SetBoard(board);
+
+            var moves = target.GetMoves(Helper.FileCharToFile('c'), 2); // pawn
+
+            Assert.AreEqual(4, moves.Count);
+            Assert.AreEqual("c2c3 ", moves[0].ToString());
+            Assert.AreEqual("c2c4 ", moves[1].ToString());
+            Assert.AreEqual("c2b3r", moves[2].ToString());
+            Assert.AreEqual("c2d3b", moves[3].ToString());
+        }
+
+        [TestMethod]
+        public void GetMoves_WhenPawnBlocked_ThenAllMoves() // en passant not included
+        {
+            MoveGenerator target = new MoveGenerator();
+            Board board = new Board();
+            string position = "        " +
+                              "        " +
+                              "        " +
+                              "        " +
+                              "  n     " +
+                              " r b    " +
+                              "  P     " +
+                              "        ";
+            board.SetPosition(position);
+            target.SetBoard(board);
+
+            var moves = target.GetMoves(Helper.FileCharToFile('c'), 2); // pawn
+
+            Assert.AreEqual(3, moves.Count);
+            Assert.AreEqual("c2c3 ", moves[0].ToString());
+            Assert.AreEqual("c2b3r", moves[1].ToString());
+            Assert.AreEqual("c2d3b", moves[2].ToString());
+        }
+
     }
 
 }

@@ -38,6 +38,9 @@ namespace BaracudaChessEngine
                 case 'b': // bishop
                     sequence = new List<string>() { "ur", "rd", "dl", "lu" }; // up right, right down, down left, left up
                     break;
+                case 'p': // pawn
+                    sequence = new List<string>() { "u", "uu", "ul", "ur" }; // up, up up, up left, up right
+                    break;
 
                 default:
                     sequence = new List<string>();

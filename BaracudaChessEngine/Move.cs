@@ -25,6 +25,18 @@ namespace BaracudaChessEngine
             CapturedPiece = capturedPiece;
         }
 
+        public Move(string moveString)
+        {
+            if (moveString.Length == 5)
+            {
+                SourceFile = Helper.FileCharToFile(moveString[0]);
+                SourceRank = int.Parse(moveString[1].ToString());
+                TargetFile = Helper.FileCharToFile(moveString[2]);
+                TargetRank = int.Parse(moveString[3].ToString());
+                CapturedPiece = moveString[4];
+            }
+        }
+
         public override bool Equals(System.Object obj)
         {
             // If parameter is null return false.
@@ -44,6 +56,7 @@ namespace BaracudaChessEngine
             equal &= SourceRank == other.SourceRank;
             equal &= TargetFile == other.TargetFile;
             equal &= TargetRank == other.TargetRank;
+            equal &= CapturedPiece == other.CapturedPiece;
             return equal;
         }
 

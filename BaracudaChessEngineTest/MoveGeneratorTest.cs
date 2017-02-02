@@ -41,17 +41,17 @@ namespace BaracudaChessEngineTest
             var moves = target.GetMoves(Helper.FileCharToFile('e'), 4); // Rook
 
             Assert.AreEqual(11, moves.Count);
-            Assert.AreEqual("e4e5.", moves[0].ToString());
-            Assert.AreEqual("e4e6p", moves[1].ToString());
-            Assert.AreEqual("e4f4.", moves[2].ToString());
-            Assert.AreEqual("e4g4.", moves[3].ToString());
-            Assert.AreEqual("e4e3.", moves[4].ToString());
-            Assert.AreEqual("e4e2.", moves[5].ToString());
-            Assert.AreEqual("e4e1.", moves[6].ToString());
-            Assert.AreEqual("e4d4.", moves[7].ToString());
-            Assert.AreEqual("e4c4.", moves[8].ToString());
-            Assert.AreEqual("e4b4.", moves[9].ToString());
-            Assert.AreEqual("e4a4.", moves[10].ToString());
+            Assert.AreEqual(true, moves.Contains(new Move("e4e5.")), "e4e5. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("e4e6p")), "e4e6p missing");
+            Assert.AreEqual(true, moves.Contains(new Move("e4f4.")), "e4f4. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("e4g4.")), "e4g4. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("e4e3.")), "e4e3. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("e4e2.")), "e4e2. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("e4e1.")), "e4e1. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("e4d4.")), "e4d4. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("e4c4.")), "e4c4. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("e4b4.")), "e4b4. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("e4a4.")), "e4a4. missing");
         }
 
         [TestMethod]
@@ -73,15 +73,15 @@ namespace BaracudaChessEngineTest
             var moves = target.GetMoves(Helper.FileCharToFile('b'), 2); // queen
 
             Assert.AreEqual(9, moves.Count);
-            Assert.AreEqual("b2b3.", moves[0].ToString());
-            Assert.AreEqual("b2b4r", moves[1].ToString());
-            Assert.AreEqual("b2c3.", moves[2].ToString());
-            Assert.AreEqual("b2c2.", moves[3].ToString());
-            Assert.AreEqual("b2c1.", moves[4].ToString());
-            Assert.AreEqual("b2b1.", moves[5].ToString());
-            Assert.AreEqual("b2a1.", moves[6].ToString());
-            Assert.AreEqual("b2a2.", moves[7].ToString());
-            Assert.AreEqual("b2a3.", moves[8].ToString());
+            Assert.AreEqual(true, moves.Contains(new Move("b2b3.")), "b2b3. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("b2b4r")), "b2b4r missing");
+            Assert.AreEqual(true, moves.Contains(new Move("b2c3.")), "b2c3. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("b2c2.")), "b2c2. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("b2c1.")), "b2c1. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("b2b1.")), "b2b1. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("b2a1.")), "b2a1. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("b2a2.")), "b2a2. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("b2a3.")), "b2a3. missing");
         }
 
         [TestMethod]
@@ -103,11 +103,11 @@ namespace BaracudaChessEngineTest
             var moves = target.GetMoves(Helper.FileCharToFile('c'), 2); // bishop
 
             Assert.AreEqual(5, moves.Count);
-            Assert.AreEqual("c2d3.", moves[0].ToString());
-            Assert.AreEqual("c2d1.", moves[1].ToString());
-            Assert.AreEqual("c2b1.", moves[2].ToString());
-            Assert.AreEqual("c2b3.", moves[3].ToString());
-            Assert.AreEqual("c2a4r", moves[4].ToString());
+            Assert.AreEqual(true, moves.Contains(new Move("c2d3.")), "c2d3. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("c2d1.")), "c2d1. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("c2b1.")), "c2b1. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("c2b3.")), "c2b3. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("c2a4r")), "c2a4r missing");
         }
 
         [TestMethod]
@@ -129,9 +129,9 @@ namespace BaracudaChessEngineTest
             var moves = target.GetMoves(Helper.FileCharToFile('b'), 1); // king
 
             Assert.AreEqual(3, moves.Count);
-            Assert.AreEqual("b1b2r", moves[0].ToString());
-            Assert.AreEqual("b1a1.", moves[1].ToString());
-            Assert.AreEqual("b1a2.", moves[2].ToString());
+            Assert.AreEqual(true, moves.Contains(new Move("b1b2r")), "b1b2r missing");
+            Assert.AreEqual(true, moves.Contains(new Move("b1a1.")), "b1a1. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("b1a2.")), "b1a2. missing");
         }
 
         [TestMethod]
@@ -153,10 +153,10 @@ namespace BaracudaChessEngineTest
             var moves = target.GetMoves(Helper.FileCharToFile('c'), 2); // pawn
 
             Assert.AreEqual(4, moves.Count);
-            Assert.AreEqual("c2c3.", moves[0].ToString());
-            Assert.AreEqual("c2c4.", moves[1].ToString());
-            Assert.AreEqual("c2b3r", moves[2].ToString());
-            Assert.AreEqual("c2d3b", moves[3].ToString());
+            Assert.AreEqual(true, moves.Contains(new Move("c2c3.")), "c2c3. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("c2c4.")), "c2c4. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("c2b3r")), "c2b3r missing");
+            Assert.AreEqual(true, moves.Contains(new Move("c2d3b")), "c2d3b missing");
         }
 
         [TestMethod]
@@ -178,9 +178,9 @@ namespace BaracudaChessEngineTest
             var moves = target.GetMoves(Helper.FileCharToFile('c'), 2); // pawn
 
             Assert.AreEqual(3, moves.Count);
-            Assert.AreEqual("c2c3.", moves[0].ToString());
-            Assert.AreEqual("c2b3r", moves[1].ToString());
-            Assert.AreEqual("c2d3b", moves[2].ToString());
+            Assert.AreEqual(true, moves.Contains(new Move("c2c3.")), "c2c3. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("c2b3r")), "c2b3r missing");
+            Assert.AreEqual(true, moves.Contains(new Move("c2d3b")), "c2d3b missing");
         }
 
         [TestMethod]
@@ -202,11 +202,10 @@ namespace BaracudaChessEngineTest
             var moves = target.GetMoves(Helper.FileCharToFile('c'), 7); // black pawn
 
             Assert.AreEqual(4, moves.Count);
-            Assert.AreEqual("c7c6.", moves[0].ToString());
-            Assert.AreEqual("c7c5.", moves[1].ToString());
-            Assert.AreEqual("c7b6R", moves[2].ToString());
-            Assert.AreEqual("c7d6B", moves[3].ToString());
+            Assert.AreEqual(true, moves.Contains(new Move("c7c6.")), "c7c6. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("c7c5.")), "c7c5. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("c7b6R")), "c7b6R missing");
+            Assert.AreEqual(true, moves.Contains(new Move("c7d6B")), "c7d6B missing");
         }
-
     }
 }

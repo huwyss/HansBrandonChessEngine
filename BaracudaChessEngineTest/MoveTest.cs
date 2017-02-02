@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BaracudaChessEngine;
 
@@ -18,6 +19,22 @@ namespace BaracudaChessEngineTest
         public void EqualsTest_WhenComparingTwoEqualMoves_ThenEqualsReturnsTrue()
         {
             Assert.AreEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 2, 5, 4, 'p'));
+        }
+
+        [TestMethod]
+        public void EqualsTest_WhenComparingTwoDifferentMoves_ThenReturnsFalse()
+        {
+            Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(0, 2, 5, 4, 'p'));
+            Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 0, 5, 4, 'p'));
+            Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 2, 0, 4, 'p'));
+            Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 2, 5, 0, 'p'));
+            Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 2, 5, 4, 'x'));
+        }
+
+        [TestMethod]
+        public void ConstructorTest_WhenStringParameter_ThenCorrectObject()
+        {
+            Assert.AreEqual(new Move(5, 2, 5, 4, 'p'), new Move("e2e4p"));
         }
     }
 

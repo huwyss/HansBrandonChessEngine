@@ -15,7 +15,7 @@ namespace BaracudaChessEngineTest
             initBoard.SetInitialPosition();
             target.SetBoard(initBoard);
 
-            var moves = target.GetMoves(Helper.FileCharToFile('b'), 1); // knight
+            var moves = target.GetMoves(Helper.FileCharToFile('b'), 1); // get moves of knight
 
             Assert.AreEqual(2, moves.Count);
             Assert.AreEqual("b1a3.", moves[0].ToString());
@@ -38,7 +38,7 @@ namespace BaracudaChessEngineTest
             board.SetPosition(position);
             target.SetBoard(board);
 
-            var moves = target.GetMoves(Helper.FileCharToFile('e'), 4); // Rook
+            var moves = target.GetMoves(Helper.FileCharToFile('e'), 4); // get moves of Rook
 
             Assert.AreEqual(11, moves.Count);
             Assert.AreEqual(true, moves.Contains(new Move("e4e5.")), "e4e5. missing");
@@ -70,7 +70,7 @@ namespace BaracudaChessEngineTest
             board.SetPosition(position);
             target.SetBoard(board);
 
-            var moves = target.GetMoves(Helper.FileCharToFile('b'), 2); // queen
+            var moves = target.GetMoves(Helper.FileCharToFile('b'), 2); // get moves of queen
 
             Assert.AreEqual(9, moves.Count);
             Assert.AreEqual(true, moves.Contains(new Move("b2b3.")), "b2b3. missing");
@@ -100,7 +100,7 @@ namespace BaracudaChessEngineTest
             board.SetPosition(position);
             target.SetBoard(board);
 
-            var moves = target.GetMoves(Helper.FileCharToFile('c'), 2); // bishop
+            var moves = target.GetMoves(Helper.FileCharToFile('c'), 2); // get moves of bishop
 
             Assert.AreEqual(5, moves.Count);
             Assert.AreEqual(true, moves.Contains(new Move("c2d3.")), "c2d3. missing");

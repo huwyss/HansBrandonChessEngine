@@ -17,5 +17,12 @@ namespace BaracudaChessEngine
 
         public static char EmptyField = '.';
 
+        public const char KING = 'k';
+        public const char PAWN = 'p';
+        public const char KNIGHT = 'n';
+        public const char ROOK = 'r';
+        public const char QUEEN = 'q';
+        public const char BISHOP = 'b';
+
     }
 }

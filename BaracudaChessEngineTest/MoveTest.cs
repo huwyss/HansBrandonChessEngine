@@ -24,10 +24,10 @@ namespace BaracudaChessEngineTest
         [TestMethod]
         public void EqualsTest_WhenComparingTwoDifferentMoves_ThenReturnsFalse()
         {
-            Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(0, 2, 5, 4, 'p'));
-            Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 0, 5, 4, 'p'));
-            Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 2, 0, 4, 'p'));
-            Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 2, 5, 0, 'p'));
+            Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(1, 2, 5, 4, 'p'));
+            Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 1, 5, 4, 'p'));
+            Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 2, 1, 4, 'p'));
+            Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 2, 5, 1, 'p'));
             Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 2, 5, 4, 'x'));
         }
 

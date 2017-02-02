@@ -42,8 +42,8 @@ namespace BaracudaChessEngine
             char pieceLower = piece.ToString().ToLower()[0];
             switch (pieceLower)
             {
-                case 'n': // Knight
-                case 'k': // King
+                case Definitions.KNIGHT:
+                case Definitions.KING:
                     directionSequences = Helper.GetMoveDirectionSequence(pieceLower);
                     foreach (string sequence in directionSequences)
                     {
@@ -55,9 +55,9 @@ namespace BaracudaChessEngine
                     }
                     break;
 
-                case 'r': // Rook
-                case 'q': // queen
-                case 'b': // Bishop
+                case Definitions.ROOK: 
+                case Definitions.QUEEN:
+                case Definitions.BISHOP:
                     directionSequences = Helper.GetMoveDirectionSequence(pieceLower);
                     foreach (string sequence in directionSequences)
                     {
@@ -90,7 +90,7 @@ namespace BaracudaChessEngine
                     }
                     break;
 
-                case 'p': // Pawn
+                case Definitions.PAWN:
                     directionSequences = Helper.GetMoveDirectionSequence(pieceLower);
                     foreach (string sequence in directionSequences)
                     {

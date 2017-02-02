@@ -81,6 +81,18 @@ namespace BaracudaChessEngineTest
         }
 
         [TestMethod]
+        public void MoveTest_WhenPawnMovesNormalAndMoveIsOfTypeMove_ThenNewPositionOk()
+        {
+            var target = new Board();
+            target.SetInitialPosition();
+            Move move = new Move("e2e4.");
+            target.Move(move);
+
+            Assert.AreEqual(Definitions.EmptyField, target.GetPiece('e', 2));
+            Assert.AreEqual('P', target.GetPiece('e', 4));
+        }
+
+        [TestMethod]
         public void MoveTest_WhenQueenCapturesPiece_ThenNewPositionOk()
         {
             var target = new Board();

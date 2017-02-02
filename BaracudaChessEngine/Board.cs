@@ -125,6 +125,15 @@ namespace BaracudaChessEngine
         }
 
         /// <summary>
+        /// Move parameter of Type Move.
+        /// </summary>
+        public void Move(Move nextMove)
+        {
+            // note: todo? captured piece is ignored.
+            Move(nextMove.SourceFile, nextMove.SourceRank, nextMove.TargetFile, nextMove.TargetRank);
+        }
+        
+        /// <summary>
         /// Do a move and update the board.
         /// </summary>
         public void Move(int sourceFile, int sourceRank, int targetFile, int targetRank)
@@ -138,6 +147,8 @@ namespace BaracudaChessEngine
             SetPiece(pieceToMove, targetFile, targetRank);
             SetPiece(Definitions.EmptyField, sourceFile, sourceRank);
         }
+
+        
 
         public Definitions.ChessColor GetColor(int file, int rank)
         {

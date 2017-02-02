@@ -24,5 +24,9 @@ namespace BaracudaChessEngine
         public const char QUEEN = 'q';
         public const char BISHOP = 'b';
 
+        public const char UP = 'u';
+        public const char DOWN = 'd';
+        public const char LEFT = 'l';
+        public const char RIGHT = 'r';
     }
 }

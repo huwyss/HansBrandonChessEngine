@@ -25,20 +25,20 @@ namespace BaracudaChessEngine
             List<string> sequence;
             switch (piece)
             {
-                case 'n': // knight
+                case Definitions.KNIGHT:
                     sequence = new List<string>() { "uul", "uur", "rru", "rrd", "ddr", "ddl", "lld", "llu" }; // up up left, up up right, ...
                     break;
-                case 'r': // rook
+                case Definitions.ROOK:
                     sequence = new List<string>() { "u", "r", "d", "l" }; // up, right, down, left
                     break;
-                case 'q': // queen
-                case 'k': // king
+                case Definitions.QUEEN:
+                case Definitions.KING:
                     sequence = new List<string>() { "u", "ur", "r", "rd", "d", "dl", "l", "lu" }; // up, up right, right, right down, ...
                     break;
-                case 'b': // bishop
+                case Definitions.BISHOP:
                     sequence = new List<string>() { "ur", "rd", "dl", "lu" }; // up right, right down, down left, left up
                     break;
-                case 'p': // pawn
+                case Definitions.PAWN:
                     sequence = new List<string>() { "u", "uu", "ul", "ur" }; // up, up up, up left, up right
                     break;
 
@@ -60,16 +60,16 @@ namespace BaracudaChessEngine
                 char direction = sequence[i];
                 switch (direction)
                 {
-                    case 'u':
+                    case Definitions.UP:
                         targetRank++;
                         break;
-                    case 'r':
+                    case Definitions.RIGHT:
                         targetFile++;
                         break;
-                    case 'd':
+                    case Definitions.DOWN:
                         targetRank--;
                         break;
-                    case 'l':
+                    case Definitions.LEFT:
                         targetFile--;
                         break;
                     default:

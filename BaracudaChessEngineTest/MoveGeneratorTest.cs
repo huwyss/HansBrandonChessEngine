@@ -270,5 +270,51 @@ namespace BaracudaChessEngineTest
             valid = target.IsMoveValid(new Move("c7c6.")); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
         }
+
+        [TestMethod]
+        public void GetEndPosition_WhenKnightSequence_ThenCorrectEndRankFile()
+        {
+            string knightSequence = "uul";
+            int targetRank;
+            int targetFile;
+            bool valid;
+
+            var target = new MoveGenerator();
+            target.GetEndPosition(Helper.FileCharToFile('b'), 1, knightSequence, out targetFile, out targetRank, out valid);
+
+            Assert.AreEqual(Helper.FileCharToFile('a'), targetFile);
+            Assert.AreEqual(3, targetRank);
+            Assert.AreEqual(true, valid);
+        }
+
+        [TestMethod]
+        public void GetEndPosition_WhenOtherKnightSequence_ThenCorrectEndRankFile()
+        {
+            string knightSequence = "ddr";
+            int targetRank;
+            int targetFile;
+            bool valid;
+
+            var target = new MoveGenerator();
+            target.GetEndPosition(Helper.FileCharToFile('c'), 3, knightSequence, out targetFile, out targetRank, out valid);
+
+            Assert.AreEqual(Helper.FileCharToFile('d'), targetFile);
+            Assert.AreEqual(1, targetRank);
+            Assert.AreEqual(true, valid);
+        }
+
+        [TestMethod]
+        public void GetEndPosition_WhenKnightSequenceInvalid_ThenMoveInvalid()
+        {
+            string knightSequence = "ddl";
+            int targetRank;
+            int targetFile;
+            bool valid;
+
+            var target = new MoveGenerator();
+            target.GetEndPosition(Helper.FileCharToFile('a'), 1, knightSequence, out targetFile, out targetRank, out valid);
+
+            Assert.AreEqual(false, valid);
+        }
     }
 }

@@ -135,7 +135,7 @@ namespace BaracudaChessEngineTest
         }
 
         [TestMethod]
-        public void GetMoves_WhenPawn_ThenAllMoves() // en passant not included
+        public void GetMoves_WhenWhitePawn_ThenAllMoves() // en passant not included
         {
             MoveGenerator target = new MoveGenerator();
             Board board = new Board();
@@ -160,7 +160,7 @@ namespace BaracudaChessEngineTest
         }
 
         [TestMethod]
-        public void GetMoves_WhenPawnBlocked_ThenAllMoves() // en passant not included
+        public void GetMoves_WhenWhitePawnBlocked_ThenAllMoves() // en passant not included
         {
             MoveGenerator target = new MoveGenerator();
             Board board = new Board();
@@ -206,6 +206,69 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual(true, moves.Contains(new Move("c7c5.")), "c7c5. missing");
             Assert.AreEqual(true, moves.Contains(new Move("c7b6R")), "c7b6R missing");
             Assert.AreEqual(true, moves.Contains(new Move("c7d6B")), "c7d6B missing");
+        }
+
+        [TestMethod]
+        public void IsMoveValidTest_WhenValidMoveWhite_ThenTrue()
+        {
+            MoveGenerator target = new MoveGenerator();
+            Board board = new Board();
+            string position = "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "..n....." +
+                              ".r.b...." +
+                              "..P....." +
+                              "........";
+            board.SetPosition(position);
+            target.SetBoard(board);
+
+            bool valid = target.IsMoveValid(new Move("c2c3.")); // pawn
+            Assert.AreEqual(true, valid, "Move should be valid.");
+        }
+
+        [TestMethod]
+        public void IsMoveValidTest_WhenInvalidMoveWhite_ThenFalse()
+        {
+            MoveGenerator target = new MoveGenerator();
+            Board board = new Board();
+            string position = "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "..n....." +
+                              ".r.b...." +
+                              "..P....." +
+                              "........";
+            board.SetPosition(position);
+            target.SetBoard(board);
+
+            bool valid = target.IsMoveValid(new Move("c2c4.")); // pawn
+            Assert.AreEqual(false, valid, "Move should be invalid.");
+        }
+
+        [TestMethod]
+        public void IsMoveValidTest_WhenValidMoveBlack_ThenTrue()
+        {
+            MoveGenerator target = new MoveGenerator();
+            Board board = new Board();
+            string position = "........" +
+                              "..p....." +
+                              ".R.B...." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........";
+            board.SetPosition(position);
+            target.SetBoard(board);
+
+            bool valid = target.IsMoveValid(new Move("c7c5.")); // pawn
+            Assert.AreEqual(true, valid, "Move should be valid.");
+
+            valid = target.IsMoveValid(new Move("c7c6.")); // pawn
+            Assert.AreEqual(true, valid, "Move should be valid.");
         }
     }
 }

@@ -123,5 +123,11 @@ namespace BaracudaChessEngine
 
             return moves;
         }
+
+        public bool IsMoveValid(Move move)
+        {
+            bool valid = GetMoves(move.SourceFile, move.SourceRank).Contains(move);
+            return valid;
+        }
     }
 }

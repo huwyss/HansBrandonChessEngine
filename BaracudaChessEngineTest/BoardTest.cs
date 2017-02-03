@@ -133,7 +133,7 @@ namespace BaracudaChessEngineTest
                                     "........\n" +
                                     "........\n" +
                                     "PPPPPPPP\n" +
-                                    "RNBQKBNR";
+                                    "RNBQKBNR\n";
 
             Assert.AreEqual(expectedString, boardString);
         }

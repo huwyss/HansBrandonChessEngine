@@ -179,10 +179,7 @@ namespace BaracudaChessEngine
                     boardString += piece;
                 }
 
-                if (rank != 1)
-                {
-                    boardString += lineBreak;
-                }
+                boardString += lineBreak;
             }
 
             return boardString;

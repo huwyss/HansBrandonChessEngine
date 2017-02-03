@@ -17,11 +17,23 @@ namespace BaracudaChessEngine
             _board = board;
         }
 
-        //public List<Move> GetAllMoves()
-        //{
-        //    List<Move> moves = new List<Move>();
-        //    return moves;
-        //}
+        public List<Move> GetAllMoves(Definitions.ChessColor color)
+        {
+            List<Move> allMoves = new List<Move>();
+
+            for (int file = 1; file <= 8; file++)
+            {
+                for (int rank = 1; rank <= 8; rank++)
+                {
+                    if (_board.GetColor(file, rank) == color)
+                    {
+                        allMoves.AddRange(GetMoves(file, rank));
+                    }
+                }
+            }
+
+            return allMoves;
+        }
 
         /// <summary>
         /// Returns all moves of that piece.

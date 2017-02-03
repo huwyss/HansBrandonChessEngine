@@ -7,6 +7,10 @@ namespace BaracudaChessEngineTest
     [TestClass]
     public class MoveGeneratorTest
     {
+        // ----------------------------------------------------------------------------------------------------
+        // Get Moves Tests
+        // ----------------------------------------------------------------------------------------------------
+
         [TestMethod]
         public void GetMoves_WhenKnightB1_ThenTwoValidMoves()
         {
@@ -208,6 +212,41 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual(true, moves.Contains(new Move("c7d6B")), "c7d6B missing");
         }
 
+        // ----------------------------------------------------------------------------------------------------
+        // Get All Moves Tests
+        // ----------------------------------------------------------------------------------------------------
+
+        [TestMethod]
+        public void GetAllMoves_WhenTwoPieces_ThenShowMovesOfBothPieces()
+        {
+            MoveGenerator target = new MoveGenerator();
+            Board board = new Board();
+            string position = "........" +
+                              "........" +
+                              "....p..." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "....P..." +
+                              "....K...";
+            board.SetPosition(position);
+            target.SetBoard(board);
+
+            var moves = target.GetAllMoves(Definitions.ChessColor.White);
+
+            Assert.AreEqual(6, moves.Count);
+            Assert.AreEqual(true, moves.Contains(new Move("e2e3.")), "e2e3. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("e2e4.")), "e2e4. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("e1d1.")), "e1d1. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("e1d2.")), "e1d2. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("e1f2.")), "e1f2. missing");
+            Assert.AreEqual(true, moves.Contains(new Move("e1f1.")), "e1f1. missing");
+        }
+
+        // ----------------------------------------------------------------------------------------------------
+        // Is Move Valid Tests
+        // ----------------------------------------------------------------------------------------------------
+
         [TestMethod]
         public void IsMoveValidTest_WhenValidMoveWhite_ThenTrue()
         {
@@ -270,6 +309,10 @@ namespace BaracudaChessEngineTest
             valid = target.IsMoveValid(new Move("c7c6.")); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
         }
+
+        // ----------------------------------------------------------------------------------------------------
+        // Get End Position Tests
+        // ----------------------------------------------------------------------------------------------------
 
         [TestMethod]
         public void GetEndPosition_WhenKnightSequence_ThenCorrectEndRankFile()

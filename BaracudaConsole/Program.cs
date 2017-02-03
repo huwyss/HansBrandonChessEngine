@@ -11,24 +11,49 @@ namespace BaracudaConsole
     {
         static void Main(string[] args)
         {
+            bool isMoveValid;
+            Move moveConsole;
+
             Board board = new Board();
             board.SetInitialPosition();
             MoveGenerator generator = new MoveGenerator();
             generator.SetBoard(board);
 
-            Console.Write(board.GetString("\n"));
-
-            Console.Write("\n\nEnter your move (ie. e2e4): ");
-            string moveConsoleString = Console.ReadLine();
-            moveConsoleString = moveConsoleString.Trim();
-
-            Move moveConsole = generator.GetValidMove(moveConsoleString);
-            if (generator.IsMoveValid(moveConsole))
+            Console.WriteLine(board.GetString("\n"));
+            while (true)
             {
-                board.Move(moveConsole);
-            }
+                do
+                {
+                    Console.WriteLine("Enter your move (ie. e2e4): ");
+                    string moveConsoleString = Console.ReadLine();
+                    moveConsoleString = moveConsoleString.Trim();
+                    moveConsole = generator.GetValidMove(moveConsoleString);
+                    isMoveValid = generator.IsMoveValid(moveConsole);
+                    if (!isMoveValid)
+                    {
+                        Console.WriteLine("Invalid move.");
+                    }
+                } while (!isMoveValid);
 
-            Console.Write(board.GetString("\n"));
+                board.Move(moveConsole);
+                Console.Write(board.GetString("\n"));
+
+                var possibleMovesComputer = generator.GetAllMoves(Definitions.ChessColor.Black);
+                int numberPossibleMoves = possibleMovesComputer.Count;
+                var rand = new Random(123);
+                if (numberPossibleMoves > 0)
+                {
+                    int randomMoveIndex = rand.Next(0, numberPossibleMoves - 1);
+                    Move moveBlack = possibleMovesComputer[randomMoveIndex];
+                    Console.WriteLine("Computer move: " + moveBlack.ToString());
+                    board.Move(moveBlack);
+                    Console.Write(board.GetString("\n"));
+                }
+                else
+                {
+                    Console.WriteLine("Computer gives up. You win!");
+                }
+            }
 
             Console.ReadLine();
 

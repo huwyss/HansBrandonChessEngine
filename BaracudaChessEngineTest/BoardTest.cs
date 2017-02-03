@@ -118,5 +118,24 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual(Definitions.ChessColor.Black, target.GetColor(5, 7));
             Assert.AreEqual(Definitions.ChessColor.Empty, target.GetColor(5, 5));
         }
+
+        [TestMethod]
+        public void GetStringTest_WhenLineBreak_ThenAddLineBreak()
+        {
+            var target = new Board();
+            target.SetInitialPosition();
+
+            string boardString = target.GetString("\n");
+            string expectedString = "rnbqkbnr\n" +
+                                    "pppppppp\n" +
+                                    "........\n" +
+                                    "........\n" +
+                                    "........\n" +
+                                    "........\n" +
+                                    "PPPPPPPP\n" +
+                                    "RNBQKBNR";
+
+            Assert.AreEqual(expectedString, boardString);
+        }
     }
 }

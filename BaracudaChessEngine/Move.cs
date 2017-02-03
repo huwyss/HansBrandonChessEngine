@@ -27,12 +27,16 @@ namespace BaracudaChessEngine
 
         public Move(string moveString)
         {
-            if (moveString.Length == 5)
+            if (moveString.Length >= 4)
             {
                 SourceFile = Helper.FileCharToFile(moveString[0]);
                 SourceRank = int.Parse(moveString[1].ToString());
                 TargetFile = Helper.FileCharToFile(moveString[2]);
                 TargetRank = int.Parse(moveString[3].ToString());
+            }
+
+            if (moveString.Length >= 5)
+            {
                 CapturedPiece = moveString[4];
             }
         }

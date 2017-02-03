@@ -9,6 +9,7 @@ namespace BaracudaChessEngine
     public class Board
     {
         char[] _board;
+
         string initPosition = "rnbqkbnr" + // black a8-h8
                               "pppppppp" +
                               "........" +
@@ -36,24 +37,25 @@ namespace BaracudaChessEngine
                 _board[i] = Definitions.EmptyField;
             }
 
-            SideToMove = Definitions.ChessColor.White;
-            EnPassantField = -1;
-            CastlingRightFirstMover = true;
-            CastlingRightSecondMover = true;
-            Moves = new List<Move>();
+            InitVariables();
         }
 
         /// <summary>
         /// Sets the initial chess position.
         /// </summary>
-        public void  SetInitialPosition()
+        public void SetInitialPosition()
         {
             SetPosition(initPosition);
+            InitVariables();
+        }
 
+        private void InitVariables()
+        {
             SideToMove = Definitions.ChessColor.White;
             EnPassantField = -1;
             CastlingRightFirstMover = true;
             CastlingRightSecondMover = true;
+            Moves = new List<Move>();
         }
 
         public void SetPosition(string position)
@@ -67,7 +69,7 @@ namespace BaracudaChessEngine
             {
                 for (int file0 = 0; file0 < 8; file0++)
                 {
-                    _board[8 * rank0 + file0] = position[8 * (7 - rank0) + file0];
+                    _board[8*rank0 + file0] = position[8*(7 - rank0) + file0];
                 }
             }
         }
@@ -80,7 +82,7 @@ namespace BaracudaChessEngine
         /// <returns></returns>
         public char GetPiece(int file, int rank)
         {
-            return _board[8 * (rank - 1) + file - 1];
+            return _board[8*(rank - 1) + file - 1];
         }
 
         /// <summary>
@@ -102,7 +104,7 @@ namespace BaracudaChessEngine
         /// <param name="rank">1 to 8</param>
         public void SetPiece(char piece, int file, int rank)
         {
-            _board[8 * (rank - 1) + file - 1] = piece;
+            _board[8*(rank - 1) + file - 1] = piece;
         }
 
         /// <summary>
@@ -132,7 +134,7 @@ namespace BaracudaChessEngine
             // note: todo? captured piece is ignored.
             Move(nextMove.SourceFile, nextMove.SourceRank, nextMove.TargetFile, nextMove.TargetRank);
         }
-        
+
         /// <summary>
         /// Do a move and update the board.
         /// </summary>
@@ -147,8 +149,6 @@ namespace BaracudaChessEngine
             SetPiece(pieceToMove, targetFile, targetRank);
             SetPiece(Definitions.EmptyField, sourceFile, sourceRank);
         }
-
-        
 
         public Definitions.ChessColor GetColor(int file, int rank)
         {
@@ -165,6 +165,27 @@ namespace BaracudaChessEngine
             {
                 return Definitions.ChessColor.Empty;
             }
+        }
+
+        public string GetString(string lineBreak)
+        {
+            string boardString = "";
+
+            for (int rank = 8; rank >= 1 ; rank--)
+            {
+                for (int file = 1; file <= 8; file++)
+                {
+                    char piece = GetPiece(file, rank);
+                    boardString += piece;
+                }
+
+                if (rank != 1)
+                {
+                    boardString += lineBreak;
+                }
+            }
+
+            return boardString;
         }
 
     }

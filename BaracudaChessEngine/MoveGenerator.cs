@@ -126,6 +126,13 @@ namespace BaracudaChessEngine
             return moves;
         }
 
+        public Move GetValidMove(string moveStringUser) // input is like "e2e4"
+        {
+            Move move = new Move(moveStringUser);
+            move.CapturedPiece = _board.GetPiece(move.TargetFile, move.TargetRank);
+            return move;
+        }
+
         public bool IsMoveValid(Move move)
         {
             bool valid = GetMoves(move.SourceFile, move.SourceRank).Contains(move);

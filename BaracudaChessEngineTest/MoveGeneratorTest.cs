@@ -316,5 +316,17 @@ namespace BaracudaChessEngineTest
 
             Assert.AreEqual(false, valid);
         }
+
+        [TestMethod]
+        public void GetValidMoveTest_Whene2e4_ThenAddDot()
+        {
+            MoveGenerator target = new MoveGenerator();
+            Board board = new Board();
+            board.SetInitialPosition();
+            target.SetBoard(board);
+
+            Move actualMove = target.GetValidMove("e2e4");
+            Assert.AreEqual("e2e4.", actualMove.ToString());
+        }
     }
 }

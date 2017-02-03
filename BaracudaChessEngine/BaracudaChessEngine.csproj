@@ -42,7 +42,10 @@
   <ItemGroup>
     <Compile Include="Board.cs" />
     <Compile Include="Definitions.cs" />
+    <Compile Include="EvaluatorSimple.cs" />
+    <Compile Include="Score.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="IEvaluator.cs" />
     <Compile Include="Move.cs" />
     <Compile Include="MoveGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

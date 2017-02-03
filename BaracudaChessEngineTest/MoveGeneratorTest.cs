@@ -243,6 +243,28 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual(true, moves.Contains(new Move("e1f1.")), "e1f1. missing");
         }
 
+        [TestMethod]
+        public void GetAllMoves_WhenCheck_ThenKingMustEscapeCheck()
+        {
+            MoveGenerator target = new MoveGenerator();
+            Board board = new Board();
+            string position = "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              ".......k" +
+                              ".......r" +
+                              ".......K"; // king is in check and must escape. only move is Kh1g1
+            board.SetPosition(position);
+            target.SetBoard(board);
+
+            var moves = target.GetAllMoves(Definitions.ChessColor.White);
+
+            Assert.AreEqual(1, moves.Count, "Only one move is possible. The other moves for white are in check.");
+            Assert.AreEqual(true, moves.Contains(new Move("h1g1.")), "h1g1. missing");
+        }
+
         // ----------------------------------------------------------------------------------------------------
         // Is Move Valid Tests
         // ----------------------------------------------------------------------------------------------------
@@ -309,7 +331,7 @@ namespace BaracudaChessEngineTest
             valid = target.IsMoveValid(new Move("c7c6.")); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
         }
-
+        
         // ----------------------------------------------------------------------------------------------------
         // Get End Position Tests
         // ----------------------------------------------------------------------------------------------------

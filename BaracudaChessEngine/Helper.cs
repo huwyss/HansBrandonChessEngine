@@ -19,5 +19,21 @@ namespace BaracudaChessEngine
             int file = fileChar + 1 - 'a';
             return file;
         }
+
+        public static Definitions.ChessColor GetOpositeColor(Definitions.ChessColor color)
+        {
+            Definitions.ChessColor oposite = Definitions.ChessColor.Empty;
+
+            if (color == Definitions.ChessColor.White)
+            {
+                oposite = Definitions.ChessColor.Black;
+            }
+            else if (color == Definitions.ChessColor.Black)
+            {
+                oposite = Definitions.ChessColor.White;
+            }
+
+            return oposite;
+        }
     }
 }

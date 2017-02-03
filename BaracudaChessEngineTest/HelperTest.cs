@@ -24,5 +24,13 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual(7, Helper.FileCharToFile('g'));
             Assert.AreEqual(8, Helper.FileCharToFile('h'));
         }
+
+        [TestMethod]
+        public void GetOpositColorTest_WhenWhite_ThenOpositeIsBlack_AndViceVersa()
+        {
+            Assert.AreEqual(Definitions.ChessColor.Black, Helper.GetOpositeColor(Definitions.ChessColor.White));
+            Assert.AreEqual(Definitions.ChessColor.White, Helper.GetOpositeColor(Definitions.ChessColor.Black));
+            Assert.AreEqual(Definitions.ChessColor.Empty, Helper.GetOpositeColor(Definitions.ChessColor.Empty));
+        }
     }
 }

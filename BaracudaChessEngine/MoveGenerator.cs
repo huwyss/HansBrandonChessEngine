@@ -19,6 +19,12 @@ namespace BaracudaChessEngine
 
         public List<Move> GetAllMoves(Definitions.ChessColor color)
         {
+            var allMovesUnchecked = GetAllMovesUnchecked(color);
+            return allMovesUnchecked;
+        }
+
+        private List<Move> GetAllMovesUnchecked(Definitions.ChessColor color)
+        {
             List<Move> allMoves = new List<Move>();
 
             for (int file = 1; file <= 8; file++)

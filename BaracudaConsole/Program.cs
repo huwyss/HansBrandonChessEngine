@@ -19,7 +19,7 @@ namespace BaracudaConsole
             MoveGenerator generator = new MoveGenerator();
             generator.SetBoard(board);
 
-            Console.WriteLine(board.GetString("\n"));
+            PrintBoard(board);
             while (true)
             {
                 do
@@ -36,7 +36,7 @@ namespace BaracudaConsole
                 } while (!isMoveValid);
 
                 board.Move(moveConsole);
-                Console.Write(board.GetString("\n"));
+                PrintBoard(board);
 
                 var possibleMovesComputer = generator.GetAllMoves(Definitions.ChessColor.Black);
                 int numberPossibleMoves = possibleMovesComputer.Count;
@@ -47,7 +47,7 @@ namespace BaracudaConsole
                     Move moveBlack = possibleMovesComputer[randomMoveIndex];
                     Console.WriteLine("Computer move: " + moveBlack.ToString());
                     board.Move(moveBlack);
-                    Console.Write(board.GetString("\n"));
+                    PrintBoard(board);
                 }
                 else
                 {
@@ -56,8 +56,11 @@ namespace BaracudaConsole
             }
 
             Console.ReadLine();
+        }
 
-
+        private static void PrintBoard(Board board)
+        {
+            Console.Write(board.GetString("\n").Replace("p", "o"));
         }
     }
 }

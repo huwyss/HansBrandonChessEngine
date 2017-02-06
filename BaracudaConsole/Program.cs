@@ -14,11 +14,11 @@ namespace BaracudaConsole
             bool whiteHuman = false;
             bool blackHuman = false;
 
-            int runStatisticGames = 100; // run statistic = 1 --> only one game
+            int runStatisticGames = 200; // run statistic = 1 --> only one game
             bool quiet = true; // quiet = true --> no display of moves or board
 
-            BaracudaEngine _whiteEngine = new BaracudaEngine();
-            BaracudaEngine _blackEngine = new BaracudaEngine();
+            BaracudaEngine whiteEngineRandom = new BaracudaEngine(EngineType.Random);
+            BaracudaEngine blackEngineRandom = new BaracudaEngine(EngineType.Random);
 
             int whiteWins = 0;
 
@@ -26,20 +26,20 @@ namespace BaracudaConsole
 
             if (!quiet)
             {
-                PrintBoard(_whiteEngine);
+                PrintBoard(whiteEngineRandom);
             }
 
             for (int i = 0; i < runStatisticGames; i++)
             {
                 int moveCount = 1;
-                _whiteEngine.SetInitialPosition();
-                _blackEngine.SetInitialPosition();
+                whiteEngineRandom.SetInitialPosition();
+                blackEngineRandom.SetInitialPosition();
 
                 while (true)
                 {
                     if (!quiet)
                     {
-                        if (_whiteEngine.SideToMove() == Definitions.ChessColor.White)
+                        if (whiteEngineRandom.SideToMove() == Definitions.ChessColor.White)
                         {
                             Console.WriteLine(moveCount++);
                         }
@@ -47,12 +47,12 @@ namespace BaracudaConsole
 
                     if (!quiet)
                     {
-                        Console.WriteLine("Next Move: " + _whiteEngine.SideToMove());
+                        Console.WriteLine("Next Move: " + whiteEngineRandom.SideToMove());
                     }
 
                     // Human move
-                    if ((whiteHuman && _whiteEngine.SideToMove() == Definitions.ChessColor.White) ||
-                        (blackHuman && _whiteEngine.SideToMove() == Definitions.ChessColor.Black))
+                    if ((whiteHuman && whiteEngineRandom.SideToMove() == Definitions.ChessColor.White) ||
+                        (blackHuman && whiteEngineRandom.SideToMove() == Definitions.ChessColor.Black))
                     {
                         // human move from console
                         do
@@ -60,14 +60,14 @@ namespace BaracudaConsole
                             Console.WriteLine("Enter your move (ie. e2e4): ");
                             string moveConsoleString = Console.ReadLine();
                             moveConsoleString = moveConsoleString.Trim();
-                            isMoveValid = _whiteEngine.Move(moveConsoleString);
+                            isMoveValid = whiteEngineRandom.Move(moveConsoleString);
                             if (!isMoveValid)
                             {
                                 Console.WriteLine("Invalid move.");
                             }
                             else
                             {
-                                _blackEngine.Move(moveConsoleString);
+                                blackEngineRandom.Move(moveConsoleString);
                             }
                         } while (!isMoveValid);
                     }
@@ -75,16 +75,16 @@ namespace BaracudaConsole
                     {
                         Move moveComputer = null;
                         // computer move for white
-                        if (!whiteHuman && _whiteEngine.SideToMove() == Definitions.ChessColor.White)
+                        if (!whiteHuman && whiteEngineRandom.SideToMove() == Definitions.ChessColor.White)
                         {
-                            moveComputer = _whiteEngine.DoBestMove(Definitions.ChessColor.White);
-                            _blackEngine.Move(moveComputer);
+                            moveComputer = whiteEngineRandom.DoBestMove(Definitions.ChessColor.White);
+                            blackEngineRandom.Move(moveComputer);
                         }
                         // computer move for black
-                        else if (!blackHuman && _whiteEngine.SideToMove() == Definitions.ChessColor.Black)
+                        else if (!blackHuman && whiteEngineRandom.SideToMove() == Definitions.ChessColor.Black)
                         {
-                            moveComputer = _blackEngine.DoBestMove(Definitions.ChessColor.Black);
-                            _whiteEngine.Move(moveComputer);
+                            moveComputer = blackEngineRandom.DoBestMove(Definitions.ChessColor.Black);
+                            whiteEngineRandom.Move(moveComputer);
                         }
 
                         if (!quiet && moveComputer.ToString() != "")
@@ -95,9 +95,9 @@ namespace BaracudaConsole
 
 
                     if (!quiet)
-                        PrintBoard(_whiteEngine);
+                        PrintBoard(whiteEngineRandom);
 
-                    if (_whiteEngine.IsWinner(Definitions.ChessColor.White))
+                    if (whiteEngineRandom.IsWinner(Definitions.ChessColor.White))
                     {
                         if (!quiet)
                             Console.WriteLine("\nWhite wins!");
@@ -105,7 +105,7 @@ namespace BaracudaConsole
                         whiteWins++;
                         break;
                     }
-                    if (_whiteEngine.IsWinner(Definitions.ChessColor.Black))
+                    if (whiteEngineRandom.IsWinner(Definitions.ChessColor.Black))
                     {
                         if (!quiet)
                             Console.WriteLine("\nBlack wins!");
@@ -121,9 +121,9 @@ namespace BaracudaConsole
             Console.ReadLine();
         }
 
-        private static void PrintBoard(BaracudaEngine engine)
+        private static void PrintBoard(BaracudaEngine engineRandom)
         {
-            Console.Write(engine.GetPrintString().Replace("p", "o"));
+            Console.Write(engineRandom.GetPrintString().Replace("p", "o"));
         }
     }
 }

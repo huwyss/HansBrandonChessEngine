@@ -6,23 +6,37 @@ using System.Threading.Tasks;
 
 namespace BaracudaChessEngine
 {
+    public enum EngineType
+    {
+        Random,
+        DepthOne
+    }
+
     public class BaracudaEngine
     {
         private Board _board;
         private MoveGenerator _moveGenerator;
         private ISearchService _search;
         private IEvaluator _evaluator;
-
-        private Random _rand;
-
-        public BaracudaEngine()
+        
+        public BaracudaEngine(EngineType engineType)
         {
-            _moveGenerator = new MoveGenerator();
-            _board = new Board(_moveGenerator);
-            _moveGenerator.SetBoard(_board);
-            _evaluator = new EvaluatorSimple();
-            _search = new SearchMinimax(_evaluator);
-            _rand = new Random();
+            if (engineType == EngineType.Random)
+            {
+                _moveGenerator = new MoveGenerator();
+                _board = new Board(_moveGenerator);
+                _moveGenerator.SetBoard(_board);
+                _evaluator = new EvaluatorSimple();
+                _search = new SearchRandom();
+            }
+            else if (engineType == EngineType.DepthOne)
+            {
+                //_moveGenerator = new MoveGenerator();
+                //_board = new Board(_moveGenerator);
+                //_moveGenerator.SetBoard(_board);
+                //_evaluator = new EvaluatorSimple();
+                //_search = new SearchServiceDepthOne(_evaluator);
+            }
         }
 
         public void SetInitialPosition()
@@ -60,14 +74,17 @@ namespace BaracudaChessEngine
 
         public Move DoBestMove(Definitions.ChessColor color)
         {
-            Move nextMove = null;
+            Move nextMove = _search.Search(_board, color);
+            _board.Move(nextMove);
+            return nextMove;
+
             var possibleMovesComputer = GetAllMoves(color);
             int numberPossibleMoves = possibleMovesComputer.Count;
             
             if (numberPossibleMoves > 0)
             {
-                int randomMoveIndex = _rand.Next(0, numberPossibleMoves - 1);
-                nextMove = possibleMovesComputer[randomMoveIndex];
+                //int randomMoveIndex = _rand.Next(0, numberPossibleMoves - 1);
+                //nextMove = possibleMovesComputer[randomMoveIndex];
                 _board.Move(nextMove);
             }
 

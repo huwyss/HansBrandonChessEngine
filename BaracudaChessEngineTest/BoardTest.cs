@@ -137,5 +137,43 @@ namespace BaracudaChessEngineTest
 
             Assert.AreEqual(expectedString, boardString);
         }
+
+        // ----------------------------------------------------------------------------------------------------
+        // Is Winner Test
+        // ----------------------------------------------------------------------------------------------------
+
+        [TestMethod]
+        public void IsWinnerTest_WhenBlackKingMissing_ThenWhiteWins()
+        {
+            Board board = new Board();
+            string position = "........" +
+                              "........" +
+                              "....p..." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "....P..." +
+                              "....K...";
+            board.SetPosition(position);
+
+            bool whiteWins = board.IsWinner(Definitions.ChessColor.White);
+            bool blackWins = board.IsWinner(Definitions.ChessColor.Black);
+
+            Assert.AreEqual(true, whiteWins);
+            Assert.AreEqual(false, blackWins);
+        }
+
+        [TestMethod]
+        public void IsWinnerTest_WhenInitialPos_ThenNooneWins()
+        {
+            Board board = new Board();
+            board.SetInitialPosition();
+
+            bool whiteWins = board.IsWinner(Definitions.ChessColor.White);
+            bool blackWins = board.IsWinner(Definitions.ChessColor.Black);
+
+            Assert.AreEqual(false, whiteWins);
+            Assert.AreEqual(false, blackWins);
+        }
     }
 }

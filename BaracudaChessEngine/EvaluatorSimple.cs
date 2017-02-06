@@ -13,7 +13,7 @@ namespace BaracudaChessEngine
         public float ValueBishop = 3f;
         public float ValueRook = 5f;
         public float ValueQueen = 9f;
-        public float ValueKing = 100f;
+        public float ValueKing = 1000f;
 
         public Score Evaluate(Board board)
         {

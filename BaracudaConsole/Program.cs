@@ -37,6 +37,11 @@ namespace BaracudaConsole
 
                 board.Move(moveConsole);
                 PrintBoard(board);
+                if (board.IsWinner(Definitions.ChessColor.White))
+                {
+                    Console.WriteLine("\nYou win!");
+                    break;
+                }
 
                 var possibleMovesComputer = generator.GetAllMoves(Definitions.ChessColor.Black);
                 int numberPossibleMoves = possibleMovesComputer.Count;
@@ -48,6 +53,11 @@ namespace BaracudaConsole
                     Console.WriteLine("Computer move: " + moveBlack.ToString());
                     board.Move(moveBlack);
                     PrintBoard(board);
+                    if (board.IsWinner(Definitions.ChessColor.Black))
+                    {
+                        Console.WriteLine("\nComputer wins!");
+                        break;
+                    }
                 }
                 else
                 {

@@ -17,6 +17,8 @@ namespace BaracudaChessEngine
             _board = board;
         }
 
+        // Note: Baracuda is a king capture engine. 
+        // This means even if we are in check then also moves that do not remove the check are returned here.
         public List<Move> GetAllMoves(Definitions.ChessColor color)
         {
             var allMovesUnchecked = GetAllMovesUnchecked(color);

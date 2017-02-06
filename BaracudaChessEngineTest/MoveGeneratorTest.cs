@@ -244,6 +244,7 @@ namespace BaracudaChessEngineTest
         }
 
         [TestMethod]
+        [Ignore]
         public void GetAllMoves_WhenCheck_ThenKingMustEscapeCheck()
         {
             MoveGenerator target = new MoveGenerator();

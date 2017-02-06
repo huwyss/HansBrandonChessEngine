@@ -9,6 +9,8 @@ namespace BaracudaChessEngine
     public class Board
     {
         char[] _board;
+        private int[] _threatenedByWhite;
+        private int[] _threatenedByBlack;
 
         string initPosition = "rnbqkbnr" + // black a8-h8
                               "pppppppp" +
@@ -165,6 +167,41 @@ namespace BaracudaChessEngine
             {
                 return Definitions.ChessColor.Empty;
             }
+        }
+
+        public bool IsWinner(Definitions.ChessColor color)
+        {
+            bool hasWhiteKing = false;
+            bool hasBlackKing = false;
+
+            for (int rank = 1; rank <= 8; rank++)
+            {
+                for (int file = 1; file <= 8; file++)
+                {
+                    char piece = GetPiece(file, rank);
+                    if (piece == Definitions.KING.ToString().ToUpper()[0])
+                    {
+                        hasWhiteKing = true;
+                    }
+                    if (piece == Definitions.KING.ToString().ToLower()[0])
+                    {
+                        hasBlackKing = true;
+                    }
+                }
+
+            }
+
+            if (color == Definitions.ChessColor.White)
+            {
+                return !hasBlackKing;
+            }
+
+            if (color == Definitions.ChessColor.Black)
+            {
+                return !hasWhiteKing;
+            }
+
+            return false;
         }
 
         public string GetString(string lineBreak)

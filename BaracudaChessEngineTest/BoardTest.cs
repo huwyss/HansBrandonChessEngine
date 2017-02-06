@@ -199,5 +199,18 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual(false, whiteWins);
             Assert.AreEqual(false, blackWins);
         }
+
+        [TestMethod]
+        public void CloneTest_Normalcase()
+        {
+            MoveGenerator generator = new MoveGenerator();
+            Board board = new Board(generator);
+            board.SetInitialPosition();
+
+            Board cloned = board.Clone();
+
+            Assert.AreNotEqual(cloned, board, "must not return the same object!");
+            Assert.AreEqual(board.GetString(), cloned.GetString());
+        }
     }
 }

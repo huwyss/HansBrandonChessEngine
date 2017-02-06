@@ -26,16 +26,15 @@ namespace BaracudaChessEngine
                 _moveGenerator = new MoveGenerator();
                 _board = new Board(_moveGenerator);
                 _moveGenerator.SetBoard(_board);
-                _evaluator = new EvaluatorSimple();
                 _search = new SearchRandom();
             }
             else if (engineType == EngineType.DepthOne)
             {
-                //_moveGenerator = new MoveGenerator();
-                //_board = new Board(_moveGenerator);
-                //_moveGenerator.SetBoard(_board);
-                //_evaluator = new EvaluatorSimple();
-                //_search = new SearchServiceDepthOne(_evaluator);
+                _moveGenerator = new MoveGenerator();
+                _board = new Board(_moveGenerator);
+                _moveGenerator.SetBoard(_board);
+                _evaluator = new EvaluatorSimple();
+                _search = new SearchServiceDepthOne(_evaluator);
             }
         }
 

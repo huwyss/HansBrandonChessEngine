@@ -44,6 +44,14 @@ namespace BaracudaChessEngine
             }
         }
 
+        public Board Clone()
+        {
+            Board clonedBoard = new Board(_moveGenerator);
+            string position = GetString();
+            clonedBoard.SetPosition(position);
+            return clonedBoard;
+        }
+
         /// <summary>
         /// Sets the initial chess position.
         /// </summary>

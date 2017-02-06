@@ -204,7 +204,7 @@ namespace BaracudaChessEngine
             return false;
         }
 
-        public string GetString(string lineBreak)
+        public string GetString()
         {
             string boardString = "";
 
@@ -215,12 +215,31 @@ namespace BaracudaChessEngine
                     char piece = GetPiece(file, rank);
                     boardString += piece;
                 }
-
-                boardString += lineBreak;
             }
 
             return boardString;
         }
 
+        public string GetPrintString()
+        {
+            string boardString = "";
+
+            for (int rank = 8; rank >= 1; rank--)
+            {
+                boardString += rank + "   ";
+                for (int file = 1; file <= 8; file++)
+                {
+                    char piece = GetPiece(file, rank);
+                    boardString += piece + " ";
+
+                }
+
+                boardString += "\n";
+            }
+
+            boardString += "\n    a b c d e f g h \n";
+
+            return boardString;
+        }
     }
 }

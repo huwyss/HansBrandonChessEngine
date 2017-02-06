@@ -70,7 +70,7 @@ namespace BaracudaConsole
 
         private static void PrintBoard(Board board)
         {
-            Console.Write(board.GetString("\n").Replace("p", "o"));
+            Console.Write(board.GetPrintString().Replace("p", "o"));
         }
     }
 }

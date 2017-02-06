@@ -120,20 +120,41 @@ namespace BaracudaChessEngineTest
         }
 
         [TestMethod]
-        public void GetStringTest_WhenLineBreak_ThenAddLineBreak()
+        public void GetStringTest_WhenInitPos_ThenCorrect()
         {
             var target = new Board();
             target.SetInitialPosition();
 
-            string boardString = target.GetString("\n");
-            string expectedString = "rnbqkbnr\n" +
-                                    "pppppppp\n" +
-                                    "........\n" +
-                                    "........\n" +
-                                    "........\n" +
-                                    "........\n" +
-                                    "PPPPPPPP\n" +
-                                    "RNBQKBNR\n";
+            string boardString = target.GetString();
+            string expectedString = "rnbqkbnr" +
+                                    "pppppppp" +
+                                    "........" +
+                                    "........" +
+                                    "........" +
+                                    "........" +
+                                    "PPPPPPPP" +
+                                    "RNBQKBNR";
+
+            Assert.AreEqual(expectedString, boardString);
+        }
+
+        [TestMethod]
+        public void GetPringStringTest_WhenInitPos_ThenCorrect()
+        {
+            var target = new Board();
+            target.SetInitialPosition();
+
+            string boardString = target.GetPrintString();
+            string expectedString = "8   r n b q k b n r \n" +
+                                    "7   p p p p p p p p \n" +
+                                    "6   . . . . . . . . \n" +
+                                    "5   . . . . . . . . \n" +
+                                    "4   . . . . . . . . \n" +
+                                    "3   . . . . . . . . \n" +
+                                    "2   P P P P P P P P \n" +
+                                    "1   R N B Q K B N R \n" +
+                                    "\n" +
+                                    "    a b c d e f g h \n";
 
             Assert.AreEqual(expectedString, boardString);
         }

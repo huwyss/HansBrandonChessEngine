@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BaracudaChessEngine
 {
-    interface IEvaluator
+    public interface IEvaluator
     {
         /// <summary>
         /// Returns the score for white and black.

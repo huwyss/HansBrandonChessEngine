@@ -15,10 +15,9 @@ namespace BaracudaChessEngineTest
         public void GetMoves_WhenKnightB1_ThenTwoValidMoves()
         {
             MoveGenerator target = new MoveGenerator();
-            Board initBoard = new Board();
+            Board initBoard = new Board(target);
             initBoard.SetInitialPosition();
-            target.SetBoard(initBoard);
-
+            
             var moves = target.GetMoves(Helper.FileCharToFile('b'), 1); // get moves of knight
 
             Assert.AreEqual(2, moves.Count);
@@ -30,7 +29,7 @@ namespace BaracudaChessEngineTest
         public void GetMoves_WhenRook_ThenAllMoves()
         {
             MoveGenerator target = new MoveGenerator();
-            Board board = new Board();
+            Board board = new Board(target);
             string position = "........" +
                               "........" +
                               "....p..." +
@@ -40,8 +39,7 @@ namespace BaracudaChessEngineTest
                               "........" +
                               "........";
             board.SetPosition(position);
-            target.SetBoard(board);
-
+            
             var moves = target.GetMoves(Helper.FileCharToFile('e'), 4); // get moves of Rook
 
             Assert.AreEqual(11, moves.Count);
@@ -62,7 +60,7 @@ namespace BaracudaChessEngineTest
         public void GetMoves_WhenQueen_ThenAllMoves()
         {
             MoveGenerator target = new MoveGenerator();
-            Board board = new Board();
+            Board board = new Board(target);
             string position = "........" +
                               "........" +
                               "........" +
@@ -72,8 +70,7 @@ namespace BaracudaChessEngineTest
                               ".Q.P...." +
                               "........";
             board.SetPosition(position);
-            target.SetBoard(board);
-
+           
             var moves = target.GetMoves(Helper.FileCharToFile('b'), 2); // get moves of queen
 
             Assert.AreEqual(9, moves.Count);
@@ -92,7 +89,7 @@ namespace BaracudaChessEngineTest
         public void GetMoves_WhenBishop_ThenAllMoves()
         {
             MoveGenerator target = new MoveGenerator();
-            Board board = new Board();
+            Board board = new Board(target);
             string position = "........" +
                               "........" +
                               "........" +
@@ -102,8 +99,7 @@ namespace BaracudaChessEngineTest
                               "..B....." +
                               "........";
             board.SetPosition(position);
-            target.SetBoard(board);
-
+            
             var moves = target.GetMoves(Helper.FileCharToFile('c'), 2); // get moves of bishop
 
             Assert.AreEqual(5, moves.Count);
@@ -118,7 +114,7 @@ namespace BaracudaChessEngineTest
         public void GetMoves_WhenKing_ThenAllMoves() // castling not included ! todo!
         {
             MoveGenerator target = new MoveGenerator();
-            Board board = new Board();
+            Board board = new Board(target);
             string position = "........" +
                               "........" +
                               "........" +
@@ -128,8 +124,7 @@ namespace BaracudaChessEngineTest
                               ".rB....." +
                               ".KP.....";
             board.SetPosition(position);
-            target.SetBoard(board);
-
+            
             var moves = target.GetMoves(Helper.FileCharToFile('b'), 1); // king
 
             Assert.AreEqual(3, moves.Count);
@@ -142,7 +137,7 @@ namespace BaracudaChessEngineTest
         public void GetMoves_WhenWhitePawn_ThenAllMoves() // en passant not included
         {
             MoveGenerator target = new MoveGenerator();
-            Board board = new Board();
+            Board board = new Board(target);
             string position = "........" +
                               "........" +
                               "........" +
@@ -152,8 +147,7 @@ namespace BaracudaChessEngineTest
                               "..P....." +
                               "........";
             board.SetPosition(position);
-            target.SetBoard(board);
-
+            
             var moves = target.GetMoves(Helper.FileCharToFile('c'), 2); // pawn
 
             Assert.AreEqual(4, moves.Count);
@@ -167,7 +161,7 @@ namespace BaracudaChessEngineTest
         public void GetMoves_WhenWhitePawnBlocked_ThenAllMoves() // en passant not included
         {
             MoveGenerator target = new MoveGenerator();
-            Board board = new Board();
+            Board board = new Board(target);
             string position = "........" +
                               "........" +
                               "........" +
@@ -177,7 +171,6 @@ namespace BaracudaChessEngineTest
                               "..P....." +
                               "........";
             board.SetPosition(position);
-            target.SetBoard(board);
 
             var moves = target.GetMoves(Helper.FileCharToFile('c'), 2); // pawn
 
@@ -191,7 +184,7 @@ namespace BaracudaChessEngineTest
         public void GetMoves_WhenBlackPawn_ThenAllMoves()
         {
             MoveGenerator target = new MoveGenerator();
-            Board board = new Board();
+            Board board = new Board(target);
             string position = "........" +
                               "..p....." +
                               ".R.B...." +
@@ -201,8 +194,7 @@ namespace BaracudaChessEngineTest
                               "........" +
                               "........";
             board.SetPosition(position);
-            target.SetBoard(board);
-
+            
             var moves = target.GetMoves(Helper.FileCharToFile('c'), 7); // black pawn
 
             Assert.AreEqual(4, moves.Count);
@@ -220,7 +212,7 @@ namespace BaracudaChessEngineTest
         public void GetAllMoves_WhenTwoPieces_ThenShowMovesOfBothPieces()
         {
             MoveGenerator target = new MoveGenerator();
-            Board board = new Board();
+            Board board = new Board(target);
             string position = "........" +
                               "........" +
                               "....p..." +
@@ -230,8 +222,7 @@ namespace BaracudaChessEngineTest
                               "....P..." +
                               "....K...";
             board.SetPosition(position);
-            target.SetBoard(board);
-
+           
             var moves = target.GetAllMoves(Definitions.ChessColor.White);
 
             Assert.AreEqual(6, moves.Count);
@@ -248,7 +239,7 @@ namespace BaracudaChessEngineTest
         public void GetAllMoves_WhenCheck_ThenKingMustEscapeCheck()
         {
             MoveGenerator target = new MoveGenerator();
-            Board board = new Board();
+            Board board = new Board(target);
             string position = "........" +
                               "........" +
                               "........" +
@@ -258,8 +249,7 @@ namespace BaracudaChessEngineTest
                               ".......r" +
                               ".......K"; // king is in check and must escape. only move is Kh1g1
             board.SetPosition(position);
-            target.SetBoard(board);
-
+            
             var moves = target.GetAllMoves(Definitions.ChessColor.White);
 
             Assert.AreEqual(1, moves.Count, "Only one move is possible. The other moves for white are in check.");
@@ -274,7 +264,7 @@ namespace BaracudaChessEngineTest
         public void IsMoveValidTest_WhenValidMoveWhite_ThenTrue()
         {
             MoveGenerator target = new MoveGenerator();
-            Board board = new Board();
+            Board board = new Board(target);
             string position = "........" +
                               "........" +
                               "........" +
@@ -284,8 +274,7 @@ namespace BaracudaChessEngineTest
                               "..P....." +
                               "........";
             board.SetPosition(position);
-            target.SetBoard(board);
-
+            
             bool valid = target.IsMoveValid(new Move("c2c3.")); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
         }
@@ -294,7 +283,7 @@ namespace BaracudaChessEngineTest
         public void IsMoveValidTest_WhenInvalidMoveWhite_ThenFalse()
         {
             MoveGenerator target = new MoveGenerator();
-            Board board = new Board();
+            Board board = new Board(target);
             string position = "........" +
                               "........" +
                               "........" +
@@ -304,8 +293,7 @@ namespace BaracudaChessEngineTest
                               "..P....." +
                               "........";
             board.SetPosition(position);
-            target.SetBoard(board);
-
+            
             bool valid = target.IsMoveValid(new Move("c2c4.")); // pawn
             Assert.AreEqual(false, valid, "Move should be invalid.");
         }
@@ -314,7 +302,7 @@ namespace BaracudaChessEngineTest
         public void IsMoveValidTest_WhenValidMoveBlack_ThenTrue()
         {
             MoveGenerator target = new MoveGenerator();
-            Board board = new Board();
+            Board board = new Board(target);
             string position = "........" +
                               "..p....." +
                               ".R.B...." +
@@ -324,8 +312,7 @@ namespace BaracudaChessEngineTest
                               "........" +
                               "........";
             board.SetPosition(position);
-            target.SetBoard(board);
-
+            
             bool valid = target.IsMoveValid(new Move("c7c5.")); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
 
@@ -387,10 +374,9 @@ namespace BaracudaChessEngineTest
         public void GetValidMoveTest_Whene2e4_ThenAddDot()
         {
             MoveGenerator target = new MoveGenerator();
-            Board board = new Board();
+            Board board = new Board(target);
             board.SetInitialPosition();
-            target.SetBoard(board);
-
+            
             Move actualMove = target.GetValidMove("e2e4");
             Assert.AreEqual("e2e4.", actualMove.ToString());
         }

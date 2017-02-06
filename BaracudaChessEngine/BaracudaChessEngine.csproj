@@ -40,14 +40,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaracudaEngine.cs" />
     <Compile Include="Board.cs" />
     <Compile Include="Definitions.cs" />
     <Compile Include="EvaluatorSimple.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="IEvaluator.cs" />
+    <Compile Include="ISearchService.cs" />
     <Compile Include="Move.cs" />
     <Compile Include="MoveGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SearchMinimax.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

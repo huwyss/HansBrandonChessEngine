@@ -14,6 +14,7 @@ namespace BaracudaChessEngine
         public bool CastlingRightSecondMover { get; set; }
         public List<Move> Moves { get; set; }
 
+        private MoveGenerator _moveGenerator;
         private char[] _board;
         string initPosition = "rnbqkbnr" + // black a8-h8
                               "pppppppp" +
@@ -24,12 +25,10 @@ namespace BaracudaChessEngine
                               "PPPPPPPP" +
                               "RNBQKBNR"; // white a1-h1
 
-        
-
         /// <summary>
         /// Constructor. Board is empty.
         /// </summary>
-        public Board()
+        public Board(MoveGenerator moveGenerator)
         {
             _board = new char[64];
             for (int i = 0; i < 64; i++)
@@ -38,6 +37,11 @@ namespace BaracudaChessEngine
             }
 
             InitVariables();
+            _moveGenerator = moveGenerator;
+            if (_moveGenerator != null)
+            {
+                _moveGenerator.SetBoard(this);
+            }
         }
 
         /// <summary>
@@ -241,6 +245,21 @@ namespace BaracudaChessEngine
             boardString += "\n    a b c d e f g h \n";
 
             return boardString;
+        }
+
+        public Move GetValidMove(string moveStringUser)
+        {
+            return _moveGenerator.GetValidMove(moveStringUser);
+        }
+
+        public bool IsMoveValid(Move move)
+        {
+            return _moveGenerator.IsMoveValid(move);
+        }
+
+        public List<Move> GetAllMoves(Definitions.ChessColor color)
+        {
+            return _moveGenerator.GetAllMoves(color);
         }
     }
 }

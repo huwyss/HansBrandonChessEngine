@@ -10,7 +10,7 @@ namespace BaracudaChessEngineTest
         [TestMethod]
         public void GetSetPieceTest_WhenSetPieceRookToD8_ThenGetPieceD8ShouldReturnRook()
         {
-            var target = new Board();
+            var target = new Board(null);
             target.SetPiece('R', 4, 8);
             char piece = target.GetPiece('d', 8);
             Assert.AreEqual('R', piece);
@@ -19,7 +19,7 @@ namespace BaracudaChessEngineTest
         [TestMethod]
         public void GetSetPieceTest_WhenSetPieceRookTo48_ThenGetPiece48ShouldReturnRook()
         {
-            var target = new Board();
+            var target = new Board(null);
             target.SetPiece('R', 4, 8);
             char piece = target.GetPiece(4, 8);
             Assert.AreEqual('R', piece);
@@ -28,7 +28,7 @@ namespace BaracudaChessEngineTest
         [TestMethod]
         public void GetPiece_WhenNewBoard_ThenAllPositionsEmpty()
         {
-            var target = new Board();
+            var target = new Board(null);
             char piece = target.GetPiece('d', 8);
             Assert.AreEqual(Definitions.EmptyField, piece);
         }
@@ -36,7 +36,7 @@ namespace BaracudaChessEngineTest
         [TestMethod]
         public void InitPosition_WhenInitializedPosition_ThenPiecesAtInitPosition()
         {
-            var target = new Board();
+            var target = new Board(null);
             target.SetInitialPosition();
 
             Assert.AreEqual('R', target.GetPiece('a', 1));
@@ -72,7 +72,7 @@ namespace BaracudaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenPawnMovesNormal_ThenNewPositionOk()
         {
-            var target = new Board();
+            var target = new Board(null);
             target.SetInitialPosition();
 
             target.Move('e', 2, 'e', 4);
@@ -84,7 +84,7 @@ namespace BaracudaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenPawnMovesNormalAndMoveIsOfTypeMove_ThenNewPositionOk()
         {
-            var target = new Board();
+            var target = new Board(null);
             target.SetInitialPosition();
             Move move = new Move("e2e4.");
             target.Move(move);
@@ -97,7 +97,7 @@ namespace BaracudaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenQueenCapturesPiece_ThenNewPositionOk()
         {
-            var target = new Board();
+            var target = new Board(null);
             target.SetInitialPosition();
             target.SetPiece(Definitions.EmptyField, 'd', 2);
             
@@ -114,7 +114,7 @@ namespace BaracudaChessEngineTest
         [TestMethod]
         public void GetColorTest()
         {
-            var target = new Board();
+            var target = new Board(null);
             target.SetInitialPosition();
             Assert.AreEqual(Definitions.ChessColor.White, target.GetColor(5, 2));
             Assert.AreEqual(Definitions.ChessColor.Empty, target.GetColor(5, 3));
@@ -125,7 +125,7 @@ namespace BaracudaChessEngineTest
         [TestMethod]
         public void GetStringTest_WhenInitPos_ThenCorrect()
         {
-            var target = new Board();
+            var target = new Board(null);
             target.SetInitialPosition();
 
             string boardString = target.GetString();
@@ -142,9 +142,9 @@ namespace BaracudaChessEngineTest
         }
 
         [TestMethod]
-        public void GetPringStringTest_WhenInitPos_ThenCorrect()
+        public void GetPrintStringTest_WhenInitPos_ThenCorrect()
         {
-            var target = new Board();
+            var target = new Board(null);
             target.SetInitialPosition();
 
             string boardString = target.GetPrintString();
@@ -169,7 +169,7 @@ namespace BaracudaChessEngineTest
         [TestMethod]
         public void IsWinnerTest_WhenBlackKingMissing_ThenWhiteWins()
         {
-            Board board = new Board();
+            Board board = new Board(null);
             string position = "........" +
                               "........" +
                               "....p..." +
@@ -190,7 +190,7 @@ namespace BaracudaChessEngineTest
         [TestMethod]
         public void IsWinnerTest_WhenInitialPos_ThenNooneWins()
         {
-            Board board = new Board();
+            Board board = new Board(null);
             board.SetInitialPosition();
 
             bool whiteWins = board.IsWinner(Definitions.ChessColor.White);

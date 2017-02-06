@@ -78,6 +78,7 @@ namespace BaracudaChessEngineTest
             target.Move('e', 2, 'e', 4);
             Assert.AreEqual(Definitions.EmptyField, target.GetPiece('e', 2));
             Assert.AreEqual('P', target.GetPiece('e', 4));
+            Assert.AreEqual(Definitions.ChessColor.Black, target.SideToMove);
         }
 
         [TestMethod]
@@ -90,6 +91,7 @@ namespace BaracudaChessEngineTest
 
             Assert.AreEqual(Definitions.EmptyField, target.GetPiece('e', 2));
             Assert.AreEqual('P', target.GetPiece('e', 4));
+            Assert.AreEqual(Definitions.ChessColor.Black, target.SideToMove);
         }
 
         [TestMethod]
@@ -102,6 +104,7 @@ namespace BaracudaChessEngineTest
             target.Move('d', 1, 'd', 7);
             Assert.AreEqual(Definitions.EmptyField, target.GetPiece('d', 1));
             Assert.AreEqual('Q', target.GetPiece('d', 7));
+            Assert.AreEqual(Definitions.ChessColor.Black, target.SideToMove);
 
             var moveList = target.Moves;
             Assert.AreEqual(1, target.Moves.Count);

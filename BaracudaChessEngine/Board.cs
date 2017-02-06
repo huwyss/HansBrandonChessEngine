@@ -8,10 +8,13 @@ namespace BaracudaChessEngine
 {
     public class Board
     {
-        char[] _board;
-        private int[] _threatenedByWhite;
-        private int[] _threatenedByBlack;
+        public Definitions.ChessColor SideToMove { get; set; }
+        public int EnPassantField { get; set; }
+        public bool CastlingRightFirstMover { get; set; }
+        public bool CastlingRightSecondMover { get; set; }
+        public List<Move> Moves { get; set; }
 
+        private char[] _board;
         string initPosition = "rnbqkbnr" + // black a8-h8
                               "pppppppp" +
                               "........" +
@@ -21,12 +24,7 @@ namespace BaracudaChessEngine
                               "PPPPPPPP" +
                               "RNBQKBNR"; // white a1-h1
 
-        public Definitions.ChessColor SideToMove { get; set; }
-        public int EnPassantField { get; set; }
-        public bool CastlingRightFirstMover { get; set; }
-        public bool CastlingRightSecondMover { get; set; }
-
-        public List<Move> Moves { get; set; }
+        
 
         /// <summary>
         /// Constructor. Board is empty.
@@ -150,6 +148,8 @@ namespace BaracudaChessEngine
 
             SetPiece(pieceToMove, targetFile, targetRank);
             SetPiece(Definitions.EmptyField, sourceFile, sourceRank);
+
+            SideToMove = Helper.GetOpositeColor(SideToMove);
         }
 
         public Definitions.ChessColor GetColor(int file, int rank)
@@ -183,6 +183,7 @@ namespace BaracudaChessEngine
                     {
                         hasWhiteKing = true;
                     }
+
                     if (piece == Definitions.KING.ToString().ToLower()[0])
                     {
                         hasBlackKing = true;

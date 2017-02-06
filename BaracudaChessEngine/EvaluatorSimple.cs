@@ -15,7 +15,10 @@ namespace BaracudaChessEngine
         public float ValueQueen = 9f;
         public float ValueKing = 1000f;
 
-        public Score Evaluate(Board board)
+        /// <summary>
+        /// Calculates the score from white's point. + --> white is better, - --> black is better.
+        /// </summary>
+        public float Evaluate(Board board)
         {
             float scoreWhite = 0;
             float scoreBlack = 0;
@@ -37,7 +40,7 @@ namespace BaracudaChessEngine
                 }
             }
 
-            return new Score(scoreWhite, scoreBlack);
+            return scoreWhite - scoreBlack;
         }
 
         private float GetPieceScore(char piece)

@@ -12,6 +12,6 @@ namespace BaracudaChessEngine
         /// <summary>
         /// Returns the score for white and black.
         /// </summary>
-        Score Evaluate(Board board);
+        float Evaluate(Board board);
     }
 }

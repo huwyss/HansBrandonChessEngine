@@ -18,7 +18,7 @@ namespace BaracudaConsole
             bool quiet = true; // quiet = true --> no display of moves or board
 
             BaracudaEngine whiteEngineRandom = new BaracudaEngine(EngineType.Random);
-            BaracudaEngine blackEngineRandom = new BaracudaEngine(EngineType.Random);
+            BaracudaEngine blackEngineRandom = new BaracudaEngine(EngineType.DepthOne);
 
             int whiteWins = 0;
 

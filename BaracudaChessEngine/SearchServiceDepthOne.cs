@@ -29,11 +29,17 @@ namespace BaracudaChessEngine
             }
 
             var possibleMoves = board.GetAllMoves(color);
-            foreach (Move move in possibleMoves)
+            foreach (Move currentMove in possibleMoves)
             {
-                // find best move
+                Board boardWithMove = board.Clone();
+                boardWithMove.Move(currentMove);
+                float scoreCurrentMove = _evaluator.Evaluate(boardWithMove);
+                if (scoreCurrentMove > bestScore)
+                {
+                    bestMove = currentMove;
+                    bestScore = scoreCurrentMove;
+                }
             }
-
 
             return bestMove;
         }

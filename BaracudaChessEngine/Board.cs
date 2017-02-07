@@ -38,16 +38,12 @@ namespace BaracudaChessEngine
 
             InitVariables();
             _moveGenerator = moveGenerator;
-            if (_moveGenerator != null)
-            {
-                _moveGenerator.SetBoard(this);
-            }
         }
 
         public Board Clone()
         {
             Board clonedBoard = new Board(_moveGenerator);
-            string position = GetString();
+            string position = GetString;
             clonedBoard.SetPosition(position);
             return clonedBoard;
         }
@@ -217,57 +213,63 @@ namespace BaracudaChessEngine
             return false;
         }
 
-        public string GetString()
+        public string GetString
         {
-            string boardString = "";
-
-            for (int rank = 8; rank >= 1 ; rank--)
+            get
             {
-                for (int file = 1; file <= 8; file++)
-                {
-                    char piece = GetPiece(file, rank);
-                    boardString += piece;
-                }
-            }
+                string boardString = "";
 
-            return boardString;
+                for (int rank = 8; rank >= 1; rank--)
+                {
+                    for (int file = 1; file <= 8; file++)
+                    {
+                        char piece = GetPiece(file, rank);
+                        boardString += piece;
+                    }
+                }
+
+                return boardString;
+            }
         }
 
-        public string GetPrintString()
+        public string GetPrintString
         {
-            string boardString = "";
-
-            for (int rank = 8; rank >= 1; rank--)
+            get
             {
-                boardString += rank + "   ";
-                for (int file = 1; file <= 8; file++)
-                {
-                    char piece = GetPiece(file, rank);
-                    boardString += piece + " ";
+                string boardString = "";
 
+                for (int rank = 8; rank >= 1; rank--)
+                {
+                    boardString += rank + "   ";
+                    for (int file = 1; file <= 8; file++)
+                    {
+                        char piece = GetPiece(file, rank);
+                        boardString += piece + " ";
+
+                    }
+
+                    boardString += "\n";
                 }
 
-                boardString += "\n";
+                boardString += "\n    a b c d e f g h \n";
+
+                return boardString;
             }
-
-            boardString += "\n    a b c d e f g h \n";
-
-            return boardString;
         }
 
         public Move GetValidMove(string moveStringUser)
         {
-            return _moveGenerator.GetValidMove(moveStringUser);
+            return _moveGenerator.GetValidMove(this, moveStringUser);
         }
 
         public bool IsMoveValid(Move move)
         {
-            return _moveGenerator.IsMoveValid(move);
+            return _moveGenerator.IsMoveValid(this, move);
         }
 
         public List<Move> GetAllMoves(Definitions.ChessColor color)
         {
-            return _moveGenerator.GetAllMoves(color);
+            return _moveGenerator.GetAllMoves(this, color);
         }
     }
 }

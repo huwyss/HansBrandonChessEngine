@@ -18,7 +18,7 @@ namespace BaracudaChessEngineTest
             Board initBoard = new Board(target);
             initBoard.SetInitialPosition();
             
-            var moves = target.GetMoves(Helper.FileCharToFile('b'), 1); // get moves of knight
+            var moves = target.GetMoves(initBoard, Helper.FileCharToFile('b'), 1); // get moves of knight
 
             Assert.AreEqual(2, moves.Count);
             Assert.AreEqual("b1a3.", moves[0].ToString());
@@ -40,7 +40,7 @@ namespace BaracudaChessEngineTest
                               "........";
             board.SetPosition(position);
             
-            var moves = target.GetMoves(Helper.FileCharToFile('e'), 4); // get moves of Rook
+            var moves = target.GetMoves(board, Helper.FileCharToFile('e'), 4); // get moves of Rook
 
             Assert.AreEqual(11, moves.Count);
             Assert.AreEqual(true, moves.Contains(new Move("e4e5.")), "e4e5. missing");
@@ -71,7 +71,7 @@ namespace BaracudaChessEngineTest
                               "........";
             board.SetPosition(position);
            
-            var moves = target.GetMoves(Helper.FileCharToFile('b'), 2); // get moves of queen
+            var moves = target.GetMoves(board, Helper.FileCharToFile('b'), 2); // get moves of queen
 
             Assert.AreEqual(9, moves.Count);
             Assert.AreEqual(true, moves.Contains(new Move("b2b3.")), "b2b3. missing");
@@ -100,7 +100,7 @@ namespace BaracudaChessEngineTest
                               "........";
             board.SetPosition(position);
             
-            var moves = target.GetMoves(Helper.FileCharToFile('c'), 2); // get moves of bishop
+            var moves = target.GetMoves(board, Helper.FileCharToFile('c'), 2); // get moves of bishop
 
             Assert.AreEqual(5, moves.Count);
             Assert.AreEqual(true, moves.Contains(new Move("c2d3.")), "c2d3. missing");
@@ -125,7 +125,7 @@ namespace BaracudaChessEngineTest
                               ".KP.....";
             board.SetPosition(position);
             
-            var moves = target.GetMoves(Helper.FileCharToFile('b'), 1); // king
+            var moves = target.GetMoves(board, Helper.FileCharToFile('b'), 1); // king
 
             Assert.AreEqual(3, moves.Count);
             Assert.AreEqual(true, moves.Contains(new Move("b1b2r")), "b1b2r missing");
@@ -148,7 +148,7 @@ namespace BaracudaChessEngineTest
                               "........";
             board.SetPosition(position);
             
-            var moves = target.GetMoves(Helper.FileCharToFile('c'), 2); // pawn
+            var moves = target.GetMoves(board, Helper.FileCharToFile('c'), 2); // pawn
 
             Assert.AreEqual(4, moves.Count);
             Assert.AreEqual(true, moves.Contains(new Move("c2c3.")), "c2c3. missing");
@@ -172,7 +172,7 @@ namespace BaracudaChessEngineTest
                               "........";
             board.SetPosition(position);
 
-            var moves = target.GetMoves(Helper.FileCharToFile('c'), 2); // pawn
+            var moves = target.GetMoves(board, Helper.FileCharToFile('c'), 2); // pawn
 
             Assert.AreEqual(3, moves.Count);
             Assert.AreEqual(true, moves.Contains(new Move("c2c3.")), "c2c3. missing");
@@ -195,7 +195,7 @@ namespace BaracudaChessEngineTest
                               "........";
             board.SetPosition(position);
             
-            var moves = target.GetMoves(Helper.FileCharToFile('c'), 7); // black pawn
+            var moves = target.GetMoves(board, Helper.FileCharToFile('c'), 7); // black pawn
 
             Assert.AreEqual(4, moves.Count);
             Assert.AreEqual(true, moves.Contains(new Move("c7c6.")), "c7c6. missing");
@@ -223,7 +223,7 @@ namespace BaracudaChessEngineTest
                               "....K...";
             board.SetPosition(position);
            
-            var moves = target.GetAllMoves(Definitions.ChessColor.White);
+            var moves = target.GetAllMoves(board, Definitions.ChessColor.White);
 
             Assert.AreEqual(6, moves.Count);
             Assert.AreEqual(true, moves.Contains(new Move("e2e3.")), "e2e3. missing");
@@ -250,7 +250,7 @@ namespace BaracudaChessEngineTest
                               ".......K"; // king is in check and must escape. only move is Kh1g1
             board.SetPosition(position);
             
-            var moves = target.GetAllMoves(Definitions.ChessColor.White);
+            var moves = target.GetAllMoves(board, Definitions.ChessColor.White);
 
             Assert.AreEqual(1, moves.Count, "Only one move is possible. The other moves for white are in check.");
             Assert.AreEqual(true, moves.Contains(new Move("h1g1.")), "h1g1. missing");
@@ -275,7 +275,7 @@ namespace BaracudaChessEngineTest
                               "........";
             board.SetPosition(position);
             
-            bool valid = target.IsMoveValid(new Move("c2c3.")); // pawn
+            bool valid = target.IsMoveValid(board, new Move("c2c3.")); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
         }
 
@@ -294,7 +294,7 @@ namespace BaracudaChessEngineTest
                               "........";
             board.SetPosition(position);
             
-            bool valid = target.IsMoveValid(new Move("c2c4.")); // pawn
+            bool valid = target.IsMoveValid(board, new Move("c2c4.")); // pawn
             Assert.AreEqual(false, valid, "Move should be invalid.");
         }
 
@@ -313,10 +313,10 @@ namespace BaracudaChessEngineTest
                               "........";
             board.SetPosition(position);
             
-            bool valid = target.IsMoveValid(new Move("c7c5.")); // pawn
+            bool valid = target.IsMoveValid(board, new Move("c7c5.")); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
 
-            valid = target.IsMoveValid(new Move("c7c6.")); // pawn
+            valid = target.IsMoveValid(board, new Move("c7c6.")); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
         }
         
@@ -377,7 +377,7 @@ namespace BaracudaChessEngineTest
             Board board = new Board(target);
             board.SetInitialPosition();
             
-            Move actualMove = target.GetValidMove("e2e4");
+            Move actualMove = target.GetValidMove(board, "e2e4");
             Assert.AreEqual("e2e4.", actualMove.ToString());
         }
     }

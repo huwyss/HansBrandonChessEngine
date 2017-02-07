@@ -14,32 +14,32 @@ namespace BaracudaConsole
             bool whiteHuman = false;
             bool blackHuman = false;
 
-            int runStatisticGames = 100; // run statistic = 1 --> only one game
+            int runStatisticGames = 1000; // run statistic = 1 --> only one game
             bool quiet = true; // quiet = true --> no display of moves or board
 
-            BaracudaEngine whiteEngineRandom = new BaracudaEngine(EngineType.DepthOne);
-            BaracudaEngine blackEngineRandom = new BaracudaEngine(EngineType.Random);
+            BaracudaEngine whiteEngine = new BaracudaEngine(EngineType.Random);
+            BaracudaEngine blackEngine = new BaracudaEngine(EngineType.DepthOne);
 
             int whiteWins = 0;
 
             bool isMoveValid;
 
-            if (!quiet)
-            {
-                PrintBoard(whiteEngineRandom);
-            }
-
             for (int i = 0; i < runStatisticGames; i++)
             {
                 int moveCount = 1;
-                whiteEngineRandom.SetInitialPosition();
-                blackEngineRandom.SetInitialPosition();
+                whiteEngine.SetInitialPosition();
+                blackEngine.SetInitialPosition();
+
+                if (!quiet)
+                {
+                    PrintBoard(whiteEngine);
+                }
 
                 while (true)
                 {
                     if (!quiet)
                     {
-                        if (whiteEngineRandom.SideToMove() == Definitions.ChessColor.White)
+                        if (whiteEngine.SideToMove() == Definitions.ChessColor.White)
                         {
                             Console.WriteLine(moveCount++);
                         }
@@ -47,12 +47,12 @@ namespace BaracudaConsole
 
                     if (!quiet)
                     {
-                        Console.WriteLine("Next Move: " + whiteEngineRandom.SideToMove());
+                        Console.WriteLine("Next Move: " + whiteEngine.SideToMove());
                     }
 
                     // Human move
-                    if ((whiteHuman && whiteEngineRandom.SideToMove() == Definitions.ChessColor.White) ||
-                        (blackHuman && whiteEngineRandom.SideToMove() == Definitions.ChessColor.Black))
+                    if ((whiteHuman && whiteEngine.SideToMove() == Definitions.ChessColor.White) ||
+                        (blackHuman && whiteEngine.SideToMove() == Definitions.ChessColor.Black))
                     {
                         // human move from console
                         do
@@ -60,14 +60,14 @@ namespace BaracudaConsole
                             Console.WriteLine("Enter your move (ie. e2e4): ");
                             string moveConsoleString = Console.ReadLine();
                             moveConsoleString = moveConsoleString.Trim();
-                            isMoveValid = whiteEngineRandom.Move(moveConsoleString);
+                            isMoveValid = whiteEngine.Move(moveConsoleString);
                             if (!isMoveValid)
                             {
                                 Console.WriteLine("Invalid move.");
                             }
                             else
                             {
-                                blackEngineRandom.Move(moveConsoleString);
+                                blackEngine.Move(moveConsoleString);
                             }
                         } while (!isMoveValid);
                     }
@@ -75,16 +75,16 @@ namespace BaracudaConsole
                     {
                         Move moveComputer = null;
                         // computer move for white
-                        if (!whiteHuman && whiteEngineRandom.SideToMove() == Definitions.ChessColor.White)
+                        if (!whiteHuman && whiteEngine.SideToMove() == Definitions.ChessColor.White)
                         {
-                            moveComputer = whiteEngineRandom.DoBestMove(Definitions.ChessColor.White);
-                            blackEngineRandom.Move(moveComputer);
+                            moveComputer = whiteEngine.DoBestMove(Definitions.ChessColor.White);
+                            blackEngine.Move(moveComputer);
                         }
                         // computer move for black
-                        else if (!blackHuman && whiteEngineRandom.SideToMove() == Definitions.ChessColor.Black)
+                        else if (!blackHuman && whiteEngine.SideToMove() == Definitions.ChessColor.Black)
                         {
-                            moveComputer = blackEngineRandom.DoBestMove(Definitions.ChessColor.Black);
-                            whiteEngineRandom.Move(moveComputer);
+                            moveComputer = blackEngine.DoBestMove(Definitions.ChessColor.Black);
+                            whiteEngine.Move(moveComputer);
                         }
 
                         if (!quiet && moveComputer.ToString() != "")
@@ -95,9 +95,9 @@ namespace BaracudaConsole
 
 
                     if (!quiet)
-                        PrintBoard(whiteEngineRandom);
+                        PrintBoard(whiteEngine);
 
-                    if (whiteEngineRandom.IsWinner(Definitions.ChessColor.White))
+                    if (whiteEngine.IsWinner(Definitions.ChessColor.White))
                     {
                         if (!quiet)
                             Console.WriteLine("\nWhite wins!");
@@ -105,7 +105,7 @@ namespace BaracudaConsole
                         whiteWins++;
                         break;
                     }
-                    if (whiteEngineRandom.IsWinner(Definitions.ChessColor.Black))
+                    if (whiteEngine.IsWinner(Definitions.ChessColor.Black))
                     {
                         if (!quiet)
                             Console.WriteLine("\nBlack wins!");

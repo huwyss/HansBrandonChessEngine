@@ -128,7 +128,7 @@ namespace BaracudaChessEngineTest
             var target = new Board(null);
             target.SetInitialPosition();
 
-            string boardString = target.GetString();
+            string boardString = target.GetString;
             string expectedString = "rnbqkbnr" +
                                     "pppppppp" +
                                     "........" +
@@ -147,7 +147,7 @@ namespace BaracudaChessEngineTest
             var target = new Board(null);
             target.SetInitialPosition();
 
-            string boardString = target.GetPrintString();
+            string boardString = target.GetPrintString;
             string expectedString = "8   r n b q k b n r \n" +
                                     "7   p p p p p p p p \n" +
                                     "6   . . . . . . . . \n" +
@@ -210,7 +210,7 @@ namespace BaracudaChessEngineTest
             Board cloned = board.Clone();
 
             Assert.AreNotEqual(cloned, board, "must not return the same object!");
-            Assert.AreEqual(board.GetString(), cloned.GetString());
+            Assert.AreEqual(board.GetString, cloned.GetString);
         }
     }
 }

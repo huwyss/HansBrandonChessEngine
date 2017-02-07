@@ -25,14 +25,12 @@ namespace BaracudaChessEngine
             {
                 _moveGenerator = new MoveGenerator();
                 _board = new Board(_moveGenerator);
-                _moveGenerator.SetBoard(_board);
                 _search = new SearchRandom();
             }
             else if (engineType == EngineType.DepthOne)
             {
                 _moveGenerator = new MoveGenerator();
                 _board = new Board(_moveGenerator);
-                _moveGenerator.SetBoard(_board);
                 _evaluator = new EvaluatorSimple();
                 _search = new SearchServiceDepthOne(_evaluator);
             }
@@ -43,9 +41,19 @@ namespace BaracudaChessEngine
             _board.SetInitialPosition();
         }
 
+        public void SetPosition(string position)
+        {
+            _board.SetPosition(position);
+        }
+
+        public string GetString()
+        {
+            return _board.GetString;
+        }
+
         public string GetPrintString()
         {
-            return _board.GetPrintString();
+            return _board.GetPrintString;
         }
 
         public bool Move(string moveStringUser)

@@ -10,22 +10,15 @@ namespace BaracudaChessEngine
 {
     public class MoveGenerator
     {
-        Board _board;
-
-        public void SetBoard(Board board)
-        {
-            _board = board;
-        }
-
         // Note: Baracuda is a king capture engine. 
         // This means even if we are in check then also moves that do not remove the check are returned here.
-        public List<Move> GetAllMoves(Definitions.ChessColor color)
+        public List<Move> GetAllMoves(Board board, Definitions.ChessColor color)
         {
-            var allMovesUnchecked = GetAllMovesUnchecked(color);
+            var allMovesUnchecked = GetAllMovesUnchecked(board, color);
             return allMovesUnchecked;
         }
 
-        private List<Move> GetAllMovesUnchecked(Definitions.ChessColor color)
+        private List<Move> GetAllMovesUnchecked(Board board, Definitions.ChessColor color)
         {
             List<Move> allMoves = new List<Move>();
 
@@ -33,9 +26,9 @@ namespace BaracudaChessEngine
             {
                 for (int rank = 1; rank <= 8; rank++)
                 {
-                    if (_board.GetColor(file, rank) == color)
+                    if (board.GetColor(file, rank) == color)
                     {
-                        allMoves.AddRange(GetMoves(file, rank));
+                        allMoves.AddRange(GetMoves(board, file, rank));
                     }
                 }
             }
@@ -52,14 +45,14 @@ namespace BaracudaChessEngine
         /// todo: castling
         /// todo: capture en passant
         /// todo: pawn promotion
-        public List<Move> GetMoves(int file, int rank)
+        public List<Move> GetMoves(Board board, int file, int rank)
         {
             List<Move> moves = new List<Move>();
-            char piece = _board.GetPiece(file, rank);
+            char piece = board.GetPiece(file, rank);
             int targetRank;
             int targetFile;
             bool valid;
-            Definitions.ChessColor pieceColor = _board.GetColor(file, rank);
+            Definitions.ChessColor pieceColor = board.GetColor(file, rank);
             List<string> directionSequences;
             char pieceLower = piece.ToString().ToLower()[0];
             switch (pieceLower)
@@ -70,9 +63,9 @@ namespace BaracudaChessEngine
                     foreach (string sequence in directionSequences)
                     {
                         GetEndPosition(file, rank, sequence, out targetFile, out targetRank, out valid);
-                        if (valid && pieceColor != _board.GetColor(targetFile, targetRank)) // capture or empty field
+                        if (valid && pieceColor != board.GetColor(targetFile, targetRank)) // capture or empty field
                         {
-                            moves.Add(new Move(file, rank, targetFile, targetRank, _board.GetPiece(targetFile, targetRank)));
+                            moves.Add(new Move(file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank)));
                         }
                     }
                     break;
@@ -92,13 +85,13 @@ namespace BaracudaChessEngine
                             {
                                 break;
                             }
-                            Definitions.ChessColor targetColor = _board.GetColor(targetFile, targetRank);
+                            Definitions.ChessColor targetColor = board.GetColor(targetFile, targetRank);
                             if (pieceColor == targetColor)
                             {
                                 break;
                             }
 
-                            char targetPiece = _board.GetPiece(targetFile, targetRank);
+                            char targetPiece = board.GetPiece(targetFile, targetRank);
                             moves.Add(new Move(file, rank, targetFile, targetRank, targetPiece));
 
                             if (Definitions.ChessColor.Empty != targetColor)
@@ -126,7 +119,7 @@ namespace BaracudaChessEngine
                         if (currentSequence == "u" || currentSequence == "uu" ||
                             currentSequence == "d" || currentSequence == "dd") // walk straight
                         {
-                            if (valid && _board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty) // empty field
+                            if (valid && board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty) // empty field
                             {
                                 moves.Add(new Move(file, rank, targetFile, targetRank, Definitions.EmptyField));
                             }
@@ -134,9 +127,9 @@ namespace BaracudaChessEngine
                         else if (currentSequence == "ul" || currentSequence == "ur" ||
                                  currentSequence == "dl" || currentSequence == "dr") // capture
                         {
-                            if (valid && pieceColor != _board.GetColor(targetFile, targetRank) && _board.GetColor(targetFile, targetRank) != Definitions.ChessColor.Empty) // other color
+                            if (valid && pieceColor != board.GetColor(targetFile, targetRank) && board.GetColor(targetFile, targetRank) != Definitions.ChessColor.Empty) // other color
                             {
-                                moves.Add(new Move(file, rank, targetFile, targetRank, _board.GetPiece(targetFile, targetRank)));
+                                moves.Add(new Move(file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank)));
                             }
                         }
                     }
@@ -146,16 +139,16 @@ namespace BaracudaChessEngine
             return moves;
         }
 
-        public Move GetValidMove(string moveStringUser) // input is like "e2e4"
+        public Move GetValidMove(Board board, string moveStringUser) // input is like "e2e4"
         {
             Move move = new Move(moveStringUser);
-            move.CapturedPiece = _board.GetPiece(move.TargetFile, move.TargetRank);
+            move.CapturedPiece = board.GetPiece(move.TargetFile, move.TargetRank);
             return move;
         }
 
-        public bool IsMoveValid(Move move)
+        public bool IsMoveValid(Board board, Move move)
         {
-            bool valid = GetMoves(move.SourceFile, move.SourceRank).Contains(move);
+            bool valid = GetMoves(board, move.SourceFile, move.SourceRank).Contains(move);
             return valid;
         }
 

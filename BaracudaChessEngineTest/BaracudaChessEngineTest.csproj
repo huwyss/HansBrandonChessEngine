@@ -52,6 +52,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="BaracudaEngineTest.cs" />
     <Compile Include="BoardTest.cs" />
     <Compile Include="EvaluatorSimpleTest.cs" />
     <Compile Include="MoveGeneratorTest.cs" />

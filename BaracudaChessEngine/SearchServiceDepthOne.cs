@@ -34,10 +34,21 @@ namespace BaracudaChessEngine
                 Board boardWithMove = board.Clone();
                 boardWithMove.Move(currentMove);
                 float scoreCurrentMove = _evaluator.Evaluate(boardWithMove);
-                if (scoreCurrentMove > bestScore)
+                if (color == Definitions.ChessColor.White)
                 {
-                    bestMove = currentMove;
-                    bestScore = scoreCurrentMove;
+                    if (scoreCurrentMove > bestScore)
+                    {
+                        bestMove = currentMove;
+                        bestScore = scoreCurrentMove;
+                    }
+                }
+                else
+                {
+                    if (scoreCurrentMove < bestScore)
+                    {
+                        bestMove = currentMove;
+                        bestScore = scoreCurrentMove;
+                    }
                 }
             }
 

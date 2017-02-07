@@ -14,11 +14,11 @@ namespace BaracudaConsole
             bool whiteHuman = false;
             bool blackHuman = false;
 
-            int runStatisticGames = 200; // run statistic = 1 --> only one game
+            int runStatisticGames = 100; // run statistic = 1 --> only one game
             bool quiet = true; // quiet = true --> no display of moves or board
 
-            BaracudaEngine whiteEngineRandom = new BaracudaEngine(EngineType.Random);
-            BaracudaEngine blackEngineRandom = new BaracudaEngine(EngineType.DepthOne);
+            BaracudaEngine whiteEngineRandom = new BaracudaEngine(EngineType.DepthOne);
+            BaracudaEngine blackEngineRandom = new BaracudaEngine(EngineType.Random);
 
             int whiteWins = 0;
 

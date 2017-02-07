@@ -28,5 +28,27 @@ namespace BaracudaChessEngineTest
             Move expectedMove = new Move("f4e5q");
             Assert.AreEqual(expectedMove, actualMove, "Queen should be captured.");
         }
+
+        [TestMethod]
+        public void SearchTest_WhenWhenQueenCanBeCaptured_ThenCaptureQueen_Black()
+        {
+            IEvaluator evaluator = new EvaluatorSimple();
+            ISearchService target = new SearchServiceDepthOne(evaluator);
+            MoveGenerator gen = new MoveGenerator();
+            var board = new Board(gen);
+            string boardString = "rnbqkbnr" +
+                                 "pppp.ppp" +
+                                 "........" +
+                                 "....p..." +
+                                 "...Q...." +
+                                 "........" +
+                                 "PPP.PPPP" +
+                                 "RNB.KBNR";
+            board.SetPosition(boardString);
+
+            Move actualMove = target.Search(board, Definitions.ChessColor.Black);
+            Move expectedMove = new Move("e5d4Q");
+            Assert.AreEqual(expectedMove, actualMove, "Queen should be captured.");
+        }
     }
 }

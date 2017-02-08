@@ -10,7 +10,7 @@ namespace BaracudaChessEngineTest
         [TestMethod]
         public void DoBestMove_DepthOneSearch_WhenQueenCanBeCaptured_ThenQueenIsCaptured_WhiteMoves()
         {
-            var engine = new BaracudaEngine(EngineType.DepthOne);
+            var engine = new BaracudaEngine(EngineType.DepthHalf);
             string boardString = "rnb.kbnr" +
                                  "ppp.pppp" +
                                  "........" +
@@ -38,7 +38,7 @@ namespace BaracudaChessEngineTest
         [TestMethod]
         public void DoBestMove_DepthOneSearch_WhenQueenCanBeCaptured_ThenQueenIsCaptured_BlackMoves()
         {
-            var engine = new BaracudaEngine(EngineType.DepthOne);
+            var engine = new BaracudaEngine(EngineType.DepthHalf);
             string boardString = "rnbqkbnr" +
                                  "pppp.ppp" +
                                  "........" +

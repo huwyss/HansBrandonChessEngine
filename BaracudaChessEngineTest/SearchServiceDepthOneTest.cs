@@ -8,47 +8,48 @@ namespace BaracudaChessEngineTest
     public class SearchServiceDepthOneTest
     {
         [TestMethod]
-        public void SearchTest_WhenWhenQueenCanBeCaptured_ThenCaptureQueen_White()
+        public void SearchTest_WhenQueenCanCapturPawnButWouldGetLost_ThenQueenDoesNotCapturePawn_White()
         {
             IEvaluator evaluator = new EvaluatorSimple();
             ISearchService target = new SearchServiceDepthOne(evaluator);
             MoveGenerator gen = new MoveGenerator();
             var board = new Board(gen);
-            string boardString = "rnb.kbnr" +
-                                 "ppp.pppp" +
+            string boardString = ".......k" +
                                  "........" +
-                                 "....q..." +
-                                 ".....P.." +
+                                 "...p...." +
+                                 "..p....." +
+                                 ".Q......" +
                                  "........" +
-                                 "PPPPP.PP" +
-                                 "RNBQKBNR";
+                                 "........" +
+                                 ".......K";
             board.SetPosition(boardString);
 
             Move actualMove = target.Search(board, Definitions.ChessColor.White);
-            Move expectedMove = new Move("f4e5q");
-            Assert.AreEqual(expectedMove, actualMove, "Queen should be captured.");
+            Move verybadMove = new Move("b4c5p");
+            Assert.AreNotEqual(verybadMove, actualMove, "Queen must not capture pawn. Otherwise queen gets lost.");
         }
 
         [TestMethod]
-        public void SearchTest_WhenWhenQueenCanBeCaptured_ThenCaptureQueen_Black()
+        public void SearchTest_WhenPawnCanCaptureQueenAndPawnGetsLost_ThenPawnMustCaptureQueen_White()
         {
             IEvaluator evaluator = new EvaluatorSimple();
             ISearchService target = new SearchServiceDepthOne(evaluator);
             MoveGenerator gen = new MoveGenerator();
             var board = new Board(gen);
-            string boardString = "rnbqkbnr" +
-                                 "pppp.ppp" +
+            string boardString = ".......k" +
                                  "........" +
-                                 "....p..." +
-                                 "...Q...." +
+                                 "...p...." +
+                                 "..q....." +
+                                 ".P......" +
                                  "........" +
-                                 "PPP.PPPP" +
-                                 "RNB.KBNR";
+                                 "........" +
+                                 ".......K";
             board.SetPosition(boardString);
 
-            Move actualMove = target.Search(board, Definitions.ChessColor.Black);
-            Move expectedMove = new Move("e5d4Q");
-            Assert.AreEqual(expectedMove, actualMove, "Queen should be captured.");
+            Move actualMove = target.Search(board, Definitions.ChessColor.White);
+            Move goodMove = new Move("b4c5q");
+            Assert.AreEqual(goodMove, actualMove, "Pawn must capture queen.");
         }
+
     }
 }

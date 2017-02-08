@@ -9,6 +9,7 @@ namespace BaracudaChessEngine
     public enum EngineType
     {
         Random,
+        DepthHalf,
         DepthOne
     }
 
@@ -26,6 +27,13 @@ namespace BaracudaChessEngine
                 _moveGenerator = new MoveGenerator();
                 _board = new Board(_moveGenerator);
                 _search = new SearchRandom();
+            }
+            else if (engineType == EngineType.DepthHalf)
+            {
+                _moveGenerator = new MoveGenerator();
+                _board = new Board(_moveGenerator);
+                _evaluator = new EvaluatorSimple();
+                _search = new SearchServiceDepthHalfMove(_evaluator);
             }
             else if (engineType == EngineType.DepthOne)
             {

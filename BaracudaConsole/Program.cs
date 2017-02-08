@@ -17,8 +17,8 @@ namespace BaracudaConsole
             int runStatisticGames = 100; // run statistic = 1 --> only one game
             bool quiet = false; // quiet = true --> no display of moves or board
 
-            BaracudaEngine whiteEngine = new BaracudaEngine(EngineType.DepthOne);
-            BaracudaEngine blackEngine = new BaracudaEngine(EngineType.DepthOne);
+            BaracudaEngine whiteEngine = new BaracudaEngine(EngineType.DepthHalf);
+            BaracudaEngine blackEngine = new BaracudaEngine(EngineType.DepthHalf);
 
             int whiteWins = 0;
             bool isMoveValid;

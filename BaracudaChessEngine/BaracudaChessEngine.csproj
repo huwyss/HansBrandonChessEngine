@@ -53,6 +53,7 @@
     <Compile Include="SearchMinimax.cs" />
     <Compile Include="SearchRandom.cs" />
     <Compile Include="SearchServiceDepthOne.cs" />
+    <Compile Include="SearchServiceDepthHalfMove.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

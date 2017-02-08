@@ -18,15 +18,7 @@ namespace BaracudaChessEngine
         public Move Search(Board board, Definitions.ChessColor color)
         {
             Move bestMove = null;
-            float bestScore;
-            if (color == Definitions.ChessColor.White)
-            {
-                bestScore = -10000;
-            }
-            else
-            {
-                bestScore = 10000;
-            }
+            float bestScore = InitBestScoreSofar(color);
 
             var possibleMoves = board.GetAllMoves(color);
             foreach (Move currentMove in possibleMoves)
@@ -34,25 +26,47 @@ namespace BaracudaChessEngine
                 Board boardWithMove = board.Clone();
                 boardWithMove.Move(currentMove);
                 float scoreCurrentMove = _evaluator.Evaluate(boardWithMove);
-                if (color == Definitions.ChessColor.White)
+                if (IsBestMoveSofar(color, bestScore, scoreCurrentMove))
                 {
-                    if (scoreCurrentMove > bestScore)
-                    {
-                        bestMove = currentMove;
-                        bestScore = scoreCurrentMove;
-                    }
-                }
-                else
-                {
-                    if (scoreCurrentMove < bestScore)
-                    {
-                        bestMove = currentMove;
-                        bestScore = scoreCurrentMove;
-                    }
+                    bestMove = currentMove;
+                    bestScore = scoreCurrentMove;
                 }
             }
 
             return bestMove;
         }
+
+        private float InitBestScoreSofar(Definitions.ChessColor color)
+        {
+            if (color == Definitions.ChessColor.White)
+            {
+                return -10000;
+            }
+            else
+            {
+                return 10000;
+            }
+        }
+
+        private bool IsBestMoveSofar(Definitions.ChessColor color, float bestScoreSoFar, float currentScore)
+        {
+            if (color == Definitions.ChessColor.White)
+            {
+                if (currentScore > bestScoreSoFar)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if (currentScore < bestScoreSoFar)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
+

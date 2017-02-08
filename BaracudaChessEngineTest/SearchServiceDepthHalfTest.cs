@@ -18,7 +18,7 @@ namespace BaracudaChessEngineTest
                                  "ppp.pppp" +
                                  "........" +
                                  "....q..." +
-                                 ".....P.." +
+                                 "...p.P.." +
                                  "........" +
                                  "PPPPP.PP" +
                                  "RNBQKBNR";
@@ -39,7 +39,7 @@ namespace BaracudaChessEngineTest
             string boardString = "rnbqkbnr" +
                                  "pppp.ppp" +
                                  "........" +
-                                 "....p..." +
+                                 "...Pp..." +
                                  "...Q...." +
                                  "........" +
                                  "PPP.PPPP" +

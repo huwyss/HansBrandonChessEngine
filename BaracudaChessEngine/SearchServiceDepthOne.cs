@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
+[assembly: InternalsVisibleTo("BaracudaChessEngineTest")]
 namespace BaracudaChessEngine
 {
     class SearchServiceDepthOne : ISearchService
@@ -16,6 +18,29 @@ namespace BaracudaChessEngine
         }
 
         public Move Search(Board board, Definitions.ChessColor color)
+        {
+            float bestScoreBlack = InitBestScoreSofar(Helper.GetOpositeColor(color));
+            float bestScoreWhite = InitBestScoreSofar(color);
+            Move bestMoveWhite = null;
+
+            var possibleMoves = board.GetAllMoves(color);
+            foreach (Move currentMove in possibleMoves)
+            {
+                Board boardWithMove = board.Clone();
+                boardWithMove.Move(currentMove);
+
+                Move bestMoveBlack = CalcScoreScoreOnNextLevel(boardWithMove, Helper.GetOpositeColor(color), out bestScoreBlack);
+                if (IsBestMoveSofar(color, bestScoreWhite, bestScoreBlack))
+                {
+                    bestScoreWhite = bestScoreBlack;
+                    bestMoveWhite = currentMove;
+                }
+            }
+
+            return bestMoveWhite;
+        }
+
+        internal Move CalcScoreScoreOnNextLevel(Board board, Definitions.ChessColor color, out float score)
         {
             Move bestMove = null;
             float bestScore = InitBestScoreSofar(color);
@@ -33,6 +58,7 @@ namespace BaracudaChessEngine
                 }
             }
 
+            score = bestScore;
             return bestMove;
         }
 

@@ -11,7 +11,7 @@ namespace BaracudaConsole
     {
         static void Main(string[] args)
         {
-            bool humanGame = true;
+            bool humanGame = false;
 
             // ----------------------------------------------------------------
 
@@ -19,17 +19,18 @@ namespace BaracudaConsole
             bool blackHuman = false;
 
             int runStatisticGames = 100; // run statistic = 1 --> only one game
-            bool quiet = true; // quiet = true --> no display of moves or board
+            bool quiet = false; // quiet = true --> no display of moves or board
 
             if (humanGame)
             {
-                whiteHuman = true;
+                whiteHuman = false;
+                blackHuman = true;
                 runStatisticGames = 1;
                 quiet = false;
             }
 
-            BaracudaEngine whiteEngine = new BaracudaEngine(EngineType.DepthOne);
-            BaracudaEngine blackEngine = new BaracudaEngine(EngineType.DepthHalf);
+            BaracudaEngine whiteEngine = new BaracudaEngine(EngineType.DepthHalf);
+            BaracudaEngine blackEngine = new BaracudaEngine(EngineType.DepthOne);
 
             int whiteWins = 0;
             bool isMoveValid;

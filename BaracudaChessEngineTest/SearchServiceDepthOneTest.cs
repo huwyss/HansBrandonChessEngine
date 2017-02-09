@@ -101,27 +101,7 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual(goodMove, actualMove, "Pawn must capture queen.");
         }
 
-        [TestMethod]
-        public void SearchTest_WhenKingWouldGoIntoCheck_ThenKingMustNotCaptureBishop_Black()
-        {
-            IEvaluator evaluator = new EvaluatorSimple();
-            ISearchService target = new SearchServiceDepthOne(evaluator);
-            MoveGenerator gen = new MoveGenerator();
-            var board = new Board(gen);
-            string boardString = "rnbqkbnr" +
-                                 ".ppp.Qpp" +
-                                 "........" +
-                                 "........" +
-                                 "p.BP...." +
-                                 "........" +
-                                 "PPP.PPPP" +
-                                 "RNB.K.NR";
-            board.SetPosition(boardString);
-
-            Move actualMove = target.Search(board, Definitions.ChessColor.Black);
-            Move goodMove = new Move("e8f7Q");
-            Assert.AreNotEqual(goodMove, actualMove, "King must not capture queen.");
-        }
+        
 
 
 

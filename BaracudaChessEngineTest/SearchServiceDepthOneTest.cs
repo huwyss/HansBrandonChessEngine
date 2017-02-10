@@ -25,7 +25,7 @@ namespace BaracudaChessEngineTest
             board.SetPosition(boardString);
 
             float score = 0;
-            Move actualMove = target.CalcScoreScoreOnNextLevel(board, Definitions.ChessColor.White, out score);
+            Move actualMove = target.CalcScoreLevelZero(board, Definitions.ChessColor.White, out score);
             Move expectedMove = new Move("f4e5q");
             
             Assert.AreEqual(expectedMove, actualMove, "Queen should be captured.");
@@ -50,7 +50,7 @@ namespace BaracudaChessEngineTest
                                  "RNB.KBNR";
             board.SetPosition(boardString);
 
-            Move actualMove = target.CalcScoreScoreOnNextLevel(board, Definitions.ChessColor.Black, out score);
+            Move actualMove = target.CalcScoreLevelZero(board, Definitions.ChessColor.Black, out score);
             Move expectedMove = new Move("e5d4Q");
 
             Assert.AreEqual(expectedMove, actualMove, "Queen should be captured.");
@@ -74,7 +74,8 @@ namespace BaracudaChessEngineTest
                                  ".......K";
             board.SetPosition(boardString);
 
-            Move actualMove = target.Search(board, Definitions.ChessColor.White);
+            float score = 0;
+            Move actualMove = target.Search(board, Definitions.ChessColor.White, out score);
             Move verybadMove = new Move("b4c5p");
             Assert.AreNotEqual(verybadMove, actualMove, "Queen must not capture pawn. Otherwise queen gets lost.");
         }
@@ -96,14 +97,11 @@ namespace BaracudaChessEngineTest
                                  ".......K";
             board.SetPosition(boardString);
 
-            Move actualMove = target.Search(board, Definitions.ChessColor.White);
+            float score = 0;
+            Move actualMove = target.Search(board, Definitions.ChessColor.White, out score);
             Move goodMove = new Move("b4c5q");
             Assert.AreEqual(goodMove, actualMove, "Pawn must capture queen.");
         }
-
-        
-
-
 
     }
 }

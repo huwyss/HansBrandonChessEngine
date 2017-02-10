@@ -1,23 +1,119 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
+[assembly: InternalsVisibleTo("BaracudaChessEngineTest")]
 namespace BaracudaChessEngine
 {
-    public class SearchMinimax : ISearchService
+    class SearchMinimax : ISearchService
     {
         private IEvaluator _evaluator;
+        private int _level;
+        const int DEFAULT_LEVEL = 3;
+
+        private static int evaluatedPositions;
 
         public SearchMinimax(IEvaluator evaluator)
         {
             _evaluator = evaluator;
+            _level = DEFAULT_LEVEL;
         }
 
-        public Move Search(Board board, Definitions.ChessColor color)
+        /// <summary>
+        /// Set the number of moves that are calculated in advance.
+        /// </summary>
+        /// <param name="level">
+        /// Level = 1 means: engine calculate 1 half move (if white's move: calculate move of white.)
+        /// Level = 2 means: engine calculate 2 half moves (if white's move: calculate move of white and of black.)
+        /// Level = 3 means: engine calculate 3 half moves (if white's move: calculate move of white, black, white)
+        /// Level = 4 means: engine calculate 4 half moves (if white's move: calculate move of white, black, white, black)
+        /// </param>
+        public void SetLevel(int level)
         {
-            return new Move("e2e4.");
+            _level = level;
+        }
+
+        public Move Search(Board board, Definitions.ChessColor color, out float score)
+        {
+            evaluatedPositions = 0;
+            Move move = SearchLevel(board, color, _level, out score);
+            Console.WriteLine("evaluated positons: " + evaluatedPositions);
+            return move;
+        }
+
+        internal Move SearchLevel(Board board, Definitions.ChessColor color, int level, out float score)
+        {
+            Move bestMove = null;
+            float bestScore = InitBestScoreSofar(color);
+
+            var possibleMoves = board.GetAllMoves(color);
+            foreach (Move currentMove in possibleMoves)
+            {
+                Board boardWithMove = board.Clone();
+                boardWithMove.Move(currentMove);
+
+                if (level == 1)
+                {
+                    float scoreCurrentMove = _evaluator.Evaluate(boardWithMove);
+                    evaluatedPositions++;
+                    if (IsBestMoveSofar(color, bestScore, scoreCurrentMove))
+                    {
+                        bestMove = currentMove;
+                        bestScore = scoreCurrentMove;
+                        score = bestScore;
+                    }
+                }
+                else
+                {
+                    float scoreRec = 0;
+                    Move moveRec = SearchLevel(boardWithMove, Helper.GetOpositeColor(color), level-1, out scoreRec);
+                    if (IsBestMoveSofar(color, bestScore, scoreRec))
+                    {
+                        bestMove = currentMove;
+                        bestScore = scoreRec;
+                        score = bestScore;
+                    }
+                }
+            }
+
+            score = bestScore;
+            return bestMove;
+        }
+
+        private float InitBestScoreSofar(Definitions.ChessColor color)
+        {
+            if (color == Definitions.ChessColor.White)
+            {
+                return -10000;
+            }
+            else
+            {
+                return 10000;
+            }
+        }
+
+        private bool IsBestMoveSofar(Definitions.ChessColor color, float bestScoreSoFar, float currentScore)
+        {
+            if (color == Definitions.ChessColor.White)
+            {
+                if (currentScore > bestScoreSoFar)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if (currentScore < bestScoreSoFar)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
+

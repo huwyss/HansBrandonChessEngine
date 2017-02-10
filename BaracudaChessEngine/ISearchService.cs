@@ -8,6 +8,6 @@ namespace BaracudaChessEngine
 {
     public interface ISearchService
     {
-        Move Search(Board board, Definitions.ChessColor color);
+        Move Search(Board board, Definitions.ChessColor color, out float score);
     }
 }

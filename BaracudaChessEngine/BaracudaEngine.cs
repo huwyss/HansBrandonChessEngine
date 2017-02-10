@@ -10,7 +10,8 @@ namespace BaracudaChessEngine
     {
         Random,
         DepthHalf,
-        DepthOne
+        DepthOne,
+        Minmax
     }
 
     public class BaracudaEngine
@@ -41,6 +42,13 @@ namespace BaracudaChessEngine
                 _board = new Board(_moveGenerator);
                 _evaluator = new EvaluatorSimple();
                 _search = new SearchServiceDepthOne(_evaluator);
+            }
+            else if (engineType == EngineType.Minmax)
+            {
+                _moveGenerator = new MoveGenerator();
+                _board = new Board(_moveGenerator);
+                _evaluator = new EvaluatorSimple();
+                _search = new SearchMinimax(_evaluator);
             }
         }
 
@@ -89,20 +97,9 @@ namespace BaracudaChessEngine
 
         public Move DoBestMove(Definitions.ChessColor color)
         {
-            Move nextMove = _search.Search(_board, color);
+            float score = 0;
+            Move nextMove = _search.Search(_board, color, out score);
             _board.Move(nextMove);
-            return nextMove;
-
-            var possibleMovesComputer = GetAllMoves(color);
-            int numberPossibleMoves = possibleMovesComputer.Count;
-            
-            if (numberPossibleMoves > 0)
-            {
-                //int randomMoveIndex = _rand.Next(0, numberPossibleMoves - 1);
-                //nextMove = possibleMovesComputer[randomMoveIndex];
-                _board.Move(nextMove);
-            }
-
             return nextMove;
         }
 

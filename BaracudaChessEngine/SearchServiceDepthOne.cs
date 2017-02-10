@@ -17,11 +17,11 @@ namespace BaracudaChessEngine
             _evaluator = evaluator;
         }
 
-        public Move Search(Board board, Definitions.ChessColor color)
+        public Move Search(Board board, Definitions.ChessColor color, out float score)
         {
-            float bestScoreBlack = InitBestScoreSofar(Helper.GetOpositeColor(color));
-            float bestScoreWhite = InitBestScoreSofar(color);
-            Move bestMoveWhite = null;
+            float bestScoreSecondMover = InitBestScoreSofar(Helper.GetOpositeColor(color));
+            float bestScoreFirstMover = InitBestScoreSofar(color);
+            Move bestMoveFirstMover = null;
 
             var possibleMoves = board.GetAllMoves(color);
             foreach (Move currentMove in possibleMoves)
@@ -29,18 +29,37 @@ namespace BaracudaChessEngine
                 Board boardWithMove = board.Clone();
                 boardWithMove.Move(currentMove);
 
-                Move bestMoveBlack = CalcScoreScoreOnNextLevel(boardWithMove, Helper.GetOpositeColor(color), out bestScoreBlack);
-                if (IsBestMoveSofar(color, bestScoreWhite, bestScoreBlack))
+                Move bestMoveSecondMover = CalcScoreLevelZero(boardWithMove, Helper.GetOpositeColor(color), out bestScoreSecondMover);
+                if (IsBestMoveSofar(color, bestScoreFirstMover, bestScoreSecondMover))
                 {
-                    bestScoreWhite = bestScoreBlack;
-                    bestMoveWhite = currentMove;
+                    bestScoreFirstMover = bestScoreSecondMover;
+                    bestMoveFirstMover = currentMove;
                 }
             }
 
-            return bestMoveWhite;
+            score = bestScoreFirstMover;
+            return bestMoveFirstMover;
         }
 
-        internal Move CalcScoreScoreOnNextLevel(Board board, Definitions.ChessColor color, out float score)
+        //private Move SearchLevel(Board board, Definitions.ChessColor color, int level, out float score)
+        //{
+        //    score = 0;
+        //    Move moveZero;
+        //    float scoreZero = 0;
+        //    level--;
+        //    if (level == 0)
+        //    {
+        //        moveZero = CalcScoreLevelZero(board, color, out scoreZero); // Calculate the score of the final position
+
+        //    }
+        //    else if ()
+        //    {
+                
+        //    }
+
+        //}
+
+        internal Move CalcScoreLevelZero(Board board, Definitions.ChessColor color, out float score)
         {
             Move bestMove = null;
             float bestScore = InitBestScoreSofar(color);

@@ -18,7 +18,7 @@ namespace BaracudaConsole
             bool whiteHuman = false;
             bool blackHuman = false;
 
-            int runStatisticGames = 100; // run statistic = 1 --> only one game
+            int runStatisticGames = 1; // run statistic = 1 --> only one game
             bool quiet = false; // quiet = true --> no display of moves or board
 
             if (humanGame)
@@ -29,8 +29,8 @@ namespace BaracudaConsole
                 quiet = false;
             }
 
-            BaracudaEngine whiteEngine = new BaracudaEngine(EngineType.DepthHalf);
-            BaracudaEngine blackEngine = new BaracudaEngine(EngineType.DepthOne);
+            BaracudaEngine whiteEngine = new BaracudaEngine(EngineType.Minmax);
+            BaracudaEngine blackEngine = new BaracudaEngine(EngineType.DepthHalf);
 
             int whiteWins = 0;
             bool isMoveValid;

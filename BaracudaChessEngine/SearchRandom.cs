@@ -15,7 +15,7 @@ namespace BaracudaChessEngine
             _rand = new Random();
         }
 
-        public Move Search(Board board, Definitions.ChessColor color)
+        public Move Search(Board board, Definitions.ChessColor color, out float score)
         {
             Move nextMove = null;
             var possibleMovesComputer = board.GetAllMoves(color);
@@ -27,6 +27,7 @@ namespace BaracudaChessEngine
                 nextMove = possibleMovesComputer[randomMoveIndex];
             }
 
+            score = 0;
             return nextMove;
         }
     }

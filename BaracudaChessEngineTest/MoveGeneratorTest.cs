@@ -133,6 +133,10 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual(true, moves.Contains(new Move("b1a2.")), "b1a2. missing");
         }
 
+        //
+        // Pawn moves
+        // 
+
         [TestMethod]
         public void GetMoves_WhenWhitePawn_ThenAllMoves() // en passant not included
         {
@@ -181,6 +185,46 @@ namespace BaracudaChessEngineTest
         }
 
         [TestMethod]
+        public void GetMoves_WhenWhitePawnBlockedInMiddleOfBoard_ThenAllMoves()
+        {
+            MoveGenerator target = new MoveGenerator();
+            Board board = new Board(target);
+            string position = "........" +
+                              "........" + 
+                              "..p....." + // black pawn
+                              "..P....." + // white pawn must not do c5-c7 !
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........";
+            board.SetPosition(position);
+
+            var moves = target.GetMoves(board, Helper.FileCharToFile('c'), 5); // white pawn
+
+            Assert.AreEqual(0, moves.Count);
+        }
+
+        [TestMethod]
+        public void GetMoves_WhenWhitePawnAtA5_ThenAllMoves()
+        {
+            MoveGenerator target = new MoveGenerator();
+            Board board = new Board(target);
+            string position = "........" +
+                              "........" + 
+                              "........" + 
+                              "........" +
+                              "........" +
+                              "..p....." + // black pawn
+                              "..P....." + // white pawn must not do c2-c4 !
+                              "........";
+            board.SetPosition(position);
+
+            var moves = target.GetMoves(board, Helper.FileCharToFile('c'), 2); // white pawn
+
+            Assert.AreEqual(0, moves.Count);
+        }
+
+        [TestMethod]
         public void GetMoves_WhenBlackPawn_ThenAllMoves()
         {
             MoveGenerator target = new MoveGenerator();
@@ -202,6 +246,27 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual(true, moves.Contains(new Move("c7c5.")), "c7c5. missing");
             Assert.AreEqual(true, moves.Contains(new Move("c7b6R")), "c7b6R missing");
             Assert.AreEqual(true, moves.Contains(new Move("c7d6B")), "c7d6B missing");
+        }
+
+        [TestMethod]
+        public void GetMoves_WhenBlackPawnAta4_ThenAllMoves()
+        {
+            MoveGenerator target = new MoveGenerator();
+            Board board = new Board(target);
+            string position = "........" +
+                              "........" +
+                              "........" +
+                              ".p......" + // black pawn must not do b5-b3 !
+                              "........" + 
+                              "........" +
+                              "........" +
+                              "........";
+            board.SetPosition(position);
+
+            var moves = target.GetMoves(board, Helper.FileCharToFile('b'), 5); // black pawn
+
+            Assert.AreEqual(1, moves.Count);
+            Assert.AreEqual(true, moves.Contains(new Move("b5b4.")), "b3b4 missing");
         }
 
         // ----------------------------------------------------------------------------------------------------

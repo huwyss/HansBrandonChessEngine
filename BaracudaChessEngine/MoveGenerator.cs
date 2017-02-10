@@ -107,19 +107,33 @@ namespace BaracudaChessEngine
 
                 case Definitions.PAWN:
                     directionSequences = GetMoveDirectionSequence(pieceLower);
+                    int twoFieldMoveInitRank = 2;
                     foreach (string sequence in directionSequences)
                     {
                         string currentSequence = sequence;
                         if (pieceColor == Definitions.ChessColor.Black)
                         {
                             currentSequence = sequence.Replace('u', 'd');
+                            twoFieldMoveInitRank = 7;
                         }
 
                         GetEndPosition(file, rank, currentSequence, out targetFile, out targetRank, out valid);
-                        if (currentSequence == "u" || currentSequence == "uu" ||
-                            currentSequence == "d" || currentSequence == "dd") // walk straight
+                        if (currentSequence == "u" || currentSequence == "d") // walk straight one field
                         {
                             if (valid && board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty) // empty field
+                            {
+                                moves.Add(new Move(file, rank, targetFile, targetRank, Definitions.EmptyField));
+                            }
+                        }
+                        else if ((currentSequence == "uu" || currentSequence == "dd") && rank == twoFieldMoveInitRank) // walk straight two fields
+                        {
+                            int targetFile2 = 0;
+                            int targetRank2 = 0;
+                            bool valid2 = false;
+                            string currentSequence2 = currentSequence == "uu" ? "u" : "d";
+                            GetEndPosition(file, rank, currentSequence2, out targetFile2, out targetRank2, out valid2);
+                            if ((valid && board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty) && // end field is empty
+                                (valid2 && board.GetColor(targetFile2, targetRank2) == Definitions.ChessColor.Empty)) // field between current and end field is also empty
                             {
                                 moves.Add(new Move(file, rank, targetFile, targetRank, Definitions.EmptyField));
                             }

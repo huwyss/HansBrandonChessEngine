@@ -11,7 +11,8 @@ namespace BaracudaChessEngine
         Random,
         DepthHalf,
         DepthOne,
-        Minmax
+        Minmax,
+        MinmaxPosition
     }
 
     public class BaracudaEngine
@@ -48,6 +49,13 @@ namespace BaracudaChessEngine
                 _moveGenerator = new MoveGenerator();
                 _board = new Board(_moveGenerator);
                 _evaluator = new EvaluatorSimple();
+                _search = new SearchMinimax(_evaluator);
+            }
+            else if (engineType == EngineType.MinmaxPosition)
+            {
+                _moveGenerator = new MoveGenerator();
+                _board = new Board(_moveGenerator);
+                _evaluator = new EvaluatorPosition();
                 _search = new SearchMinimax(_evaluator);
             }
         }
@@ -100,6 +108,7 @@ namespace BaracudaChessEngine
             float score = 0;
             Move nextMove = _search.Search(_board, color, out score);
             _board.Move(nextMove);
+            Console.WriteLine("Score: " + score);
             return nextMove;
         }
 

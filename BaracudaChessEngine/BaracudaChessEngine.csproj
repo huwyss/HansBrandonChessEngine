@@ -43,17 +43,18 @@
     <Compile Include="BaracudaEngine.cs" />
     <Compile Include="Board.cs" />
     <Compile Include="Definitions.cs" />
-    <Compile Include="EvaluatorSimple.cs" />
+    <Compile Include="Evaluator\EvaluatorPosition.cs" />
+    <Compile Include="Evaluator\EvaluatorSimple.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="IEvaluator.cs" />
-    <Compile Include="ISearchService.cs" />
+    <Compile Include="Evaluator\IEvaluator.cs" />
+    <Compile Include="Search\ISearchService.cs" />
     <Compile Include="Move.cs" />
     <Compile Include="MoveGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchMinimax.cs" />
-    <Compile Include="SearchRandom.cs" />
-    <Compile Include="SearchServiceDepthOne.cs" />
-    <Compile Include="SearchServiceDepthHalfMove.cs" />
+    <Compile Include="Search\SearchMinimax.cs" />
+    <Compile Include="Search\SearchRandom.cs" />
+    <Compile Include="Search\SearchServiceDepthOne.cs" />
+    <Compile Include="Search\SearchServiceDepthHalfMove.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

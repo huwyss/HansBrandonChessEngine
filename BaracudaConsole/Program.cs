@@ -29,8 +29,8 @@ namespace BaracudaConsole
                 quiet = false;
             }
 
-            BaracudaEngine whiteEngine = new BaracudaEngine(EngineType.Minmax);
-            BaracudaEngine blackEngine = new BaracudaEngine(EngineType.Random);
+            BaracudaEngine whiteEngine = new BaracudaEngine(EngineType.MinmaxPosition);
+            BaracudaEngine blackEngine = new BaracudaEngine(EngineType.MinmaxPosition);
 
             int whiteWins = 0;
             bool isMoveValid;

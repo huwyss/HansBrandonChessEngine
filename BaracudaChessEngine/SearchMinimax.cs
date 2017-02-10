@@ -36,6 +36,13 @@ namespace BaracudaChessEngine
             _level = level;
         }
 
+        /// <summary>
+        /// Search for the best move.
+        /// </summary>
+        /// <param name="board">Board to be searched in</param>
+        /// <param name="color">Color of next move</param>
+        /// <param name="score">Score of endposition of the returned move.</param>
+        /// <returns>best move for color.</returns>
         public Move Search(Board board, Definitions.ChessColor color, out float score)
         {
             evaluatedPositions = 0;
@@ -44,10 +51,19 @@ namespace BaracudaChessEngine
             return move;
         }
 
+        /// <summary>
+        /// Search best move. Calculate level number of moves.
+        /// </summary>
+        /// <param name="board">Board to be searched in</param>
+        /// <param name="color">Color of next move</param>
+        /// <param name="level">Number of levels to be searched (1=ie whites move, 2=moves of white, black, 3=move of white,black,white...</param>
+        /// <param name="score">Score of position on current level</param>
+        /// <returns></returns>
         internal Move SearchLevel(Board board, Definitions.ChessColor color, int level, out float score)
         {
             Move bestMove = null;
             float bestScore = InitBestScoreSofar(color);
+            float currentScore;
 
             var possibleMoves = board.GetAllMoves(color);
             foreach (Move currentMove in possibleMoves)
@@ -55,27 +71,20 @@ namespace BaracudaChessEngine
                 Board boardWithMove = board.Clone();
                 boardWithMove.Move(currentMove);
 
-                if (level == 1)
+                if (level <= 1)
                 {
-                    float scoreCurrentMove = _evaluator.Evaluate(boardWithMove);
+                    currentScore = _evaluator.Evaluate(boardWithMove);
                     evaluatedPositions++;
-                    if (IsBestMoveSofar(color, bestScore, scoreCurrentMove))
-                    {
-                        bestMove = currentMove;
-                        bestScore = scoreCurrentMove;
-                        score = bestScore;
-                    }
                 }
                 else
                 {
-                    float scoreRec = 0;
-                    Move moveRec = SearchLevel(boardWithMove, Helper.GetOpositeColor(color), level-1, out scoreRec);
-                    if (IsBestMoveSofar(color, bestScore, scoreRec))
-                    {
-                        bestMove = currentMove;
-                        bestScore = scoreRec;
-                        score = bestScore;
-                    }
+                    Move moveRec = SearchLevel(boardWithMove, Helper.GetOpositeColor(color), level-1, out currentScore);
+                }
+
+                if (IsBestMoveSofar(color, bestScore, currentScore))
+                {
+                    bestMove = currentMove;
+                    bestScore = currentScore;
                 }
             }
 

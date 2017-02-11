@@ -107,13 +107,13 @@ namespace BaracudaChessEngine
         {
             float score = 0;
             Move nextMove = _search.Search(_board, color, out score);
-            if (nextMove != null) // no legal move found = color is check mate.
+            if (nextMove != null) // no legal move found = color is check mate or stall mate
             {
                 _board.Move(nextMove);
             }
             else
             {
-                Console.WriteLine(color + " is check mate.");
+                Console.WriteLine(color + " is check mate or stall mate.");
             }
 
             Console.WriteLine("Score: " + score);

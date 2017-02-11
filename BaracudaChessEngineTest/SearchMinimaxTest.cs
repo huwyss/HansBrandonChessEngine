@@ -126,6 +126,32 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual(-1, score);
         }
 
+        [TestMethod]
+        public void SearchLevelTest_WhenWhiteInCheck_ThenDoNotAttackBlackKing_White()
+        {
+            IEvaluator evaluator = new EvaluatorSimple();
+            var target = new SearchMinimax(evaluator);
+            MoveGenerator gen = new MoveGenerator();
+            var board = new Board(gen);
+            string boardString = "....q..R" +
+                                 "........" +
+                                 "....k..." +
+                                 "...b...." +
+                                 "....K..." +
+                                 "........" +
+                                 "........" +
+                                 "........";
+            board.SetPosition(boardString);
+
+            float score = 0;
+            Move actualMove = target.SearchLevel(board, Definitions.ChessColor.White, 3, out score); // level 3
+            Move wrongMove = new Move("h8e8q");
+            Move wrongMove2 = new Move("e4d5b");
+
+            Assert.AreNotEqual(wrongMove, actualMove, "White must escape check.");
+            Assert.AreNotEqual(wrongMove2, actualMove, "White must escape check.");
+        }
+
         // ---------------------------------------------------------------------------------------------
         // Black is first mover
         // ---------------------------------------------------------------------------------------------

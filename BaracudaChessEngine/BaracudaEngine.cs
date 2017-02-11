@@ -107,7 +107,15 @@ namespace BaracudaChessEngine
         {
             float score = 0;
             Move nextMove = _search.Search(_board, color, out score);
-            _board.Move(nextMove);
+            if (nextMove != null) // no legal move found = color is check mate.
+            {
+                _board.Move(nextMove);
+            }
+            else
+            {
+                Console.WriteLine(color + " is check mate.");
+            }
+
             Console.WriteLine("Score: " + score);
             return nextMove;
         }

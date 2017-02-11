@@ -139,8 +139,11 @@ namespace BaracudaChessEngine
         /// </summary>
         public void Move(Move nextMove)
         {
-            // note: todo? captured piece is ignored.
-            Move(nextMove.SourceFile, nextMove.SourceRank, nextMove.TargetFile, nextMove.TargetRank);
+            if (nextMove != null)
+            {
+                // note: todo? captured piece is ignored.
+                Move(nextMove.SourceFile, nextMove.SourceRank, nextMove.TargetFile, nextMove.TargetRank);
+            }
         }
 
         /// <summary>

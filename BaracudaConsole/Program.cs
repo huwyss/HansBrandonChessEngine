@@ -23,14 +23,14 @@ namespace BaracudaConsole
 
             if (humanGame)
             {
-                whiteHuman = false;
-                blackHuman = true;
+                whiteHuman = true;
+                blackHuman = false;
                 runStatisticGames = 1;
                 quiet = false;
             }
 
             BaracudaEngine whiteEngine = new BaracudaEngine(EngineType.MinmaxPosition);
-            BaracudaEngine blackEngine = new BaracudaEngine(EngineType.MinmaxPosition);
+            BaracudaEngine blackEngine = new BaracudaEngine(EngineType.Minmax);
 
             int whiteWins = 0;
             bool isMoveValid;

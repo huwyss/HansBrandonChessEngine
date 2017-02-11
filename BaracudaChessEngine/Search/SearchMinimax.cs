@@ -62,7 +62,7 @@ namespace BaracudaChessEngine
         internal Move SearchLevel(Board board, Definitions.ChessColor color, int level, out float score)
         {
             Move bestMove = null;
-            float bestScore = InitBestScoreSofar(color);
+            float bestScore = InitWithWorstScorePossible(color);
             float currentScore;
 
             var possibleMoves = board.GetAllMoves(color);
@@ -71,16 +71,24 @@ namespace BaracudaChessEngine
                 Board boardWithMove = board.Clone();
                 boardWithMove.Move(currentMove);
 
-                if (level <= 1)
+                if (level > 1) // we need to do another move level...
+                {
+                    if (boardWithMove.IsWinner(color))
+                    {
+                        currentScore = InitWithWorstScorePossible(Helper.GetOpositeColor(color)); // oposit color has lost king
+                    }
+                    else
+                    {
+                        Move moveRec = SearchLevel(boardWithMove, Helper.GetOpositeColor(color), level - 1, out currentScore);
+                    }
+                }
+                else // we calculated all levels and reached the last position that we need to evaluate
                 {
                     currentScore = _evaluator.Evaluate(boardWithMove);
                     evaluatedPositions++;
                 }
-                else
-                {
-                    Move moveRec = SearchLevel(boardWithMove, Helper.GetOpositeColor(color), level-1, out currentScore);
-                }
 
+                // update the best move in the current level
                 if (IsBestMoveSofar(color, bestScore, currentScore))
                 {
                     bestMove = currentMove;
@@ -92,7 +100,7 @@ namespace BaracudaChessEngine
             return bestMove;
         }
 
-        private float InitBestScoreSofar(Definitions.ChessColor color)
+        private float InitWithWorstScorePossible(Definitions.ChessColor color)
         {
             if (color == Definitions.ChessColor.White)
             {

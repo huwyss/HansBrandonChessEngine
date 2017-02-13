@@ -225,6 +225,31 @@ namespace BaracudaChessEngineTest
         }
 
         [TestMethod]
+        public void GetMoves_WhenWhiteCanCaptureEnPassant_ThenListEnPassant()
+        {
+            MoveGenerator target = new MoveGenerator();
+            Board board = new Board(target);
+            string position = ".......k" +
+                              "p......." +
+                              "........" +
+                              ".P......" +
+                              "........" +
+                              "........" + 
+                              "........" + 
+                              "...K....";
+            board.SetPosition(position);
+            board.Move(new Move("a7a5"));
+            Assert.AreEqual(Helper.FileCharToFile('a'), board.EnPassantFile);
+            Assert.AreEqual(6, board.EnPassantRank);
+
+            var moves = target.GetMoves(board, Helper.FileCharToFile('b'), 5); // white pawn
+
+            Assert.AreEqual(2, moves.Count);
+            Assert.AreEqual(true, moves.Contains(new Move("b5a6pe")), "b5a6pe en passant missing");
+            Assert.AreEqual(true, moves.Contains(new Move("b5b6.")), "b5b6. missing");
+        }
+
+        [TestMethod]
         public void GetMoves_WhenBlackPawn_ThenAllMoves()
         {
             MoveGenerator target = new MoveGenerator();
@@ -436,7 +461,7 @@ namespace BaracudaChessEngineTest
         }
 
         [TestMethod]
-        public void GetValidMoveTest_Whene2e4_ThenAddDot()
+        public void GetCorrectMoveTest_Whene2e4_ThenAddDot()
         {
             MoveGenerator target = new MoveGenerator();
             Board board = new Board(target);
@@ -444,6 +469,45 @@ namespace BaracudaChessEngineTest
             
             Move actualMove = target.GetCorrectMove(board, "e2e4");
             Assert.AreEqual("e2e4.", actualMove.ToString());
+        }
+
+        [TestMethod]
+        public void GetCorrectMoveTest_WhenCaptureNormal_ThenAddCapturedPiece()
+        {
+            MoveGenerator target = new MoveGenerator();
+            Board board = new Board(target);
+            string position = "...k...." +
+                              "........" +
+                              "..p....." +
+                              "...P...." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "..K.....";
+            board.SetPosition(position);
+
+            Move actualMove = target.GetCorrectMove(board, "d5c6");
+            Assert.AreEqual("d5c6p", actualMove.ToString());
+        }
+
+        [TestMethod]
+        public void GetCorrectMoveTest_WhenCaptureEnPassant_ThenAddCapturedPiece()
+        {
+            MoveGenerator target = new MoveGenerator();
+            Board board = new Board(target);
+            string position = "...k...." +
+                              "..p....." +
+                              "........" +
+                              "...P...." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "..K.....";
+            board.SetPosition(position);
+            board.Move(new Move("c7c5"));
+
+            Move actualMove = target.GetCorrectMove(board, "d5c6");
+            Assert.AreEqual("d5c6pe", actualMove.ToString());
         }
     }
 }

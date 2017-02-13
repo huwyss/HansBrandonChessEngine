@@ -141,10 +141,18 @@ namespace BaracudaChessEngine
                         else if (currentSequence == "ul" || currentSequence == "ur" ||
                                  currentSequence == "dl" || currentSequence == "dr") // capture
                         {
-                            if (valid && pieceColor != board.GetColor(targetFile, targetRank) && board.GetColor(targetFile, targetRank) != Definitions.ChessColor.Empty) // other color
+                            if (valid && pieceColor == Helper.GetOpositeColor(board.GetColor(targetFile, targetRank)))
                             {
                                 moves.Add(new Move(file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank)));
                             }
+                            else if (valid && targetFile == board.EnPassantFile && targetRank == board.EnPassantRank)
+                            {
+                                char capturedPawn = pieceColor == Definitions.ChessColor.White
+                                    ? Definitions.PAWN.ToString().ToLower()[0]
+                                    : Definitions.PAWN.ToString().ToUpper()[0];
+                                moves.Add(new Move(file, rank, targetFile, targetRank, capturedPawn, true));
+                            }
+
                         }
                     }
                     break;
@@ -158,7 +166,19 @@ namespace BaracudaChessEngine
             if (Move.IsCorrectMove(moveStringUser))
             {
                 Move move = new Move(moveStringUser);
-                move.CapturedPiece = board.GetPiece(move.TargetFile, move.TargetRank);
+                if (board.GetColor(move.TargetFile, move.TargetRank) == Definitions.ChessColor.Empty &&
+                    board.EnPassantFile == move.TargetFile && board.EnPassantRank == move.TargetRank)
+                {
+                    move.CapturedPiece = board.GetColor(move.SourceFile, move.SourceRank) == Definitions.ChessColor.White
+                        ? Definitions.PAWN.ToString().ToLower()[0]
+                        : Definitions.PAWN.ToString().ToUpper()[0];
+                    move.EnPassant = true;
+                }
+                else
+                {
+                    move.CapturedPiece = board.GetPiece(move.TargetFile, move.TargetRank);
+                }
+
                 return move;
             }
 
@@ -202,6 +222,7 @@ namespace BaracudaChessEngine
         }
 
         // unit tests need access.
+        // valid means move is within board. 
         internal void GetEndPosition(int file, int rank, string sequence, out int targetFile, out int targetRank, out bool valid)
         {
             targetFile = file;

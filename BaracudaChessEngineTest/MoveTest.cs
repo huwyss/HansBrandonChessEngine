@@ -82,5 +82,15 @@ namespace BaracudaChessEngineTest
             wrongMoveString = "abcdef";
             Assert.AreEqual(false, Move.IsCorrectMove(wrongMoveString));
         }
+
+        [TestMethod]
+        public void MoveTest_WhenEnPassant_ThenCheckEnPassantCorrect()
+        {
+            Move move = new Move(1, 2, 2, 3, 'p', true);
+            Move move2 = new Move(1, 2, 2, 3, 'p', false);
+            Assert.AreEqual("a2b3pe", move.ToString());
+            Assert.AreNotEqual(move2, move);
+            Assert.AreEqual(new Move("a2b3pe"), move);
+        }
     }
 }

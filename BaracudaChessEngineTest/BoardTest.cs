@@ -64,7 +64,8 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual('n', target.GetPiece('g', 8));
             Assert.AreEqual('r', target.GetPiece('h', 8));
 
-            Assert.AreEqual(-1, target.EnPassantField);
+            Assert.AreEqual(0, target.EnPassantFile);
+            Assert.AreEqual(0, target.EnPassantRank);
             Assert.AreEqual(true, target.CastlingRightFirstMover); // white
             Assert.AreEqual(true, target.CastlingRightSecondMover); // black
         }
@@ -75,7 +76,7 @@ namespace BaracudaChessEngineTest
             var target = new Board(null);
             target.SetInitialPosition();
 
-            target.Move('e', 2, 'e', 4);
+            target.Move(new Move("e2e4"));
             Assert.AreEqual(Definitions.EmptyField, target.GetPiece('e', 2));
             Assert.AreEqual('P', target.GetPiece('e', 4));
             Assert.AreEqual(Definitions.ChessColor.Black, target.SideToMove);
@@ -101,7 +102,7 @@ namespace BaracudaChessEngineTest
             target.SetInitialPosition();
             target.SetPiece(Definitions.EmptyField, 'd', 2);
 
-            target.Move('d', 1, 'd', 7);
+            target.Move(new Move("d1d7"));
             Assert.AreEqual(Definitions.EmptyField, target.GetPiece('d', 1));
             Assert.AreEqual('Q', target.GetPiece('d', 7));
             Assert.AreEqual(Definitions.ChessColor.Black, target.SideToMove);
@@ -109,6 +110,70 @@ namespace BaracudaChessEngineTest
             var moveList = target.Moves;
             Assert.AreEqual(1, target.Moves.Count);
             Assert.AreEqual(new Move(4, 1, 4, 7, 'p'), target.Moves[0]);
+        }
+
+        [TestMethod]
+        public void MoveTest_WhenPawnMovesTwoFields_ThenEnPassantFieldSet_Black()
+        {
+            Board board = new Board(null);
+            string position = ".......k" +
+                              "p......." +
+                              "........" +
+                              ".P......" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "...K....";
+            board.SetPosition(position);
+            board.Move(new Move("a7a5"));
+            Assert.AreEqual(Helper.FileCharToFile('a'), board.EnPassantFile);
+            Assert.AreEqual(6, board.EnPassantRank);
+        }
+
+        [TestMethod]
+        public void MoveTest_WhenPawnMovesTwoFields_ThenEnPassantFieldSet_White()
+        {
+            Board board = new Board(null);
+            string position = ".......k" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "p......." +
+                              "........" +
+                              ".P......" +
+                              "...K....";
+            board.SetPosition(position);
+            board.Move(new Move("b2b4"));
+            Assert.AreEqual(Helper.FileCharToFile('b'), board.EnPassantFile);
+            Assert.AreEqual(3, board.EnPassantRank);
+        }
+
+        [TestMethod]
+        public void MoveTest_WhenBlackCapturesEnPassant_ThenMoveCorrect_BlackMoves()
+        {
+            Board board = new Board(null);
+            string position = ".......k" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "p......." +
+                              "........" +
+                              ".P......" +
+                              "...K....";
+            board.SetPosition(position);
+            board.Move(new Move("b2b4"));
+
+            board.Move(new Move("a4b3Pe")); // capture en passant
+
+            string expPosit = ".......k" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              ".p......" +
+                              "........" +
+                              "...K....";
+            Assert.AreEqual(expPosit, board.GetString, "En passant capture not correct move.");
         }
 
         [TestMethod]

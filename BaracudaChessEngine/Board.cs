@@ -9,7 +9,8 @@ namespace BaracudaChessEngine
     public class Board
     {
         public Definitions.ChessColor SideToMove { get; set; }
-        public int EnPassantField { get; set; }
+        public int EnPassantFile { get; set; } // 1..8
+        public int EnPassantRank { get; set; } // 1..8
         public bool CastlingRightFirstMover { get; set; }
         public bool CastlingRightSecondMover { get; set; }
         public List<Move> Moves { get; set; }
@@ -60,7 +61,8 @@ namespace BaracudaChessEngine
         private void InitVariables()
         {
             SideToMove = Definitions.ChessColor.White;
-            EnPassantField = -1;
+            EnPassantFile = 0;
+            EnPassantRank = 0;
             CastlingRightFirstMover = true;
             CastlingRightSecondMover = true;
             Moves = new List<Move>();
@@ -127,15 +129,7 @@ namespace BaracudaChessEngine
         }
 
         /// <summary>
-        /// Do a move and update the board.
-        /// </summary>
-        public void Move(char sourceFileChar, int sourceRank, char targetFileChar, int targetRank)
-        {
-            Move(Helper.FileCharToFile(sourceFileChar), sourceRank, Helper.FileCharToFile(targetFileChar), targetRank);
-        }
-
-        /// <summary>
-        /// Move parameter of Type Move.
+        /// Do a move and update the board
         /// </summary>
         public void Move(IMove nextMove)
         {
@@ -145,23 +139,58 @@ namespace BaracudaChessEngine
                 return;
             }
 
-            // note: todo? captured piece is ignored.
-            Move(move.SourceFile, move.SourceRank, move.TargetFile, move.TargetRank);
-        }
+            int sourceFile = move.SourceFile;
+            int sourceRank = move.SourceRank;
+            int targetFile = move.TargetFile;
+            int targetRank = move.TargetRank;
 
-        /// <summary>
-        /// Do a move and update the board.
-        /// </summary>
-        public void Move(int sourceFile, int sourceRank, int targetFile, int targetRank)
-        {
+            bool enPassant = move.EnPassant;
+
+            int currentEnPassantFile = EnPassantFile;
+            int currentEnPassantRank = EnPassantRank;
+            
             char pieceToMove = GetPiece(sourceFile, sourceRank);
-            char capturedPiece = GetPiece(targetFile, targetRank);
+            char capturedPiece = move.CapturedPiece; // GetPiece(targetFile, targetRank);
 
-            var currentMove = new Move(sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
+            EnPassantFile = 0;
+            EnPassantRank = 0;
+
+            var currentMove = new Move(sourceFile, sourceRank, targetFile, targetRank, capturedPiece, enPassant);
             Moves.Add(currentMove);
 
             SetPiece(pieceToMove, targetFile, targetRank);
             SetPiece(Definitions.EmptyField, sourceFile, sourceRank);
+
+            //if (enPassant) // if en passant capture then remove the passed pawn
+            //{
+            //    // Black
+            //    SetPiece(Definitions.EmptyField, targetFile, targetRank + 1);
+                
+            //}
+
+            // set black en passant field
+            if (pieceToMove == Definitions.PAWN.ToString().ToLower()[0]) // black pawn
+            {
+                // set en passant field
+                if (sourceRank - 2 == targetRank && // if 2 fields move
+                    sourceFile == targetFile)       // and straight move 
+                {
+                    EnPassantRank = sourceRank - 1;
+                    EnPassantFile = sourceFile;
+                }
+            }
+
+            // set white en passant field
+            if (pieceToMove == Definitions.PAWN.ToString().ToUpper()[0]) // white pawn
+            {
+                // set en passant field
+                if (sourceRank + 2 == targetRank && // if 2 fields move
+                    sourceFile == targetFile)       // and straight move 
+                {
+                    EnPassantRank = sourceRank + 1;
+                    EnPassantFile = sourceFile;
+                }
+            }
 
             SideToMove = Helper.GetOpositeColor(SideToMove);
         }

@@ -17,14 +17,16 @@ namespace BaracudaChessEngine
         // char TargetFileChar { get; set; }
         public int TargetRank { get; set; }
         public char CapturedPiece { get; set; }
+        public bool EnPassant { get; set; }
 
-        public Move(int sourceFile, int sourceRank, int targetFile, int targetRank, char capturedPiece)
+        public Move(int sourceFile, int sourceRank, int targetFile, int targetRank, char capturedPiece, bool enPassant = false)
         {
             SourceFile = sourceFile;
             SourceRank = sourceRank;
             TargetFile = targetFile;
             TargetRank = targetRank;
             CapturedPiece = capturedPiece;
+            EnPassant = enPassant;
         }
 
         public Move(string moveString)
@@ -40,6 +42,14 @@ namespace BaracudaChessEngine
             if (moveString.Length >= 5)
             {
                 CapturedPiece = moveString[4];
+            }
+
+            if (moveString.Length >= 6)
+            {
+                if (moveString[5] == 'e')
+                {
+                    EnPassant = true;
+                }
             }
         }
 
@@ -63,6 +73,7 @@ namespace BaracudaChessEngine
             equal &= TargetFile == other.TargetFile;
             equal &= TargetRank == other.TargetRank;
             equal &= CapturedPiece == other.CapturedPiece;
+            equal &= EnPassant == other.EnPassant;
             return equal;
         }
 
@@ -74,6 +85,7 @@ namespace BaracudaChessEngine
             moveString += Helper.FileToFileChar(TargetFile);
             moveString += TargetRank;
             moveString += CapturedPiece;
+            moveString += EnPassant ? "e" : "";
             return moveString;
         }
 

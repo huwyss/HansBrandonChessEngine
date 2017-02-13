@@ -150,7 +150,7 @@ namespace BaracudaChessEngine
             int currentEnPassantRank = EnPassantRank;
             
             char pieceToMove = GetPiece(sourceFile, sourceRank);
-            char capturedPiece = move.CapturedPiece; // GetPiece(targetFile, targetRank);
+            char capturedPiece = GetPiece(targetFile, targetRank);
 
             EnPassantFile = 0;
             EnPassantRank = 0;

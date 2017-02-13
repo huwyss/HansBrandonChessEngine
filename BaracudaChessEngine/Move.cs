@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace BaracudaChessEngine
 {
-    public class Move
+    
+
+    public class Move : IMove
     {
         public int SourceFile { get; set; }
         // char SourceFileChar { get; set; }

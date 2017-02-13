@@ -63,5 +63,29 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual(expectedBoard, actualBoard, "Black queen should be captured at d4");
         }
 
+        [TestMethod]
+        public void DoBestMoveTest_WhenWhiteIsCheckMate_ThenNoLegalMove_WhiteMoves()
+        {
+            var engine = new BaracudaEngine(EngineType.MinmaxPosition);
+            string boardString = "........" +
+                                 "........" +
+                                 "........" +
+                                 "........" +
+                                 "........" +
+                                 "...k...." +
+                                 "...q...." +
+                                 "...K....";
+            engine.SetPosition(boardString);
+
+            IMove actualMove = engine.DoBestMove(Definitions.ChessColor.White);
+
+            string actualBoard = engine.GetString();
+            string expectedBoard = boardString;
+            Assert.AreEqual(expectedBoard, actualBoard, "White is check mate");
+            Assert.AreEqual(new NoLegalMove(), actualMove, "White is check mate, so no legal move possible");
+        }
+
+
+
     }
 }

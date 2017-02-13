@@ -137,13 +137,16 @@ namespace BaracudaChessEngine
         /// <summary>
         /// Move parameter of Type Move.
         /// </summary>
-        public void Move(Move nextMove)
+        public void Move(IMove nextMove)
         {
-            if (nextMove != null)
+            Move move = nextMove as Move;
+            if (move == null)
             {
-                // note: todo? captured piece is ignored.
-                Move(nextMove.SourceFile, nextMove.SourceRank, nextMove.TargetFile, nextMove.TargetRank);
+                return;
             }
+
+            // note: todo? captured piece is ignored.
+            Move(move.SourceFile, move.SourceRank, move.TargetFile, move.TargetRank);
         }
 
         /// <summary>

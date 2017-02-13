@@ -28,13 +28,39 @@ namespace BaracudaChessEngineTest
             Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 1, 5, 4, 'p'));
             Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 2, 1, 4, 'p'));
             Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 2, 5, 1, 'p'));
-            Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 2, 5, 4, 'x'));
+            Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 2, 5, 4, 'r'));
         }
 
         [TestMethod]
         public void ConstructorTest_WhenStringParameter_ThenCorrectObject()
         {
             Assert.AreEqual(new Move(5, 2, 5, 4, 'p'), new Move("e2e4p"));
+        }
+
+        [TestMethod]
+        public void EqualsTest_WhenNoLegalMove_ThenCorrectObject()
+        {
+            IMove noLegalMove = new NoLegalMove();
+            IMove noLegalMove2 = new NoLegalMove();
+            Assert.AreEqual(noLegalMove, noLegalMove2);
+        }
+
+        [TestMethod]
+        public void EqualsTest_WhenNormalMoveAndNoLegalMove_ThenNotEqual()
+        {
+            IMove noLegalMove = new NoLegalMove();
+            IMove normalMove = new Move(1, 1, 1, 1, '.');
+            Assert.AreNotEqual(noLegalMove, normalMove);
+            
+            // the other way round
+            Assert.AreNotEqual(normalMove, noLegalMove);
+        }
+
+        [TestMethod]
+        public void ToStringTest_WhenNoLegalMove_ThenNoLegalMove()
+        {
+            IMove noLegal = new NoLegalMove();
+            Assert.AreEqual("NoLegalMove", noLegal.ToString());
         }
     }
 

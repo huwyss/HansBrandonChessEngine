@@ -92,7 +92,7 @@ namespace BaracudaChessEngine
             return valid;
         }
 
-        public bool Move(Move move)
+        public bool Move(IMove move)
         {
             _board.Move(move);
             return true;
@@ -103,19 +103,11 @@ namespace BaracudaChessEngine
             return _board.IsWinner(color);
         }
 
-        public Move DoBestMove(Definitions.ChessColor color)
+        public IMove DoBestMove(Definitions.ChessColor color)
         {
             float score = 0;
-            Move nextMove = _search.Search(_board, color, out score);
-            if (nextMove != null) // no legal move found = color is check mate or stall mate
-            {
-                _board.Move(nextMove);
-            }
-            else
-            {
-                Console.WriteLine(color + " is check mate or stall mate.");
-            }
-
+            IMove nextMove = _search.Search(_board, color, out score);
+            _board.Move(nextMove);
             Console.WriteLine("Score: " + score);
             return nextMove;
         }

@@ -43,10 +43,10 @@ namespace BaracudaChessEngine
         /// <param name="color">Color of next move</param>
         /// <param name="score">Score of endposition of the returned move.</param>
         /// <returns>best move for color.</returns>
-        public Move Search(Board board, Definitions.ChessColor color, out float score)
+        public IMove Search(Board board, Definitions.ChessColor color, out float score)
         {
             evaluatedPositions = 0;
-            Move move = SearchLevel(board, color, _level, out score);
+            IMove move = SearchLevel(board, color, _level, out score);
             Console.WriteLine("evaluated positons: " + evaluatedPositions);
             return move;
         }
@@ -59,7 +59,7 @@ namespace BaracudaChessEngine
         /// <param name="level">Number of levels to be searched (1=ie whites move, 2=moves of white, black, 3=move of white,black,white...</param>
         /// <param name="score">Score of position on current level</param>
         /// <returns></returns>
-        internal Move SearchLevel(Board board, Definitions.ChessColor color, int level, out float score)
+        internal IMove SearchLevel(Board board, Definitions.ChessColor color, int level, out float score)
         {
             Move bestMove = null;
             float bestScore = InitWithWorstScorePossible(color);
@@ -79,7 +79,7 @@ namespace BaracudaChessEngine
                     }
                     else
                     {
-                        Move moveRec = SearchLevel(boardWithMove, Helper.GetOpositeColor(color), level - 1, out currentScore);
+                        IMove moveRec = SearchLevel(boardWithMove, Helper.GetOpositeColor(color), level - 1, out currentScore);
                     }
                 }
                 else // we calculated all levels and reached the last position that we need to evaluate
@@ -97,6 +97,11 @@ namespace BaracudaChessEngine
             }
 
             score = bestScore;
+            if (bestMove == null)
+            {
+                return new NoLegalMove();
+            }
+            
             return bestMove;
         }
 

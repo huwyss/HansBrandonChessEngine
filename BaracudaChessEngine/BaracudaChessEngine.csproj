@@ -47,6 +47,8 @@
     <Compile Include="Evaluator\EvaluatorSimple.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Evaluator\IEvaluator.cs" />
+    <Compile Include="IMove.cs" />
+    <Compile Include="NoLegalMove.cs" />
     <Compile Include="Search\ISearchService.cs" />
     <Compile Include="Move.cs" />
     <Compile Include="MoveGenerator.cs" />

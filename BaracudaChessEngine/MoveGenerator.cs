@@ -37,7 +37,7 @@ namespace BaracudaChessEngine
         }
 
         /// <summary>
-        /// Returns all moves of that piece.
+        /// Returns all pseudo legal moves of that piece. (King might be under attack).
         /// </summary>
         /// <param name="file"></param>
         /// <param name="rank"></param>

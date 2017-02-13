@@ -75,7 +75,7 @@ namespace BaracudaChessEngineTest
             board.SetPosition(boardString);
 
             float score = 0;
-            Move actualMove = target.Search(board, Definitions.ChessColor.White, out score);
+            IMove actualMove = target.Search(board, Definitions.ChessColor.White, out score);
             Move verybadMove = new Move("b4c5p");
             Assert.AreNotEqual(verybadMove, actualMove, "Queen must not capture pawn. Otherwise queen gets lost.");
         }
@@ -98,7 +98,7 @@ namespace BaracudaChessEngineTest
             board.SetPosition(boardString);
 
             float score = 0;
-            Move actualMove = target.Search(board, Definitions.ChessColor.White, out score);
+            IMove actualMove = target.Search(board, Definitions.ChessColor.White, out score);
             Move goodMove = new Move("b4c5q");
             Assert.AreEqual(goodMove, actualMove, "Pawn must capture queen.");
         }

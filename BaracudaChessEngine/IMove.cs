@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace BaracudaChessEngine
 {
-    public interface ISearchService
+    public interface IMove
     {
-        IMove Search(Board board, Definitions.ChessColor color, out float score);
+        bool Equals(System.Object obj);
+        string ToString();
+        int GetHashCode();
     }
 }

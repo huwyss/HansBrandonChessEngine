@@ -84,7 +84,7 @@ namespace BaracudaConsole
                     }
                     else
                     {
-                        Move moveComputer = null;
+                        IMove moveComputer = null;
                         // computer move for white
                         if (!whiteHuman && whiteEngine.SideToMove() == Definitions.ChessColor.White)
                         {
@@ -98,13 +98,21 @@ namespace BaracudaConsole
                             whiteEngine.Move(moveComputer);
                         }
 
+                        if (moveComputer as NoLegalMove != null)
+                        {
+                            // check for stall mate and check mate
+                            Console.WriteLine("\nWhite wins!");
+                            break;
+                        }
+
+
                         if (!quiet && moveComputer.ToString() != "")
                         {
                             Console.WriteLine("Computer move: " + moveComputer.ToString());
                         }
                     }
 
-
+                    
                     if (!quiet)
                         PrintBoard(whiteEngine);
 

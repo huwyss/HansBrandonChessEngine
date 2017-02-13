@@ -15,7 +15,7 @@ namespace BaracudaChessEngine
             _evaluator = evaluator;
         }
 
-        public Move Search(Board board, Definitions.ChessColor color, out float score)
+        public IMove Search(Board board, Definitions.ChessColor color, out float score)
         {
             Move bestMove = null;
             float bestScore = InitBestScoreSofar(color);

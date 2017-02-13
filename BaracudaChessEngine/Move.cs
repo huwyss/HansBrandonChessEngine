@@ -81,5 +81,42 @@ namespace BaracudaChessEngine
         {
             return ToString().GetHashCode();
         }
+
+        public static bool IsCorrectMove(string moveString)
+        {
+            bool correct = true;
+
+            if (moveString.Length >= 4)
+            {
+                correct &= moveString[0] >= 'a';
+                correct &= moveString[0] <= 'h';
+
+                correct &= moveString[1] >= '1';
+                correct &= moveString[1] <= '8';
+
+                correct &= moveString[2] >= 'a';
+                correct &= moveString[2] <= 'h';
+
+                correct &= moveString[3] >= '1';
+                correct &= moveString[3] <= '8';
+            }
+            else
+            {
+                return false;
+            }
+
+            if (moveString.Length >= 5)
+            {
+                char capturedPiece = moveString[4].ToString().ToLower()[0];
+                correct &= capturedPiece == Definitions.KING ||
+                           capturedPiece == Definitions.QUEEN ||
+                           capturedPiece == Definitions.ROOK ||
+                           capturedPiece == Definitions.BISHOP ||
+                           capturedPiece == Definitions.KNIGHT ||
+                           capturedPiece == Definitions.PAWN;
+            }
+
+            return correct;
+        }
     }
 }

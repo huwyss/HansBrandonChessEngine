@@ -11,7 +11,7 @@ namespace BaracudaConsole
     {
         static void Main(string[] args)
         {
-            bool humanGame = false;
+            bool humanGame = true;
 
             // ----------------------------------------------------------------
 
@@ -30,7 +30,7 @@ namespace BaracudaConsole
             }
 
             BaracudaEngine whiteEngine = new BaracudaEngine(EngineType.MinmaxPosition);
-            BaracudaEngine blackEngine = new BaracudaEngine(EngineType.Minmax);
+            BaracudaEngine blackEngine = new BaracudaEngine(EngineType.MinmaxPosition);
 
             float whiteWins = 0;
             bool isMoveValid;

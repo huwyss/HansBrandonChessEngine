@@ -263,9 +263,9 @@ namespace BaracudaChessEngine
             }
         }
 
-        public Move GetValidMove(string moveStringUser)
+        public Move GetCorrectMove(string moveStringUser)
         {
-            return _moveGenerator.GetValidMove(this, moveStringUser);
+            return _moveGenerator.GetCorrectMove(this, moveStringUser);
         }
 
         public bool IsMoveValid(Move move)

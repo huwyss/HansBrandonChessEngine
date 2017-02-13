@@ -62,6 +62,25 @@ namespace BaracudaChessEngineTest
             IMove noLegal = new NoLegalMove();
             Assert.AreEqual("NoLegalMove", noLegal.ToString());
         }
-    }
 
+        [TestMethod]
+        public void IsCorrectMoveTest_WhenCorrect_ThenTrue()
+        {
+            String correctMoveString = "a2a3";
+            Assert.AreEqual(true, Move.IsCorrectMove(correctMoveString));
+        }
+
+        [TestMethod]
+        public void IsCorrectMoveTest_WhenBadInput_ThenFalse()
+        {
+            String wrongMoveString = "abcd";
+            Assert.AreEqual(false, Move.IsCorrectMove(wrongMoveString));
+
+            wrongMoveString = "abcde";
+            Assert.AreEqual(false, Move.IsCorrectMove(wrongMoveString));
+
+            wrongMoveString = "abcdef";
+            Assert.AreEqual(false, Move.IsCorrectMove(wrongMoveString));
+        }
+    }
 }

@@ -153,11 +153,16 @@ namespace BaracudaChessEngine
             return moves;
         }
 
-        public Move GetValidMove(Board board, string moveStringUser) // input is like "e2e4"
+        public Move GetCorrectMove(Board board, string moveStringUser) // input is like "e2e4"
         {
-            Move move = new Move(moveStringUser);
-            move.CapturedPiece = board.GetPiece(move.TargetFile, move.TargetRank);
-            return move;
+            if (Move.IsCorrectMove(moveStringUser))
+            {
+                Move move = new Move(moveStringUser);
+                move.CapturedPiece = board.GetPiece(move.TargetFile, move.TargetRank);
+                return move;
+            }
+
+            return null;
         }
 
         public bool IsMoveValid(Board board, Move move)

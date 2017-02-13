@@ -82,7 +82,12 @@ namespace BaracudaChessEngine
 
         public bool Move(string moveStringUser)
         {
-            Move syntaxCorrectMove = _board.GetValidMove(moveStringUser);
+            Move syntaxCorrectMove = _board.GetCorrectMove(moveStringUser);
+            if (syntaxCorrectMove == null)
+            {
+                return false;
+            }
+
             bool valid = _board.IsMoveValid(syntaxCorrectMove);
             if (valid)
             {

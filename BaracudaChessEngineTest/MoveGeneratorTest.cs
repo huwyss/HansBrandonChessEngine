@@ -442,7 +442,7 @@ namespace BaracudaChessEngineTest
             Board board = new Board(target);
             board.SetInitialPosition();
             
-            Move actualMove = target.GetValidMove(board, "e2e4");
+            Move actualMove = target.GetCorrectMove(board, "e2e4");
             Assert.AreEqual("e2e4.", actualMove.ToString());
         }
     }

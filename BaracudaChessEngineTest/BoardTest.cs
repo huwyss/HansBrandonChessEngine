@@ -100,7 +100,7 @@ namespace BaracudaChessEngineTest
             var target = new Board(null);
             target.SetInitialPosition();
             target.SetPiece(Definitions.EmptyField, 'd', 2);
-            
+
             target.Move('d', 1, 'd', 7);
             Assert.AreEqual(Definitions.EmptyField, target.GetPiece('d', 1));
             Assert.AreEqual('Q', target.GetPiece('d', 7));
@@ -247,6 +247,40 @@ namespace BaracudaChessEngineTest
             board.SetPosition(position);
 
             Assert.AreEqual(false, board.IsCheck(Definitions.ChessColor.White), "king is not attacked!");
+        }
+
+        [TestMethod]
+        public void BackTest_WhenWhiteAndBlackMovesDone_ThenGoBackToInitPosition()
+        {
+            var target = new Board(null);
+            target.SetInitialPosition();
+            target.Move(new Move("e2e4"));
+            target.Move(new Move("e7e5"));
+
+            target.Back();
+            string expectedString = "rnbqkbnr" +
+                                    "pppppppp" +
+                                    "........" +
+                                    "........" +
+                                    "....P..." +
+                                    "........" +
+                                    "PPPP.PPP" +
+                                    "RNBQKBNR";
+            Assert.AreEqual(expectedString, target.GetString);
+            Assert.AreEqual(Definitions.ChessColor.Black, target.SideToMove);
+
+            target.Back();
+            expectedString =        "rnbqkbnr" +
+                                    "pppppppp" +
+                                    "........" +
+                                    "........" +
+                                    "........" +
+                                    "........" +
+                                    "PPPPPPPP" +
+                                    "RNBQKBNR";
+            Assert.AreEqual(expectedString, target.GetString);
+            Assert.AreEqual(Definitions.ChessColor.White, target.SideToMove);
+
         }
     }
 }

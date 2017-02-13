@@ -131,5 +131,11 @@ namespace BaracudaChessEngine
         {
             return _board.IsCheck(color);
         }
+
+        public void Back()
+        {
+            _board.Back();
+            _board.Back();
+        }
     }
 }

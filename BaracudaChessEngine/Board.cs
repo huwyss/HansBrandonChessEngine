@@ -305,5 +305,17 @@ namespace BaracudaChessEngine
 
             return false;
         }
+
+        public void Back()
+        {
+            if (Moves.Count >= 1)
+            {
+                var lastMove = Moves[Moves.Count - 1];
+                SetPiece(GetPiece(lastMove.TargetFile, lastMove.TargetRank), lastMove.SourceFile, lastMove.SourceRank);
+                SetPiece(lastMove.CapturedPiece, lastMove.TargetFile, lastMove.TargetRank);
+                Moves.RemoveAt(Moves.Count - 1);
+                SideToMove = Helper.GetOpositeColor(SideToMove);
+            }
+        }
     }
 }

@@ -71,6 +71,13 @@ namespace BaracudaConsole
                             Console.WriteLine("Enter your move (ie. e2e4): ");
                             string moveConsoleString = Console.ReadLine();
                             moveConsoleString = moveConsoleString.Trim();
+                            if (moveConsoleString == "back" || moveConsoleString == "b")
+                            {
+                                blackEngine.Back();
+                                whiteEngine.Back();
+                                moveCount -= 2;
+                                break;
+                            }
                             isMoveValid = whiteEngine.Move(moveConsoleString);
                             if (!isMoveValid)
                             {

@@ -212,5 +212,41 @@ namespace BaracudaChessEngineTest
             Assert.AreNotEqual(cloned, board, "must not return the same object!");
             Assert.AreEqual(board.GetString, cloned.GetString);
         }
+
+        [TestMethod]
+        public void IsCheckTest_WhenKingAttacked_ThenTrue()
+        {
+            MoveGenerator generator = new MoveGenerator();
+            Board board = new Board(generator);
+            string position = "....rk.." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "....K...";
+            board.SetPosition(position);
+
+            Assert.AreEqual(true, board.IsCheck(Definitions.ChessColor.White), "king is attacked by rook!");
+        }
+
+        [TestMethod]
+        public void IsCheckTest_WhenKingNotAttacked_ThenFalse()
+        {
+            MoveGenerator generator = new MoveGenerator();
+            Board board = new Board(generator);
+            string position = ".....k.." +
+                              ".....p.." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "....K...";
+            board.SetPosition(position);
+
+            Assert.AreEqual(false, board.IsCheck(Definitions.ChessColor.White), "king is not attacked!");
+        }
     }
 }

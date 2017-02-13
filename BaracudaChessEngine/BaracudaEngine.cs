@@ -121,5 +121,10 @@ namespace BaracudaChessEngine
         {
             return _board.SideToMove;
         }
+
+        public bool IsCheck(Definitions.ChessColor color)
+        {
+            return _board.IsCheck(color);
+        }
     }
 }

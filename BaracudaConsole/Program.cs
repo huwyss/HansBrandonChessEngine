@@ -32,7 +32,7 @@ namespace BaracudaConsole
             BaracudaEngine whiteEngine = new BaracudaEngine(EngineType.MinmaxPosition);
             BaracudaEngine blackEngine = new BaracudaEngine(EngineType.Minmax);
 
-            int whiteWins = 0;
+            float whiteWins = 0;
             bool isMoveValid;
 
             for (int i = 0; i < runStatisticGames; i++)
@@ -90,28 +90,52 @@ namespace BaracudaConsole
                         {
                             moveComputer = whiteEngine.DoBestMove(Definitions.ChessColor.White);
                             blackEngine.Move(moveComputer);
+
+                            if (moveComputer is NoLegalMove)
+                            {
+                                // check for stall mate and check mate
+                                if (whiteEngine.IsCheck(Definitions.ChessColor.White))
+                                {
+                                    Console.WriteLine("\nBlack wins!");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("\nBlack is stall mate. Game is draw!");
+                                    whiteWins += 0.5f;
+                                }
+                                break;
+                            }
                         }
                         // computer move for black
                         else if (!blackHuman && whiteEngine.SideToMove() == Definitions.ChessColor.Black)
                         {
                             moveComputer = blackEngine.DoBestMove(Definitions.ChessColor.Black);
                             whiteEngine.Move(moveComputer);
+
+                            if (moveComputer is NoLegalMove)
+                            {
+                                // check for stall mate and check mate
+                                if (whiteEngine.IsCheck(Definitions.ChessColor.Black))
+                                {
+                                    Console.WriteLine("\nWhite wins!");
+                                    whiteWins++;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("\nWhite is stall mate. Game is draw!");
+                                    whiteWins += 0.5f;
+                                }
+                                break;
+                            }
                         }
 
-                        if (moveComputer as NoLegalMove != null)
-                        {
-                            // check for stall mate and check mate
-                            Console.WriteLine("\nWhite wins!");
-                            break;
-                        }
-
+                        
 
                         if (!quiet && moveComputer.ToString() != "")
                         {
                             Console.WriteLine("Computer move: " + moveComputer.ToString());
                         }
                     }
-
                     
                     if (!quiet)
                         PrintBoard(whiteEngine);
@@ -133,7 +157,7 @@ namespace BaracudaConsole
                     }
                 }
 
-                Console.WriteLine("Games: " + i + " - White wins: " + whiteWins);
+                Console.WriteLine("Games: " + i+1 + " - White wins: " + whiteWins);
             }
 
             Console.WriteLine("\n\nResult\n\nGames: " + runStatisticGames + " - White wins: " + whiteWins);

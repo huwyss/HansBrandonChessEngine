@@ -277,5 +277,33 @@ namespace BaracudaChessEngine
         {
             return _moveGenerator.GetAllMoves(this, color);
         }
+
+        public bool IsCheck(Definitions.ChessColor color)
+        {
+            char king;
+
+            if (color == Definitions.ChessColor.White)
+            {
+                king = Definitions.KING.ToString().ToUpper()[0];
+            }
+            else
+            {
+                king = Definitions.KING.ToString().ToLower()[0];
+            }
+
+            // find all oponent moves
+            var moves = _moveGenerator.GetAllMoves(this, Helper.GetOpositeColor(color));
+
+            // if a move ends in king's position then king is in check
+            foreach (Move move in moves)
+            {
+                if (move.CapturedPiece == king)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

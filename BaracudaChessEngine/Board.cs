@@ -9,11 +9,41 @@ namespace BaracudaChessEngine
     public class Board
     {
         public Definitions.ChessColor SideToMove { get; set; }
-        public int EnPassantFile { get; set; } // 1..8
-        public int EnPassantRank { get; set; } // 1..8
         public bool CastlingRightFirstMover { get; set; }
         public bool CastlingRightSecondMover { get; set; }
-        public List<Move> Moves { get; set; }
+        public History History { get; set; }
+        public Move LastMove { get { return History.LastMove; } }
+
+        public int EnPassantFile
+        {
+            get
+            {
+                if (!IsClonedBoard)
+                {
+                    return History.LastEnPassantFile;
+                }
+                
+                return ClonedEnPassantFile;
+            }
+        }
+
+        public int EnPassantRank
+        {
+            get
+            {
+                if (!IsClonedBoard)
+                {
+                    return History.LastEnPassantRank;
+                }
+
+                return ClonedEnPassantRank;
+            }
+        }
+
+        public int ClonedEnPassantFile { get; set; }
+        public int ClonedEnPassantRank { get; set; }
+
+        public bool IsClonedBoard { get; set; }
 
         private MoveGenerator _moveGenerator;
         private char[] _board;
@@ -41,11 +71,17 @@ namespace BaracudaChessEngine
             _moveGenerator = moveGenerator;
         }
 
+        /// <summary>
+        /// Clone the Board (not the complete history, only en passant fields)
+        /// </summary>
         public Board Clone()
         {
             Board clonedBoard = new Board(_moveGenerator);
             string position = GetString;
             clonedBoard.SetPosition(position);
+            clonedBoard.ClonedEnPassantFile = EnPassantFile;
+            clonedBoard.ClonedEnPassantRank = EnPassantRank;
+            clonedBoard.IsClonedBoard = true;
             return clonedBoard;
         }
 
@@ -61,11 +97,10 @@ namespace BaracudaChessEngine
         private void InitVariables()
         {
             SideToMove = Definitions.ChessColor.White;
-            EnPassantFile = 0;
-            EnPassantRank = 0;
             CastlingRightFirstMover = true;
             CastlingRightSecondMover = true;
-            Moves = new List<Move>();
+            History = new History();
+            IsClonedBoard = false;
         }
 
         public void SetPosition(string position)
@@ -145,17 +180,14 @@ namespace BaracudaChessEngine
             int targetRank = move.TargetRank;
 
             bool enPassant = move.EnPassant;
-
-            int currentEnPassantFile = EnPassantFile;
-            int currentEnPassantRank = EnPassantRank;
             
             char pieceToMove = GetPiece(sourceFile, sourceRank);
             char capturedPiece;
 
             Definitions.ChessColor color = GetColor(sourceFile, sourceRank);
 
-            EnPassantFile = 0;
-            EnPassantRank = 0;
+            int enPassantFile = 0;
+            int enPassantRank = 0;
 
             if (enPassant)
             {
@@ -177,7 +209,7 @@ namespace BaracudaChessEngine
             }
 
             var currentMove = new Move(sourceFile, sourceRank, targetFile, targetRank, capturedPiece, enPassant);
-            Moves.Add(currentMove);
+            
 
             SetPiece(pieceToMove, targetFile, targetRank);
             SetPiece(Definitions.EmptyField, sourceFile, sourceRank);
@@ -189,8 +221,8 @@ namespace BaracudaChessEngine
                 if (sourceRank - 2 == targetRank && // if 2 fields move
                     sourceFile == targetFile)       // and straight move 
                 {
-                    EnPassantRank = sourceRank - 1;
-                    EnPassantFile = sourceFile;
+                    enPassantRank = sourceRank - 1;
+                    enPassantFile = sourceFile;
                 }
             }
 
@@ -201,11 +233,12 @@ namespace BaracudaChessEngine
                 if (sourceRank + 2 == targetRank && // if 2 fields move
                     sourceFile == targetFile)       // and straight move 
                 {
-                    EnPassantRank = sourceRank + 1;
-                    EnPassantFile = sourceFile;
+                    enPassantRank = sourceRank + 1;
+                    enPassantFile = sourceFile;
                 }
             }
 
+            History.Add(currentMove, enPassantFile, enPassantRank);
             SideToMove = Helper.GetOpositeColor(SideToMove);
         }
 
@@ -351,9 +384,9 @@ namespace BaracudaChessEngine
 
         public void Back()
         {
-            if (Moves.Count >= 1)
+            if (History.Count >= 1)
             {
-                var lastMove = Moves[Moves.Count - 1];
+                var lastMove = History.LastMove; 
                 Definitions.ChessColor color = GetColor(lastMove.TargetFile, lastMove.TargetRank);
                 SetPiece(GetPiece(lastMove.TargetFile, lastMove.TargetRank), lastMove.SourceFile, lastMove.SourceRank);
 
@@ -374,8 +407,8 @@ namespace BaracudaChessEngine
                 {
                     SetPiece(lastMove.CapturedPiece, lastMove.TargetFile, lastMove.TargetRank);
                 }
-                
-                Moves.RemoveAt(Moves.Count - 1);
+
+                History.Back(); 
                 SideToMove = Helper.GetOpositeColor(SideToMove);
             }
         }

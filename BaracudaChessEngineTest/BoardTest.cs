@@ -64,8 +64,8 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual('n', target.GetPiece('g', 8));
             Assert.AreEqual('r', target.GetPiece('h', 8));
 
-            Assert.AreEqual(0, target.EnPassantFile);
-            Assert.AreEqual(0, target.EnPassantRank);
+            Assert.AreEqual(0, target.History.LastEnPassantFile);
+            Assert.AreEqual(0, target.History.LastEnPassantRank);
             Assert.AreEqual(true, target.CastlingRightFirstMover); // white
             Assert.AreEqual(true, target.CastlingRightSecondMover); // black
         }
@@ -107,9 +107,9 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual('Q', target.GetPiece('d', 7));
             Assert.AreEqual(Definitions.ChessColor.Black, target.SideToMove);
 
-            var moveList = target.Moves;
-            Assert.AreEqual(1, target.Moves.Count);
-            Assert.AreEqual(new Move(4, 1, 4, 7, 'p'), target.Moves[0]);
+            var moveList = target.History.Moves;
+            Assert.AreEqual(1, target.History.Moves.Count);
+            Assert.AreEqual(new Move(4, 1, 4, 7, 'p'), target.History.Moves[0]);
         }
 
         [TestMethod]
@@ -126,8 +126,8 @@ namespace BaracudaChessEngineTest
                               "...K....";
             board.SetPosition(position);
             board.Move(new Move("a7a5"));
-            Assert.AreEqual(Helper.FileCharToFile('a'), board.EnPassantFile);
-            Assert.AreEqual(6, board.EnPassantRank);
+            Assert.AreEqual(Helper.FileCharToFile('a'), board.History.LastEnPassantFile);
+            Assert.AreEqual(6, board.History.LastEnPassantRank);
         }
 
         [TestMethod]
@@ -144,8 +144,8 @@ namespace BaracudaChessEngineTest
                               "...K....";
             board.SetPosition(position);
             board.Move(new Move("b2b4"));
-            Assert.AreEqual(Helper.FileCharToFile('b'), board.EnPassantFile);
-            Assert.AreEqual(3, board.EnPassantRank);
+            Assert.AreEqual(Helper.FileCharToFile('b'), board.History.LastEnPassantFile);
+            Assert.AreEqual(3, board.History.LastEnPassantRank);
         }
 
         [TestMethod]
@@ -174,7 +174,7 @@ namespace BaracudaChessEngineTest
                               "........" +
                               "...K....";
             Assert.AreEqual(expPosit, board.GetString, "En passant capture not correct move.");
-            Assert.AreEqual(board.Moves[1], new Move("a4b3Pe"));
+            Assert.AreEqual(board.History.Moves[1], new Move("a4b3Pe"));
         }
 
         [TestMethod]
@@ -203,7 +203,7 @@ namespace BaracudaChessEngineTest
                               "........" +
                               "...K....";
             Assert.AreEqual(expPosit, board.GetString, "En passant capture not correct move.");
-            Assert.AreEqual(board.Moves[1], new Move("a5b6pe"));
+            Assert.AreEqual(board.History.Moves[1], new Move("a5b6pe"));
         }
 
         [TestMethod]
@@ -306,6 +306,8 @@ namespace BaracudaChessEngineTest
 
             Assert.AreNotEqual(cloned, board, "must not return the same object!");
             Assert.AreEqual(board.GetString, cloned.GetString);
+            Assert.AreEqual(board.History.LastEnPassantFile, cloned.History.LastEnPassantFile);
+            Assert.AreEqual(board.History.LastEnPassantRank, cloned.History.LastEnPassantRank);
         }
 
         [TestMethod]
@@ -367,6 +369,8 @@ namespace BaracudaChessEngineTest
                                     "RNBQKBNR";
             Assert.AreEqual(expectedString, target.GetString);
             Assert.AreEqual(Definitions.ChessColor.Black, target.SideToMove);
+            Assert.AreEqual(Helper.FileCharToFile('e'), target.EnPassantFile, "en passant file wrong after 1st back");
+            Assert.AreEqual(3, target.EnPassantRank, "en passant rank wrong after 1st back");
 
             target.Back();
             expectedString =        "rnbqkbnr" +
@@ -379,6 +383,8 @@ namespace BaracudaChessEngineTest
                                     "RNBQKBNR";
             Assert.AreEqual(expectedString, target.GetString);
             Assert.AreEqual(Definitions.ChessColor.White, target.SideToMove);
+            Assert.AreEqual(0, target.EnPassantFile, "en passant file wrong after 2dn back");
+            Assert.AreEqual(0, target.EnPassantRank, "en passant rank wrong after 2dn back");
         }
 
         [TestMethod]
@@ -419,9 +425,13 @@ namespace BaracudaChessEngineTest
                               "........" +
                               "...K....";
             Assert.AreEqual(expPosit, board.GetString, "Back after en passant capture not correct.");
+            Assert.AreEqual(Helper.FileCharToFile('b'), board.EnPassantFile, "En passant file wrong after 1st back.");
+            Assert.AreEqual(3, board.EnPassantRank, "En passant rank wrong after 1st back.");
            
             board.Back();
             Assert.AreEqual(position, board.GetString, "2nd back after en passant capture not correct.");
+            Assert.AreEqual(0, board.EnPassantFile, "En passant file wrong after 2nd back.");
+            Assert.AreEqual(0, board.EnPassantRank, "En passant rank wrong after 2nd back.");
         }
     }
 }

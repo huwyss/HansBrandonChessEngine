@@ -145,7 +145,7 @@ namespace BaracudaChessEngine
                             {
                                 moves.Add(new Move(file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank)));
                             }
-                            else if (valid && targetFile == board.EnPassantFile && targetRank == board.EnPassantRank)
+                            else if (valid && targetFile == board.History.LastEnPassantFile && targetRank == board.History.LastEnPassantRank)
                             {
                                 char capturedPawn = pieceColor == Definitions.ChessColor.White
                                     ? Definitions.PAWN.ToString().ToLower()[0]
@@ -167,7 +167,7 @@ namespace BaracudaChessEngine
             {
                 Move move = new Move(moveStringUser);
                 if (board.GetColor(move.TargetFile, move.TargetRank) == Definitions.ChessColor.Empty &&
-                    board.EnPassantFile == move.TargetFile && board.EnPassantRank == move.TargetRank)
+                    board.History.LastEnPassantFile == move.TargetFile && board.History.LastEnPassantRank == move.TargetRank)
                 {
                     move.CapturedPiece = board.GetColor(move.SourceFile, move.SourceRank) == Definitions.ChessColor.White
                         ? Definitions.PAWN.ToString().ToLower()[0]

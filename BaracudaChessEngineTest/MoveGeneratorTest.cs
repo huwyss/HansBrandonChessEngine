@@ -239,8 +239,8 @@ namespace BaracudaChessEngineTest
                               "...K....";
             board.SetPosition(position);
             board.Move(new Move("a7a5"));
-            Assert.AreEqual(Helper.FileCharToFile('a'), board.EnPassantFile);
-            Assert.AreEqual(6, board.EnPassantRank);
+            Assert.AreEqual(Helper.FileCharToFile('a'), board.History.LastEnPassantFile);
+            Assert.AreEqual(6, board.History.LastEnPassantRank);
 
             var moves = target.GetMoves(board, Helper.FileCharToFile('b'), 5); // white pawn
 

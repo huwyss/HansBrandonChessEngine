@@ -184,54 +184,18 @@ namespace BaracudaChessEngine
                 SetPiece(Definitions.EmptyField, move.CapturedFile, move.CapturedRank);
             }
 
-            int sourceFile = move.SourceFile;
-            int sourceRank = move.SourceRank;
-            int targetFile = move.TargetFile;
-            int targetRank = move.TargetRank;
-
-            bool enPassant = move.EnPassant;
-
-            char pieceToMove = GetPiece(sourceFile, sourceRank);
-            Definitions.ChessColor color = GetColor(sourceFile, sourceRank);
-
-            char capturedPiece;
-
             int enPassantFile = 0;
             int enPassantRank = 0;
-
-            //if (enPassant)
-            //{
-            //    // Black
-            //    if (color == Definitions.ChessColor.Black)
-            //    {
-            //        capturedPiece = GetPiece(targetFile, targetRank + 1);
-            //        SetPiece(Definitions.EmptyField, targetFile, targetRank + 1); // if en passant capture then remove the passed pawn
-            //    }
-            //    else // white
-            //    {
-            //        capturedPiece = GetPiece(targetFile, targetRank - 1);
-            //        SetPiece(Definitions.EmptyField, targetFile, targetRank - 1); // if en passant capture then remove the passed pawn
-            //    }
-            //}
-            //else
-            //{
-            //    capturedPiece = GetPiece(targetFile, targetRank);
-            //}
-
-            //var currentMove = new Move(pieceToMove, sourceFile, sourceRank, targetFile, targetRank, capturedPiece, enPassant);
-
-            //SetPiece(pieceToMove, targetFile, targetRank);
-            //SetPiece(Definitions.EmptyField, sourceFile, sourceRank);
 
             // set black en passant field
             if (move.MovingPiece == Definitions.PAWN.ToString().ToLower()[0]) // black pawn
             {
                 // set en passant field
-                if (sourceRank - 2 == targetRank && // if 2 fields move
-                    sourceFile == targetFile)       // and straight move 
+                if (move.SourceRank - 2 == move.TargetRank && // if 2 fields move
+                    move.SourceFile == move.TargetFile)       // and straight move 
                 {
-                    enPassantRank = sourceRank - 1;
-                    enPassantFile = sourceFile;
+                    enPassantRank = move.SourceRank - 1;
+                    enPassantFile = move.SourceFile;
                 }
             }
 
@@ -239,15 +203,14 @@ namespace BaracudaChessEngine
             if (move.MovingPiece == Definitions.PAWN.ToString().ToUpper()[0]) // white pawn
             {
                 // set en passant field
-                if (sourceRank + 2 == targetRank && // if 2 fields move
-                    sourceFile == targetFile)       // and straight move 
+                if (move.SourceRank + 2 == move.TargetRank && // if 2 fields move
+                    move.SourceFile == move.TargetFile)       // and straight move 
                 {
-                    enPassantRank = sourceRank + 1;
-                    enPassantFile = sourceFile;
+                    enPassantRank = move.SourceRank + 1;
+                    enPassantFile = move.SourceFile;
                 }
             }
 
-            //History.Add(currentMove, enPassantFile, enPassantRank);
             History.Add(move, enPassantFile, enPassantRank);
             SideToMove = Helper.GetOpositeColor(SideToMove);
         }
@@ -397,7 +360,6 @@ namespace BaracudaChessEngine
             if (History.Count >= 1)
             {
                 var lastMove = History.LastMove;
-                Definitions.ChessColor color = lastMove.Color; 
                 SetPiece(lastMove.MovingPiece, lastMove.SourceFile, lastMove.SourceRank);
 
                 SetPiece(Definitions.EmptyField, lastMove.TargetFile, lastMove.TargetRank);     // TargetFile is equal to CapturedFile

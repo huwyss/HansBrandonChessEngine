@@ -174,6 +174,36 @@ namespace BaracudaChessEngineTest
                               "........" +
                               "...K....";
             Assert.AreEqual(expPosit, board.GetString, "En passant capture not correct move.");
+            Assert.AreEqual(board.Moves[1], new Move("a4b3Pe"));
+        }
+
+        [TestMethod]
+        public void MoveTest_WhenWhiteCapturesEnPassant_ThenMoveCorrect_WhiteMoves()
+        {
+            Board board = new Board(null);
+            string position = ".......k" +
+                              ".p......" +
+                              "........" +
+                              "P......." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "...K....";
+            board.SetPosition(position);
+            board.Move(new Move("b7b5"));
+
+            board.Move(new Move("a5b6pe")); // capture en passant
+
+            string expPosit = ".......k" +
+                              "........" +
+                              ".P......" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "...K....";
+            Assert.AreEqual(expPosit, board.GetString, "En passant capture not correct move.");
+            Assert.AreEqual(board.Moves[1], new Move("a5b6pe"));
         }
 
         [TestMethod]
@@ -314,6 +344,10 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual(false, board.IsCheck(Definitions.ChessColor.White), "king is not attacked!");
         }
 
+        // -------------------------------------------------------------------
+        // Back tests
+        // -------------------------------------------------------------------
+
         [TestMethod]
         public void BackTest_WhenWhiteAndBlackMovesDone_ThenGoBackToInitPosition()
         {
@@ -345,7 +379,49 @@ namespace BaracudaChessEngineTest
                                     "RNBQKBNR";
             Assert.AreEqual(expectedString, target.GetString);
             Assert.AreEqual(Definitions.ChessColor.White, target.SideToMove);
+        }
 
+        [TestMethod]
+        public void MoveTest_WhenBackAfterEnPassant_ThenMoveCorrect()
+        {
+            // init move: white pawn moves two fields and black captures en passant
+            Board board = new Board(null);
+            string position = ".......k" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "p......." +
+                              "........" +
+                              ".P......" +
+                              "...K....";
+            board.SetPosition(position);
+            board.Move(new Move("b2b4"));
+            board.Move(new Move("a4b3Pe")); // capture en passant
+
+            string expPosit = ".......k" +  // position after capture en passant
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              ".p......" +
+                              "........" +
+                              "...K....";
+            Assert.AreEqual(expPosit, board.GetString, "En passant capture not correct move.");
+
+            // en passant back
+            board.Back();
+            expPosit        = ".......k" +  // position before capture en passant
+                              "........" +
+                              "........" +
+                              "........" +
+                              "pP......" +
+                              "........" +
+                              "........" +
+                              "...K....";
+            Assert.AreEqual(expPosit, board.GetString, "Back after en passant capture not correct.");
+           
+            board.Back();
+            Assert.AreEqual(position, board.GetString, "2nd back after en passant capture not correct.");
         }
     }
 }

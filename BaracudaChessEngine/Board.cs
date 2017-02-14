@@ -150,23 +150,37 @@ namespace BaracudaChessEngine
             int currentEnPassantRank = EnPassantRank;
             
             char pieceToMove = GetPiece(sourceFile, sourceRank);
-            char capturedPiece = GetPiece(targetFile, targetRank);
+            char capturedPiece;
+
+            Definitions.ChessColor color = GetColor(sourceFile, sourceRank);
 
             EnPassantFile = 0;
             EnPassantRank = 0;
+
+            if (enPassant)
+            {
+                // Black
+                if (color == Definitions.ChessColor.Black)
+                {
+                    capturedPiece = GetPiece(targetFile, targetRank + 1);
+                    SetPiece(Definitions.EmptyField, targetFile, targetRank + 1); // if en passant capture then remove the passed pawn
+                }
+                else // white
+                {
+                    capturedPiece = GetPiece(targetFile, targetRank - 1);
+                    SetPiece(Definitions.EmptyField, targetFile, targetRank - 1); // if en passant capture then remove the passed pawn
+                }
+            }
+            else
+            {
+                capturedPiece = GetPiece(targetFile, targetRank);
+            }
 
             var currentMove = new Move(sourceFile, sourceRank, targetFile, targetRank, capturedPiece, enPassant);
             Moves.Add(currentMove);
 
             SetPiece(pieceToMove, targetFile, targetRank);
             SetPiece(Definitions.EmptyField, sourceFile, sourceRank);
-
-            //if (enPassant) // if en passant capture then remove the passed pawn
-            //{
-            //    // Black
-            //    SetPiece(Definitions.EmptyField, targetFile, targetRank + 1);
-                
-            //}
 
             // set black en passant field
             if (pieceToMove == Definitions.PAWN.ToString().ToLower()[0]) // black pawn
@@ -340,8 +354,27 @@ namespace BaracudaChessEngine
             if (Moves.Count >= 1)
             {
                 var lastMove = Moves[Moves.Count - 1];
+                Definitions.ChessColor color = GetColor(lastMove.TargetFile, lastMove.TargetRank);
                 SetPiece(GetPiece(lastMove.TargetFile, lastMove.TargetRank), lastMove.SourceFile, lastMove.SourceRank);
-                SetPiece(lastMove.CapturedPiece, lastMove.TargetFile, lastMove.TargetRank);
+
+                if (lastMove.EnPassant)
+                {
+                    if (color == Definitions.ChessColor.White) // capturing pawn is white, captured pawn is black
+                    {
+                        SetPiece(lastMove.CapturedPiece, lastMove.TargetFile, lastMove.TargetRank - 1); // set captured pawn at its original position
+                        SetPiece(Definitions.EmptyField, lastMove.TargetFile, lastMove.TargetRank);     // remove the pawn from en passant field
+                    }
+                    else
+                    {
+                        SetPiece(lastMove.CapturedPiece, lastMove.TargetFile, lastMove.TargetRank + 1); // set captured pawn at its original position
+                        SetPiece(Definitions.EmptyField, lastMove.TargetFile, lastMove.TargetRank);     // remove the pawn from en passant field
+                    }
+                }
+                else
+                {
+                    SetPiece(lastMove.CapturedPiece, lastMove.TargetFile, lastMove.TargetRank);
+                }
+                
                 Moves.RemoveAt(Moves.Count - 1);
                 SideToMove = Helper.GetOpositeColor(SideToMove);
             }

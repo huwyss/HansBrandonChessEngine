@@ -116,12 +116,7 @@ namespace BaracudaChessEngine
             Console.WriteLine("Score: " + score);
             return nextMove;
         }
-
-        private List<Move> GetAllMoves(Definitions.ChessColor color)
-        {
-            return _board.GetAllMoves(color);
-        }
-
+        
         public Definitions.ChessColor SideToMove()
         {
             return _board.SideToMove;

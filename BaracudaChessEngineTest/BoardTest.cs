@@ -380,14 +380,14 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual(3, target.EnPassantRank, "en passant rank wrong after 1st back");
 
             target.Back();
-            expectedString =        "rnbqkbnr" +
-                                    "pppppppp" +
-                                    "........" +
-                                    "........" +
-                                    "........" +
-                                    "........" +
-                                    "PPPPPPPP" +
-                                    "RNBQKBNR";
+            expectedString = "rnbqkbnr" +
+                             "pppppppp" +
+                             "........" +
+                             "........" +
+                             "........" +
+                             "........" +
+                             "PPPPPPPP" +
+                             "RNBQKBNR";
             Assert.AreEqual(expectedString, target.GetString);
             Assert.AreEqual(Definitions.ChessColor.White, target.SideToMove);
             Assert.AreEqual(0, target.EnPassantFile, "en passant file wrong after 2dn back");
@@ -412,7 +412,7 @@ namespace BaracudaChessEngineTest
             board.Move("b2b4");
             board.Move("a4b3Pe"); // capture en passant
 
-            string expPosit = ".......k" +  // position after capture en passant
+            string expPosit = ".......k" + // position after capture en passant
                               "........" +
                               "........" +
                               "........" +
@@ -424,22 +424,61 @@ namespace BaracudaChessEngineTest
 
             // en passant back
             board.Back();
-            expPosit        = ".......k" +  // position before capture en passant
-                              "........" +
-                              "........" +
-                              "........" +
-                              "pP......" +
-                              "........" +
-                              "........" +
-                              "...K....";
+            expPosit = ".......k" + // position before capture en passant
+                       "........" +
+                       "........" +
+                       "........" +
+                       "pP......" +
+                       "........" +
+                       "........" +
+                       "...K....";
             Assert.AreEqual(expPosit, board.GetString, "Back after en passant capture not correct.");
             Assert.AreEqual(Helper.FileCharToFile('b'), board.EnPassantFile, "En passant file wrong after 1st back.");
             Assert.AreEqual(3, board.EnPassantRank, "En passant rank wrong after 1st back.");
-           
+
             board.Back();
             Assert.AreEqual(position, board.GetString, "2nd back after en passant capture not correct.");
             Assert.AreEqual(0, board.EnPassantFile, "En passant file wrong after 2nd back.");
             Assert.AreEqual(0, board.EnPassantRank, "En passant rank wrong after 2nd back.");
+        }
+
+        // -------------------------------------------------------------------
+        // Castling tests
+        // -------------------------------------------------------------------
+
+        [TestMethod]
+        public void CastlingRightTest_WhenKingOrRookMoved_ThenRightFalse()
+        {
+            MoveGenerator generator = new MoveGenerator();
+            Board board = new Board(generator);
+            string position = "r...k..r" +
+                              "p......." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "P......." +
+                              "R...K..R";
+            board.SetPosition(position);
+
+            Assert.AreEqual(true, board.CastlingRightWhiteQueenSide);
+            Assert.AreEqual(true, board.CastlingRightWhiteKingSide);
+            Assert.AreEqual(true, board.CastlingRightBlackQueenSide);
+            Assert.AreEqual(true, board.CastlingRightBlackKingSide);
+
+            board.Move("h1g1");
+            Assert.AreEqual(true, board.CastlingRightWhiteQueenSide);
+            Assert.AreEqual(false, board.CastlingRightWhiteKingSide);
+
+            board.Move("a1c1");
+            Assert.AreEqual(false, board.CastlingRightWhiteQueenSide);
+            Assert.AreEqual(false, board.CastlingRightWhiteKingSide);
+
+            board.Move("e8f8");
+            Assert.AreEqual(false, board.CastlingRightWhiteQueenSide);
+            Assert.AreEqual(false, board.CastlingRightWhiteKingSide);
+            Assert.AreEqual(false, board.CastlingRightBlackQueenSide);
+            Assert.AreEqual(false, board.CastlingRightBlackKingSide);
         }
     }
 }

@@ -38,6 +38,11 @@ namespace BaracudaChessEngine
             }
         }
 
+        public bool CastlingRightWhiteQueenSide { get { return History.LastCastlingRightWhiteQueenSide; } }
+        public bool CastlingRightWhiteKingSide { get { return History.LastCastlingRightWhiteKingSide; } }
+        public bool CastlingRightBlackQueenSide { get { return History.LastCastlingRightBlackQueenSide; } }
+        public bool CastlingRightBlackKingSide { get { return History.LastCastlingRightBlackKingSide; } }
+
         public int ClonedEnPassantFile { get; set; }
         public int ClonedEnPassantRank { get; set; }
 
@@ -211,7 +216,24 @@ namespace BaracudaChessEngine
                 }
             }
 
-            History.Add(move, enPassantFile, enPassantRank);
+            // Set Castling rights
+            // if white king moved --> castling right white both sides = false
+            // if white rook queen side moved --> castling right white queen side = false
+            // if white rook king side moved --> castling right white king side = false
+            // same for black
+            bool blackKingMoved = move.MovingPiece == Definitions.KING.ToString().ToLower()[0];
+            bool blackRookKingSideMoved = move.MovingPiece == Definitions.ROOK.ToString().ToLower()[0] && move.SourceFile == 8;
+            bool blackRookQueenSideMoved = move.MovingPiece == Definitions.ROOK.ToString().ToLower()[0] && move.SourceFile == 1;
+            bool whiteKingMoved = move.MovingPiece == Definitions.KING.ToString().ToUpper()[0];
+            bool whiteRookKingSideMoved = move.MovingPiece == Definitions.ROOK.ToString().ToUpper()[0] && move.SourceFile == 8;
+            bool whiteRookQueenSideMoved = move.MovingPiece == Definitions.ROOK.ToString().ToUpper()[0] && move.SourceFile == 1;
+            bool castlingRightWhiteQueenSide = History.LastCastlingRightWhiteQueenSide & !whiteKingMoved & !whiteRookQueenSideMoved;
+            bool castlingRightWhiteKingSide = History.LastCastlingRightWhiteKingSide & !whiteKingMoved & !whiteRookKingSideMoved;
+            bool castlingRightBlackQueenSide = History.LastCastlingRightBlackQueenSide & !blackKingMoved & !blackRookQueenSideMoved;
+            bool castlingRightBlackKingSide = History.LastCastlingRightBlackKingSide & !blackKingMoved & !blackRookKingSideMoved;
+
+            History.Add(move, enPassantFile, enPassantRank, castlingRightWhiteQueenSide, castlingRightWhiteKingSide, 
+                castlingRightBlackQueenSide, castlingRightBlackKingSide);
             SideToMove = Helper.GetOpositeColor(SideToMove);
         }
 

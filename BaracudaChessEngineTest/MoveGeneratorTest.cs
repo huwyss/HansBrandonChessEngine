@@ -238,7 +238,7 @@ namespace BaracudaChessEngineTest
                               "........" + 
                               "...K....";
             board.SetPosition(position);
-            board.Move(new Move("a7a5"));
+            board.Move("a7a5");
             Assert.AreEqual(Helper.FileCharToFile('a'), board.History.LastEnPassantFile);
             Assert.AreEqual(6, board.History.LastEnPassantRank);
 
@@ -504,7 +504,7 @@ namespace BaracudaChessEngineTest
                               "........" +
                               "..K.....";
             board.SetPosition(position);
-            board.Move(new Move("c7c5"));
+            board.Move("c7c5");
 
             Move actualMove = target.GetCorrectMove(board, "d5c6");
             Assert.AreEqual("d5c6pe", actualMove.ToString());

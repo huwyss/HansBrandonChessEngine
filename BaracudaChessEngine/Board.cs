@@ -9,8 +9,6 @@ namespace BaracudaChessEngine
     public class Board
     {
         public Definitions.ChessColor SideToMove { get; set; }
-        public bool CastlingRightFirstMover { get; set; }
-        public bool CastlingRightSecondMover { get; set; }
         public History History { get; set; }
         public Move LastMove { get { return History.LastMove; } }
 
@@ -97,8 +95,6 @@ namespace BaracudaChessEngine
         private void InitVariables()
         {
             SideToMove = Definitions.ChessColor.White;
-            CastlingRightFirstMover = true;
-            CastlingRightSecondMover = true;
             History = new History();
             IsClonedBoard = false;
         }
@@ -163,6 +159,12 @@ namespace BaracudaChessEngine
             SetPiece(piece, Helper.FileCharToFile(fileChar), rank);
         }
 
+        public void Move(string userMoveString)
+        {
+            Move correctedMove = GetCorrectMove(userMoveString);
+            Move(correctedMove);
+        }
+
         /// <summary>
         /// Do a move and update the board
         /// </summary>
@@ -174,48 +176,55 @@ namespace BaracudaChessEngine
                 return;
             }
 
+            SetPiece(move.MovingPiece, move.TargetFile, move.TargetRank);
+            SetPiece(Definitions.EmptyField, move.SourceFile, move.SourceRank);
+
+            if (move.EnPassant)
+            {
+                SetPiece(Definitions.EmptyField, move.CapturedFile, move.CapturedRank);
+            }
+
             int sourceFile = move.SourceFile;
             int sourceRank = move.SourceRank;
             int targetFile = move.TargetFile;
             int targetRank = move.TargetRank;
 
             bool enPassant = move.EnPassant;
-            
-            char pieceToMove = GetPiece(sourceFile, sourceRank);
-            char capturedPiece;
 
+            char pieceToMove = GetPiece(sourceFile, sourceRank);
             Definitions.ChessColor color = GetColor(sourceFile, sourceRank);
+
+            char capturedPiece;
 
             int enPassantFile = 0;
             int enPassantRank = 0;
 
-            if (enPassant)
-            {
-                // Black
-                if (color == Definitions.ChessColor.Black)
-                {
-                    capturedPiece = GetPiece(targetFile, targetRank + 1);
-                    SetPiece(Definitions.EmptyField, targetFile, targetRank + 1); // if en passant capture then remove the passed pawn
-                }
-                else // white
-                {
-                    capturedPiece = GetPiece(targetFile, targetRank - 1);
-                    SetPiece(Definitions.EmptyField, targetFile, targetRank - 1); // if en passant capture then remove the passed pawn
-                }
-            }
-            else
-            {
-                capturedPiece = GetPiece(targetFile, targetRank);
-            }
+            //if (enPassant)
+            //{
+            //    // Black
+            //    if (color == Definitions.ChessColor.Black)
+            //    {
+            //        capturedPiece = GetPiece(targetFile, targetRank + 1);
+            //        SetPiece(Definitions.EmptyField, targetFile, targetRank + 1); // if en passant capture then remove the passed pawn
+            //    }
+            //    else // white
+            //    {
+            //        capturedPiece = GetPiece(targetFile, targetRank - 1);
+            //        SetPiece(Definitions.EmptyField, targetFile, targetRank - 1); // if en passant capture then remove the passed pawn
+            //    }
+            //}
+            //else
+            //{
+            //    capturedPiece = GetPiece(targetFile, targetRank);
+            //}
 
-            var currentMove = new Move(sourceFile, sourceRank, targetFile, targetRank, capturedPiece, enPassant);
-            
+            //var currentMove = new Move(pieceToMove, sourceFile, sourceRank, targetFile, targetRank, capturedPiece, enPassant);
 
-            SetPiece(pieceToMove, targetFile, targetRank);
-            SetPiece(Definitions.EmptyField, sourceFile, sourceRank);
+            //SetPiece(pieceToMove, targetFile, targetRank);
+            //SetPiece(Definitions.EmptyField, sourceFile, sourceRank);
 
             // set black en passant field
-            if (pieceToMove == Definitions.PAWN.ToString().ToLower()[0]) // black pawn
+            if (move.MovingPiece == Definitions.PAWN.ToString().ToLower()[0]) // black pawn
             {
                 // set en passant field
                 if (sourceRank - 2 == targetRank && // if 2 fields move
@@ -227,7 +236,7 @@ namespace BaracudaChessEngine
             }
 
             // set white en passant field
-            if (pieceToMove == Definitions.PAWN.ToString().ToUpper()[0]) // white pawn
+            if (move.MovingPiece == Definitions.PAWN.ToString().ToUpper()[0]) // white pawn
             {
                 // set en passant field
                 if (sourceRank + 2 == targetRank && // if 2 fields move
@@ -238,7 +247,8 @@ namespace BaracudaChessEngine
                 }
             }
 
-            History.Add(currentMove, enPassantFile, enPassantRank);
+            //History.Add(currentMove, enPassantFile, enPassantRank);
+            History.Add(move, enPassantFile, enPassantRank);
             SideToMove = Helper.GetOpositeColor(SideToMove);
         }
 
@@ -386,27 +396,12 @@ namespace BaracudaChessEngine
         {
             if (History.Count >= 1)
             {
-                var lastMove = History.LastMove; 
-                Definitions.ChessColor color = GetColor(lastMove.TargetFile, lastMove.TargetRank);
-                SetPiece(GetPiece(lastMove.TargetFile, lastMove.TargetRank), lastMove.SourceFile, lastMove.SourceRank);
+                var lastMove = History.LastMove;
+                Definitions.ChessColor color = lastMove.Color; 
+                SetPiece(lastMove.MovingPiece, lastMove.SourceFile, lastMove.SourceRank);
 
-                if (lastMove.EnPassant)
-                {
-                    if (color == Definitions.ChessColor.White) // capturing pawn is white, captured pawn is black
-                    {
-                        SetPiece(lastMove.CapturedPiece, lastMove.TargetFile, lastMove.TargetRank - 1); // set captured pawn at its original position
-                        SetPiece(Definitions.EmptyField, lastMove.TargetFile, lastMove.TargetRank);     // remove the pawn from en passant field
-                    }
-                    else
-                    {
-                        SetPiece(lastMove.CapturedPiece, lastMove.TargetFile, lastMove.TargetRank + 1); // set captured pawn at its original position
-                        SetPiece(Definitions.EmptyField, lastMove.TargetFile, lastMove.TargetRank);     // remove the pawn from en passant field
-                    }
-                }
-                else
-                {
-                    SetPiece(lastMove.CapturedPiece, lastMove.TargetFile, lastMove.TargetRank);
-                }
+                SetPiece(Definitions.EmptyField, lastMove.TargetFile, lastMove.TargetRank);     // TargetFile is equal to CapturedFile
+                SetPiece(lastMove.CapturedPiece, lastMove.CapturedFile, lastMove.CapturedRank); // TargetRank differs from TargetRank for en passant capture
 
                 History.Back(); 
                 SideToMove = Helper.GetOpositeColor(SideToMove);

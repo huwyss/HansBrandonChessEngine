@@ -11,30 +11,33 @@ namespace BaracudaChessEngineTest
         [TestMethod]
         public void ToString_WhenMove_ThenPrintCorrect()
         {
-            Assert.AreEqual("e2e4.", new Move(5, 2, 5, 4, Definitions.EmptyField).ToString());
-            Assert.AreEqual("e4d5p", new Move(5, 4, 4, 5, 'p').ToString());
+            Assert.AreEqual("e2e4.", new Move('p', 5, 2, 5, 4, Definitions.EmptyField).ToString());
+            Assert.AreEqual("e4d5p", new Move('p',5, 4, 4, 5, 'p').ToString());
         }
 
         [TestMethod]
         public void EqualsTest_WhenComparingTwoEqualMoves_ThenEqualsReturnsTrue()
         {
-            Assert.AreEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 2, 5, 4, 'p'));
+            Assert.AreEqual(new Move('p', 5, 2, 5, 4, 'p'), new Move('p', 5, 2, 5, 4, 'p'));
         }
 
         [TestMethod]
         public void EqualsTest_WhenComparingTwoDifferentMoves_ThenReturnsFalse()
         {
-            Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(1, 2, 5, 4, 'p'));
-            Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 1, 5, 4, 'p'));
-            Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 2, 1, 4, 'p'));
-            Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 2, 5, 1, 'p'));
-            Assert.AreNotEqual(new Move(5, 2, 5, 4, 'p'), new Move(5, 2, 5, 4, 'r'));
+            Assert.AreNotEqual(new Move('p', 5, 2, 5, 4, 'p'), new Move('p', 1, 2, 5, 4, 'p'));
+            Assert.AreNotEqual(new Move('p', 5, 2, 5, 4, 'p'), new Move('p', 5, 1, 5, 4, 'p'));
+            Assert.AreNotEqual(new Move('p', 5, 2, 5, 4, 'p'), new Move('p', 5, 2, 1, 4, 'p'));
+            Assert.AreNotEqual(new Move('p', 5, 2, 5, 4, 'p'), new Move('p', 5, 2, 5, 1, 'p'));
+            Assert.AreNotEqual(new Move('p', 5, 2, 5, 4, 'p'), new Move('p', 5, 2, 5, 4, 'r'));
+            Assert.AreNotEqual(new Move('p', 5, 2, 5, 4, 'p'), new Move('q', 5, 2, 5, 4, 'r'));
         }
 
         [TestMethod]
         public void ConstructorTest_WhenStringParameter_ThenCorrectObject()
         {
-            Assert.AreEqual(new Move(5, 2, 5, 4, 'p'), new Move("e2e4p"));
+            Move move = new Move('q', 5, 2, 5, 4, 'p');
+            move.MovingPiece = 'q';
+            Assert.AreEqual(move, new Move("e2e4p"));
         }
 
         [TestMethod]
@@ -49,7 +52,7 @@ namespace BaracudaChessEngineTest
         public void EqualsTest_WhenNormalMoveAndNoLegalMove_ThenNotEqual()
         {
             IMove noLegalMove = new NoLegalMove();
-            IMove normalMove = new Move(1, 1, 1, 1, '.');
+            IMove normalMove = new Move('p', 1, 1, 1, 1, '.');
             Assert.AreNotEqual(noLegalMove, normalMove);
             
             // the other way round
@@ -86,8 +89,8 @@ namespace BaracudaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenEnPassant_ThenCheckEnPassantCorrect()
         {
-            Move move = new Move(1, 2, 2, 3, 'p', true);
-            Move move2 = new Move(1, 2, 2, 3, 'p', false);
+            Move move = new Move('p', 1, 2, 2, 3, 'p', true);
+            Move move2 = new Move('p', 1, 2, 2, 3, 'p', false);
             Assert.AreEqual("a2b3pe", move.ToString());
             Assert.AreNotEqual(move2, move);
             Assert.AreEqual(new Move("a2b3pe"), move);

@@ -65,7 +65,7 @@ namespace BaracudaChessEngine
                         GetEndPosition(file, rank, sequence, out targetFile, out targetRank, out valid);
                         if (valid && pieceColor != board.GetColor(targetFile, targetRank)) // capture or empty field
                         {
-                            moves.Add(new Move(file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank)));
+                            moves.Add(new Move(piece, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank)));
                         }
                     }
                     break;
@@ -92,7 +92,7 @@ namespace BaracudaChessEngine
                             }
 
                             char targetPiece = board.GetPiece(targetFile, targetRank);
-                            moves.Add(new Move(file, rank, targetFile, targetRank, targetPiece));
+                            moves.Add(new Move(piece, file, rank, targetFile, targetRank, targetPiece));
 
                             if (Definitions.ChessColor.Empty != targetColor)
                             {
@@ -122,7 +122,7 @@ namespace BaracudaChessEngine
                         {
                             if (valid && board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty) // empty field
                             {
-                                moves.Add(new Move(file, rank, targetFile, targetRank, Definitions.EmptyField));
+                                moves.Add(new Move(piece, file, rank, targetFile, targetRank, Definitions.EmptyField));
                             }
                         }
                         else if ((currentSequence == "uu" || currentSequence == "dd") && rank == twoFieldMoveInitRank) // walk straight two fields
@@ -135,7 +135,7 @@ namespace BaracudaChessEngine
                             if ((valid && board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty) && // end field is empty
                                 (valid2 && board.GetColor(targetFile2, targetRank2) == Definitions.ChessColor.Empty)) // field between current and end field is also empty
                             {
-                                moves.Add(new Move(file, rank, targetFile, targetRank, Definitions.EmptyField));
+                                moves.Add(new Move(piece, file, rank, targetFile, targetRank, Definitions.EmptyField));
                             }
                         }
                         else if (currentSequence == "ul" || currentSequence == "ur" ||
@@ -143,14 +143,14 @@ namespace BaracudaChessEngine
                         {
                             if (valid && pieceColor == Helper.GetOpositeColor(board.GetColor(targetFile, targetRank)))
                             {
-                                moves.Add(new Move(file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank)));
+                                moves.Add(new Move(piece, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank)));
                             }
                             else if (valid && targetFile == board.History.LastEnPassantFile && targetRank == board.History.LastEnPassantRank)
                             {
                                 char capturedPawn = pieceColor == Definitions.ChessColor.White
                                     ? Definitions.PAWN.ToString().ToLower()[0]
                                     : Definitions.PAWN.ToString().ToUpper()[0];
-                                moves.Add(new Move(file, rank, targetFile, targetRank, capturedPawn, true));
+                                moves.Add(new Move(piece, file, rank, targetFile, targetRank, capturedPawn, true));
                             }
 
                         }
@@ -166,6 +166,8 @@ namespace BaracudaChessEngine
             if (Move.IsCorrectMove(moveStringUser))
             {
                 Move move = new Move(moveStringUser);
+                move.MovingPiece = board.GetPiece(move.SourceFile, move.SourceRank);
+
                 if (board.GetColor(move.TargetFile, move.TargetRank) == Definitions.ChessColor.Empty &&
                     board.History.LastEnPassantFile == move.TargetFile && board.History.LastEnPassantRank == move.TargetRank)
                 {

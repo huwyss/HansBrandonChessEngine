@@ -1,26 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BaracudaChessEngine
 {
-    
-
     public class Move : IMove
     {
+        public char MovingPiece { get; set; }
         public int SourceFile { get; set; }
-        // char SourceFileChar { get; set; }
         public int SourceRank { get; set; }
         public int TargetFile { get; set; }
-        // char TargetFileChar { get; set; }
         public int TargetRank { get; set; }
         public char CapturedPiece { get; set; }
         public bool EnPassant { get; set; }
 
-        public Move(int sourceFile, int sourceRank, int targetFile, int targetRank, char capturedPiece, bool enPassant = false)
+        public Definitions.ChessColor Color
         {
+            get
+            {
+                Definitions.ChessColor color = (MovingPiece >= 'A' && MovingPiece <= 'Z')
+                    ? Definitions.ChessColor.White
+                    : Definitions.ChessColor.Black;
+                return color;
+            }
+        }
+
+        public int CapturedFile // same as target file
+        {
+            get { return TargetFile; }
+            
+        } 
+
+        public int CapturedRank // mostly this is the same as target rank but for en passant capture it is different
+        {
+            get
+            {
+                if (EnPassant)
+                {
+                    if (Color == Definitions.ChessColor.White)
+                    {
+                        return TargetRank - 1;
+                    }
+
+                    return TargetRank + 1;
+                }
+
+                return TargetRank;
+            }
+        }
+
+        
+
+        public Move(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, char capturedPiece, bool enPassant = false)
+        {
+            MovingPiece = movingPiece;
             SourceFile = sourceFile;
             SourceRank = sourceRank;
             TargetFile = targetFile;

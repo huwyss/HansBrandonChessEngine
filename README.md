@@ -14,7 +14,6 @@ Baracuda is reasonably playing. However it does not beat me yet.
 ### Some important features that are missing:
 - Castling
 - Pawn promotion
-- Pawn en passant
 - Standard GUI
 
 ### Features for a stronger game

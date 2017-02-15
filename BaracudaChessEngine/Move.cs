@@ -87,6 +87,8 @@ namespace BaracudaChessEngine
                     EnPassant = true;
                 }
             }
+
+            MovingPiece = (char)0;
         }
 
         public override bool Equals(System.Object obj)
@@ -110,6 +112,15 @@ namespace BaracudaChessEngine
             equal &= TargetRank == other.TargetRank;
             equal &= CapturedPiece == other.CapturedPiece;
             equal &= EnPassant == other.EnPassant;
+
+            // note: only check MovingPiece if they are set in both objects
+            // new Move("a2a3") is equal to new Move('p', a, 2, a, 3, nocapture, enpassant=false)
+            // --> this is useful for tests!
+            if (MovingPiece != (char) 0 && other.MovingPiece != (char) 0)
+            {
+                equal &= MovingPiece == other.MovingPiece;
+            }
+            
             return equal;
         }
 

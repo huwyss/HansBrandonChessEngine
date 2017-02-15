@@ -181,12 +181,12 @@ namespace BaracudaChessEngine
                 return;
             }
 
-            SetPiece(move.MovingPiece, move.TargetFile, move.TargetRank);
-            SetPiece(Definitions.EmptyField, move.SourceFile, move.SourceRank);
+            SetPiece(move.MovingPiece, move.TargetFile, move.TargetRank); // set MovingPiece to new position (and overwrite captured piece)
+            SetPiece(Definitions.EmptyField, move.SourceFile, move.SourceRank); // empty MovingPiece's old position
 
             if (move.EnPassant)
             {
-                SetPiece(Definitions.EmptyField, move.CapturedFile, move.CapturedRank);
+                SetPiece(Definitions.EmptyField, move.CapturedFile, move.CapturedRank); // remove captured pawn if it is en passant
             }
 
             int enPassantFile = 0;
@@ -198,7 +198,7 @@ namespace BaracudaChessEngine
             // if white rook queen side moved --> castling right white queen side = false
             // if white rook king side moved --> castling right white king side = false
             // same for black
-        bool blackKingMoved = move.MovingPiece == Definitions.KING.ToString().ToLower()[0];
+            bool blackKingMoved = move.MovingPiece == Definitions.KING.ToString().ToLower()[0];
             bool blackRookKingSideMoved = move.MovingPiece == Definitions.ROOK.ToString().ToLower()[0] && move.SourceFile == 8;
             bool blackRookQueenSideMoved = move.MovingPiece == Definitions.ROOK.ToString().ToLower()[0] && move.SourceFile == 1;
             bool whiteKingMoved = move.MovingPiece == Definitions.KING.ToString().ToUpper()[0];

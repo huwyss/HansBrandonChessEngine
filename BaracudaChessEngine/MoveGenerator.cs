@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -43,7 +44,6 @@ namespace BaracudaChessEngine
         /// <param name="rank"></param>
         /// <returns></returns>
         /// todo: castling
-        /// todo: capture en passant
         /// todo: pawn promotion
         public List<Move> GetMoves(Board board, int file, int rank)
         {
@@ -68,7 +68,58 @@ namespace BaracudaChessEngine
                             moves.Add(new Move(piece, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank)));
                         }
                     }
-                    break;
+
+                    // Castling
+                    if (piece == Definitions.KING.ToString().ToUpper()[0]) // white king
+                    {
+                        // check for king side castling (0-0)
+                        if (board.CastlingRightWhiteKingSide && // castling right
+                            file == Helper.FileCharToFile('e') && rank == 1 && // king initial position
+                            Definitions.ROOK.ToString().ToUpper()[0] == board.GetPiece(Helper.FileCharToFile('h'), 1) && // rook init position
+                            IsFieldsEmpty(board, Helper.FileCharToFile('f'), 1, Helper.FileCharToFile('g')) // fields between king and rook empty
+                                                                                                            // fields not attacked
+                            )
+                        {
+                            moves.Add(new Move(piece, file, rank, Helper.FileCharToFile('g'), 1, Definitions.EmptyField));
+                        }
+
+                        // check for king side castling (0-0-0)
+                        if (board.CastlingRightWhiteQueenSide && // castling right
+                            file == Helper.FileCharToFile('e') && rank == 1 && // king initial position
+                            Definitions.ROOK.ToString().ToUpper()[0] == board.GetPiece(Helper.FileCharToFile('a'), 1) && // rook init position
+                            IsFieldsEmpty(board, Helper.FileCharToFile('b'), 1, Helper.FileCharToFile('d')) // fields between king and rook empty
+                                                                                                            // fields not attacked
+                            )
+                        {
+                            moves.Add(new Move(piece, file, rank, Helper.FileCharToFile('c'), 1, Definitions.EmptyField));
+                        }
+                    }
+
+                    if (piece == Definitions.KING.ToString().ToLower()[0]) // black king
+                    {
+                        // check for king side castling (0-0)
+                        if (board.CastlingRightBlackKingSide && // castling right
+                            file == Helper.FileCharToFile('e') && rank == 8 && // king initial position
+                            Definitions.ROOK.ToString().ToLower()[0] == board.GetPiece(Helper.FileCharToFile('h'), 8) && // rook init position
+                            IsFieldsEmpty(board, Helper.FileCharToFile('f'), 1, Helper.FileCharToFile('g')) // fields between king and rook empty
+                                                                                                            // fields not attacked
+                            )
+                        {
+                            moves.Add(new Move(piece, file, rank, Helper.FileCharToFile('g'), 8, Definitions.EmptyField));
+                        }
+
+                        // check for king side castling (0-0-0)
+                        if (board.CastlingRightBlackQueenSide && // castling right
+                            file == Helper.FileCharToFile('e') && rank == 8 && // king initial position
+                            Definitions.ROOK.ToString().ToLower()[0] == board.GetPiece(Helper.FileCharToFile('a'), 8) && // rook init position
+                            IsFieldsEmpty(board, Helper.FileCharToFile('b'), 8, Helper.FileCharToFile('d')) // fields between king and rook empty
+                                                                                                            // fields not attacked
+                            )
+                        {
+                            moves.Add(new Move(piece, file, rank, Helper.FileCharToFile('c'), 8, Definitions.EmptyField));
+                        }
+                    }
+                        break;
 
                 case Definitions.ROOK: 
                 case Definitions.QUEEN:
@@ -254,6 +305,18 @@ namespace BaracudaChessEngine
 
             valid = targetFile >= 1 && targetFile <= 8 &&
                     targetRank >= 1 && targetRank <= 8;
+        }
+
+        private bool IsFieldsEmpty(Board board, int sourceFile, int sourceRank, int targetFile)
+        {
+            bool empty = true;
+
+            for (int file = sourceFile; file <= targetFile; file++)
+            {
+                empty &= board.GetPiece(file, sourceRank) == Definitions.EmptyField;
+            }
+
+            return empty;
         }
     }
 }

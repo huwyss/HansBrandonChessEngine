@@ -193,13 +193,40 @@ namespace BaracudaChessEngine
                 SetPiece(Definitions.EmptyField, move.CapturedFile, move.CapturedRank); // remove captured pawn if it is en passant
             }
 
-            // if white king side castrling
+            // if white king side castling
             if (move.MovingPiece == Definitions.KING.ToString().ToUpper()[0] &&
                 move.SourceFile == Helper.FileCharToFile('e') && move.SourceRank == 1 &&
                 move.TargetFile == Helper.FileCharToFile('g') && move.TargetRank == 1)
             {
                 SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('f'), 1); // move rook next to king
                 SetPiece(Definitions.EmptyField, Helper.FileCharToFile('h'), 1); // remove old rook
+            }
+
+            // if white queen side castling
+            if (move.MovingPiece == Definitions.KING.ToString().ToUpper()[0] &&
+                move.SourceFile == Helper.FileCharToFile('e') && move.SourceRank == 1 &&
+                move.TargetFile == Helper.FileCharToFile('c') && move.TargetRank == 1)
+            {
+                SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('d'), 1); // move rook next to king
+                SetPiece(Definitions.EmptyField, Helper.FileCharToFile('a'), 1); // remove old rook
+            }
+
+            // if black king side castling
+            if (move.MovingPiece == Definitions.KING.ToString().ToLower()[0] &&
+                move.SourceFile == Helper.FileCharToFile('e') && move.SourceRank == 8 &&
+                move.TargetFile == Helper.FileCharToFile('g') && move.TargetRank == 8)
+            {
+                SetPiece(Definitions.ROOK.ToString().ToLower()[0], Helper.FileCharToFile('f'), 8); // move rook next to king
+                SetPiece(Definitions.EmptyField, Helper.FileCharToFile('h'), 8); // remove old rook
+            }
+
+            // if black queen side castling
+            if (move.MovingPiece == Definitions.KING.ToString().ToLower()[0] &&
+                move.SourceFile == Helper.FileCharToFile('e') && move.SourceRank == 8 &&
+                move.TargetFile == Helper.FileCharToFile('c') && move.TargetRank == 8)
+            {
+                SetPiece(Definitions.ROOK.ToString().ToLower()[0], Helper.FileCharToFile('d'), 8); // move rook next to king
+                SetPiece(Definitions.EmptyField, Helper.FileCharToFile('a'), 8); // remove old rook
             }
 
             int enPassantFile = 0;

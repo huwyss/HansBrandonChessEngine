@@ -508,5 +508,89 @@ namespace BaracudaChessEngineTest
                               "R....RK.";
             Assert.AreEqual(expecPos, board.GetString, "White King Side Castling not correct.");
         }
+
+        [TestMethod]
+        public void MoveTest_WhenQueenSideCastling_ThenCorrectMove_White()
+        {
+            MoveGenerator generator = new MoveGenerator();
+            Board board = new Board(generator);
+            string position = "r...k..r" +
+                              "p......." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "P......." +
+                              "R...K..R";
+            board.SetPosition(position);
+
+            board.Move("e1c1");
+
+            string expecPos = "r...k..r" +
+                              "p......." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "P......." +
+                              "..KR...R";
+            Assert.AreEqual(expecPos, board.GetString, "White Queen Side Castling not correct.");
+        }
+
+        [TestMethod]
+        public void MoveTest_WhenKingSideCastling_ThenCorrectMove_Black()
+        {
+            MoveGenerator generator = new MoveGenerator();
+            Board board = new Board(generator);
+            string position = "r...k..r" +
+                              "p......." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "P......." +
+                              "R...K..R";
+            board.SetPosition(position);
+
+            board.Move("e8g8");
+
+            string expecPos = "r....rk." +
+                              "p......." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "P......." +
+                              "R...K..R";
+            Assert.AreEqual(expecPos, board.GetString, "Black King Side Castling not correct.");
+        }
+
+        [TestMethod]
+        public void MoveTest_WhenQueenSideCastling_ThenCorrectMove_Black()
+        {
+            MoveGenerator generator = new MoveGenerator();
+            Board board = new Board(generator);
+            string position = "r...k..r" +
+                              "p......." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "P......." +
+                              "R...K..R";
+            board.SetPosition(position);
+
+            board.Move("e8c8");
+
+            string expecPos = "..kr...r" +
+                              "p......." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "P......." +
+                              "R...K..R";
+            Assert.AreEqual(expecPos, board.GetString, "Black Queen Side Castling not correct.");
+        }
     }
 }

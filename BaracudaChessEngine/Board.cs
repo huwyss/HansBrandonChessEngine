@@ -59,15 +59,19 @@ namespace BaracudaChessEngine
                               "PPPPPPPP" +
                               "RNBQKBNR"; // white a1-h1
 
+        private int[] _attackedFields;
+
         /// <summary>
         /// Constructor. Board is empty.
         /// </summary>
         public Board(MoveGenerator moveGenerator)
         {
             _board = new char[64];
+            _attackedFields = new int[64];
             for (int i = 0; i < 64; i++)
             {
                 _board[i] = Definitions.EmptyField;
+                _attackedFields[i] = 0;
             }
 
             InitVariables();
@@ -370,12 +374,29 @@ namespace BaracudaChessEngine
             }
 
             // find all oponent moves
-            var moves = _moveGenerator.GetAllMoves(this, Helper.GetOpositeColor(color));
+            var moves = _moveGenerator.GetAllMoves(this, Helper.GetOpositeColor(color), false);
 
             // if a move ends in king's position then king is in check
             foreach (Move move in moves)
             {
                 if (move.CapturedPiece == king)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool IsAttacked(Definitions.ChessColor color, int file, int rank)
+        {
+            // find all oponent moves
+            var moves = _moveGenerator.GetAllMoves(this, Helper.GetOpositeColor(color), false);
+
+            // if a move ends in king's position then king is in check
+            foreach (Move move in moves)
+            {
+                if (move.TargetFile == file && move.TargetRank == rank)
                 {
                     return true;
                 }

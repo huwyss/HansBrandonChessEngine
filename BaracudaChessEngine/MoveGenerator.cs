@@ -13,13 +13,13 @@ namespace BaracudaChessEngine
     {
         // Note: Baracuda is a king capture engine. 
         // This means even if we are in check then also moves that do not remove the check are returned here.
-        public List<Move> GetAllMoves(Board board, Definitions.ChessColor color)
+        public List<Move> GetAllMoves(Board board, Definitions.ChessColor color, bool includeCastling = true)
         {
-            var allMovesUnchecked = GetAllMovesUnchecked(board, color);
+            var allMovesUnchecked = GetAllMovesUnchecked(board, color, includeCastling);
             return allMovesUnchecked;
         }
 
-        private List<Move> GetAllMovesUnchecked(Board board, Definitions.ChessColor color)
+        private List<Move> GetAllMovesUnchecked(Board board, Definitions.ChessColor color, bool includeCastling = true)
         {
             List<Move> allMoves = new List<Move>();
 
@@ -29,7 +29,7 @@ namespace BaracudaChessEngine
                 {
                     if (board.GetColor(file, rank) == color)
                     {
-                        allMoves.AddRange(GetMoves(board, file, rank));
+                        allMoves.AddRange(GetMoves(board, file, rank, includeCastling));
                     }
                 }
             }
@@ -43,9 +43,8 @@ namespace BaracudaChessEngine
         /// <param name="file"></param>
         /// <param name="rank"></param>
         /// <returns></returns>
-        /// todo: castling
         /// todo: pawn promotion
-        public List<Move> GetMoves(Board board, int file, int rank)
+        public List<Move> GetMoves(Board board, int file, int rank, bool includeCastling = true)
         {
             List<Move> moves = new List<Move>();
             char piece = board.GetPiece(file, rank);
@@ -69,6 +68,11 @@ namespace BaracudaChessEngine
                         }
                     }
 
+                    if (!includeCastling)
+                    {
+                        break;
+                    }
+
                     // Castling
                     if (piece == Definitions.KING.ToString().ToUpper()[0]) // white king
                     {
@@ -76,19 +80,21 @@ namespace BaracudaChessEngine
                         if (board.CastlingRightWhiteKingSide && // castling right
                             file == Helper.FileCharToFile('e') && rank == 1 && // king initial position
                             Definitions.ROOK.ToString().ToUpper()[0] == board.GetPiece(Helper.FileCharToFile('h'), 1) && // rook init position
-                            IsFieldsEmpty(board, Helper.FileCharToFile('f'), 1, Helper.FileCharToFile('g')) // fields between king and rook empty
-                                                                                                            // fields not attacked
+                            IsFieldsEmpty(board, Helper.FileCharToFile('f'), 1, Helper.FileCharToFile('g')) && // fields between king and rook empty
+                            !IsAttacked(board, pieceColor, Helper.FileCharToFile('e'), 1) && // king not attacked
+                            !IsAttacked(board, pieceColor, Helper.FileCharToFile('f'), 1)
                             )
                         {
                             moves.Add(new Move(piece, file, rank, Helper.FileCharToFile('g'), 1, Definitions.EmptyField));
                         }
 
-                        // check for king side castling (0-0-0)
+                        // check for queen side castling (0-0-0)
                         if (board.CastlingRightWhiteQueenSide && // castling right
                             file == Helper.FileCharToFile('e') && rank == 1 && // king initial position
                             Definitions.ROOK.ToString().ToUpper()[0] == board.GetPiece(Helper.FileCharToFile('a'), 1) && // rook init position
-                            IsFieldsEmpty(board, Helper.FileCharToFile('b'), 1, Helper.FileCharToFile('d')) // fields between king and rook empty
-                                                                                                            // fields not attacked
+                            IsFieldsEmpty(board, Helper.FileCharToFile('b'), 1, Helper.FileCharToFile('d')) &&// fields between king and rook empty
+                            !IsAttacked(board, pieceColor, Helper.FileCharToFile('e'), 1) && // king not attacked
+                            !IsAttacked(board, pieceColor, Helper.FileCharToFile('d'), 1)
                             )
                         {
                             moves.Add(new Move(piece, file, rank, Helper.FileCharToFile('c'), 1, Definitions.EmptyField));
@@ -101,25 +107,27 @@ namespace BaracudaChessEngine
                         if (board.CastlingRightBlackKingSide && // castling right
                             file == Helper.FileCharToFile('e') && rank == 8 && // king initial position
                             Definitions.ROOK.ToString().ToLower()[0] == board.GetPiece(Helper.FileCharToFile('h'), 8) && // rook init position
-                            IsFieldsEmpty(board, Helper.FileCharToFile('f'), 1, Helper.FileCharToFile('g')) // fields between king and rook empty
-                                                                                                            // fields not attacked
-                            )
+                            IsFieldsEmpty(board, Helper.FileCharToFile('f'), 8, Helper.FileCharToFile('g')) && // fields between king and rook empty
+                            !IsAttacked(board, pieceColor, Helper.FileCharToFile('e'), 8) && // king not attacked
+                            !IsAttacked(board, pieceColor, Helper.FileCharToFile('f'), 8)    // field next to king not attacked
+                        )
                         {
                             moves.Add(new Move(piece, file, rank, Helper.FileCharToFile('g'), 8, Definitions.EmptyField));
                         }
 
-                        // check for king side castling (0-0-0)
+                        // check for queen side castling (0-0-0)
                         if (board.CastlingRightBlackQueenSide && // castling right
                             file == Helper.FileCharToFile('e') && rank == 8 && // king initial position
                             Definitions.ROOK.ToString().ToLower()[0] == board.GetPiece(Helper.FileCharToFile('a'), 8) && // rook init position
-                            IsFieldsEmpty(board, Helper.FileCharToFile('b'), 8, Helper.FileCharToFile('d')) // fields between king and rook empty
-                                                                                                            // fields not attacked
-                            )
+                            IsFieldsEmpty(board, Helper.FileCharToFile('b'), 8, Helper.FileCharToFile('d')) && // fields between king and rook empty
+                            !IsAttacked(board, pieceColor, Helper.FileCharToFile('e'), 8) && // king not attacked
+                            !IsAttacked(board, pieceColor, Helper.FileCharToFile('d'), 8)    // field next to king not attacked
+                        )
                         {
                             moves.Add(new Move(piece, file, rank, Helper.FileCharToFile('c'), 8, Definitions.EmptyField));
                         }
                     }
-                        break;
+                    break;
 
                 case Definitions.ROOK: 
                 case Definitions.QUEEN:
@@ -317,6 +325,11 @@ namespace BaracudaChessEngine
             }
 
             return empty;
+        }
+
+        private bool IsAttacked(Board board, Definitions.ChessColor color, int file, int rank)
+        {
+            return board.IsAttacked(color, file, rank);
         }
     }
 }

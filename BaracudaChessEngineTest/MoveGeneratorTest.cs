@@ -577,6 +577,27 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual(false, kingMoves.Contains(new Move("e1c1.")), "e1c1. 0-0-0 castling not possible");
         }
 
+        [TestMethod]
+        public void GetMovesTest_WhenFieldNextToKingIsAttacked_ThenNoCastling()
+        {
+            MoveGenerator generator = new MoveGenerator();
+            Board board = new Board(generator);
+            string position = "....k..." +
+                              "p..r.r.." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "P......." +
+                              "R...K..R";
+            board.SetPosition(position);
+            board.Move("e8e7");
+
+            List<Move> kingMoves = generator.GetMoves(board, Helper.FileCharToFile('e'), 1);
+            Assert.AreEqual(false, kingMoves.Contains(new Move("e1g1.")), "e1g1. 0-0 castling not possible. f1 is attacked.");
+            Assert.AreEqual(false, kingMoves.Contains(new Move("e1c1.")), "e1c1. 0-0-0 castling not possible. d1 is attacked.");
+        }
+
         // black
 
         [TestMethod]
@@ -637,6 +658,26 @@ namespace BaracudaChessEngineTest
             List<Move> kingMoves = generator.GetMoves(board, Helper.FileCharToFile('e'), 8);
             Assert.AreEqual(false, kingMoves.Contains(new Move("e8g8.")), "e8g8. 0-0 castling not possible");
             Assert.AreEqual(false, kingMoves.Contains(new Move("e8c8.")), "e8c8. 0-0-0 castling not possible");
+        }
+
+        [TestMethod]
+        public void GetMovesTest_WhenFieldNextToKingAttacked_ThenNoCastling_Black()
+        {
+            MoveGenerator generator = new MoveGenerator();
+            Board board = new Board(generator);
+            string position = "r...k..r" +
+                              "p......." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "P......." +
+                              "...RKR..";
+            board.SetPosition(position);
+
+            List<Move> kingMoves = generator.GetMoves(board, Helper.FileCharToFile('e'), 8);
+            Assert.AreEqual(false, kingMoves.Contains(new Move("e8g8.")), "e8g8. 0-0 castling not possible. F8 attacked");
+            Assert.AreEqual(false, kingMoves.Contains(new Move("e8c8.")), "e8c8. 0-0-0 castling not possible. D8 attacked");
         }
     }
 }

@@ -91,7 +91,7 @@ namespace BaracudaChessEngine
             }
         }
 
-        private readonly float[] PawnPositionValue = new float[64]
+        private readonly float[] PawnPositionValue = new float[64] // pawn in center are more valuable (at least in opening)
         {
             1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 
             1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f,

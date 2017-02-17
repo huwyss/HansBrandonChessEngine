@@ -451,6 +451,15 @@ namespace BaracudaChessEngine
                 SetPiece(Definitions.EmptyField, lastMove.TargetFile, lastMove.TargetRank);     // TargetFile is equal to CapturedFile
                 SetPiece(lastMove.CapturedPiece, lastMove.CapturedFile, lastMove.CapturedRank); // TargetRank differs from TargetRank for en passant capture
 
+                // if white king side castling
+                if (lastMove.MovingPiece == Definitions.KING.ToString().ToUpper()[0] &&
+                    lastMove.SourceFile == Helper.FileCharToFile('e') && lastMove.SourceRank == 1 &&
+                    lastMove.TargetFile == Helper.FileCharToFile('g') && lastMove.TargetRank == 1)
+                {
+                    SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('h'), 1); // move rook next to king
+                    SetPiece(Definitions.EmptyField, Helper.FileCharToFile('f'), 1); // remove old rook
+                }
+
                 History.Back(); 
                 SideToMove = Helper.GetOpositeColor(SideToMove);
             }

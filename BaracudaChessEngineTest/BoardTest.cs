@@ -507,6 +507,10 @@ namespace BaracudaChessEngineTest
                               "P......." +
                               "R....RK.";
             Assert.AreEqual(expecPos, board.GetString, "White King Side Castling not correct.");
+
+            board.Back();
+
+            Assert.AreEqual(position, board.GetString, "White King Side Castling: back not correct.");
         }
 
         [TestMethod]
@@ -535,6 +539,10 @@ namespace BaracudaChessEngineTest
                               "P......." +
                               "..KR...R";
             Assert.AreEqual(expecPos, board.GetString, "White Queen Side Castling not correct.");
+
+            board.Back();
+
+            Assert.AreEqual(position, board.GetString, "White Queen Side Castling: back not correct.");
         }
 
         [TestMethod]
@@ -563,6 +571,10 @@ namespace BaracudaChessEngineTest
                               "P......." +
                               "R...K..R";
             Assert.AreEqual(expecPos, board.GetString, "Black King Side Castling not correct.");
+
+            board.Back();
+
+            Assert.AreEqual(position, board.GetString, "Black King Side Castling: back not correct.");
         }
 
         [TestMethod]
@@ -591,6 +603,10 @@ namespace BaracudaChessEngineTest
                               "P......." +
                               "R...K..R";
             Assert.AreEqual(expecPos, board.GetString, "Black Queen Side Castling not correct.");
+
+            board.Back();
+
+            Assert.AreEqual(position, board.GetString, "Black Queen Side Castling: back not correct.");
         }
     }
 }

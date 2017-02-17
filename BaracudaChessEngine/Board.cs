@@ -193,6 +193,15 @@ namespace BaracudaChessEngine
                 SetPiece(Definitions.EmptyField, move.CapturedFile, move.CapturedRank); // remove captured pawn if it is en passant
             }
 
+            // if white king side castrling
+            if (move.MovingPiece == Definitions.KING.ToString().ToUpper()[0] &&
+                move.SourceFile == Helper.FileCharToFile('e') && move.SourceRank == 1 &&
+                move.TargetFile == Helper.FileCharToFile('g') && move.TargetRank == 1)
+            {
+                SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('f'), 1); // move rook next to king
+                SetPiece(Definitions.EmptyField, Helper.FileCharToFile('h'), 1); // remove old rook
+            }
+
             int enPassantFile = 0;
             int enPassantRank = 0;
             SetEnPassantFields(move, out enPassantFile, out enPassantRank);

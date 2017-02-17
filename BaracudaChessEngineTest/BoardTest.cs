@@ -480,5 +480,33 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual(false, board.CastlingRightBlackQueenSide);
             Assert.AreEqual(false, board.CastlingRightBlackKingSide);
         }
+
+        [TestMethod]
+        public void MoveTest_WhenKingSideCastling_ThenCorrectMove_White()
+        {
+            MoveGenerator generator = new MoveGenerator();
+            Board board = new Board(generator);
+            string position = "r...k..r" +
+                              "p......." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "P......." +
+                              "R...K..R";
+            board.SetPosition(position);
+
+            board.Move("e1g1");
+
+            string expecPos = "r...k..r" +
+                              "p......." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "P......." +
+                              "R....RK.";
+            Assert.AreEqual(expecPos, board.GetString, "White King Side Castling not correct.");
+        }
     }
 }

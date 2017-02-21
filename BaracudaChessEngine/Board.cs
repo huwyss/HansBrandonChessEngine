@@ -38,13 +38,18 @@ namespace BaracudaChessEngine
             }
         }
 
-        public bool CastlingRightWhiteQueenSide { get { return History.LastCastlingRightWhiteQueenSide; } }
-        public bool CastlingRightWhiteKingSide { get { return History.LastCastlingRightWhiteKingSide; } }
-        public bool CastlingRightBlackQueenSide { get { return History.LastCastlingRightBlackQueenSide; } }
-        public bool CastlingRightBlackKingSide { get { return History.LastCastlingRightBlackKingSide; } }
+        public bool CastlingRightWhiteQueenSide { get { return !IsClonedBoard ? History.LastCastlingRightWhiteQueenSide : ClonedCastlingRightWhiteQueenSide; } }
+        public bool CastlingRightWhiteKingSide { get { return !IsClonedBoard ? History.LastCastlingRightWhiteKingSide : ClonedCastlingRightWhiteKingSide; } }
+        public bool CastlingRightBlackQueenSide { get { return !IsClonedBoard ? History.LastCastlingRightBlackQueenSide : ClonedCastlingRightBlackQueenSide; } }
+        public bool CastlingRightBlackKingSide { get { return !IsClonedBoard ? History.LastCastlingRightBlackKingSide : ClonedCastlingRightBlackKingSide; } }
 
         public int ClonedEnPassantFile { get; set; }
         public int ClonedEnPassantRank { get; set; }
+
+        public bool ClonedCastlingRightWhiteQueenSide { get; set; }
+        public bool ClonedCastlingRightWhiteKingSide { get; set; }
+        public bool ClonedCastlingRightBlackQueenSide { get; set; }
+        public bool ClonedCastlingRightBlackKingSide { get; set; }
 
         public bool IsClonedBoard { get; set; }
 
@@ -88,6 +93,10 @@ namespace BaracudaChessEngine
             clonedBoard.SetPosition(position);
             clonedBoard.ClonedEnPassantFile = EnPassantFile;
             clonedBoard.ClonedEnPassantRank = EnPassantRank;
+            clonedBoard.ClonedCastlingRightWhiteQueenSide = CastlingRightWhiteQueenSide;
+            clonedBoard.ClonedCastlingRightWhiteKingSide = CastlingRightWhiteKingSide;
+            clonedBoard.ClonedCastlingRightBlackQueenSide = CastlingRightBlackQueenSide;
+            clonedBoard.ClonedCastlingRightBlackKingSide = CastlingRightBlackKingSide;
             clonedBoard.IsClonedBoard = true;
             return clonedBoard;
         }

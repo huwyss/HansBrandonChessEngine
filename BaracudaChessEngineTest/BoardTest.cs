@@ -301,19 +301,49 @@ namespace BaracudaChessEngineTest
             Assert.AreEqual(false, blackWins);
         }
 
+        // -------------------------------------------------------------------
+        // Clone tests
+        // -------------------------------------------------------------------
+        
+        [TestMethod]
+        public void CloneTest_CheckEnPassantField()
+        {
+            MoveGenerator generator = new MoveGenerator();
+            Board board = new Board(generator);
+            board.SetInitialPosition();
+            board.Move("e2e4");
+            
+            Board cloned = board.Clone();
+
+            Assert.AreNotEqual(cloned, board, "must not return the same object!");
+            Assert.AreEqual(board.GetString, cloned.GetString);
+            
+            Assert.AreEqual(board.CastlingRightWhiteKingSide, cloned.CastlingRightWhiteKingSide);
+            Assert.AreEqual(board.CastlingRightWhiteQueenSide, cloned.CastlingRightWhiteQueenSide);
+            Assert.AreEqual(board.CastlingRightBlackKingSide, cloned.CastlingRightBlackKingSide);
+            Assert.AreEqual(board.CastlingRightBlackQueenSide, cloned.CastlingRightBlackQueenSide);
+        }
+
         [TestMethod]
         public void CloneTest_Normalcase()
         {
             MoveGenerator generator = new MoveGenerator();
             Board board = new Board(generator);
             board.SetInitialPosition();
+            board.Move("e2e4");
+            board.Move("e7e5");
+            board.Move("e1e2"); // white loses castling right
 
             Board cloned = board.Clone();
 
             Assert.AreNotEqual(cloned, board, "must not return the same object!");
             Assert.AreEqual(board.GetString, cloned.GetString);
-            Assert.AreEqual(board.History.LastEnPassantFile, cloned.History.LastEnPassantFile);
-            Assert.AreEqual(board.History.LastEnPassantRank, cloned.History.LastEnPassantRank);
+
+            Assert.AreEqual(false, board.CastlingRightWhiteKingSide);
+            Assert.AreEqual(board.CastlingRightWhiteKingSide, cloned.CastlingRightWhiteKingSide);
+            Assert.AreEqual(board.CastlingRightWhiteQueenSide, cloned.CastlingRightWhiteQueenSide);
+            Assert.AreEqual(board.CastlingRightBlackKingSide, cloned.CastlingRightBlackKingSide);
+            Assert.AreEqual(board.CastlingRightBlackQueenSide, cloned.CastlingRightBlackQueenSide);
         }
 
         [TestMethod]
@@ -511,6 +541,8 @@ namespace BaracudaChessEngineTest
             board.Back();
 
             Assert.AreEqual(position, board.GetString, "White King Side Castling: back not correct.");
+            Assert.AreEqual(true, board.CastlingRightWhiteKingSide, "castling right must be true after back.");
+            Assert.AreEqual(true, board.CastlingRightWhiteQueenSide, "castling right must be true after back.");
         }
 
         [TestMethod]
@@ -543,6 +575,8 @@ namespace BaracudaChessEngineTest
             board.Back();
 
             Assert.AreEqual(position, board.GetString, "White Queen Side Castling: back not correct.");
+            Assert.AreEqual(true, board.CastlingRightWhiteKingSide, "castling right must be true after back.");
+            Assert.AreEqual(true, board.CastlingRightWhiteQueenSide, "castling right must be true after back.");
         }
 
         [TestMethod]
@@ -575,6 +609,8 @@ namespace BaracudaChessEngineTest
             board.Back();
 
             Assert.AreEqual(position, board.GetString, "Black King Side Castling: back not correct.");
+            Assert.AreEqual(true, board.CastlingRightBlackKingSide, "castling right must be true after back.");
+            Assert.AreEqual(true, board.CastlingRightBlackQueenSide, "castling right must be true after back.");
         }
 
         [TestMethod]
@@ -607,6 +643,8 @@ namespace BaracudaChessEngineTest
             board.Back();
 
             Assert.AreEqual(position, board.GetString, "Black Queen Side Castling: back not correct.");
+            Assert.AreEqual(true, board.CastlingRightBlackKingSide, "castling right must be true after back.");
+            Assert.AreEqual(true, board.CastlingRightBlackQueenSide, "castling right must be true after back.");
         }
     }
 }

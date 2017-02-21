@@ -30,7 +30,7 @@ namespace BaracudaConsole
             }
 
             BaracudaEngine whiteEngine = new BaracudaEngine(EngineType.MinmaxPosition);
-            BaracudaEngine blackEngine = new BaracudaEngine(EngineType.Minmax);
+            BaracudaEngine blackEngine = new BaracudaEngine(EngineType.MinmaxPosition);
 
             float whiteWins = 0;
             bool isMoveValid;

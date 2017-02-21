@@ -460,6 +460,33 @@ namespace BaracudaChessEngine
                     SetPiece(Definitions.EmptyField, Helper.FileCharToFile('f'), 1); // remove old rook
                 }
 
+                // if white queen side castling
+                if (lastMove.MovingPiece == Definitions.KING.ToString().ToUpper()[0] &&
+                    lastMove.SourceFile == Helper.FileCharToFile('e') && lastMove.SourceRank == 1 &&
+                    lastMove.TargetFile == Helper.FileCharToFile('c') && lastMove.TargetRank == 1)
+                {
+                    SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('a'), 1); // move rook next to king
+                    SetPiece(Definitions.EmptyField, Helper.FileCharToFile('d'), 1); // remove old rook
+                }
+
+                // if black king side castling
+                if (lastMove.MovingPiece == Definitions.KING.ToString().ToLower()[0] &&
+                    lastMove.SourceFile == Helper.FileCharToFile('e') && lastMove.SourceRank == 8 &&
+                    lastMove.TargetFile == Helper.FileCharToFile('g') && lastMove.TargetRank == 8)
+                {
+                    SetPiece(Definitions.ROOK.ToString().ToLower()[0], Helper.FileCharToFile('h'), 8); // move rook next to king
+                    SetPiece(Definitions.EmptyField, Helper.FileCharToFile('f'), 8); // remove old rook
+                }
+
+                // if black queen side castling
+                if (lastMove.MovingPiece == Definitions.KING.ToString().ToLower()[0] &&
+                    lastMove.SourceFile == Helper.FileCharToFile('e') && lastMove.SourceRank == 8 &&
+                    lastMove.TargetFile == Helper.FileCharToFile('c') && lastMove.TargetRank == 8)
+                {
+                    SetPiece(Definitions.ROOK.ToString().ToLower()[0], Helper.FileCharToFile('a'), 8); // move rook next to king
+                    SetPiece(Definitions.EmptyField, Helper.FileCharToFile('d'), 8); // remove old rook
+                }
+
                 History.Back(); 
                 SideToMove = Helper.GetOpositeColor(SideToMove);
             }

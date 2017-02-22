@@ -12,7 +12,6 @@ Baracuda is reasonably playing. However it does not beat me yet.
 - Evaluation of the current position via position for pawn, knight, bishop, ... Additionally pawn and knight get points for position on board and doulbe bishop gives extra points.
 
 ### Some important features that are missing:
-- Castling
 - Pawn promotion
 - Standard GUI
 

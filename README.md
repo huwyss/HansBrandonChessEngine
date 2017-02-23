@@ -4,7 +4,7 @@ A strong chess engine or at least it is supposed to beat me.
 
 ## Current Status
 
-Baracuda is reasonably playing. However it does not beat me yet.
+Manta Chess Engine is reasonably playing. However it does not beat me yet.
 
 ### Implemented features:
 - Super simple GUI on console

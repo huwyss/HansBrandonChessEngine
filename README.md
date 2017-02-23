@@ -1,4 +1,4 @@
-# Baracuda
+# Manta Chess Engine
 
 A strong chess engine or at least it is supposed to beat me.
 

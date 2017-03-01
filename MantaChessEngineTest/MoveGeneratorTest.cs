@@ -468,7 +468,7 @@ namespace MantaChessEngineTest
             Board board = new Board(target);
             board.SetInitialPosition();
             
-            Move actualMove = target.GetCorrectMove(board, "e2e4");
+            Move actualMove = MoveFactory.GetCorrectMove(board, "e2e4");
             Assert.AreEqual("e2e4.", actualMove.ToString());
         }
 
@@ -487,7 +487,7 @@ namespace MantaChessEngineTest
                               "..K.....";
             board.SetPosition(position);
 
-            Move actualMove = target.GetCorrectMove(board, "d5c6");
+            Move actualMove = MoveFactory.GetCorrectMove(board, "d5c6");
             Assert.AreEqual("d5c6p", actualMove.ToString());
         }
 
@@ -507,7 +507,7 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
             board.Move("c7c5");
 
-            Move actualMove = target.GetCorrectMove(board, "d5c6");
+            Move actualMove = MoveFactory.GetCorrectMove(board, "d5c6");
             Assert.AreEqual("d5c6pe", actualMove.ToString());
         }
 

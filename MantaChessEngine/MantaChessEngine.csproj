@@ -48,10 +48,12 @@
     <Compile Include="Helper.cs" />
     <Compile Include="Evaluator\IEvaluator.cs" />
     <Compile Include="History.cs" />
-    <Compile Include="IMove.cs" />
-    <Compile Include="NoLegalMove.cs" />
+    <Compile Include="Move\IMove.cs" />
+    <Compile Include="Move\MoveFactory.cs" />
+    <Compile Include="Move\MoveNormal.cs" />
+    <Compile Include="Move\NoLegalMove.cs" />
     <Compile Include="Search\ISearchService.cs" />
-    <Compile Include="Move.cs" />
+    <Compile Include="Move\Move.cs" />
     <Compile Include="MoveGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Search\SearchMinimax.cs" />

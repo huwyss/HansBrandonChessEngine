@@ -126,5 +126,37 @@ namespace MantaChessEngineTest
 
             Assert.AreEqual(true, score < -0.1f, "Two bishops should be better than bishop and knight.");
         }
+
+        [TestMethod]
+        public void EvaluateTest_WhenWhiteDidCastle_ThenWhiteBetter()
+        {
+            var gen = new MoveGenerator();
+            Board board = new Board(gen);
+            string position = "rnbqk..r" +
+                              "ppppppbp" +
+                              ".....np." +
+                              "........" +
+                              "........" +
+                              ".....NP." +
+                              "PPPPPPBP" +
+                              "RNBQK..R";
+            board.SetPosition(position);
+
+            // white castling
+            board.Move("e1g1");
+            var target = new EvaluatorPosition();
+            var score = target.Evaluate(board);
+            Assert.AreEqual(true, score > 0.1f, "White did castling. so white should be better.");
+
+            // black castling
+            board.Move("e8g8");
+            score = target.Evaluate(board);
+            Assert.AreEqual(true, score == 0, "White and Black did castling. They are equal.");
+
+            // take black move back
+            board.Back();
+            score = target.Evaluate(board);
+            Assert.AreEqual(true, score > 0.1f, "Black castling was taken back. so white should be better.");
+        }
     }
 }

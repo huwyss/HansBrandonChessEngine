@@ -12,31 +12,8 @@ namespace MantaChessEngine
         public History History { get; set; }
         public Move LastMove { get { return History.LastMove; } }
 
-        public int EnPassantFile
-        {
-            get
-            {
-                if (!IsClonedBoard)
-                {
-                    return History.LastEnPassantFile;
-                }
-                
-                return ClonedEnPassantFile;
-            }
-        }
-
-        public int EnPassantRank
-        {
-            get
-            {
-                if (!IsClonedBoard)
-                {
-                    return History.LastEnPassantRank;
-                }
-
-                return ClonedEnPassantRank;
-            }
-        }
+        public int EnPassantFile { get { return !IsClonedBoard ? History.LastEnPassantFile : ClonedEnPassantFile; } }
+        public int EnPassantRank { get { return !IsClonedBoard ? History.LastEnPassantRank : ClonedEnPassantRank; } }
 
         public bool CastlingRightWhiteQueenSide { get { return !IsClonedBoard ? History.LastCastlingRightWhiteQueenSide : ClonedCastlingRightWhiteQueenSide; } }
         public bool CastlingRightWhiteKingSide { get { return !IsClonedBoard ? History.LastCastlingRightWhiteKingSide : ClonedCastlingRightWhiteKingSide; } }
@@ -52,6 +29,9 @@ namespace MantaChessEngine
         public bool ClonedCastlingRightBlackKingSide { get; set; }
 
         public bool IsClonedBoard { get; set; }
+
+        public bool WhiteDidCastling { get; set; }
+        public bool BlackDidCastling { get; set; }
 
         private MoveGenerator _moveGenerator;
         private char[] _board;
@@ -98,6 +78,8 @@ namespace MantaChessEngine
             clonedBoard.ClonedCastlingRightBlackQueenSide = CastlingRightBlackQueenSide;
             clonedBoard.ClonedCastlingRightBlackKingSide = CastlingRightBlackKingSide;
             clonedBoard.IsClonedBoard = true;
+            clonedBoard.WhiteDidCastling = WhiteDidCastling;
+            clonedBoard.BlackDidCastling = BlackDidCastling;
             return clonedBoard;
         }
 
@@ -115,6 +97,8 @@ namespace MantaChessEngine
             SideToMove = Definitions.ChessColor.White;
             History = new History();
             IsClonedBoard = false;
+            WhiteDidCastling = false;
+            BlackDidCastling = false;
         }
 
         public void SetPosition(string position)
@@ -209,6 +193,7 @@ namespace MantaChessEngine
             {
                 SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('f'), 1); // move rook next to king
                 SetPiece(Definitions.EmptyField, Helper.FileCharToFile('h'), 1); // remove old rook
+                WhiteDidCastling = true;
             }
 
             // if white queen side castling
@@ -218,6 +203,7 @@ namespace MantaChessEngine
             {
                 SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('d'), 1); // move rook next to king
                 SetPiece(Definitions.EmptyField, Helper.FileCharToFile('a'), 1); // remove old rook
+                WhiteDidCastling = true;
             }
 
             // if black king side castling
@@ -227,6 +213,7 @@ namespace MantaChessEngine
             {
                 SetPiece(Definitions.ROOK.ToString().ToLower()[0], Helper.FileCharToFile('f'), 8); // move rook next to king
                 SetPiece(Definitions.EmptyField, Helper.FileCharToFile('h'), 8); // remove old rook
+                BlackDidCastling = true;
             }
 
             // if black queen side castling
@@ -236,6 +223,7 @@ namespace MantaChessEngine
             {
                 SetPiece(Definitions.ROOK.ToString().ToLower()[0], Helper.FileCharToFile('d'), 8); // move rook next to king
                 SetPiece(Definitions.EmptyField, Helper.FileCharToFile('a'), 8); // remove old rook
+                BlackDidCastling = true;
             }
 
             int enPassantFile = 0;
@@ -467,6 +455,7 @@ namespace MantaChessEngine
                 {
                     SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('h'), 1); // move rook next to king
                     SetPiece(Definitions.EmptyField, Helper.FileCharToFile('f'), 1); // remove old rook
+                    WhiteDidCastling = false;
                 }
 
                 // if white queen side castling
@@ -476,6 +465,7 @@ namespace MantaChessEngine
                 {
                     SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('a'), 1); // move rook next to king
                     SetPiece(Definitions.EmptyField, Helper.FileCharToFile('d'), 1); // remove old rook
+                    WhiteDidCastling = false;
                 }
 
                 // if black king side castling
@@ -485,6 +475,7 @@ namespace MantaChessEngine
                 {
                     SetPiece(Definitions.ROOK.ToString().ToLower()[0], Helper.FileCharToFile('h'), 8); // move rook next to king
                     SetPiece(Definitions.EmptyField, Helper.FileCharToFile('f'), 8); // remove old rook
+                    BlackDidCastling = false;
                 }
 
                 // if black queen side castling
@@ -494,6 +485,7 @@ namespace MantaChessEngine
                 {
                     SetPiece(Definitions.ROOK.ToString().ToLower()[0], Helper.FileCharToFile('a'), 8); // move rook next to king
                     SetPiece(Definitions.EmptyField, Helper.FileCharToFile('d'), 8); // remove old rook
+                    BlackDidCastling = false;
                 }
 
                 History.Back(); 

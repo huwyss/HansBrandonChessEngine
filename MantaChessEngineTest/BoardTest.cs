@@ -312,6 +312,7 @@ namespace MantaChessEngineTest
             Board board = new Board(generator);
             board.SetInitialPosition();
             board.Move("e2e4");
+            board.WhiteDidCastling = true; // cannot be. but this should test the cloned board.
             
             Board cloned = board.Clone();
 
@@ -322,6 +323,9 @@ namespace MantaChessEngineTest
             Assert.AreEqual(board.CastlingRightWhiteQueenSide, cloned.CastlingRightWhiteQueenSide);
             Assert.AreEqual(board.CastlingRightBlackKingSide, cloned.CastlingRightBlackKingSide);
             Assert.AreEqual(board.CastlingRightBlackQueenSide, cloned.CastlingRightBlackQueenSide);
+
+            Assert.AreEqual(board.WhiteDidCastling, cloned.WhiteDidCastling);
+            Assert.AreEqual(board.BlackDidCastling, cloned.BlackDidCastling);
         }
 
         [TestMethod]

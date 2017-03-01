@@ -16,6 +16,7 @@ namespace MantaChessEngine
         public readonly float ValueKing = 1000f;
 
         private readonly float AdvantageDoubleBishop = 0.5f;
+        private readonly float CastlingScore = 1f;
 
         private int numberWhiteBishop = 0;
         private int numberBlackBishop = 0;
@@ -56,6 +57,16 @@ namespace MantaChessEngine
             if (numberBlackBishop >= 2)
             {
                 scoreBlack += AdvantageDoubleBishop;
+            }
+
+            if (board.WhiteDidCastling)
+            {
+                scoreWhite += CastlingScore;
+            }
+
+            if (board.BlackDidCastling)
+            {
+                scoreBlack += CastlingScore;
             }
 
             return scoreWhite - scoreBlack;

@@ -25,6 +25,7 @@ namespace MantaChessEngine
                 
                 movingPiece = board.GetPiece(sourceFile, sourceRank);
 
+                // is it enpassant capture?
                 if (board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty &&
                     board.History.LastEnPassantFile == targetFile && board.History.LastEnPassantRank == targetRank)
                 {
@@ -42,10 +43,28 @@ namespace MantaChessEngine
                 {
                     return new EnPassantCaptureMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
                 }
-                else
+
+                if (IsWhiteKingSideCastling(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
                 {
-                    return new Move(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece, false);
+                    return new CastlingMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, CastlingType.WhiteKingSide);
                 }
+
+                if (IsWhiteQueenSideCastling(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
+                {
+                    return new CastlingMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, CastlingType.WhiteQueenSide);
+                }
+
+                if (IsBlackKingSideCastling(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
+                {
+                    return new CastlingMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, CastlingType.BlackKingSide);
+                }
+
+                if (IsBlackQueenSideCastling(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
+                {
+                    return new CastlingMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, CastlingType.BlackQueenSide);
+                }
+
+                return new Move(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece, false);
             }
 
             return null;
@@ -67,6 +86,34 @@ namespace MantaChessEngine
                 targetFile = 0;
                 targetRank = 0;
             }
+        }
+
+        private static bool IsWhiteKingSideCastling(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
+        {
+            return movingPiece == Definitions.KING.ToString().ToUpper()[0] &&
+                    sourceFile == Helper.FileCharToFile('e') && sourceRank == 1 &&
+                    targetFile == Helper.FileCharToFile('g') && targetRank == 1;
+        }
+
+        private static bool IsWhiteQueenSideCastling(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
+        {
+            return movingPiece == Definitions.KING.ToString().ToUpper()[0] &&
+                   sourceFile == Helper.FileCharToFile('e') && sourceRank == 1 &&
+                   targetFile == Helper.FileCharToFile('c') && targetRank == 1;
+        }
+
+        private static bool IsBlackKingSideCastling(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
+        {
+            return movingPiece == Definitions.KING.ToString().ToLower()[0] &&
+                sourceFile == Helper.FileCharToFile('e') && sourceRank == 8 &&
+                targetFile == Helper.FileCharToFile('g') && targetRank == 8;
+        }
+
+        private static bool IsBlackQueenSideCastling(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
+        {
+            return movingPiece == Definitions.KING.ToString().ToLower()[0] &&
+                   sourceFile == Helper.FileCharToFile('e') && sourceRank == 8 &&
+                   targetFile == Helper.FileCharToFile('c') && targetRank == 8;
         }
     }
 }

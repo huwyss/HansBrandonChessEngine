@@ -189,44 +189,44 @@ namespace MantaChessEngine
             //}
 
             // if white king side castling
-            if (MovingPiece == Definitions.KING.ToString().ToUpper()[0] &&
-                SourceFile == Helper.FileCharToFile('e') && SourceRank == 1 &&
-                TargetFile == Helper.FileCharToFile('g') && TargetRank == 1)
-            {
-                board.SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('f'), 1); // move rook next to king
-                board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('h'), 1); // remove old rook
-                board.WhiteDidCastling = true;
-            }
+            //if (MovingPiece == Definitions.KING.ToString().ToUpper()[0] &&
+            //    SourceFile == Helper.FileCharToFile('e') && SourceRank == 1 &&
+            //    TargetFile == Helper.FileCharToFile('g') && TargetRank == 1)
+            //{
+            //    board.SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('f'), 1); // move rook next to king
+            //    board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('h'), 1); // remove old rook
+            //    board.WhiteDidCastling = true;
+            //}
 
-            // if white queen side castling
-            if (MovingPiece == Definitions.KING.ToString().ToUpper()[0] &&
-                SourceFile == Helper.FileCharToFile('e') && SourceRank == 1 &&
-                TargetFile == Helper.FileCharToFile('c') && TargetRank == 1)
-            {
-                board.SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('d'), 1); // move rook next to king
-                board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('a'), 1); // remove old rook
-                board.WhiteDidCastling = true;
-            }
+            //// if white queen side castling
+            //if (MovingPiece == Definitions.KING.ToString().ToUpper()[0] &&
+            //    SourceFile == Helper.FileCharToFile('e') && SourceRank == 1 &&
+            //    TargetFile == Helper.FileCharToFile('c') && TargetRank == 1)
+            //{
+            //    board.SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('d'), 1); // move rook next to king
+            //    board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('a'), 1); // remove old rook
+            //    board.WhiteDidCastling = true;
+            //}
 
             // if black king side castling
-            if (MovingPiece == Definitions.KING.ToString().ToLower()[0] &&
-                SourceFile == Helper.FileCharToFile('e') && SourceRank == 8 &&
-                TargetFile == Helper.FileCharToFile('g') && TargetRank == 8)
-            {
-                board.SetPiece(Definitions.ROOK.ToString().ToLower()[0], Helper.FileCharToFile('f'), 8); // move rook next to king
-                board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('h'), 8); // remove old rook
-                board.BlackDidCastling = true;
-            }
+            //if (MovingPiece == Definitions.KING.ToString().ToLower()[0] &&
+            //    SourceFile == Helper.FileCharToFile('e') && SourceRank == 8 &&
+            //    TargetFile == Helper.FileCharToFile('g') && TargetRank == 8)
+            //{
+            //    board.SetPiece(Definitions.ROOK.ToString().ToLower()[0], Helper.FileCharToFile('f'), 8); // move rook next to king
+            //    board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('h'), 8); // remove old rook
+            //    board.BlackDidCastling = true;
+            //}
 
             // if black queen side castling
-            if (MovingPiece == Definitions.KING.ToString().ToLower()[0] &&
-                SourceFile == Helper.FileCharToFile('e') && SourceRank == 8 &&
-                TargetFile == Helper.FileCharToFile('c') && TargetRank == 8)
-            {
-                board.SetPiece(Definitions.ROOK.ToString().ToLower()[0], Helper.FileCharToFile('d'), 8); // move rook next to king
-                board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('a'), 8); // remove old rook
-                board.BlackDidCastling = true;
-            }
+            //if (MovingPiece == Definitions.KING.ToString().ToLower()[0] &&
+            //    SourceFile == Helper.FileCharToFile('e') && SourceRank == 8 &&
+            //    TargetFile == Helper.FileCharToFile('c') && TargetRank == 8)
+            //{
+            //    board.SetPiece(Definitions.ROOK.ToString().ToLower()[0], Helper.FileCharToFile('d'), 8); // move rook next to king
+            //    board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('a'), 8); // remove old rook
+            //    board.BlackDidCastling = true;
+            //}
 
             int enPassantFile = 0;
             int enPassantRank = 0;
@@ -261,45 +261,45 @@ namespace MantaChessEngine
             board.SetPiece(Definitions.EmptyField, TargetFile, TargetRank);     // TargetFile is equal to CapturedFile
             board.SetPiece(CapturedPiece, CapturedFile, CapturedRank); // TargetRank differs from TargetRank for en passant capture
 
-            // if white king side castling
-            if (MovingPiece == Definitions.KING.ToString().ToUpper()[0] &&
-                SourceFile == Helper.FileCharToFile('e') && SourceRank == 1 &&
-                TargetFile == Helper.FileCharToFile('g') && TargetRank == 1)
-            {
-                board.SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('h'), 1); // move rook next to king
-                board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('f'), 1); // remove old rook
-                board.WhiteDidCastling = false;
-            }
+            //// if white king side castling
+            //if (MovingPiece == Definitions.KING.ToString().ToUpper()[0] &&
+            //    SourceFile == Helper.FileCharToFile('e') && SourceRank == 1 &&
+            //    TargetFile == Helper.FileCharToFile('g') && TargetRank == 1)
+            //{
+            //    board.SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('h'), 1); // move rook next to king
+            //    board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('f'), 1); // remove old rook
+            //    board.WhiteDidCastling = false;
+            //}
 
-            // if white queen side castling
-            if (MovingPiece == Definitions.KING.ToString().ToUpper()[0] &&
-                SourceFile == Helper.FileCharToFile('e') && SourceRank == 1 &&
-                TargetFile == Helper.FileCharToFile('c') && TargetRank == 1)
-            {
-                board.SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('a'), 1); // move rook next to king
-                board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('d'), 1); // remove old rook
-                board.WhiteDidCastling = false;
-            }
+            //// if white queen side castling
+            //if (MovingPiece == Definitions.KING.ToString().ToUpper()[0] &&
+            //    SourceFile == Helper.FileCharToFile('e') && SourceRank == 1 &&
+            //    TargetFile == Helper.FileCharToFile('c') && TargetRank == 1)
+            //{
+            //    board.SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('a'), 1); // move rook next to king
+            //    board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('d'), 1); // remove old rook
+            //    board.WhiteDidCastling = false;
+            //}
 
-            // if black king side castling
-            if (MovingPiece == Definitions.KING.ToString().ToLower()[0] &&
-                SourceFile == Helper.FileCharToFile('e') && SourceRank == 8 &&
-                TargetFile == Helper.FileCharToFile('g') && TargetRank == 8)
-            {
-                board.SetPiece(Definitions.ROOK.ToString().ToLower()[0], Helper.FileCharToFile('h'), 8); // move rook next to king
-                board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('f'), 8); // remove old rook
-                board.BlackDidCastling = false;
-            }
+            //// if black king side castling
+            //if (MovingPiece == Definitions.KING.ToString().ToLower()[0] &&
+            //    SourceFile == Helper.FileCharToFile('e') && SourceRank == 8 &&
+            //    TargetFile == Helper.FileCharToFile('g') && TargetRank == 8)
+            //{
+            //    board.SetPiece(Definitions.ROOK.ToString().ToLower()[0], Helper.FileCharToFile('h'), 8); // move rook next to king
+            //    board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('f'), 8); // remove old rook
+            //    board.BlackDidCastling = false;
+            //}
 
-            // if black queen side castling
-            if (MovingPiece == Definitions.KING.ToString().ToLower()[0] &&
-                SourceFile == Helper.FileCharToFile('e') && SourceRank == 8 &&
-                TargetFile == Helper.FileCharToFile('c') && TargetRank == 8)
-            {
-                board.SetPiece(Definitions.ROOK.ToString().ToLower()[0], Helper.FileCharToFile('a'), 8); // move rook next to king
-                board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('d'), 8); // remove old rook
-                board.BlackDidCastling = false;
-            }
+            //// if black queen side castling
+            //if (MovingPiece == Definitions.KING.ToString().ToLower()[0] &&
+            //    SourceFile == Helper.FileCharToFile('e') && SourceRank == 8 &&
+            //    TargetFile == Helper.FileCharToFile('c') && TargetRank == 8)
+            //{
+            //    board.SetPiece(Definitions.ROOK.ToString().ToLower()[0], Helper.FileCharToFile('a'), 8); // move rook next to king
+            //    board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('d'), 8); // remove old rook
+            //    board.BlackDidCastling = false;
+            //}
 
             board.History.Back();
             board.SideToMove = Helper.GetOpositeColor(board.SideToMove);

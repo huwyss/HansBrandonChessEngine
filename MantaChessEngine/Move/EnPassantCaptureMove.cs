@@ -13,7 +13,7 @@ namespace MantaChessEngine
         {
         }
 
-        public override int CapturedRank // mostly this is the same as target rank but for en passant capture it is different
+        public override int CapturedRank // for en passant capture it is different from TargetRank
         {
             get
             {
@@ -34,10 +34,7 @@ namespace MantaChessEngine
 
         public override void UndoMove(Board board)
         {
-            //board.SetPiece(MovingPiece, SourceFile, SourceRank);
-            //board.SetPiece(Definitions.EmptyField, TargetFile, TargetRank);     // TargetFile is equal to CapturedFile
-            //board.SetPiece(CapturedPiece, CapturedFile, CapturedRank); // TargetRank differs from TargetRank for en passant capture
-
+            // note: CapturedRank is overridden and therefore taken from this class!
             base.UndoMove(board);
         }
     }

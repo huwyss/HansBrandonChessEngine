@@ -36,20 +36,7 @@ namespace MantaChessEngine
 
         public virtual int CapturedRank // mostly this is the same as target rank but for en passant capture it is different
         {
-            get
-            {
-                //if (EnPassant)
-                //{
-                //    if (Color == Definitions.ChessColor.White)
-                //    {
-                //        return TargetRank - 1;
-                //    }
-
-                //    return TargetRank + 1;
-                //}
-
-                return TargetRank;
-            }
+            get { return TargetRank; }
         }
 
         
@@ -183,51 +170,6 @@ namespace MantaChessEngine
             board.SetPiece(MovingPiece, TargetFile, TargetRank); // set MovingPiece to new position (and overwrite captured piece)
             board.SetPiece(Definitions.EmptyField, SourceFile, SourceRank); // empty MovingPiece's old position
 
-            //if (EnPassant)
-            //{
-            //    board.SetPiece(Definitions.EmptyField, CapturedFile, CapturedRank); // remove captured pawn if it is en passant
-            //}
-
-            // if white king side castling
-            //if (MovingPiece == Definitions.KING.ToString().ToUpper()[0] &&
-            //    SourceFile == Helper.FileCharToFile('e') && SourceRank == 1 &&
-            //    TargetFile == Helper.FileCharToFile('g') && TargetRank == 1)
-            //{
-            //    board.SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('f'), 1); // move rook next to king
-            //    board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('h'), 1); // remove old rook
-            //    board.WhiteDidCastling = true;
-            //}
-
-            //// if white queen side castling
-            //if (MovingPiece == Definitions.KING.ToString().ToUpper()[0] &&
-            //    SourceFile == Helper.FileCharToFile('e') && SourceRank == 1 &&
-            //    TargetFile == Helper.FileCharToFile('c') && TargetRank == 1)
-            //{
-            //    board.SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('d'), 1); // move rook next to king
-            //    board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('a'), 1); // remove old rook
-            //    board.WhiteDidCastling = true;
-            //}
-
-            // if black king side castling
-            //if (MovingPiece == Definitions.KING.ToString().ToLower()[0] &&
-            //    SourceFile == Helper.FileCharToFile('e') && SourceRank == 8 &&
-            //    TargetFile == Helper.FileCharToFile('g') && TargetRank == 8)
-            //{
-            //    board.SetPiece(Definitions.ROOK.ToString().ToLower()[0], Helper.FileCharToFile('f'), 8); // move rook next to king
-            //    board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('h'), 8); // remove old rook
-            //    board.BlackDidCastling = true;
-            //}
-
-            // if black queen side castling
-            //if (MovingPiece == Definitions.KING.ToString().ToLower()[0] &&
-            //    SourceFile == Helper.FileCharToFile('e') && SourceRank == 8 &&
-            //    TargetFile == Helper.FileCharToFile('c') && TargetRank == 8)
-            //{
-            //    board.SetPiece(Definitions.ROOK.ToString().ToLower()[0], Helper.FileCharToFile('d'), 8); // move rook next to king
-            //    board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('a'), 8); // remove old rook
-            //    board.BlackDidCastling = true;
-            //}
-
             int enPassantFile = 0;
             int enPassantRank = 0;
             SetEnPassantFields(this, out enPassantFile, out enPassantRank);
@@ -255,51 +197,9 @@ namespace MantaChessEngine
 
         public virtual void UndoMove(Board board)
         {
-            //var lastMove = this; //board.History.LastMove;
             board.SetPiece(MovingPiece, SourceFile, SourceRank);
-
             board.SetPiece(Definitions.EmptyField, TargetFile, TargetRank);     // TargetFile is equal to CapturedFile
             board.SetPiece(CapturedPiece, CapturedFile, CapturedRank); // TargetRank differs from TargetRank for en passant capture
-
-            //// if white king side castling
-            //if (MovingPiece == Definitions.KING.ToString().ToUpper()[0] &&
-            //    SourceFile == Helper.FileCharToFile('e') && SourceRank == 1 &&
-            //    TargetFile == Helper.FileCharToFile('g') && TargetRank == 1)
-            //{
-            //    board.SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('h'), 1); // move rook next to king
-            //    board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('f'), 1); // remove old rook
-            //    board.WhiteDidCastling = false;
-            //}
-
-            //// if white queen side castling
-            //if (MovingPiece == Definitions.KING.ToString().ToUpper()[0] &&
-            //    SourceFile == Helper.FileCharToFile('e') && SourceRank == 1 &&
-            //    TargetFile == Helper.FileCharToFile('c') && TargetRank == 1)
-            //{
-            //    board.SetPiece(Definitions.ROOK.ToString().ToUpper()[0], Helper.FileCharToFile('a'), 1); // move rook next to king
-            //    board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('d'), 1); // remove old rook
-            //    board.WhiteDidCastling = false;
-            //}
-
-            //// if black king side castling
-            //if (MovingPiece == Definitions.KING.ToString().ToLower()[0] &&
-            //    SourceFile == Helper.FileCharToFile('e') && SourceRank == 8 &&
-            //    TargetFile == Helper.FileCharToFile('g') && TargetRank == 8)
-            //{
-            //    board.SetPiece(Definitions.ROOK.ToString().ToLower()[0], Helper.FileCharToFile('h'), 8); // move rook next to king
-            //    board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('f'), 8); // remove old rook
-            //    board.BlackDidCastling = false;
-            //}
-
-            //// if black queen side castling
-            //if (MovingPiece == Definitions.KING.ToString().ToLower()[0] &&
-            //    SourceFile == Helper.FileCharToFile('e') && SourceRank == 8 &&
-            //    TargetFile == Helper.FileCharToFile('c') && TargetRank == 8)
-            //{
-            //    board.SetPiece(Definitions.ROOK.ToString().ToLower()[0], Helper.FileCharToFile('a'), 8); // move rook next to king
-            //    board.SetPiece(Definitions.EmptyField, Helper.FileCharToFile('d'), 8); // remove old rook
-            //    board.BlackDidCastling = false;
-            //}
 
             board.History.Back();
             board.SideToMove = Helper.GetOpositeColor(board.SideToMove);

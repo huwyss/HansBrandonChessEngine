@@ -26,7 +26,7 @@ namespace MantaChessEngineTest
 
             float score = 0;
             IMove actualMove = target.Search(board, Definitions.ChessColor.White, out score);
-            Move expectedMove = new Move("f4e5q");
+            MoveBase expectedMove = new NormalMove("f4e5q");
             Assert.AreEqual(expectedMove, actualMove, "Queen should be captured.");
         }
 
@@ -49,7 +49,7 @@ namespace MantaChessEngineTest
 
             float score = 0;
             IMove actualMove = target.Search(board, Definitions.ChessColor.Black, out score);
-            Move expectedMove = new Move("e5d4Q");
+            MoveBase expectedMove = new NormalMove("e5d4Q");
             Assert.AreEqual(expectedMove, actualMove, "Queen should be captured.");
         }
     }

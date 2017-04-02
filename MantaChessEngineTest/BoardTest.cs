@@ -111,7 +111,7 @@ namespace MantaChessEngineTest
 
             var moveList = target.History.Moves;
             Assert.AreEqual(1, target.History.Moves.Count);
-            Assert.AreEqual(new Move('Q', 4, 1, 4, 7, 'p'), target.History.Moves[0]);
+            Assert.AreEqual(new NormalMove('Q', 4, 1, 4, 7, 'p'), target.History.Moves[0]);
         }
 
         [TestMethod]
@@ -179,7 +179,7 @@ namespace MantaChessEngineTest
                               "........" +
                               "...K....";
             Assert.AreEqual(expPosit, board.GetString, "En passant capture not correct move.");
-            Assert.AreEqual(board.History.Moves[1], new Move("a4b3Pe"));
+            Assert.AreEqual(board.History.Moves[1], new EnPassantCaptureMove("a4b3P"));
         }
 
         [TestMethod]
@@ -209,7 +209,7 @@ namespace MantaChessEngineTest
                               "........" +
                               "...K....";
             Assert.AreEqual(expPosit, board.GetString, "En passant capture not correct move.");
-            Assert.AreEqual(board.History.Moves[1], new Move("a5b6pe"));
+            Assert.AreEqual(board.History.Moves[1], new EnPassantCaptureMove("a5b6p"));
         }
 
         [TestMethod]

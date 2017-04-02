@@ -61,12 +61,12 @@ namespace MantaChessEngine
         /// <returns></returns>
         internal IMove SearchLevel(Board board, Definitions.ChessColor color, int level, out float score)
         {
-            Move bestMove = null;
+            MoveBase bestMove = null;
             float bestScore = InitWithWorstScorePossible(color);
             float currentScore;
 
             var possibleMoves = board.GetAllMoves(color);
-            foreach (Move currentMove in possibleMoves)
+            foreach (MoveBase currentMove in possibleMoves)
             {
                 Board boardWithMove = board.Clone();
                 boardWithMove.Move(currentMove);

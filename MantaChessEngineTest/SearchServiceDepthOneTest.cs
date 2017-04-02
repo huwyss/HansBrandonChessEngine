@@ -25,8 +25,8 @@ namespace MantaChessEngineTest
             board.SetPosition(boardString);
 
             float score = 0;
-            Move actualMove = target.CalcScoreLevelZero(board, Definitions.ChessColor.White, out score);
-            Move expectedMove = new Move("f4e5q");
+            MoveBase actualMove = target.CalcScoreLevelZero(board, Definitions.ChessColor.White, out score);
+            MoveBase expectedMove = new NormalMove("f4e5q");
             
             Assert.AreEqual(expectedMove, actualMove, "Queen should be captured.");
             Assert.AreEqual(9, score);
@@ -50,8 +50,8 @@ namespace MantaChessEngineTest
                                  "RNB.KBNR";
             board.SetPosition(boardString);
 
-            Move actualMove = target.CalcScoreLevelZero(board, Definitions.ChessColor.Black, out score);
-            Move expectedMove = new Move("e5d4Q");
+            MoveBase actualMove = target.CalcScoreLevelZero(board, Definitions.ChessColor.Black, out score);
+            MoveBase expectedMove = new NormalMove("e5d4Q");
 
             Assert.AreEqual(expectedMove, actualMove, "Queen should be captured.");
             Assert.AreEqual(-9, score);
@@ -76,7 +76,7 @@ namespace MantaChessEngineTest
 
             float score = 0;
             IMove actualMove = target.Search(board, Definitions.ChessColor.White, out score);
-            Move verybadMove = new Move("b4c5p");
+            MoveBase verybadMove = new NormalMove("b4c5p");
             Assert.AreNotEqual(verybadMove, actualMove, "Queen must not capture pawn. Otherwise queen gets lost.");
         }
 
@@ -99,7 +99,7 @@ namespace MantaChessEngineTest
 
             float score = 0;
             IMove actualMove = target.Search(board, Definitions.ChessColor.White, out score);
-            Move goodMove = new Move("b4c5q");
+            MoveBase goodMove = new NormalMove("b4c5q");
             Assert.AreEqual(goodMove, actualMove, "Pawn must capture queen.");
         }
 

@@ -82,7 +82,7 @@ namespace MantaChessEngine
 
         public bool Move(string moveStringUser)
         {
-            Move syntaxCorrectMove = _board.GetCorrectMove(moveStringUser);
+            MoveBase syntaxCorrectMove = _board.GetCorrectMove(moveStringUser);
             if (syntaxCorrectMove == null)
             {
                 return false;

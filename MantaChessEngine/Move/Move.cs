@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MantaChessEngine
 {
-    public class Move : IMove
+    public abstract class MoveBase : IMove
     {
         public char MovingPiece { get; set; }
         public int SourceFile { get; set; }
@@ -15,7 +15,6 @@ namespace MantaChessEngine
         public int TargetFile { get; set; }
         public int TargetRank { get; set; }
         public char CapturedPiece { get; set; }
-        public bool EnPassant { get; set; }
 
         public Definitions.ChessColor Color
         {
@@ -41,7 +40,7 @@ namespace MantaChessEngine
 
         
 
-        public Move(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, char capturedPiece, bool enPassant = false)
+        public MoveBase(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, char capturedPiece)
         {
             MovingPiece = movingPiece;
             SourceFile = sourceFile;
@@ -49,10 +48,9 @@ namespace MantaChessEngine
             TargetFile = targetFile;
             TargetRank = targetRank;
             CapturedPiece = capturedPiece;
-            EnPassant = enPassant;
         }
 
-        public Move(string moveString)
+        public MoveBase(string moveString)
         {
             if (moveString.Length >= 4)
             {
@@ -69,10 +67,10 @@ namespace MantaChessEngine
 
             if (moveString.Length >= 6)
             {
-                if (moveString[5] == 'e')
-                {
-                    EnPassant = true;
-                }
+                //if (moveString[5] == 'e')
+                //{
+                //    EnPassant = true;
+                //}
             }
 
             MovingPiece = (char)0;
@@ -87,7 +85,7 @@ namespace MantaChessEngine
             }
 
             // If parameter cannot be cast to Move return false.
-            Move other = obj as Move;
+            MoveBase other = obj as MoveBase;
             if ((System.Object)other == null)
             {
                 return false;
@@ -98,7 +96,7 @@ namespace MantaChessEngine
             equal &= TargetFile == other.TargetFile;
             equal &= TargetRank == other.TargetRank;
             equal &= CapturedPiece == other.CapturedPiece;
-            equal &= EnPassant == other.EnPassant;
+            //equal &= EnPassant == other.EnPassant;
 
             // note: only check MovingPiece if they are set in both objects
             // new Move("a2a3") is equal to new Move('p', a, 2, a, 3, nocapture, enpassant=false)
@@ -119,7 +117,7 @@ namespace MantaChessEngine
             moveString += Helper.FileToFileChar(TargetFile);
             moveString += TargetRank;
             moveString += CapturedPiece;
-            moveString += EnPassant ? "e" : "";
+           
             return moveString;
         }
 
@@ -205,7 +203,7 @@ namespace MantaChessEngine
             board.SideToMove = Helper.GetOpositeColor(board.SideToMove);
         }
 
-        private void SetEnPassantFields(Move move, out int enPassantFile, out int enPassantRank)
+        private void SetEnPassantFields(MoveBase move, out int enPassantFile, out int enPassantRank)
         {
             enPassantFile = 0;
             enPassantRank = 0;

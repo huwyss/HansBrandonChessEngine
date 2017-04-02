@@ -8,7 +8,7 @@ namespace MantaChessEngine
 {
     public class MoveFactory
     {
-        public static Move GetCorrectMove(Board board, string moveStringUser) // input is like "e2e4"
+        public static MoveBase GetCorrectMove(Board board, string moveStringUser) // input is like "e2e4"
         {
             char movingPiece;
             char capturedPiece;
@@ -18,7 +18,7 @@ namespace MantaChessEngine
             int targetRank = 0;
             bool enPassant = false;
 
-            if (Move.IsCorrectMove(moveStringUser))
+            if (MoveBase.IsCorrectMove(moveStringUser))
             {
                 GetPositions(moveStringUser, out sourceFile, out sourceRank, out targetFile, out targetRank);
                 movingPiece = board.GetPiece(sourceFile, sourceRank);
@@ -61,7 +61,7 @@ namespace MantaChessEngine
                     return new CastlingMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, CastlingType.BlackQueenSide);
                 }
 
-                return new Move(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece, false);
+                return new NormalMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
             }
 
             return null;

@@ -17,7 +17,7 @@ namespace MantaChessEngine
 
         public IMove Search(Board board, Definitions.ChessColor color, out float score)
         {
-            Move nextMove = null;
+            MoveBase nextMove = null;
             var possibleMovesComputer = board.GetAllMoves(color);
             int numberPossibleMoves = possibleMovesComputer.Count;
 

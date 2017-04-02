@@ -21,15 +21,15 @@ namespace MantaChessEngine
         {
             float bestScoreSecondMover = InitBestScoreSofar(Helper.GetOpositeColor(color));
             float bestScoreFirstMover = InitBestScoreSofar(color);
-            Move bestMoveFirstMover = null;
+            MoveBase bestMoveFirstMover = null;
 
             var possibleMoves = board.GetAllMoves(color);
-            foreach (Move currentMove in possibleMoves)
+            foreach (MoveBase currentMove in possibleMoves)
             {
                 Board boardWithMove = board.Clone();
                 boardWithMove.Move(currentMove);
 
-                Move bestMoveSecondMover = CalcScoreLevelZero(boardWithMove, Helper.GetOpositeColor(color), out bestScoreSecondMover);
+                MoveBase bestMoveSecondMover = CalcScoreLevelZero(boardWithMove, Helper.GetOpositeColor(color), out bestScoreSecondMover);
                 if (IsBestMoveSofar(color, bestScoreFirstMover, bestScoreSecondMover))
                 {
                     bestScoreFirstMover = bestScoreSecondMover;
@@ -59,13 +59,13 @@ namespace MantaChessEngine
 
         //}
 
-        internal Move CalcScoreLevelZero(Board board, Definitions.ChessColor color, out float score)
+        internal MoveBase CalcScoreLevelZero(Board board, Definitions.ChessColor color, out float score)
         {
-            Move bestMove = null;
+            MoveBase bestMove = null;
             float bestScore = InitBestScoreSofar(color);
 
             var possibleMoves = board.GetAllMoves(color);
-            foreach (Move currentMove in possibleMoves)
+            foreach (MoveBase currentMove in possibleMoves)
             {
                 Board boardWithMove = board.Clone();
                 boardWithMove.Move(currentMove);

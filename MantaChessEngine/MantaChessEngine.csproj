@@ -53,6 +53,7 @@
     <Compile Include="Move\IMove.cs" />
     <Compile Include="Move\MoveFactory.cs" />
     <Compile Include="Move\NoLegalMove.cs" />
+    <Compile Include="Move\NormalMove.cs" />
     <Compile Include="Search\ISearchService.cs" />
     <Compile Include="Move\Move.cs" />
     <Compile Include="MoveGenerator.cs" />

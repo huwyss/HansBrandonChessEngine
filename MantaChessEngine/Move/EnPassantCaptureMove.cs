@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 
 namespace MantaChessEngine
 {
-    public class EnPassantCaptureMove : Move
+    public class EnPassantCaptureMove : MoveBase
     {
         public EnPassantCaptureMove(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, char capturedPiece)
-            : base(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece, true)
+            : base(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece)
+        {
+        }
+
+        public EnPassantCaptureMove(string moveStringUser)
+            : base(moveStringUser)
         {
         }
 
@@ -36,6 +41,33 @@ namespace MantaChessEngine
         {
             // note: CapturedRank is overridden and therefore taken from this class!
             base.UndoMove(board);
+        }
+
+        public override bool Equals(System.Object obj)
+        {
+            if (!(obj is EnPassantCaptureMove))
+            {
+                return false;
+            }
+
+            return base.Equals(obj);
+        }
+
+        public override string ToString()
+        {
+            string moveString = "";
+            moveString += Helper.FileToFileChar(SourceFile);
+            moveString += SourceRank.ToString();
+            moveString += Helper.FileToFileChar(TargetFile);
+            moveString += TargetRank;
+            moveString += CapturedPiece;
+            moveString += "e";
+            return moveString;
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
         }
     }
 }

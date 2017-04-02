@@ -14,7 +14,7 @@ namespace MantaChessEngine
         BlackQueenSide
     }
 
-    public class CastlingMove : Move
+    public class CastlingMove : MoveBase
     {
         private CastlingType _castlingType;
 
@@ -25,7 +25,7 @@ namespace MantaChessEngine
         int _rookCastledRank = 0;
 
         public CastlingMove(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, CastlingType castlingType)
-            : base(movingPiece, sourceFile, sourceRank, targetFile, targetRank, Definitions.EmptyField, false)
+            : base(movingPiece, sourceFile, sourceRank, targetFile, targetRank, Definitions.EmptyField)
         {
             _castlingType = castlingType;
         }

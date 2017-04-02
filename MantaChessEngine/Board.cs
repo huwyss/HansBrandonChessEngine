@@ -10,7 +10,7 @@ namespace MantaChessEngine
     {
         public Definitions.ChessColor SideToMove { get; set; }
         public History History { get; set; }
-        public Move LastMove { get { return History.LastMove; } }
+        public MoveBase LastMove { get { return History.LastMove; } }
 
         public int EnPassantFile { get { return !IsClonedBoard ? History.LastEnPassantFile : ClonedEnPassantFile; } }
         public int EnPassantRank { get { return !IsClonedBoard ? History.LastEnPassantRank : ClonedEnPassantRank; } }
@@ -163,7 +163,7 @@ namespace MantaChessEngine
 
         public void Move(string userMoveString)
         {
-            Move correctedMove = GetCorrectMove(userMoveString);
+            MoveBase correctedMove = GetCorrectMove(userMoveString);
             Move(correctedMove);
         }
 
@@ -172,7 +172,7 @@ namespace MantaChessEngine
         /// </summary>
         public void Move(IMove nextMove)
         {
-            Move move = nextMove as Move;
+            MoveBase move = nextMove as MoveBase;
             if (move == null)
             {
                 return;
@@ -280,17 +280,17 @@ namespace MantaChessEngine
             }
         }
 
-        public Move GetCorrectMove(string moveStringUser)
+        public MoveBase GetCorrectMove(string moveStringUser)
         {
             return MoveFactory.GetCorrectMove(this, moveStringUser);
         }
 
-        public bool IsMoveValid(Move move)
+        public bool IsMoveValid(MoveBase move)
         {
             return _moveGenerator.IsMoveValid(this, move);
         }
 
-        public List<Move> GetAllMoves(Definitions.ChessColor color)
+        public List<MoveBase> GetAllMoves(Definitions.ChessColor color)
         {
             return _moveGenerator.GetAllMoves(this, color);
         }
@@ -312,7 +312,7 @@ namespace MantaChessEngine
             var moves = _moveGenerator.GetAllMoves(this, Helper.GetOpositeColor(color), false);
 
             // if a move ends in king's position then king is in check
-            foreach (Move move in moves)
+            foreach (MoveBase move in moves)
             {
                 if (move.CapturedPiece == king)
                 {
@@ -329,7 +329,7 @@ namespace MantaChessEngine
             var moves = _moveGenerator.GetAllMoves(this, Helper.GetOpositeColor(color), false);
 
             // if a move ends in king's position then king is in check
-            foreach (Move move in moves)
+            foreach (MoveBase move in moves)
             {
                 if (move.TargetFile == file && move.TargetRank == rank)
                 {

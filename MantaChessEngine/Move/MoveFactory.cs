@@ -43,22 +43,22 @@ namespace MantaChessEngine
 
                 if (IsWhiteKingSideCastling(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
                 {
-                    return new CastlingMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, CastlingType.WhiteKingSide);
+                    return new CastlingMove(CastlingType.WhiteKingSide);
                 }
 
                 if (IsWhiteQueenSideCastling(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
                 {
-                    return new CastlingMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, CastlingType.WhiteQueenSide);
+                    return new CastlingMove(CastlingType.WhiteQueenSide);
                 }
 
                 if (IsBlackKingSideCastling(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
                 {
-                    return new CastlingMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, CastlingType.BlackKingSide);
+                    return new CastlingMove(CastlingType.BlackKingSide);
                 }
 
                 if (IsBlackQueenSideCastling(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
                 {
-                    return new CastlingMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, CastlingType.BlackQueenSide);
+                    return new CastlingMove(CastlingType.BlackQueenSide);
                 }
 
                 return new NormalMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);

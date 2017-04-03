@@ -24,42 +24,42 @@ namespace MantaChessEngine
         int _rookCastledFile = 0;
         int _rookCastledRank = 0;
 
-        public CastlingMove(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, CastlingType castlingType)
-            : base(movingPiece, sourceFile, sourceRank, targetFile, targetRank, Definitions.EmptyField)
+        public CastlingMove(CastlingType castlingType)
+            : base((char)0, 0, 0, 0, 0, Definitions.EmptyField)
         {
             _castlingType = castlingType;
+            switch (castlingType)
+            {
+                case CastlingType.WhiteKingSide:
+                    MovingPiece = 'K';
+                    SourceFile = Helper.FileCharToFile('e');
+                    SourceRank = 1;
+                    TargetFile = Helper.FileCharToFile('g');
+                    TargetRank = 1;
+                    break;
+                case CastlingType.WhiteQueenSide:
+                    MovingPiece = 'K';
+                    SourceFile = Helper.FileCharToFile('e');
+                    SourceRank = 1;
+                    TargetFile = Helper.FileCharToFile('c');
+                    TargetRank = 1;
+                    break;
+                case CastlingType.BlackKingSide:
+                    MovingPiece = 'k';
+                    SourceFile = Helper.FileCharToFile('e');
+                    SourceRank = 8;
+                    TargetFile = Helper.FileCharToFile('g');
+                    TargetRank = 8;
+                    break;
+                case CastlingType.BlackQueenSide:
+                    MovingPiece = 'k';
+                    SourceFile = Helper.FileCharToFile('e');
+                    SourceRank = 8;
+                    TargetFile = Helper.FileCharToFile('c');
+                    TargetRank = 8;
+                    break;
+            }
         }
-
-        //public CastlingMove(CastlingType castlingType)
-        //    : base((char)0, 0, 0, 0, 0, (char)0)
-        //{
-        //    _castlingType = castlingType;
-        //    switch (castlingType)
-        //    {
-        //        case CastlingType.WhiteKingSide:
-        //            MovingPiece = 'K';
-        //            SourceFile = Helper.FileCharToFile('e');
-        //            SourceRank = 1;
-        //            TargetFile = Helper.FileCharToFile('g');
-        //            TargetRank = 1;
-        //            break;
-        //        case CastlingType.WhiteQueenSide:
-        //            MovingPiece = 'K';
-        //            SourceFile = Helper.FileCharToFile('e');
-        //            SourceRank = 1;
-        //            TargetFile = Helper.FileCharToFile('c');
-        //            TargetRank = 1;
-        //            break;
-        //        case CastlingType.BlackKingSide:
-        //            MovingPiece = 'K';ddd
-        //            SourceFile = Helper.FileCharToFile('e');
-        //            SourceRank = 1;
-        //            TargetFile = Helper.FileCharToFile('g');
-        //            TargetRank = 1;
-        //            break;
-        //    }
-        //}
-
 
         public override void ExecuteMove(Board board)
         {

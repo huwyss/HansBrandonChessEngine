@@ -30,6 +30,37 @@ namespace MantaChessEngine
             _castlingType = castlingType;
         }
 
+        //public CastlingMove(CastlingType castlingType)
+        //    : base((char)0, 0, 0, 0, 0, (char)0)
+        //{
+        //    _castlingType = castlingType;
+        //    switch (castlingType)
+        //    {
+        //        case CastlingType.WhiteKingSide:
+        //            MovingPiece = 'K';
+        //            SourceFile = Helper.FileCharToFile('e');
+        //            SourceRank = 1;
+        //            TargetFile = Helper.FileCharToFile('g');
+        //            TargetRank = 1;
+        //            break;
+        //        case CastlingType.WhiteQueenSide:
+        //            MovingPiece = 'K';
+        //            SourceFile = Helper.FileCharToFile('e');
+        //            SourceRank = 1;
+        //            TargetFile = Helper.FileCharToFile('c');
+        //            TargetRank = 1;
+        //            break;
+        //        case CastlingType.BlackKingSide:
+        //            MovingPiece = 'K';ddd
+        //            SourceFile = Helper.FileCharToFile('e');
+        //            SourceRank = 1;
+        //            TargetFile = Helper.FileCharToFile('g');
+        //            TargetRank = 1;
+        //            break;
+        //    }
+        //}
+
+
         public override void ExecuteMove(Board board)
         {
             if (_castlingType == CastlingType.WhiteKingSide)
@@ -128,6 +159,19 @@ namespace MantaChessEngine
             _rookOriginalRank = 8;
             _rookCastledFile = Helper.FileCharToFile('d');
             _rookCastledRank = 8;
+        }
+
+        public override string ToString()
+        {
+            if (_castlingType == CastlingType.WhiteKingSide ||
+                _castlingType == CastlingType.BlackKingSide)
+            {
+                return "0-0";
+            }
+            else
+            {
+                return "0-0-0";
+            }
         }
     }
 }

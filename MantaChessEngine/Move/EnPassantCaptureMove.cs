@@ -55,12 +55,7 @@ namespace MantaChessEngine
 
         public override string ToString()
         {
-            string moveString = "";
-            moveString += Helper.FileToFileChar(SourceFile);
-            moveString += SourceRank.ToString();
-            moveString += Helper.FileToFileChar(TargetFile);
-            moveString += TargetRank;
-            moveString += CapturedPiece;
+            string moveString = base.ToString();
             moveString += "e";
             return moveString;
         }

@@ -13,8 +13,7 @@ namespace MantaChessEngine
         {
         }
 
-        public NormalMove(string moveStringUser)
-            : base(moveStringUser)
+        public NormalMove(string moveStringUser) : base(moveStringUser)
         {
         }
 
@@ -30,12 +29,7 @@ namespace MantaChessEngine
 
         public override string ToString()
         {
-            string moveString = "";
-            moveString += Helper.FileToFileChar(SourceFile);
-            moveString += SourceRank.ToString();
-            moveString += Helper.FileToFileChar(TargetFile);
-            moveString += TargetRank;
-            moveString += CapturedPiece;
+            string moveString = base.ToString();
             return moveString;
         }
 

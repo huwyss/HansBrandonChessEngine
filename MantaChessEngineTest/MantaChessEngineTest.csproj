@@ -63,6 +63,7 @@
     <Compile Include="SearchMinimaxTest.cs" />
     <Compile Include="SearchServiceDepthOneTest.cs" />
     <Compile Include="SearchServiceDepthHalfTest.cs" />
+    <Compile Include="CastlingMoveTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MantaChessEngine\MantaChessEngine.csproj">

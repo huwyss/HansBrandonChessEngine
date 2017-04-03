@@ -117,7 +117,6 @@ namespace MantaChessEngine
             moveString += Helper.FileToFileChar(TargetFile);
             moveString += TargetRank;
             moveString += CapturedPiece;
-           
             return moveString;
         }
 

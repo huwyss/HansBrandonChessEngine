@@ -25,9 +25,10 @@ namespace MantaChessEngine
 
         public MantaEngine(EngineType engineType)
         {
+            _factory = new MoveFactory();
+
             if (engineType == EngineType.Random)
             {
-                _factory = new MoveFactory();
                 _moveGenerator = new MoveGenerator(_factory);
                 _board = new Board(_moveGenerator);
                 _search = new SearchRandom();

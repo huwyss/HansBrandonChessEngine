@@ -12,7 +12,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             ISearchService target = new SearchServiceDepthHalfMove(evaluator);
-            MoveGenerator gen = new MoveGenerator();
+            MoveGenerator gen = new MoveGenerator(new MoveFactory());
             var board = new Board(gen);
             string boardString = "rnb.kbnr" +
                                  "ppp.pppp" +
@@ -35,7 +35,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             ISearchService target = new SearchServiceDepthHalfMove(evaluator);
-            MoveGenerator gen = new MoveGenerator();
+            MoveGenerator gen = new MoveGenerator(new MoveFactory());
             var board = new Board(gen);
             string boardString = "rnbqkbnr" +
                                  "pppp.ppp" +

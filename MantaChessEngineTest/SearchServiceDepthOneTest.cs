@@ -12,7 +12,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             var target = new SearchServiceDepthOne(evaluator);
-            MoveGenerator gen = new MoveGenerator();
+            MoveGenerator gen = new MoveGenerator(new MoveFactory());
             var board = new Board(gen);
             string boardString = "rnb.kbnr" +
                                  "ppp.pppp" +
@@ -38,7 +38,7 @@ namespace MantaChessEngineTest
             float score = 0;
             IEvaluator evaluator = new EvaluatorSimple();
             var target = new SearchServiceDepthOne(evaluator);
-            MoveGenerator gen = new MoveGenerator();
+            MoveGenerator gen = new MoveGenerator(new MoveFactory());
             var board = new Board(gen);
             string boardString = "rnbqkbnr" +
                                  "pppp.ppp" +
@@ -62,7 +62,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             ISearchService target = new SearchServiceDepthOne(evaluator);
-            MoveGenerator gen = new MoveGenerator();
+            MoveGenerator gen = new MoveGenerator(new MoveFactory());
             var board = new Board(gen);
             string boardString = ".......k" +
                                  "........" +
@@ -85,7 +85,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             ISearchService target = new SearchServiceDepthOne(evaluator);
-            MoveGenerator gen = new MoveGenerator();
+            MoveGenerator gen = new MoveGenerator(new MoveFactory());
             var board = new Board(gen);
             string boardString = ".......k" +
                                  "........" +

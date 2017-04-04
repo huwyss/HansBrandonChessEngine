@@ -30,15 +30,12 @@ namespace MantaChessEngine
         public int CapturedFile // same as target file
         {
             get { return TargetFile; }
-            
         } 
 
         public virtual int CapturedRank // mostly this is the same as target rank but for en passant capture it is different
         {
             get { return TargetRank; }
         }
-
-        
 
         public MoveBase(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, char capturedPiece)
         {

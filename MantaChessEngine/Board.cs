@@ -282,7 +282,8 @@ namespace MantaChessEngine
 
         public MoveBase GetCorrectMove(string moveStringUser)
         {
-            return MoveFactory.GetCorrectMove(this, moveStringUser);
+            var factory = new MoveFactory();
+            return factory.GetCorrectMove(this, moveStringUser);
         }
 
         public bool IsMoveValid(MoveBase move)

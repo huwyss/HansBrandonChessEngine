@@ -31,28 +31,28 @@ namespace MantaChessEngine
             switch (castlingType)
             {
                 case CastlingType.WhiteKingSide:
-                    MovingPiece = 'K';
+                    MovingPiece = Definitions.KING.ToString().ToUpper()[0];
                     SourceFile = Helper.FileCharToFile('e');
                     SourceRank = 1;
                     TargetFile = Helper.FileCharToFile('g');
                     TargetRank = 1;
                     break;
                 case CastlingType.WhiteQueenSide:
-                    MovingPiece = 'K';
+                    MovingPiece = Definitions.KING.ToString().ToUpper()[0];
                     SourceFile = Helper.FileCharToFile('e');
                     SourceRank = 1;
                     TargetFile = Helper.FileCharToFile('c');
                     TargetRank = 1;
                     break;
                 case CastlingType.BlackKingSide:
-                    MovingPiece = 'k';
+                    MovingPiece = Definitions.KING.ToString().ToLower()[0];
                     SourceFile = Helper.FileCharToFile('e');
                     SourceRank = 8;
                     TargetFile = Helper.FileCharToFile('g');
                     TargetRank = 8;
                     break;
                 case CastlingType.BlackQueenSide:
-                    MovingPiece = 'k';
+                    MovingPiece = Definitions.KING.ToString().ToLower()[0];
                     SourceFile = Helper.FileCharToFile('e');
                     SourceRank = 8;
                     TargetFile = Helper.FileCharToFile('c');

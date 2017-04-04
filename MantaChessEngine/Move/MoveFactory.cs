@@ -8,7 +8,28 @@ namespace MantaChessEngine
 {
     public class MoveFactory
     {
-        public static MoveBase GetCorrectMove(Board board, string moveStringUser) // input is like "e2e4"
+        public NormalMove MakeNormalMove(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, char capturedPiece)
+        {
+            return new NormalMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
+        }
+
+        public EnPassantCaptureMove MakeEnPassantCaptureMove(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, char capturedPiece)
+        {
+            return new EnPassantCaptureMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
+        }
+
+        public CastlingMove MakeCastlingMove(CastlingType castlingType)
+        {
+            return new CastlingMove(castlingType);
+        }
+
+        public NoLegalMove MakeNoLegalMove()
+        {
+            return new NoLegalMove();
+        }
+
+
+        public MoveBase GetCorrectMove(Board board, string moveStringUser) // input is like "e2e4"
         {
             char movingPiece;
             char capturedPiece;
@@ -68,14 +89,14 @@ namespace MantaChessEngine
         }
         
 
-        private static bool IsEnPassantCapture(Board board, int sourceFile, int sourceRank, int targetFile, int targetRank)
+        private bool IsEnPassantCapture(Board board, int sourceFile, int sourceRank, int targetFile, int targetRank)
         {
             return board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty &&
                    board.History.LastEnPassantFile == targetFile && 
                    board.History.LastEnPassantRank == targetRank;
         }
 
-        public static void GetPositions(string moveString, out int sourceFile, out int sourceRank, out int targetFile, out int targetRank)
+        public void GetPositions(string moveString, out int sourceFile, out int sourceRank, out int targetFile, out int targetRank)
         {
             if (moveString.Length >= 4)
             {
@@ -93,28 +114,28 @@ namespace MantaChessEngine
             }
         }
 
-        private static bool IsWhiteKingSideCastling(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
+        private bool IsWhiteKingSideCastling(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
         {
             return movingPiece == Definitions.KING.ToString().ToUpper()[0] &&
                     sourceFile == Helper.FileCharToFile('e') && sourceRank == 1 &&
                     targetFile == Helper.FileCharToFile('g') && targetRank == 1;
         }
 
-        private static bool IsWhiteQueenSideCastling(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
+        private bool IsWhiteQueenSideCastling(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
         {
             return movingPiece == Definitions.KING.ToString().ToUpper()[0] &&
                    sourceFile == Helper.FileCharToFile('e') && sourceRank == 1 &&
                    targetFile == Helper.FileCharToFile('c') && targetRank == 1;
         }
 
-        private static bool IsBlackKingSideCastling(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
+        private bool IsBlackKingSideCastling(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
         {
             return movingPiece == Definitions.KING.ToString().ToLower()[0] &&
                 sourceFile == Helper.FileCharToFile('e') && sourceRank == 8 &&
                 targetFile == Helper.FileCharToFile('g') && targetRank == 8;
         }
 
-        private static bool IsBlackQueenSideCastling(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
+        private bool IsBlackQueenSideCastling(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
         {
             return movingPiece == Definitions.KING.ToString().ToLower()[0] &&
                    sourceFile == Helper.FileCharToFile('e') && sourceRank == 8 &&

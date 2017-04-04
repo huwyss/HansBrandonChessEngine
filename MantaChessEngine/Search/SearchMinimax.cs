@@ -99,7 +99,8 @@ namespace MantaChessEngine
             score = bestScore;
             if (bestMove == null)
             {
-                return new NoLegalMove();
+                var factory = new MoveFactory();
+                return factory.MakeNoLegalMove();
             }
             
             return bestMove;

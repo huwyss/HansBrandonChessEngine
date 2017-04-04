@@ -11,6 +11,13 @@ namespace MantaChessEngine
 {
     public class MoveGenerator
     {
+        private MoveFactory _factory;
+
+        public MoveGenerator(MoveFactory factory)
+        {
+            _factory = factory;
+        }
+
         // Note: Manta is a king capture engine. 
         // This means even if we are in check then also moves that do not remove the check are returned here.
         public List<MoveBase> GetAllMoves(Board board, Definitions.ChessColor color, bool includeCastling = true)
@@ -64,7 +71,7 @@ namespace MantaChessEngine
                         GetEndPosition(file, rank, sequence, out targetFile, out targetRank, out valid);
                         if (valid && pieceColor != board.GetColor(targetFile, targetRank)) // capture or empty field
                         {
-                            moves.Add(new NormalMove(piece, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank)));
+                            moves.Add(_factory.MakeNormalMove(piece, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank)));
                         }
                     }
 
@@ -85,7 +92,7 @@ namespace MantaChessEngine
                             !IsAttacked(board, pieceColor, Helper.FileCharToFile('f'), 1)
                             )
                         {
-                            moves.Add(new NormalMove(piece, file, rank, Helper.FileCharToFile('g'), 1, Definitions.EmptyField));
+                            moves.Add(_factory.MakeNormalMove(piece, file, rank, Helper.FileCharToFile('g'), 1, Definitions.EmptyField));
                         }
 
                         // check for queen side castling (0-0-0)
@@ -97,7 +104,7 @@ namespace MantaChessEngine
                             !IsAttacked(board, pieceColor, Helper.FileCharToFile('d'), 1)
                             )
                         {
-                            moves.Add(new NormalMove(piece, file, rank, Helper.FileCharToFile('c'), 1, Definitions.EmptyField));
+                            moves.Add(_factory.MakeNormalMove(piece, file, rank, Helper.FileCharToFile('c'), 1, Definitions.EmptyField));
                         }
                     }
 
@@ -112,7 +119,7 @@ namespace MantaChessEngine
                             !IsAttacked(board, pieceColor, Helper.FileCharToFile('f'), 8)    // field next to king not attacked
                         )
                         {
-                            moves.Add(new NormalMove(piece, file, rank, Helper.FileCharToFile('g'), 8, Definitions.EmptyField));
+                            moves.Add(_factory.MakeNormalMove(piece, file, rank, Helper.FileCharToFile('g'), 8, Definitions.EmptyField));
                         }
 
                         // check for queen side castling (0-0-0)
@@ -124,7 +131,7 @@ namespace MantaChessEngine
                             !IsAttacked(board, pieceColor, Helper.FileCharToFile('d'), 8)    // field next to king not attacked
                         )
                         {
-                            moves.Add(new NormalMove(piece, file, rank, Helper.FileCharToFile('c'), 8, Definitions.EmptyField));
+                            moves.Add(_factory.MakeNormalMove(piece, file, rank, Helper.FileCharToFile('c'), 8, Definitions.EmptyField));
                         }
                     }
                     break;
@@ -151,7 +158,7 @@ namespace MantaChessEngine
                             }
 
                             char targetPiece = board.GetPiece(targetFile, targetRank);
-                            moves.Add(new NormalMove(piece, file, rank, targetFile, targetRank, targetPiece));
+                            moves.Add(_factory.MakeNormalMove(piece, file, rank, targetFile, targetRank, targetPiece));
 
                             if (Definitions.ChessColor.Empty != targetColor)
                             {
@@ -181,7 +188,7 @@ namespace MantaChessEngine
                         {
                             if (valid && board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty) // empty field
                             {
-                                moves.Add(new NormalMove(piece, file, rank, targetFile, targetRank, Definitions.EmptyField));
+                                moves.Add(_factory.MakeNormalMove(piece, file, rank, targetFile, targetRank, Definitions.EmptyField));
                             }
                         }
                         else if ((currentSequence == "uu" || currentSequence == "dd") && rank == twoFieldMoveInitRank) // walk straight two fields
@@ -194,7 +201,7 @@ namespace MantaChessEngine
                             if ((valid && board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty) && // end field is empty
                                 (valid2 && board.GetColor(targetFile2, targetRank2) == Definitions.ChessColor.Empty)) // field between current and end field is also empty
                             {
-                                moves.Add(new NormalMove(piece, file, rank, targetFile, targetRank, Definitions.EmptyField));
+                                moves.Add(_factory.MakeNormalMove(piece, file, rank, targetFile, targetRank, Definitions.EmptyField));
                             }
                         }
                         else if (currentSequence == "ul" || currentSequence == "ur" ||
@@ -202,14 +209,14 @@ namespace MantaChessEngine
                         {
                             if (valid && pieceColor == Helper.GetOpositeColor(board.GetColor(targetFile, targetRank)))
                             {
-                                moves.Add(new NormalMove(piece, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank)));
+                                moves.Add(_factory.MakeNormalMove(piece, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank)));
                             }
                             else if (valid && targetFile == board.History.LastEnPassantFile && targetRank == board.History.LastEnPassantRank)
                             {
                                 char capturedPawn = pieceColor == Definitions.ChessColor.White
                                     ? Definitions.PAWN.ToString().ToLower()[0]
                                     : Definitions.PAWN.ToString().ToUpper()[0];
-                                moves.Add(new EnPassantCaptureMove(piece, file, rank, targetFile, targetRank, capturedPawn));
+                                moves.Add(_factory.MakeEnPassantCaptureMove(piece, file, rank, targetFile, targetRank, capturedPawn));
                             }
 
                         }

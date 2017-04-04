@@ -21,39 +21,41 @@ namespace MantaChessEngine
         private MoveGenerator _moveGenerator;
         private ISearchService _search;
         private IEvaluator _evaluator;
-        
+        private MoveFactory _factory;
+
         public MantaEngine(EngineType engineType)
         {
             if (engineType == EngineType.Random)
             {
-                _moveGenerator = new MoveGenerator();
+                _factory = new MoveFactory();
+                _moveGenerator = new MoveGenerator(_factory);
                 _board = new Board(_moveGenerator);
                 _search = new SearchRandom();
             }
             else if (engineType == EngineType.DepthHalf)
             {
-                _moveGenerator = new MoveGenerator();
+                _moveGenerator = new MoveGenerator(_factory);
                 _board = new Board(_moveGenerator);
                 _evaluator = new EvaluatorSimple();
                 _search = new SearchServiceDepthHalfMove(_evaluator);
             }
             else if (engineType == EngineType.DepthOne)
             {
-                _moveGenerator = new MoveGenerator();
+                _moveGenerator = new MoveGenerator(_factory);
                 _board = new Board(_moveGenerator);
                 _evaluator = new EvaluatorSimple();
                 _search = new SearchServiceDepthOne(_evaluator);
             }
             else if (engineType == EngineType.Minmax)
             {
-                _moveGenerator = new MoveGenerator();
+                _moveGenerator = new MoveGenerator(_factory);
                 _board = new Board(_moveGenerator);
                 _evaluator = new EvaluatorSimple();
                 _search = new SearchMinimax(_evaluator);
             }
             else if (engineType == EngineType.MinmaxPosition)
             {
-                _moveGenerator = new MoveGenerator();
+                _moveGenerator = new MoveGenerator(_factory);
                 _board = new Board(_moveGenerator);
                 _evaluator = new EvaluatorPosition();
                 _search = new SearchMinimax(_evaluator);

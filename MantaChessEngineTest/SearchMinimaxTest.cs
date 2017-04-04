@@ -16,7 +16,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             var target = new SearchMinimax(evaluator);
-            MoveGenerator gen = new MoveGenerator();
+            MoveGenerator gen = new MoveGenerator(new MoveFactory());
             var board = new Board(gen);
             string boardString = "k......." +
                                  "........" +
@@ -41,7 +41,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             var target = new SearchMinimax(evaluator);
-            MoveGenerator gen = new MoveGenerator();
+            MoveGenerator gen = new MoveGenerator(new MoveFactory());
             var board = new Board(gen);
             string boardString = "k......." +
                                  "........" +
@@ -66,7 +66,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             var target = new SearchMinimax(evaluator);
-            MoveGenerator gen = new MoveGenerator();
+            MoveGenerator gen = new MoveGenerator(new MoveFactory());
             var board = new Board(gen);
             string boardString = "k......." +
                                  "...n...." +
@@ -104,7 +104,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             var target = new SearchMinimax(evaluator);
-            MoveGenerator gen = new MoveGenerator();
+            MoveGenerator gen = new MoveGenerator(new MoveFactory());
             var board = new Board(gen);
             string boardString = "k......." +
                                  "...n...." +
@@ -131,7 +131,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             var target = new SearchMinimax(evaluator);
-            MoveGenerator gen = new MoveGenerator();
+            MoveGenerator gen = new MoveGenerator(new MoveFactory());
             var board = new Board(gen);
             string boardString = "....q..R" +
                                  "........" +
@@ -157,7 +157,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             var target = new SearchMinimax(evaluator);
-            MoveGenerator gen = new MoveGenerator();
+            MoveGenerator gen = new MoveGenerator(new MoveFactory());
             var board = new Board(gen);
             string boardString = "........" +
                                  "........" +
@@ -185,7 +185,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             var target = new SearchMinimax(evaluator);
-            MoveGenerator gen = new MoveGenerator();
+            MoveGenerator gen = new MoveGenerator(new MoveFactory());
             var board = new Board(gen);
             string boardString = "k......." +
                                  "........" +
@@ -210,7 +210,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             var target = new SearchMinimax(evaluator);
-            MoveGenerator gen = new MoveGenerator();
+            MoveGenerator gen = new MoveGenerator(new MoveFactory());
             var board = new Board(gen);
             string boardString = "k......." +
                                  "........" +
@@ -235,7 +235,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             var target = new SearchMinimax(evaluator);
-            MoveGenerator gen = new MoveGenerator();
+            MoveGenerator gen = new MoveGenerator(new MoveFactory());
             var board = new Board(gen);
             string boardString = "k......." +
                                  "...n...." +
@@ -273,7 +273,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             var target = new SearchMinimax(evaluator);
-            MoveGenerator gen = new MoveGenerator();
+            MoveGenerator gen = new MoveGenerator(new MoveFactory());
             var board = new Board(gen);
             string boardString = "k......." +
                                  "...n...." +

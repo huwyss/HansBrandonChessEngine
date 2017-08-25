@@ -97,7 +97,7 @@ namespace MantaChessEngineTest
         }
 
         [TestMethod]
-        public void MoveTest_WhenMovingPiece_ThenCorrect()
+        public void MoveTest_WhenNormalMove_ThenEqualsCorrect()
         {
             // equal
             MoveBase move = new NormalMove('p', 1, 2, 2, 3, 'q');

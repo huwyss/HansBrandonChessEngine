@@ -282,7 +282,7 @@ namespace MantaChessEngine
 
         public MoveBase GetCorrectMove(string moveStringUser)
         {
-            var factory = new MoveFactory();
+            var factory = new MoveFactory();  // todo keine neue fabrik erzeugen hier! besser statisch.
             return factory.GetCorrectMove(this, moveStringUser);
         }
 

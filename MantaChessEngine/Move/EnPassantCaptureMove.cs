@@ -8,15 +8,20 @@ namespace MantaChessEngine
 {
     public class EnPassantCaptureMove : MoveBase
     {
+        public EnPassantCaptureMove(char movingPiece, char sourceFile, int sourceRank, char targetFile, int targetRank, char capturedPiece)
+            : base(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece)
+        {
+        }
+
         public EnPassantCaptureMove(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, char capturedPiece)
             : base(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece)
         {
         }
 
-        public EnPassantCaptureMove(string moveStringUser)
-            : base(moveStringUser)
-        {
-        }
+        //public EnPassantCaptureMove(string moveStringUser)
+        //    : base(moveStringUser)
+        //{
+        //}
 
         public override int CapturedRank // for en passant capture it is different from TargetRank
         {

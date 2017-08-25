@@ -24,20 +24,24 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EqualsTest_WhenComparingTwoDifferentMoves_ThenReturnsFalse()
         {
-            Assert.AreNotEqual(new NormalMove('p', 5, 2, 5, 4, 'p'), new NormalMove('p', 1, 2, 5, 4, 'p'));
-            Assert.AreNotEqual(new NormalMove('p', 5, 2, 5, 4, 'p'), new NormalMove('p', 5, 1, 5, 4, 'p'));
-            Assert.AreNotEqual(new NormalMove('p', 5, 2, 5, 4, 'p'), new NormalMove('p', 5, 2, 1, 4, 'p'));
-            Assert.AreNotEqual(new NormalMove('p', 5, 2, 5, 4, 'p'), new NormalMove('p', 5, 2, 5, 1, 'p'));
-            Assert.AreNotEqual(new NormalMove('p', 5, 2, 5, 4, 'p'), new NormalMove('p', 5, 2, 5, 4, 'r'));
-            Assert.AreNotEqual(new NormalMove('p', 5, 2, 5, 4, 'p'), new NormalMove('q', 5, 2, 5, 4, 'p'));
+            Assert.AreNotEqual(new NormalMove('p', 'e', 2, 'e', 4, 'p'), new NormalMove('p', 1, 2, 5, 4, 'p'));
+            Assert.AreNotEqual(new NormalMove('p', 'e', 2, 'e', 4, 'p'), new NormalMove('p', 5, 1, 5, 4, 'p'));
+            Assert.AreNotEqual(new NormalMove('p', 'e', 2, 'e', 4, 'p'), new NormalMove('p', 5, 2, 1, 4, 'p'));
+            Assert.AreNotEqual(new NormalMove('p', 'e', 2, 'e', 4, 'p'), new NormalMove('p', 5, 2, 5, 1, 'p'));
+            Assert.AreNotEqual(new NormalMove('p', 'e', 2, 'e', 4, 'p'), new NormalMove('p', 5, 2, 5, 4, 'r'));
+            Assert.AreNotEqual(new NormalMove('p', 'e', 2, 'e', 4, 'p'), new NormalMove('q', 5, 2, 5, 4, 'p'));
         }
 
         [TestMethod]
         public void ConstructorTest_WhenStringParameter_ThenCorrectObject()
         {
-            MoveBase move = new NormalMove('q', 5, 2, 5, 4, 'p');
-            move.MovingPiece = 'q';
-            Assert.AreEqual(move, new NormalMove("e2e4p"));
+            MoveBase move = new NormalMove('q', 5, 2, 4, 3, 'p');
+            Assert.AreEqual('q', move.MovingPiece);
+            Assert.AreEqual('e'-'a' + 1, move.SourceFile);
+            Assert.AreEqual(2, move.SourceRank);
+            Assert.AreEqual('d'-'a' + 1, move.TargetFile);
+            Assert.AreEqual(3, move.TargetRank);
+            Assert.AreEqual('p', move.CapturedPiece);
         }
 
         [TestMethod]
@@ -100,18 +104,18 @@ namespace MantaChessEngineTest
         public void MoveTest_WhenNormalMove_ThenEqualsCorrect()
         {
             // equal
-            MoveBase move = new NormalMove('p', 1, 2, 2, 3, 'q');
-            MoveBase move2 = new NormalMove('p', 1, 2, 2, 3, 'q');
+            MoveBase move = new NormalMove('p', 'a', 2, 'b', 3, 'q');
+            MoveBase move2 = new NormalMove('p', 1,  2,  2,  3, 'q');
             Assert.AreEqual(move2, move);
 
             // not equal different MovingPiece
-            move = new NormalMove('q', 1, 2, 2, 3, 'q');
-            move2 = new NormalMove('p', 1, 2, 2, 3, 'q');
+            move = new NormalMove('q', 'a', 2, 'b', 3, 'q');
+            move2 = new NormalMove('p', 1,  2,  2,  3, 'q');
             Assert.AreNotEqual(move2, move);
 
             // equal
-            move = new NormalMove("a2a3.");
-            move2 = new NormalMove('p', 1, 2, 1, 3, '.');
+            move = new NormalMove('p', 'a', 2, 'a', 3, '.');
+            move2 = new NormalMove('p', 1,  2,  1,  3, '.');
             Assert.AreEqual(move, move2);
         }
     }

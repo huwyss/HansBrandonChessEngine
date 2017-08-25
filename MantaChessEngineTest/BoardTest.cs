@@ -179,7 +179,7 @@ namespace MantaChessEngineTest
                               "........" +
                               "...K....";
             Assert.AreEqual(expPosit, board.GetString, "En passant capture not correct move.");
-            Assert.AreEqual(board.History.Moves[1], new EnPassantCaptureMove("a4b3P"));
+            Assert.AreEqual(board.History.Moves[1], new EnPassantCaptureMove('p', 'a', 4, 'b', 3, 'P'));
         }
 
         [TestMethod]
@@ -209,7 +209,7 @@ namespace MantaChessEngineTest
                               "........" +
                               "...K....";
             Assert.AreEqual(expPosit, board.GetString, "En passant capture not correct move.");
-            Assert.AreEqual(board.History.Moves[1], new EnPassantCaptureMove("a5b6p"));
+            Assert.AreEqual(board.History.Moves[1], new EnPassantCaptureMove('P', 'a', 5, 'b', 6, 'p'));
         }
 
         [TestMethod]

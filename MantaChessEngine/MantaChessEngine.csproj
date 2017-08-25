@@ -55,7 +55,7 @@
     <Compile Include="Move\NoLegalMove.cs" />
     <Compile Include="Move\NormalMove.cs" />
     <Compile Include="Search\ISearchService.cs" />
-    <Compile Include="Move\Move.cs" />
+    <Compile Include="Move\MoveBase.cs" />
     <Compile Include="MoveGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Search\SearchMinimax.cs" />

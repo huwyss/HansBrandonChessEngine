@@ -39,15 +39,15 @@ namespace MantaChessEngine
 
         public MoveBase(char movingPiece, char sourceFile, int sourceRank, char targetFile, int targetRank, char capturedPiece)
         {
-            Initialize(movingPiece, sourceFile - 'a' + 1, sourceRank, targetFile - 'a' + 1, targetRank, capturedPiece);
+            InitializeMove(movingPiece, sourceFile - 'a' + 1, sourceRank, targetFile - 'a' + 1, targetRank, capturedPiece);
         }
 
         public MoveBase(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, char capturedPiece)
         {
-            Initialize(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
+            InitializeMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
         }
 
-        public void Initialize(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, char capturedPiece)
+        public void InitializeMove(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, char capturedPiece)
         {
             MovingPiece = movingPiece;
             SourceFile = sourceFile;
@@ -56,32 +56,6 @@ namespace MantaChessEngine
             TargetRank = targetRank;
             CapturedPiece = capturedPiece;
         }
-
-        //public MoveBase(string moveString)
-        //{
-        //    if (moveString.Length >= 4)
-        //    {
-        //        SourceFile = Helper.FileCharToFile(moveString[0]);
-        //        SourceRank = int.Parse(moveString[1].ToString());
-        //        TargetFile = Helper.FileCharToFile(moveString[2]);
-        //        TargetRank = int.Parse(moveString[3].ToString());
-        //    }
-
-        //    if (moveString.Length >= 5)
-        //    {
-        //        CapturedPiece = moveString[4];
-        //    }
-
-        //    if (moveString.Length >= 6)
-        //    {
-        //        //if (moveString[5] == 'e')
-        //        //{
-        //        //    EnPassant = true;
-        //        //}
-        //    }
-
-        //    MovingPiece = (char)0;
-        //}
 
         public override bool Equals(System.Object obj)
         {

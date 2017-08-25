@@ -18,11 +18,6 @@ namespace MantaChessEngine
         {
         }
 
-        //public EnPassantCaptureMove(string moveStringUser)
-        //    : base(moveStringUser)
-        //{
-        //}
-
         public override int CapturedRank // for en passant capture it is different from TargetRank
         {
             get

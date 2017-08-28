@@ -29,8 +29,12 @@ namespace MantaConsole
                 quiet = false;
             }
 
+            Board board = new Board(new MoveGenerator(new MoveFactory()));
+            board.SetInitialPosition();
             MantaEngine whiteEngine = new MantaEngine(EngineType.MinmaxPosition);
             MantaEngine blackEngine = new MantaEngine(EngineType.MinmaxPosition);
+            whiteEngine.SetBoard(board);
+            blackEngine.SetBoard(board);
 
             float whiteWins = 0;
             bool isMoveValid;
@@ -38,8 +42,6 @@ namespace MantaConsole
             for (int i = 0; i < runStatisticGames; i++)
             {
                 int moveCount = 1;
-                whiteEngine.SetInitialPosition();
-                blackEngine.SetInitialPosition();
 
                 if (!quiet)
                 {
@@ -73,8 +75,8 @@ namespace MantaConsole
                             moveConsoleString = moveConsoleString.Trim();
                             if (moveConsoleString == "back" || moveConsoleString == "b")
                             {
-                                blackEngine.Back();
-                                whiteEngine.Back();
+                                board.Back();
+                                board.Back();
                                 moveCount -= 2;
                                 break;
                             }
@@ -82,10 +84,6 @@ namespace MantaConsole
                             if (!isMoveValid)
                             {
                                 Console.WriteLine("Invalid move.");
-                            }
-                            else
-                            {
-                                blackEngine.Move(moveConsoleString);
                             }
                         } while (!isMoveValid);
                     }
@@ -96,7 +94,6 @@ namespace MantaConsole
                         if (!whiteHuman && whiteEngine.SideToMove() == Definitions.ChessColor.White)
                         {
                             moveComputer = whiteEngine.DoBestMove(Definitions.ChessColor.White);
-                            blackEngine.Move(moveComputer);
 
                             if (moveComputer is NoLegalMove)
                             {
@@ -117,7 +114,7 @@ namespace MantaConsole
                         else if (!blackHuman && whiteEngine.SideToMove() == Definitions.ChessColor.Black)
                         {
                             moveComputer = blackEngine.DoBestMove(Definitions.ChessColor.Black);
-                            whiteEngine.Move(moveComputer);
+                            //whiteEngine.Move(moveComputer);
 
                             if (moveComputer is NoLegalMove)
                             {
@@ -135,8 +132,6 @@ namespace MantaConsole
                                 break;
                             }
                         }
-
-                        
 
                         if (!quiet && moveComputer.ToString() != "")
                         {
@@ -158,7 +153,9 @@ namespace MantaConsole
                     if (whiteEngine.IsWinner(Definitions.ChessColor.Black))
                     {
                         if (!quiet)
+                        {
                             Console.WriteLine("\nBlack wins!");
+                        }
 
                         break;
                     }

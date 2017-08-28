@@ -18,49 +18,40 @@ namespace MantaChessEngine
     public class MantaEngine
     {
         private Board _board;
-        private MoveGenerator _moveGenerator;
         private ISearchService _search;
         private IEvaluator _evaluator;
-        private MoveFactory _factory;
 
         public MantaEngine(EngineType engineType)
         {
-            _factory = new MoveFactory();
-
             if (engineType == EngineType.Random)
             {
-                _moveGenerator = new MoveGenerator(_factory);
-                _board = new Board(_moveGenerator);
                 _search = new SearchRandom();
             }
             else if (engineType == EngineType.DepthHalf)
             {
-                _moveGenerator = new MoveGenerator(_factory);
-                _board = new Board(_moveGenerator);
                 _evaluator = new EvaluatorSimple();
                 _search = new SearchServiceDepthHalfMove(_evaluator);
             }
             else if (engineType == EngineType.DepthOne)
             {
-                _moveGenerator = new MoveGenerator(_factory);
-                _board = new Board(_moveGenerator);
                 _evaluator = new EvaluatorSimple();
                 _search = new SearchServiceDepthOne(_evaluator);
             }
             else if (engineType == EngineType.Minmax)
             {
-                _moveGenerator = new MoveGenerator(_factory);
-                _board = new Board(_moveGenerator);
                 _evaluator = new EvaluatorSimple();
                 _search = new SearchMinimax(_evaluator);
             }
             else if (engineType == EngineType.MinmaxPosition)
             {
-                _moveGenerator = new MoveGenerator(_factory);
-                _board = new Board(_moveGenerator);
                 _evaluator = new EvaluatorPosition();
                 _search = new SearchMinimax(_evaluator);
             }
+        }
+
+        public void SetBoard(Board board)
+        {
+            _board = board;
         }
 
         public void SetInitialPosition()

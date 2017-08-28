@@ -11,6 +11,7 @@ namespace MantaChessEngineTest
         public void DoBestMove_DepthOneSearch_WhenQueenCanBeCaptured_ThenQueenIsCaptured_WhiteMoves()
         {
             var engine = new MantaEngine(EngineType.DepthHalf);
+            engine.SetBoard(new Board(new MoveGenerator(new MoveFactory())));
             string boardString = "rnb.kbnr" +
                                  "ppp.pppp" +
                                  "........" +
@@ -39,6 +40,7 @@ namespace MantaChessEngineTest
         public void DoBestMove_DepthOneSearch_WhenQueenCanBeCaptured_ThenQueenIsCaptured_BlackMoves()
         {
             var engine = new MantaEngine(EngineType.DepthHalf);
+            engine.SetBoard(new Board(new MoveGenerator(new MoveFactory())));
             string boardString = "rnbqkbnr" +
                                  "pppp.ppp" +
                                  "........" +
@@ -67,6 +69,7 @@ namespace MantaChessEngineTest
         public void DoBestMoveTest_WhenWhiteIsCheckMate_ThenNoLegalMove_WhiteMoves()
         {
             var engine = new MantaEngine(EngineType.MinmaxPosition);
+            engine.SetBoard(new Board(new MoveGenerator(new MoveFactory())));
             string boardString = "........" +
                                  "........" +
                                  "........" +

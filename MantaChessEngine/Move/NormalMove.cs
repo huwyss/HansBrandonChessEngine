@@ -18,10 +18,6 @@ namespace MantaChessEngine
         {
         }
 
-        //public NormalMove(string moveStringUser) : base(moveStringUser)
-        //{
-        //}
-
         public override bool Equals(System.Object obj)
         {
             if (!(obj is NormalMove))

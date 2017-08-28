@@ -39,7 +39,7 @@ namespace MantaChessEngine
 
         public MoveBase(char movingPiece, char sourceFile, int sourceRank, char targetFile, int targetRank, char capturedPiece)
         {
-            InitializeMove(movingPiece, sourceFile - 'a' + 1, sourceRank, targetFile - 'a' + 1, targetRank, capturedPiece);
+            InitializeMove(movingPiece, Helper.FileCharToFile(sourceFile), sourceRank, Helper.FileCharToFile(targetFile), targetRank, capturedPiece);
         }
 
         public MoveBase(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, char capturedPiece)

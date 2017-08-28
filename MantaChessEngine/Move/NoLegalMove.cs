@@ -23,8 +23,10 @@ namespace MantaChessEngine
         {
             return "NoLegalMove";
         }
-
-
-        //int GetHashCode();
+        
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
     }
 }

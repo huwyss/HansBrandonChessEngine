@@ -63,28 +63,24 @@ namespace MantaChessEngine
 
         public override void ExecuteMove(Board board)
         {
-            if (_castlingType == CastlingType.WhiteKingSide)
+            switch (_castlingType)
             {
-                SetWhiteKingSideRook();
-                board.WhiteDidCastling = true;
-            }
-
-            if (_castlingType == CastlingType.WhiteQueenSide)
-            {
-                SetWhiteQueenSideRook();
-                board.WhiteDidCastling = true;
-            }
-
-            if (_castlingType == CastlingType.BlackKingSide)
-            {
-                SetBlackKingSideRook();
-                board.BlackDidCastling = true;
-            }
-
-            if (_castlingType == CastlingType.BlackQueenSide)
-            {
-                SetBlackQueenSideRook();
-                board.BlackDidCastling = true;
+                case CastlingType.WhiteKingSide:
+                    SetWhiteKingSideRook();
+                    board.WhiteDidCastling = true;
+                    break;
+                case CastlingType.WhiteQueenSide:
+                    SetWhiteQueenSideRook();
+                    board.WhiteDidCastling = true;
+                    break;
+                case CastlingType.BlackKingSide:
+                    SetBlackKingSideRook();
+                    board.BlackDidCastling = true;
+                    break;
+                case CastlingType.BlackQueenSide:
+                    SetBlackQueenSideRook();
+                    board.BlackDidCastling = true;
+                    break;
             }
 
             board.SetPiece(_rook, _rookCastledFile, _rookCastledRank); // move rook next to king
@@ -95,28 +91,24 @@ namespace MantaChessEngine
 
         public override void UndoMove(Board board)
         {
-            if (_castlingType == CastlingType.WhiteKingSide)
+            switch (_castlingType)
             {
-                SetWhiteKingSideRook();
-                board.WhiteDidCastling = false;
-            }
-
-            if (_castlingType == CastlingType.WhiteQueenSide)
-            {
-                SetWhiteQueenSideRook();
-                board.WhiteDidCastling = false;
-            }
-
-            if (_castlingType == CastlingType.BlackKingSide)
-            {
-                SetBlackKingSideRook();
-                board.BlackDidCastling = false;
-            }
-
-            if (_castlingType == CastlingType.BlackQueenSide)
-            {
-                SetBlackQueenSideRook();
-                board.BlackDidCastling = false;
+                case CastlingType.WhiteKingSide:
+                    SetWhiteKingSideRook();
+                    board.WhiteDidCastling = false;
+                    break;
+                case CastlingType.WhiteQueenSide:
+                    SetWhiteQueenSideRook();
+                    board.WhiteDidCastling = false;
+                    break;
+                case CastlingType.BlackKingSide:
+                    SetBlackKingSideRook();
+                    board.BlackDidCastling = false;
+                    break;
+                case CastlingType.BlackQueenSide:
+                    SetBlackQueenSideRook();
+                    board.BlackDidCastling = false;
+                    break;
             }
 
             board.SetPiece(_rook, _rookOriginalFile, _rookOriginalRank); // move rook next to king
@@ -159,6 +151,16 @@ namespace MantaChessEngine
             _rookOriginalRank = 8;
             _rookCastledFile = Helper.FileCharToFile('d');
             _rookCastledRank = 8;
+        }
+
+        public override bool Equals(System.Object obj)
+        {
+            if (!(obj is CastlingMove))
+            {
+                return false;
+            }
+
+            return base.Equals(obj);
         }
 
         public override string ToString()

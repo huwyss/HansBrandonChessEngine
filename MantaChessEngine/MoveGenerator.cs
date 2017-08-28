@@ -227,15 +227,16 @@ namespace MantaChessEngine
             return moves;
         }
 
-        //public Move GetCorrectMove(Board board, string moveStringUser) // input is like "e2e4"
-        //{
-        //    return MoveFactory.GetCorrectMove(board, moveStringUser);
-        //}
-
         public bool IsMoveValid(Board board, MoveBase move)
         {
-            bool valid = GetMoves(board, move.SourceFile, move.SourceRank).Contains(move);
+            bool valid = HasCorrectColorMoved(board, move);
+            valid &= GetMoves(board, move.SourceFile, move.SourceRank).Contains(move);
             return valid;
+        }
+
+        private bool HasCorrectColorMoved(Board board, MoveBase move)
+        {
+            return (Helper.GetPieceColor(move.MovingPiece) == board.SideToMove);
         }
 
         private List<string> GetMoveDirectionSequence(char piece)

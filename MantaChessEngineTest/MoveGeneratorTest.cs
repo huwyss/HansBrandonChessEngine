@@ -403,6 +403,7 @@ namespace MantaChessEngineTest
                               "........" +
                               "........";
             board.SetPosition(position);
+            board.SideToMove = Definitions.ChessColor.Black;
             
             bool valid = target.IsMoveValid(board, new NormalMove('p', 'c', 7, 'c', 5, '.')); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
@@ -410,7 +411,18 @@ namespace MantaChessEngineTest
             valid = target.IsMoveValid(board, new NormalMove('p', 'c', 7, 'c', 6, '.')); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
         }
-        
+
+        [TestMethod]
+        public void IsMoveValidTest_WhenWrongSideMoves_ThenFalse()
+        {
+            MoveGenerator target = new MoveGenerator(new MoveFactory());
+            Board board = new Board(target);
+            board.SetInitialPosition();
+
+            bool valid = target.IsMoveValid(board, new NormalMove('p', 'e', 7, 'e', 5, '.')); // BLACK pawn
+            Assert.AreEqual(false, valid, "This is white's move. Black must not move.");
+        }
+
         // ----------------------------------------------------------------------------------------------------
         // Get End Position Tests
         // ----------------------------------------------------------------------------------------------------
@@ -536,8 +548,8 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             List<MoveBase> kingMoves = generator.GetMoves(board, Helper.FileCharToFile('e'), 1);
-            Assert.AreEqual(true, kingMoves.Contains(new NormalMove('K', 'e', 1, 'g', 1, '.')), "e1g1. 0-0 castling missing");
-            Assert.AreEqual(true, kingMoves.Contains(new NormalMove('K', 'e', 1, 'c', 1, '.')), "e1c1. 0-0-0 castling missing");
+            Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(CastlingType.WhiteKingSide)), "e1g1. 0-0 castling missing");
+            Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(CastlingType.WhiteQueenSide)), "e1c1. 0-0-0 castling missing");
         }
 
         [TestMethod]
@@ -619,8 +631,8 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             List<MoveBase> kingMoves = generator.GetMoves(board, Helper.FileCharToFile('e'), 8);
-            Assert.AreEqual(true, kingMoves.Contains(new NormalMove('k', 'e', 8, 'g', 8, '.')), "e8g8. 0-0 castling missing");
-            Assert.AreEqual(true, kingMoves.Contains(new NormalMove('k', 'e', 8, 'c', 8, '.')), "e8c8. 0-0-0 castling missing");
+            Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(CastlingType.BlackKingSide)), "e8g8. 0-0 castling missing");
+            Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(CastlingType.BlackQueenSide)), "e8c8. 0-0-0 castling missing");
         }
 
         [TestMethod]

@@ -35,5 +35,10 @@ namespace MantaChessEngine
 
             return oposite;
         }
+
+        public static Definitions.ChessColor GetPieceColor(char piece)
+        {
+            return piece < 'a' ? Definitions.ChessColor.White : Definitions.ChessColor.Black; 
+        }
     }
 }

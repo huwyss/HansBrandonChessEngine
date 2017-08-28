@@ -92,7 +92,7 @@ namespace MantaChessEngine
                             !IsAttacked(board, pieceColor, Helper.FileCharToFile('f'), 1)
                             )
                         {
-                            moves.Add(_factory.MakeNormalMove(piece, file, rank, Helper.FileCharToFile('g'), 1, Definitions.EmptyField));
+                            moves.Add(_factory.MakeCastlingMove(CastlingType.WhiteKingSide));
                         }
 
                         // check for queen side castling (0-0-0)
@@ -104,7 +104,7 @@ namespace MantaChessEngine
                             !IsAttacked(board, pieceColor, Helper.FileCharToFile('d'), 1)
                             )
                         {
-                            moves.Add(_factory.MakeNormalMove(piece, file, rank, Helper.FileCharToFile('c'), 1, Definitions.EmptyField));
+                            moves.Add(_factory.MakeCastlingMove(CastlingType.WhiteQueenSide));
                         }
                     }
 
@@ -119,7 +119,7 @@ namespace MantaChessEngine
                             !IsAttacked(board, pieceColor, Helper.FileCharToFile('f'), 8)    // field next to king not attacked
                         )
                         {
-                            moves.Add(_factory.MakeNormalMove(piece, file, rank, Helper.FileCharToFile('g'), 8, Definitions.EmptyField));
+                            moves.Add(_factory.MakeCastlingMove(CastlingType.BlackKingSide));
                         }
 
                         // check for queen side castling (0-0-0)
@@ -131,7 +131,7 @@ namespace MantaChessEngine
                             !IsAttacked(board, pieceColor, Helper.FileCharToFile('d'), 8)    // field next to king not attacked
                         )
                         {
-                            moves.Add(_factory.MakeNormalMove(piece, file, rank, Helper.FileCharToFile('c'), 8, Definitions.EmptyField));
+                            moves.Add(_factory.MakeCastlingMove(CastlingType.BlackQueenSide));
                         }
                     }
                     break;

@@ -33,7 +33,6 @@ namespace MantaChessEngine
         public bool WhiteDidCastling { get; set; }
         public bool BlackDidCastling { get; set; }
 
-        private MoveGenerator _moveGenerator;
         private char[] _board;
         string initPosition = "rnbqkbnr" + // black a8-h8
                               "pppppppp" +
@@ -49,7 +48,7 @@ namespace MantaChessEngine
         /// <summary>
         /// Constructor. Board is empty.
         /// </summary>
-        public Board(MoveGenerator moveGenerator)
+        public Board()
         {
             _board = new char[64];
             _attackedFields = new int[64];
@@ -60,7 +59,6 @@ namespace MantaChessEngine
             }
 
             InitVariables();
-            _moveGenerator = moveGenerator;
         }
 
         /// <summary>
@@ -68,7 +66,7 @@ namespace MantaChessEngine
         /// </summary>
         public Board Clone()
         {
-            Board clonedBoard = new Board(_moveGenerator);
+            Board clonedBoard = new Board();
             string position = GetString;
             clonedBoard.SetPosition(position);
             clonedBoard.ClonedEnPassantFile = EnPassantFile;
@@ -161,12 +159,6 @@ namespace MantaChessEngine
             SetPiece(piece, Helper.FileCharToFile(fileChar), rank);
         }
 
-        public void Move(string userMoveString)
-        {
-            MoveBase correctedMove = GetCorrectMove(userMoveString);
-            Move(correctedMove);
-        }
-
         /// <summary>
         /// Do a move and update the board
         /// </summary>
@@ -180,8 +172,6 @@ namespace MantaChessEngine
 
             move.ExecuteMove(this);
         }
-
-        
 
         public Definitions.ChessColor GetColor(int file, int rank)
         {
@@ -278,67 +268,6 @@ namespace MantaChessEngine
 
                 return boardString;
             }
-        }
-
-        public MoveBase GetCorrectMove(string moveStringUser)
-        {
-            var factory = new MoveFactory();  // todo keine neue fabrik erzeugen hier! besser statisch.
-            return factory.GetCorrectMove(this, moveStringUser);
-        }
-
-        public bool IsMoveValid(MoveBase move)
-        {
-            return _moveGenerator.IsMoveValid(this, move);
-        }
-
-        public List<MoveBase> GetAllMoves(Definitions.ChessColor color)
-        {
-            return _moveGenerator.GetAllMoves(this, color);
-        }
-
-        public bool IsCheck(Definitions.ChessColor color)
-        {
-            char king;
-
-            if (color == Definitions.ChessColor.White)
-            {
-                king = Definitions.KING.ToString().ToUpper()[0];
-            }
-            else
-            {
-                king = Definitions.KING.ToString().ToLower()[0];
-            }
-
-            // find all oponent moves
-            var moves = _moveGenerator.GetAllMoves(this, Helper.GetOpositeColor(color), false);
-
-            // if a move ends in king's position then king is in check
-            foreach (MoveBase move in moves)
-            {
-                if (move.CapturedPiece == king)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public bool IsAttacked(Definitions.ChessColor color, int file, int rank)
-        {
-            // find all oponent moves
-            var moves = _moveGenerator.GetAllMoves(this, Helper.GetOpositeColor(color), false);
-
-            // if a move ends in king's position then king is in check
-            foreach (MoveBase move in moves)
-            {
-                if (move.TargetFile == file && move.TargetRank == rank)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         public void Back()

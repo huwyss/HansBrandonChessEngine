@@ -10,7 +10,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenPawnInCenter_Then1_2()
         {
-            Board board = new Board(null);
+            Board board = new Board();
             string position = "........" +
                               "........" +
                               "........" +
@@ -30,7 +30,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenPawnIn3rdRank_Then1_1()
         {
-            Board board = new Board(null);
+            Board board = new Board();
             string position = "........" +
                               "........" +
                               "........" +
@@ -50,7 +50,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenKnightIsAtBorder_ThenItsAShame()
         {
-            Board board = new Board(null);
+            Board board = new Board();
             string position = "........" +
                               "........" +
                               "........" +
@@ -70,7 +70,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenKnightIsNotAtBorder_ThenItsOk()
         {
-            Board board = new Board(null);
+            Board board = new Board();
             string position = "........" +
                               "........" +
                               "........" +
@@ -90,7 +90,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenWhiteHasTwoBishopAndBlackHasBishopAndKnight_ThenWhiteBetter()
         {
-            Board board = new Board(null);
+            Board board = new Board();
             string position = "........" +
                               "....bn.." +
                               "........" +
@@ -110,7 +110,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenBlackHasDoubleBishop_ThenBlackBetter()
         {
-            Board board = new Board(null);
+            Board board = new Board();
             string position = "........" +
                               "....bb.." +
                               "........" +
@@ -131,7 +131,7 @@ namespace MantaChessEngineTest
         public void EvaluateTest_WhenWhiteDidCastle_ThenWhiteBetter()
         {
             var gen = new MoveGenerator(new MoveFactory());
-            Board board = new Board(gen);
+            Board board = new Board();
             string position = "rnbqk..r" +
                               "ppppppbp" +
                               ".....np." +
@@ -143,13 +143,13 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             // white castling
-            board.Move("e1g1");
+            board.Move(new CastlingMove(CastlingType.WhiteKingSide));
             var target = new EvaluatorPosition();
             var score = target.Evaluate(board);
             Assert.AreEqual(true, score > 0.1f, "White did castling. so white should be better.");
 
             // black castling
-            board.Move("e8g8");
+            board.Move(new CastlingMove(CastlingType.BlackKingSide));
             score = target.Evaluate(board);
             Assert.AreEqual(true, score == 0, "White and Black did castling. They are equal.");
 

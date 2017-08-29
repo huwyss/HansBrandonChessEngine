@@ -11,9 +11,9 @@ namespace MantaChessEngineTest
         public void SearchTest_WhenWhenQueenCanBeCaptured_ThenCaptureQueen_White()
         {
             IEvaluator evaluator = new EvaluatorSimple();
-            ISearchService target = new SearchServiceDepthHalfMove(evaluator);
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var board = new Board(gen);
+            ISearchService target = new SearchServiceDepthHalfMove(evaluator, gen);
+            var board = new Board();
             string boardString = "rnb.kbnr" +
                                  "ppp.pppp" +
                                  "........" +
@@ -34,9 +34,9 @@ namespace MantaChessEngineTest
         public void SearchTest_WhenWhenQueenCanBeCaptured_ThenCaptureQueen_Black()
         {
             IEvaluator evaluator = new EvaluatorSimple();
-            ISearchService target = new SearchServiceDepthHalfMove(evaluator);
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var board = new Board(gen);
+            ISearchService target = new SearchServiceDepthHalfMove(evaluator, gen);
+            var board = new Board();
             string boardString = "rnbqkbnr" +
                                  "pppp.ppp" +
                                  "........" +

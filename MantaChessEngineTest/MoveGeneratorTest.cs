@@ -16,7 +16,7 @@ namespace MantaChessEngineTest
         public void GetMoves_WhenKnightB1_ThenTwoValidMoves()
         {
             MoveGenerator target = new MoveGenerator(new MoveFactory());
-            Board initBoard = new Board(target);
+            Board initBoard = new Board();
             initBoard.SetInitialPosition();
             
             var moves = target.GetMoves(initBoard, Helper.FileCharToFile('b'), 1); // get moves of knight
@@ -30,7 +30,7 @@ namespace MantaChessEngineTest
         public void GetMoves_WhenRook_ThenAllMoves()
         {
             MoveGenerator target = new MoveGenerator(new MoveFactory());
-            Board board = new Board(target);
+            Board board = new Board();
             string position = "........" +
                               "........" +
                               "....p..." +
@@ -61,7 +61,7 @@ namespace MantaChessEngineTest
         public void GetMoves_WhenQueen_ThenAllMoves()
         {
             MoveGenerator target = new MoveGenerator(new MoveFactory());
-            Board board = new Board(target);
+            Board board = new Board();
             string position = "........" +
                               "........" +
                               "........" +
@@ -90,7 +90,7 @@ namespace MantaChessEngineTest
         public void GetMoves_WhenBishop_ThenAllMoves()
         {
             MoveGenerator target = new MoveGenerator(new MoveFactory());
-            Board board = new Board(target);
+            Board board = new Board();
             string position = "........" +
                               "........" +
                               "........" +
@@ -115,7 +115,7 @@ namespace MantaChessEngineTest
         public void GetMoves_WhenKing_ThenAllMoves() // castling not included ! todo!
         {
             MoveGenerator target = new MoveGenerator(new MoveFactory());
-            Board board = new Board(target);
+            Board board = new Board();
             string position = "........" +
                               "........" +
                               "........" +
@@ -142,7 +142,7 @@ namespace MantaChessEngineTest
         public void GetMoves_WhenWhitePawn_ThenAllMoves() // en passant not included
         {
             MoveGenerator target = new MoveGenerator(new MoveFactory());
-            Board board = new Board(target);
+            Board board = new Board();
             string position = "........" +
                               "........" +
                               "........" +
@@ -166,7 +166,7 @@ namespace MantaChessEngineTest
         public void GetMoves_WhenWhitePawnBlocked_ThenAllMoves() // en passant not included
         {
             MoveGenerator target = new MoveGenerator(new MoveFactory());
-            Board board = new Board(target);
+            Board board = new Board();
             string position = "........" +
                               "........" +
                               "........" +
@@ -189,7 +189,7 @@ namespace MantaChessEngineTest
         public void GetMoves_WhenWhitePawnBlockedInMiddleOfBoard_ThenAllMoves()
         {
             MoveGenerator target = new MoveGenerator(new MoveFactory());
-            Board board = new Board(target);
+            Board board = new Board();
             string position = "........" +
                               "........" + 
                               "..p....." + // black pawn
@@ -209,7 +209,7 @@ namespace MantaChessEngineTest
         public void GetMoves_WhenWhitePawnAtA5_ThenAllMoves()
         {
             MoveGenerator target = new MoveGenerator(new MoveFactory());
-            Board board = new Board(target);
+            Board board = new Board();
             string position = "........" +
                               "........" + 
                               "........" + 
@@ -229,7 +229,7 @@ namespace MantaChessEngineTest
         public void GetMoves_WhenWhiteCanCaptureEnPassant_ThenListEnPassant()
         {
             MoveGenerator target = new MoveGenerator(new MoveFactory());
-            Board board = new Board(target);
+            Board board = new Board();
             string position = ".......k" +
                               "p......." +
                               "........" +
@@ -239,7 +239,7 @@ namespace MantaChessEngineTest
                               "........" + 
                               "...K....";
             board.SetPosition(position);
-            board.Move("a7a5");
+            board.Move(new NormalMove('p','a',7,'a',5,Definitions.EmptyField));
             Assert.AreEqual(Helper.FileCharToFile('a'), board.History.LastEnPassantFile);
             Assert.AreEqual(6, board.History.LastEnPassantRank);
 
@@ -254,7 +254,7 @@ namespace MantaChessEngineTest
         public void GetMoves_WhenBlackPawn_ThenAllMoves()
         {
             MoveGenerator target = new MoveGenerator(new MoveFactory());
-            Board board = new Board(target);
+            Board board = new Board();
             string position = "........" +
                               "..p....." +
                               ".R.B...." +
@@ -278,7 +278,7 @@ namespace MantaChessEngineTest
         public void GetMoves_WhenBlackPawnAta4_ThenAllMoves()
         {
             MoveGenerator target = new MoveGenerator(new MoveFactory());
-            Board board = new Board(target);
+            Board board = new Board();
             string position = "........" +
                               "........" +
                               "........" +
@@ -303,7 +303,7 @@ namespace MantaChessEngineTest
         public void GetAllMoves_WhenTwoPieces_ThenShowMovesOfBothPieces()
         {
             MoveGenerator target = new MoveGenerator(new MoveFactory());
-            Board board = new Board(target);
+            Board board = new Board();
             string position = "........" +
                               "........" +
                               "....p..." +
@@ -330,7 +330,7 @@ namespace MantaChessEngineTest
         public void GetAllMoves_WhenCheck_ThenKingMustEscapeCheck()
         {
             MoveGenerator target = new MoveGenerator(new MoveFactory());
-            Board board = new Board(target);
+            Board board = new Board();
             string position = "........" +
                               "........" +
                               "........" +
@@ -355,7 +355,7 @@ namespace MantaChessEngineTest
         public void IsMoveValidTest_WhenValidMoveWhite_ThenTrue()
         {
             MoveGenerator target = new MoveGenerator(new MoveFactory());
-            Board board = new Board(target);
+            Board board = new Board();
             string position = "........" +
                               "........" +
                               "........" +
@@ -374,7 +374,7 @@ namespace MantaChessEngineTest
         public void IsMoveValidTest_WhenInvalidMoveWhite_ThenFalse()
         {
             MoveGenerator target = new MoveGenerator(new MoveFactory());
-            Board board = new Board(target);
+            Board board = new Board();
             string position = "........" +
                               "........" +
                               "........" +
@@ -393,7 +393,7 @@ namespace MantaChessEngineTest
         public void IsMoveValidTest_WhenValidMoveBlack_ThenTrue()
         {
             MoveGenerator target = new MoveGenerator(new MoveFactory());
-            Board board = new Board(target);
+            Board board = new Board();
             string position = "........" +
                               "..p....." +
                               ".R.B...." +
@@ -416,7 +416,7 @@ namespace MantaChessEngineTest
         public void IsMoveValidTest_WhenWrongSideMoves_ThenFalse()
         {
             MoveGenerator target = new MoveGenerator(new MoveFactory());
-            Board board = new Board(target);
+            Board board = new Board();
             board.SetInitialPosition();
 
             bool valid = target.IsMoveValid(board, new NormalMove('p', 'e', 7, 'e', 5, '.')); // BLACK pawn
@@ -478,10 +478,10 @@ namespace MantaChessEngineTest
         {
             var factory = new MoveFactory();
             MoveGenerator target = new MoveGenerator(factory);
-            Board board = new Board(target);
+            Board board = new Board();
             board.SetInitialPosition();
             
-            MoveBase actualMove = factory.GetCorrectMove(board, "e2e4");
+            MoveBase actualMove = factory.MakeCorrectMove(board, "e2e4");
             Assert.AreEqual("e2e4.", actualMove.ToString());
         }
 
@@ -490,7 +490,7 @@ namespace MantaChessEngineTest
         {
             var factory = new MoveFactory();
             MoveGenerator target = new MoveGenerator(factory);
-            Board board = new Board(target);
+            Board board = new Board();
             string position = "...k...." +
                               "........" +
                               "..p....." +
@@ -501,7 +501,7 @@ namespace MantaChessEngineTest
                               "..K.....";
             board.SetPosition(position);
 
-            MoveBase actualMove = factory.GetCorrectMove(board, "d5c6");
+            MoveBase actualMove = factory.MakeCorrectMove(board, "d5c6");
             Assert.AreEqual("d5c6p", actualMove.ToString());
         }
 
@@ -510,7 +510,7 @@ namespace MantaChessEngineTest
         {
             var factory = new MoveFactory();
             MoveGenerator target = new MoveGenerator(factory);
-            Board board = new Board(target);
+            Board board = new Board();
             string position = "...k...." +
                               "..p....." +
                               "........" +
@@ -520,9 +520,9 @@ namespace MantaChessEngineTest
                               "........" +
                               "..K.....";
             board.SetPosition(position);
-            board.Move("c7c5");
+            board.Move(new NormalMove('p','c',7,'c',5,Definitions.EmptyField));
 
-            MoveBase actualMove = factory.GetCorrectMove(board, "d5c6");
+            MoveBase actualMove = factory.MakeCorrectMove(board, "d5c6");
             Assert.AreEqual("d5c6pe", actualMove.ToString());
         }
 
@@ -536,7 +536,7 @@ namespace MantaChessEngineTest
         public void GetMovesTest_WhenCastlingRightOk_ThenCastling()
         {
             MoveGenerator generator = new MoveGenerator(new MoveFactory());
-            Board board = new Board(generator);
+            Board board = new Board();
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -556,7 +556,7 @@ namespace MantaChessEngineTest
         public void GetMovesTest_WhenCastlingBlocked_ThenNoCastling()
         {
             MoveGenerator generator = new MoveGenerator(new MoveFactory());
-            Board board = new Board(generator);
+            Board board = new Board();
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -576,7 +576,7 @@ namespace MantaChessEngineTest
         public void GetMovesTest_WhenCastlingBlockedKingSide_ThenNoCastling()
         {
             MoveGenerator generator = new MoveGenerator(new MoveFactory());
-            Board board = new Board(generator);
+            Board board = new Board();
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -596,7 +596,7 @@ namespace MantaChessEngineTest
         public void GetMovesTest_WhenFieldNextToKingIsAttacked_ThenNoCastling()
         {
             MoveGenerator generator = new MoveGenerator(new MoveFactory());
-            Board board = new Board(generator);
+            Board board = new Board();
             string position = "....k..." +
                               "p..r.r.." +
                               "........" +
@@ -606,8 +606,7 @@ namespace MantaChessEngineTest
                               "P......." +
                               "R...K..R";
             board.SetPosition(position);
-            board.Move("e8e7");
-
+            
             List<MoveBase> kingMoves = generator.GetMoves(board, Helper.FileCharToFile('e'), 1);
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove('K', 'e', 1, 'g', 1, '.')), "e1g1. 0-0 castling not possible. f1 is attacked.");
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove('K', 'e', 1, 'c', 1, '.')), "e1c1. 0-0-0 castling not possible. d1 is attacked.");
@@ -619,7 +618,7 @@ namespace MantaChessEngineTest
         public void GetMovesTest_WhenCastlingRightOk_ThenCastling_Black()
         {
             MoveGenerator generator = new MoveGenerator(new MoveFactory());
-            Board board = new Board(generator);
+            Board board = new Board();
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -639,7 +638,7 @@ namespace MantaChessEngineTest
         public void GetMovesTest_WhenCastlingBlocked_ThenNoCastling_Black()
         {
             MoveGenerator generator = new MoveGenerator(new MoveFactory());
-            Board board = new Board(generator);
+            Board board = new Board();
             string position = "r..k...r" + // king moved!
                               "p......." +
                               "........" +
@@ -659,7 +658,7 @@ namespace MantaChessEngineTest
         public void GetMovesTest_WhenCastlingBlockedKingSide_ThenNoCastling_Black()
         {
             MoveGenerator generator = new MoveGenerator(new MoveFactory());
-            Board board = new Board(generator);
+            Board board = new Board();
             string position = "r.b.k.nr" +
                               "p......." +
                               "........" +
@@ -679,7 +678,7 @@ namespace MantaChessEngineTest
         public void GetMovesTest_WhenFieldNextToKingAttacked_ThenNoCastling_Black()
         {
             MoveGenerator generator = new MoveGenerator(new MoveFactory());
-            Board board = new Board(generator);
+            Board board = new Board();
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -694,5 +693,49 @@ namespace MantaChessEngineTest
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove('k', 'e', 8, 'g', 8, '.')), "e8g8. 0-0 castling not possible. F8 attacked");
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove('k', 'e', 8, 'c', 8, '.')), "e8c8. 0-0-0 castling not possible. D8 attacked");
         }
+
+        // ----------------------------------------------------------------
+        // IsCheck Test
+        // ----------------------------------------------------------------
+
+        [TestMethod]
+        public void IsCheckTest_WhenKingAttacked_ThenTrue()
+        {
+            MantaEngine engine = new MantaEngine(EngineType.MinmaxPosition);
+            Board board = new Board();
+            string position = "....rk.." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "....K...";
+            board.SetPosition(position);
+            engine.SetBoard(board);
+
+            Assert.AreEqual(true, engine.IsCheck(Definitions.ChessColor.White), "king is attacked by rook! IsCheck should return true.");
+        }
+
+        [TestMethod]
+        public void IsCheckTest_WhenKingNotAttacked_ThenFalse()
+        {
+            MantaEngine engine = new MantaEngine(EngineType.MinmaxPosition);
+            Board board = new Board();
+            string position = ".....k.." +
+                              ".....p.." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "....K...";
+            board.SetPosition(position);
+            engine.SetBoard(board);
+
+            Assert.AreEqual(false, engine.IsCheck(Definitions.ChessColor.White), "king is not attacked! IsCheck shoult return false.");
+        }
+
+
     }
 }

@@ -11,10 +11,12 @@ namespace MantaChessEngine
     class SearchServiceDepthOne : ISearchService
     {
         private IEvaluator _evaluator;
+        private MoveGenerator _moveGenerator;
 
-        public SearchServiceDepthOne(IEvaluator evaluator)
+        public SearchServiceDepthOne(IEvaluator evaluator, MoveGenerator moveGenerator)
         {
             _evaluator = evaluator;
+            _moveGenerator = moveGenerator;
         }
 
         public IMove Search(Board board, Definitions.ChessColor color, out float score)
@@ -23,7 +25,7 @@ namespace MantaChessEngine
             float bestScoreFirstMover = InitBestScoreSofar(color);
             MoveBase bestMoveFirstMover = null;
 
-            var possibleMoves = board.GetAllMoves(color);
+            var possibleMoves = _moveGenerator.GetAllMoves(board, color);
             foreach (MoveBase currentMove in possibleMoves)
             {
                 Board boardWithMove = board.Clone();
@@ -64,7 +66,7 @@ namespace MantaChessEngine
             MoveBase bestMove = null;
             float bestScore = InitBestScoreSofar(color);
 
-            var possibleMoves = board.GetAllMoves(color);
+            var possibleMoves = _moveGenerator.GetAllMoves(board, color);
             foreach (MoveBase currentMove in possibleMoves)
             {
                 Board boardWithMove = board.Clone();

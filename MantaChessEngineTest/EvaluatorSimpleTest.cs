@@ -10,7 +10,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenOneWhitePawn_ThenWhite1_Black0()
         {
-            Board board = new Board(null);
+            Board board = new Board();
             string position = "........" +
                               "........" +
                               "........" +
@@ -30,7 +30,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenBlackAndWhitePawn_ThenWhite2_Black2()
         {
-            Board board = new Board(null);
+            Board board = new Board();
             string position = "p......p" +
                               "........" +
                               "........" +
@@ -50,7 +50,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenInitialPosition_ThenScoreCorrect()
         {
-            Board board = new Board(null);
+            Board board = new Board();
             string position = "........" + // black a8-h8
                               "........" +
                               "........" +

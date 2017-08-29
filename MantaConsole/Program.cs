@@ -29,7 +29,7 @@ namespace MantaConsole
                 quiet = false;
             }
 
-            Board board = new Board(new MoveGenerator(new MoveFactory()));
+            Board board = new Board();
             board.SetInitialPosition();
             MantaEngine whiteEngine = new MantaEngine(EngineType.MinmaxPosition);
             MantaEngine blackEngine = new MantaEngine(EngineType.MinmaxPosition);

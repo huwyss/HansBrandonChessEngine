@@ -17,35 +17,40 @@ namespace MantaChessEngine
 
     public class MantaEngine
     {
-        private Board _board;
+        private MoveGenerator _moveGenerator;
+        private MoveFactory _moveFactory;
         private ISearchService _search;
         private IEvaluator _evaluator;
+        private Board _board;
 
         public MantaEngine(EngineType engineType)
         {
+            _moveFactory = new MoveFactory();
+            _moveGenerator = new MoveGenerator(_moveFactory);
+
             if (engineType == EngineType.Random)
             {
-                _search = new SearchRandom();
+                _search = new SearchRandom(_moveGenerator);
             }
             else if (engineType == EngineType.DepthHalf)
             {
                 _evaluator = new EvaluatorSimple();
-                _search = new SearchServiceDepthHalfMove(_evaluator);
+                _search = new SearchServiceDepthHalfMove(_evaluator, _moveGenerator);
             }
             else if (engineType == EngineType.DepthOne)
             {
                 _evaluator = new EvaluatorSimple();
-                _search = new SearchServiceDepthOne(_evaluator);
+                _search = new SearchServiceDepthOne(_evaluator, _moveGenerator);
             }
             else if (engineType == EngineType.Minmax)
             {
                 _evaluator = new EvaluatorSimple();
-                _search = new SearchMinimax(_evaluator);
+                _search = new SearchMinimax(_evaluator, _moveGenerator);
             }
             else if (engineType == EngineType.MinmaxPosition)
             {
                 _evaluator = new EvaluatorPosition();
-                _search = new SearchMinimax(_evaluator);
+                _search = new SearchMinimax(_evaluator, _moveGenerator);
             }
         }
 
@@ -76,13 +81,13 @@ namespace MantaChessEngine
 
         public bool Move(string moveStringUser)
         {
-            MoveBase syntaxCorrectMove = _board.GetCorrectMove(moveStringUser);
+            MoveBase syntaxCorrectMove = _moveFactory.MakeCorrectMove(_board, moveStringUser);
             if (syntaxCorrectMove == null)
             {
                 return false;
             }
 
-            bool valid = _board.IsMoveValid(syntaxCorrectMove);
+            bool valid = _moveGenerator.IsMoveValid(_board, syntaxCorrectMove);
             if (valid)
             {
                 _board.Move(syntaxCorrectMove);
@@ -118,7 +123,7 @@ namespace MantaChessEngine
 
         public bool IsCheck(Definitions.ChessColor color)
         {
-            return _board.IsCheck(color);
+            return _moveGenerator.IsCheck(_board, color);
         }
 
         public void Back()

@@ -314,9 +314,51 @@ namespace MantaChessEngine
             return empty;
         }
 
-        private bool IsAttacked(Board board, Definitions.ChessColor color, int file, int rank)
+        public bool IsAttacked(Board board, Definitions.ChessColor color, int file, int rank)
         {
-            return board.IsAttacked(color, file, rank);
+            // find all oponent moves
+            var moves = GetAllMoves(board, Helper.GetOpositeColor(color), false);
+
+            // if a move ends in king's position then king is in check
+            foreach (MoveBase move in moves)
+            {
+                if (move.TargetFile == file && move.TargetRank == rank)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
+
+        public bool IsCheck(Board board, Definitions.ChessColor color)
+        {
+            char king;
+
+            if (color == Definitions.ChessColor.White)
+            {
+                king = Definitions.KING.ToString().ToUpper()[0];
+            }
+            else
+            {
+                king = Definitions.KING.ToString().ToLower()[0];
+            }
+
+            // find all oponent moves
+            var moves = GetAllMoves(board, Helper.GetOpositeColor(color), false);
+
+            // if a move ends in king's position then king is in check
+            foreach (MoveBase move in moves)
+            {
+                if (move.CapturedPiece == king)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
     }
 }

@@ -11,9 +11,9 @@ namespace MantaChessEngineTest
         public void SearchBestMoveOneLevelTest_WhenWhenQueenCanBeCaptured_ThenCaptureQueen_White()
         {
             IEvaluator evaluator = new EvaluatorSimple();
-            var target = new SearchServiceDepthOne(evaluator);
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var board = new Board(gen);
+            var target = new SearchServiceDepthOne(evaluator, gen);
+            var board = new Board();
             string boardString = "rnb.kbnr" +
                                  "ppp.pppp" +
                                  "........" +
@@ -38,9 +38,9 @@ namespace MantaChessEngineTest
         {
             float score = 0;
             IEvaluator evaluator = new EvaluatorSimple();
-            var target = new SearchServiceDepthOne(evaluator);
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var board = new Board(gen);
+            var target = new SearchServiceDepthOne(evaluator, gen);
+            var board = new Board();
             string boardString = "rnbqkbnr" +
                                  "pppp.ppp" +
                                  "........" +
@@ -62,9 +62,9 @@ namespace MantaChessEngineTest
         public void SearchTest_WhenQueenCanCapturPawnButWouldGetLost_ThenQueenDoesNotCapturePawn_White()
         {
             IEvaluator evaluator = new EvaluatorSimple();
-            ISearchService target = new SearchServiceDepthOne(evaluator);
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var board = new Board(gen);
+            ISearchService target = new SearchServiceDepthOne(evaluator, gen);
+            var board = new Board();
             string boardString = ".......k" +
                                  "........" +
                                  "...p...." +
@@ -85,9 +85,9 @@ namespace MantaChessEngineTest
         public void SearchTest_WhenPawnCanCaptureQueenAndPawnGetsLost_ThenPawnMustCaptureQueen_White()
         {
             IEvaluator evaluator = new EvaluatorSimple();
-            ISearchService target = new SearchServiceDepthOne(evaluator);
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var board = new Board(gen);
+            ISearchService target = new SearchServiceDepthOne(evaluator, gen);
+            var board = new Board();
             string boardString = ".......k" +
                                  "........" +
                                  "...p...." +

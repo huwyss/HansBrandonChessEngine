@@ -15,9 +15,10 @@ namespace MantaChessEngineTest
         public void SearchLevelTest_WhenLevelOne_ThenCapturePawn_White()
         {
             IEvaluator evaluator = new EvaluatorSimple();
-            var target = new SearchMinimax(evaluator);
+            
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var board = new Board(gen);
+            var target = new SearchMinimax(evaluator, gen);
+            var board = new Board();
             string boardString = "k......." +
                                  "........" +
                                  "...p...." +
@@ -40,9 +41,9 @@ namespace MantaChessEngineTest
         public void SearchBestMoveOneLevelTest_WhenLevel2_ThenDoNotCapturePawn_White()
         {
             IEvaluator evaluator = new EvaluatorSimple();
-            var target = new SearchMinimax(evaluator);
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var board = new Board(gen);
+            var target = new SearchMinimax(evaluator, gen);
+            var board = new Board();
             string boardString = "k......." +
                                  "........" +
                                  "...p...." +
@@ -65,9 +66,9 @@ namespace MantaChessEngineTest
         public void SearchBestMoveOneLevelTest_WhenLevel3_ThenCapturePawn_White()
         {
             IEvaluator evaluator = new EvaluatorSimple();
-            var target = new SearchMinimax(evaluator);
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var board = new Board(gen);
+            var target = new SearchMinimax(evaluator, gen);
+            var board = new Board();
             string boardString = "k......." +
                                  "...n...." +
                                  "...b...." +
@@ -103,9 +104,9 @@ namespace MantaChessEngineTest
         public void SearchBestMoveOneLevelTest_WhenLevel4_ThenDoNotCapturePawn_White()
         {
             IEvaluator evaluator = new EvaluatorSimple();
-            var target = new SearchMinimax(evaluator);
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var board = new Board(gen);
+            var target = new SearchMinimax(evaluator, gen);
+            var board = new Board();
             string boardString = "k......." +
                                  "...n...." +
                                  "...b...." +
@@ -130,9 +131,9 @@ namespace MantaChessEngineTest
         public void SearchLevelTest_WhenWhiteInCheck_ThenDoNotAttackBlackKing_White()
         {
             IEvaluator evaluator = new EvaluatorSimple();
-            var target = new SearchMinimax(evaluator);
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var board = new Board(gen);
+            var target = new SearchMinimax(evaluator, gen);
+            var board = new Board();
             string boardString = "....q..R" +
                                  "........" +
                                  "....k..." +
@@ -156,9 +157,9 @@ namespace MantaChessEngineTest
         public void SearchLevelTest_WhenWhiteIsCheckMate_ThenNoLegalMove_White()
         {
             IEvaluator evaluator = new EvaluatorSimple();
-            var target = new SearchMinimax(evaluator);
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var board = new Board(gen);
+            var target = new SearchMinimax(evaluator, gen);
+            var board = new Board();
             string boardString = "........" +
                                  "........" +
                                  "........" +
@@ -184,9 +185,9 @@ namespace MantaChessEngineTest
         public void SearchLevelTest_WhenLevelOne_ThenCapturePawn_Black()
         {
             IEvaluator evaluator = new EvaluatorSimple();
-            var target = new SearchMinimax(evaluator);
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var board = new Board(gen);
+            var target = new SearchMinimax(evaluator, gen);
+            var board = new Board();
             string boardString = "k......." +
                                  "........" +
                                  ".....b.." +
@@ -209,9 +210,9 @@ namespace MantaChessEngineTest
         public void SearchBestMoveOneLevelTest_WhenLevel2_ThenDoNotCapturePawn_Black()
         {
             IEvaluator evaluator = new EvaluatorSimple();
-            var target = new SearchMinimax(evaluator);
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var board = new Board(gen);
+            var target = new SearchMinimax(evaluator, gen);
+            var board = new Board();
             string boardString = "k......." +
                                  "........" +
                                  ".....b.." +
@@ -234,9 +235,9 @@ namespace MantaChessEngineTest
         public void SearchBestMoveOneLevelTest_WhenLevel3_ThenCapturePawn_Black()
         {
             IEvaluator evaluator = new EvaluatorSimple();
-            var target = new SearchMinimax(evaluator);
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var board = new Board(gen);
+            var target = new SearchMinimax(evaluator, gen);
+            var board = new Board();
             string boardString = "k......." +
                                  "...n...." +
                                  "...b...." +
@@ -272,9 +273,9 @@ namespace MantaChessEngineTest
         public void SearchBestMoveOneLevelTest_WhenLevel4_ThenDoNotCapturePawn_Black()
         {
             IEvaluator evaluator = new EvaluatorSimple();
-            var target = new SearchMinimax(evaluator);
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var board = new Board(gen);
+            var target = new SearchMinimax(evaluator, gen);
+            var board = new Board();
             string boardString = "k......." +
                                  "...n...." +
                                  "...b...." +

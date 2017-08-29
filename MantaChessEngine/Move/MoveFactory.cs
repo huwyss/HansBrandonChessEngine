@@ -29,7 +29,7 @@ namespace MantaChessEngine
         }
 
 
-        public MoveBase GetCorrectMove(Board board, string moveStringUser) // input is like "e2e4"
+        public MoveBase MakeCorrectMove(Board board, string moveStringUser) // input is like "e2e4"
         {
             char movingPiece;
             char capturedPiece;

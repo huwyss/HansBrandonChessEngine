@@ -10,15 +10,17 @@ namespace MantaChessEngine
 {
     class SearchMinimax : ISearchService
     {
+        private MoveGenerator _moveGenerator;
         private IEvaluator _evaluator;
         private int _level;
         const int DEFAULT_LEVEL = 3;
 
         private static int evaluatedPositions;
 
-        public SearchMinimax(IEvaluator evaluator)
+        public SearchMinimax(IEvaluator evaluator, MoveGenerator moveGenerator)
         {
             _evaluator = evaluator;
+            _moveGenerator = moveGenerator;
             _level = DEFAULT_LEVEL;
         }
 
@@ -65,7 +67,7 @@ namespace MantaChessEngine
             float bestScore = InitWithWorstScorePossible(color);
             float currentScore;
 
-            var possibleMoves = board.GetAllMoves(color);
+            var possibleMoves = _moveGenerator.GetAllMoves(board, color);
             foreach (MoveBase currentMove in possibleMoves)
             {
                 Board boardWithMove = board.Clone();

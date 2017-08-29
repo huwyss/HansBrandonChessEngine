@@ -9,10 +9,12 @@ namespace MantaChessEngine
     class SearchServiceDepthHalfMove : ISearchService
     {
         private IEvaluator _evaluator;
+        private MoveGenerator _moveGenerator;
 
-        public SearchServiceDepthHalfMove(IEvaluator evaluator)
+        public SearchServiceDepthHalfMove(IEvaluator evaluator, MoveGenerator generator)
         {
             _evaluator = evaluator;
+            _moveGenerator = generator;
         }
 
         public IMove Search(Board board, Definitions.ChessColor color, out float score)
@@ -20,7 +22,7 @@ namespace MantaChessEngine
             MoveBase bestMove = null;
             float bestScore = InitBestScoreSofar(color);
 
-            var possibleMoves = board.GetAllMoves(color);
+            var possibleMoves = _moveGenerator.GetAllMoves(board, color);
             foreach (MoveBase currentMove in possibleMoves)
             {
                 Board boardWithMove = board.Clone();

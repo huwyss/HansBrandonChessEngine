@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace MantaChessEngine
 {
-    class SearchServiceTree : ISearchService
+    class SearchMinimaxTree : ISearchService
     {
         private IEvaluator _evaluator;
         private MoveGenerator _moveGenerator;
 
-        public SearchServiceTree(IEvaluator evaluator, MoveGenerator generator)
+        public SearchMinimaxTree(IEvaluator evaluator, MoveGenerator generator)
         {
             _evaluator = evaluator;
             _moveGenerator = generator;
@@ -30,36 +30,44 @@ namespace MantaChessEngine
 
             MoveBase bestMove = null;
             float bestScore = InitBestScoreSofar(color);
-            var moves = new Tree<MoveBase>(null);
+
+            CreateSearchTree(board, color);
+
+            score = bestScore;
+            return bestMove;
+        }
+
+        private void CreateSearchTree(Board board, Definitions.ChessColor color)
+        {
+            var moves = new NodeTree<MoveBase>(null);
 
             var possibleFirstMoves = _moveGenerator.GetAllMoves(board, color);
-            for (int i=0; i<possibleFirstMoves.Count; i++)
+            for (int i = 0; i < possibleFirstMoves.Count; i++)
             {
-                
+
                 moves.AddChild(possibleFirstMoves[i]);
                 board.Move(possibleFirstMoves[i]);
                 var secondColor = Helper.GetOpositeColor(color);
                 var possibleSecondMoves = _moveGenerator.GetAllMoves(board, color);
 
-                for (int j=0; j<possibleSecondMoves.Count; j++)
+                for (int j = 0; j < possibleSecondMoves.Count; j++)
                 {
                     var secondMoveNode = moves.GetChild(i);
-                    board.Move(possibleSecondMoves[j]);
-                    float scoreCurrentMove = _evaluator.Evaluate(board);
-                    if (IsBestMoveSofar(color, bestScore, scoreCurrentMove))
-                    {
-                        bestMove = possibleSecondMoves[j];
-                        bestScore = scoreCurrentMove;
-                    }
-
-                    board.Back();
+                    secondMoveNode.AddChild(possibleSecondMoves[i]);
                 }
 
                 board.Back();
             }
+        }
 
-            score = bestScore;
-            return bestMove;
+        private void Evaluate()
+        {
+            //float scoreCurrentMove = _evaluator.Evaluate(board);
+            //if (IsBestMoveSofar(color, bestScore, scoreCurrentMove))
+            //{
+            //    bestMove = possibleSecondMoves[j];
+            //    bestScore = scoreCurrentMove;
+            //}
         }
 
         private float InitBestScoreSofar(Definitions.ChessColor color)

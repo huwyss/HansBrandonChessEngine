@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 [assembly: InternalsVisibleTo("MantaChessEngineTest")]
 namespace MantaChessEngine
 {
-    public class MoveGenerator
+    public class MoveGenerator : IMoveGenerator
     {
         private MoveFactory _factory;
 

@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FakeMoveGenerator.cs" />
+    <Compile Include="IMoveGenerator.cs" />
     <Compile Include="MantaEngine.cs" />
     <Compile Include="Board.cs" />
     <Compile Include="Definitions.cs" />

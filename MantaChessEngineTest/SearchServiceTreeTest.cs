@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MantaChessEngine;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -8,49 +9,47 @@ namespace MantaChessEngineTest
     public class SearchServiceTreeTest
     {
         [TestMethod]
-        public void SearchTest_WhenWhenQueenCanBeCaptured_ThenCaptureQueen_White()
+        public void CreateSearchTreeTest_WhenWhenQueenCanBeCaptured_ThenCaptureQueen_White()
         {
-            IEvaluator evaluator = new EvaluatorSimple();
-            MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            ISearchService target = new SearchMinimaxTree(evaluator, gen);
-            var board = new Board();
-            string boardString = "rnb.kbnr" +
-                                 "ppp.pppp" +
-                                 "........" +
-                                 "....q..." +
-                                 "...p.P.." +
-                                 "........" +
-                                 "PPPPP.PP" +
-                                 "RNBQKBNR";
-            board.SetPosition(boardString);
+            var gen = new FakeMoveGenerator();
+            gen.ReturnsWhiteGetAllMoves = new List<MoveBase>()
+            {
+                new NormalMove('P', 'e', 2, 'e', 4, '.'),
+                new NormalMove('N', 'g', 1, 'f', 3, '.'),
+            };
 
-            float score = 0;
-            IMove actualMove = target.Search(board, Definitions.ChessColor.White, out score);
-            MoveBase expectedMove = new NormalMove('P', 'f', 4, 'e', 5, 'q');
-            Assert.AreEqual(expectedMove, actualMove, "Queen should be captured.");
+            gen.ReturnsBlackGetAllMoves = new List<MoveBase>()
+            {
+                new NormalMove('p', 'e', 7, 'e', 5, '.'),
+                new NormalMove('n', 'g', 8, 'f', 6, '.'),
+            };
+
+            var target = new SearchMinimaxTree(null, gen);
+            var board = new Board();
+
+            var searchTree = target.CreateSearchTree(board, Definitions.ChessColor.White);
+
+            // check search tree
+            // first white move
+            var moveWhite0 = target.MoveRoot.GetChild(0).Data;
+            Assert.AreEqual(new NormalMove('P', 'e', 2, 'e', 4, '.'), moveWhite0);
+
+            var moveBlack00 = target.MoveRoot.GetChild(0).GetChild(0).Data;
+            Assert.AreEqual(new NormalMove('p', 'e', 7, 'e', 5, '.'), moveBlack00);
+
+            var moveBlack01 = target.MoveRoot.GetChild(0).GetChild(1).Data;
+            Assert.AreEqual(new NormalMove('n', 'g', 8, 'f', 6, '.'), moveBlack01);
+
+            // second white move
+            var moveWhite1 = target.MoveRoot.GetChild(1).Data;
+            Assert.AreEqual(new NormalMove('N', 'g', 1, 'f', 3, '.'), moveWhite1);
+
+            var moveBlack10 = target.MoveRoot.GetChild(1).GetChild(0).Data;
+            Assert.AreEqual(new NormalMove('p', 'e', 7, 'e', 5, '.'), moveBlack10);
+
+            var moveBlack11 = target.MoveRoot.GetChild(1).GetChild(1).Data;
+            Assert.AreEqual(new NormalMove('n', 'g', 8, 'f', 6, '.'), moveBlack11);
         }
 
-        [TestMethod]
-        public void SearchTest_WhenWhenQueenCanBeCaptured_ThenCaptureQueen_Black()
-        {
-            IEvaluator evaluator = new EvaluatorSimple();
-            MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            ISearchService target = new SearchMinimaxTree(evaluator, gen);
-            var board = new Board();
-            string boardString = "rnbqkbnr" +
-                                 "pppp.ppp" +
-                                 "........" +
-                                 "...Pp..." +
-                                 "...Q...." +
-                                 "........" +
-                                 "PPP.PPPP" +
-                                 "RNB.KBNR";
-            board.SetPosition(boardString);
-
-            float score = 0;
-            IMove actualMove = target.Search(board, Definitions.ChessColor.Black, out score);
-            MoveBase expectedMove = new NormalMove('p', 'e', 5, 'd', 4, 'Q');
-            Assert.AreEqual(expectedMove, actualMove, "Queen should be captured.");
-        }
     }
 }

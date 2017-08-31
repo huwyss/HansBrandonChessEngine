@@ -9,9 +9,12 @@ namespace MantaChessEngine
     class SearchMinimaxTree : ISearchService
     {
         private IEvaluator _evaluator;
-        private MoveGenerator _moveGenerator;
+        private IMoveGenerator _moveGenerator;
 
-        public SearchMinimaxTree(IEvaluator evaluator, MoveGenerator generator)
+        private NodeTree<MoveBase> _movesRoot;
+        public NodeTree<MoveBase> MoveRoot { get { return _movesRoot; } }
+
+        public SearchMinimaxTree(IEvaluator evaluator, IMoveGenerator generator)
         {
             _evaluator = evaluator;
             _moveGenerator = generator;
@@ -37,30 +40,31 @@ namespace MantaChessEngine
             return bestMove;
         }
 
-        private void CreateSearchTree(Board board, Definitions.ChessColor color)
+        internal NodeTree<MoveBase> CreateSearchTree(Board board, Definitions.ChessColor color)
         {
-            var moves = new NodeTree<MoveBase>(null);
+            _movesRoot = new NodeTree<MoveBase>(null);
 
             var possibleFirstMoves = _moveGenerator.GetAllMoves(board, color);
             for (int i = 0; i < possibleFirstMoves.Count; i++)
             {
-
-                moves.AddChild(possibleFirstMoves[i]);
+                _movesRoot.AddChild(possibleFirstMoves[i]);
                 board.Move(possibleFirstMoves[i]);
                 var secondColor = Helper.GetOpositeColor(color);
-                var possibleSecondMoves = _moveGenerator.GetAllMoves(board, color);
+                var possibleSecondMoves = _moveGenerator.GetAllMoves(board, secondColor);
 
                 for (int j = 0; j < possibleSecondMoves.Count; j++)
                 {
-                    var secondMoveNode = moves.GetChild(i);
-                    secondMoveNode.AddChild(possibleSecondMoves[i]);
+                    var secondMoveNode = _movesRoot.GetChild(i);
+                    secondMoveNode.AddChild(possibleSecondMoves[j]);
                 }
 
                 board.Back();
             }
+
+            return _movesRoot;
         }
 
-        private void Evaluate()
+        internal void Evaluate()
         {
             //float scoreCurrentMove = _evaluator.Evaluate(board);
             //if (IsBestMoveSofar(color, bestScore, scoreCurrentMove))

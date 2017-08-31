@@ -42,7 +42,7 @@ namespace MantaChessEngine
 
         internal NodeTree<MoveBase> CreateSearchTree(Board board, Definitions.ChessColor color)
         {
-            _movesRoot = new NodeTree<MoveBase>(null);
+            _movesRoot = new NodeTree<MoveBase>(null, null); // no content, no parent
 
             var possibleFirstMoves = _moveGenerator.GetAllMoves(board, color);
             for (int i = 0; i < possibleFirstMoves.Count; i++)

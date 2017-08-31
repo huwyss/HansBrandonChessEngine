@@ -10,27 +10,28 @@ namespace MantaChessEngine
 
     public class NodeTree<T>
     {
-        public T Data { get; set; }
+        public T Data { get; private set; }
+        public NodeTree<T> Parent { get; private set; }
+
         private LinkedList<NodeTree<T>> children;
 
-        public NodeTree(T data)
+        public NodeTree(T data, NodeTree<T> parent )
         {
-            this.Data = data;
+            Data = data;
+            Parent = parent;
             children = new LinkedList<NodeTree<T>>();
         }
 
         public void AddChild(T data)
         {
-            children.AddLast(new NodeTree<T>(data));
+            children.AddLast(new NodeTree<T>(data, this));
         }
+
+        public int ChildrenCount { get { return children.Count; } }
 
         public NodeTree<T> GetChild(int i)
         {
             return children.ElementAt(i);
-            //foreach (NodeTree<T> n in children)
-            //    if (--i == 0)
-            //        return n;
-            //return null;
         }
 
         public void Traverse(NodeTree<T> node, TreeVisitor<T> visitor)

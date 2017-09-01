@@ -65,7 +65,8 @@
     <Compile Include="Search\SearchMinimaxTree.cs" />
     <Compile Include="Search\SearchServiceDepthOne.cs" />
     <Compile Include="Search\SearchServiceDepthHalfMove.cs" />
-    <Compile Include="Search\NodeTree.cs" />
+    <Compile Include="Search\MoveTree.cs" />
+    <Compile Include="Search\TreeNode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

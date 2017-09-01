@@ -11,8 +11,8 @@ namespace MantaChessEngine
         private IEvaluator _evaluator;
         private IMoveGenerator _moveGenerator;
 
-        private NodeTree<MoveBase> _movesRoot;
-        public NodeTree<MoveBase> MoveRoot { get { return _movesRoot; } }
+        private TreeNode<MoveBase> _movesRoot;
+        public TreeNode<MoveBase> MoveRoot { get { return _movesRoot; } }
 
         public SearchMinimaxTree(IEvaluator evaluator, IMoveGenerator generator)
         {
@@ -24,7 +24,7 @@ namespace MantaChessEngine
         {
 
             // todo
-            // 0. Tree mit test erstellen. braucht noch GetSibling und GetParent
+            // 0. MoveTree mit test erstellen. braucht noch GetSibling und GetParent
             // 1. Create complete tree with all possible moves of required depth --> test
             // 2. take tree and evaluate each position. --> test
             // Auf diese Weise können beide schritte getestet werden
@@ -40,9 +40,9 @@ namespace MantaChessEngine
             return bestMove;
         }
 
-        internal NodeTree<MoveBase> CreateSearchTree(Board board, Definitions.ChessColor color)
+        internal TreeNode<MoveBase> CreateSearchTree(Board board, Definitions.ChessColor color)
         {
-            _movesRoot = new NodeTree<MoveBase>(null, null); // no content, no parent
+            _movesRoot = new TreeNode<MoveBase>(null, null); // no content, no parent
 
             var possibleFirstMoves = _moveGenerator.GetAllMoves(board, color);
             for (int i = 0; i < possibleFirstMoves.Count; i++)

@@ -59,6 +59,7 @@
     <Compile Include="MoveGeneratorTest.cs" />
     <Compile Include="MoveTest.cs" />
     <Compile Include="HelperTest.cs" />
+    <Compile Include="MoveTreeTest.cs" />
     <Compile Include="NodeTreeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchMinimaxTest.cs" />

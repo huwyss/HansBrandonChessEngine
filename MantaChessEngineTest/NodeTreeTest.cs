@@ -11,7 +11,7 @@ namespace MantaChessEngineTest
         public void NodeTreeTest_WhenAddChildren_ThenCanGetChildren()
         {
             // parent
-            var tree = new NodeTree<string>("root", null); // null: kein parent
+            var tree = new TreeNode<string>("root", null); // null: kein parent
             // children
             tree.AddChild("level1-first");
             tree.AddChild("level1-second");
@@ -35,7 +35,7 @@ namespace MantaChessEngineTest
         public void NodeTreeTest_WhenOnChild_ThenCanGetParent()
         {
             // parent
-            var tree = new NodeTree<string>("root", null); // null: kein parent
+            var tree = new TreeNode<string>("root", null); // null: kein parent
             // children
             tree.AddChild("child");
 

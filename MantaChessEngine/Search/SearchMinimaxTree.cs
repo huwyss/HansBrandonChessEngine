@@ -19,7 +19,11 @@ namespace MantaChessEngine
         private IEvaluator _evaluator;
         private IMoveGenerator _moveGenerator;
         private BuildTreeState _state;
-        private int DEFAULT_LEVEL = 2;
+        private int DEFAULT_LEVEL = 1;
+        private Board _board;
+        private Definitions.ChessColor _color;
+        private MoveTree _tree;
+        private int _maxPly;
 
         public TreeNode<MoveInfo> MoveRoot { get { return _tree.Root; } }
 
@@ -47,16 +51,13 @@ namespace MantaChessEngine
 
             return bestMove;
         }
-
-        private Board _board;
-        private Definitions.ChessColor _color;
-        private MoveTree _tree;
-        private int _maxPly = 2; // 2 half moves depth
-
+        
         internal void CreateSearchTree(Board board, Definitions.ChessColor color)
         {
             _board = board;
             _color = color;
+            _state = BuildTreeState.AddMoves;
+            _tree.ResetChildIndex();
 
             while (CreateTreeStep()) { }
         }

@@ -22,6 +22,8 @@ namespace MantaChessEngine
 
         public TreeNode<MoveInfo> MoveRoot { get { return _tree.Root; } }
 
+        private MoveBase _bestMove;
+
         public SearchMinimaxTree(IEvaluator evaluator, IMoveGenerator generator)
         {
             _evaluator = evaluator;
@@ -40,13 +42,11 @@ namespace MantaChessEngine
             // und später können opitimiertere Suchen implementiert werden mit dem gleichen bereits
             // erstellten kompletten Baum.
 
-            MoveBase bestMove = null;
-            float bestScore = InitBestScoreSofar(color);
-            
             CreateSearchTree(board, color);
             Evaluate();
+            IMove bestMove = SelectBestMove();
+            score = _tree.Root.Data.Score;
 
-            score = bestScore;
             return bestMove;
         }
 
@@ -116,6 +116,11 @@ namespace MantaChessEngine
 
         internal void Evaluate()
         {
+            if (!_tree.IsCurrentRoot())
+            {
+                throw new Exception("Current node should be at the root but it is not.");
+            }
+
             _state = BuildTreeState.GoDown;
             _tree.ResetChildIndex();
             while (EvaluateTreeStep()) { }
@@ -162,12 +167,88 @@ namespace MantaChessEngine
             return true;
         }
 
+        internal MoveBase SelectBestMove()
+        {
+            if (!_tree.IsCurrentRoot())
+            {
+                throw new Exception("Current node should be at the root but it is not.");
+            }
+
+            _state = BuildTreeState.GoDown;
+            _tree.ResetChildIndex();
+            while (SelectBestMoveStep()) { }
+
+            return _bestMove;
+        }
+
+        private bool SelectBestMoveStep()
+        {
+            switch (_state)
+            {
+                case BuildTreeState.GoDown:
+                    if (_tree.HasCurrentNextChild())
+                    {
+                        _tree.GotoNextChild();
+                        _board.Move(_tree.CurrentMove);
+                        _color = Helper.GetOpositeColor(_color);
+                        if (_tree.CurrentLevel == _maxPly - 1)
+                        {
+                            if (_color == Definitions.ChessColor.White)
+                            {
+                                var bestMoveInfo = _tree.GetChildMaxMoveInfo();
+                                _tree.CurrentScore = bestMoveInfo.Score;
+                                _bestMove = bestMoveInfo.Move;
+                            }
+                            else
+                            {
+                                var bestMoveInfo = _tree.GetChildMinMoveInfo();
+                                _tree.CurrentScore = bestMoveInfo.Score;
+                                _bestMove = bestMoveInfo.Move;
+                            }
+                            _state = BuildTreeState.GoUp;
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        if (_color == Definitions.ChessColor.White)
+                        {
+                            var bestMoveInfo = _tree.GetChildMaxMoveInfo();
+                            _tree.CurrentScore = bestMoveInfo.Score;
+                            _bestMove = bestMoveInfo.Move;
+                        }
+                        else
+                        {
+                            var bestMoveInfo = _tree.GetChildMinMoveInfo();
+                            _tree.CurrentScore = bestMoveInfo.Score;
+                            _bestMove = bestMoveInfo.Move;
+                        }
+                        _state = BuildTreeState.GoUp;
+
+                        if (_tree.IsCurrentRoot())
+                        {
+                            return false; // fertig
+                        }
+                        break;
+                    }
+                    break;
+
+                case BuildTreeState.GoUp:
+                    _board.Back();
+                    _tree.GotoParent();
+                    _color = Helper.GetOpositeColor(_color);
+                    _state = BuildTreeState.GoDown;
+                    break;
+            }
+            return true;
+        }
+
         //float scoreCurrentMove = _evaluator.Evaluate(board);
-            //if (IsBestMoveSofar(color, bestScore, scoreCurrentMove))
-            //{
-            //    bestMove = possibleSecondMoves[j];
-            //    bestScore = scoreCurrentMove;
-            //}
+        //if (IsBestMoveSofar(color, bestScore, scoreCurrentMove))
+        //{
+        //    bestMove = possibleSecondMoves[j];
+        //    bestScore = scoreCurrentMove;
+        //}
         //}
 
         private float InitBestScoreSofar(Definitions.ChessColor color)

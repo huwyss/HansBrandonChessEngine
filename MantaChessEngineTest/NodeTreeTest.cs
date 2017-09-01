@@ -15,7 +15,7 @@ namespace MantaChessEngineTest
             // children
             tree.AddChild("level1-first");
             tree.AddChild("level1-second");
-            // children-children
+            // children-Children
             var childchild = tree.GetChild(0);
             childchild.AddChild("level2-first");
             childchild.AddChild("level2-second");

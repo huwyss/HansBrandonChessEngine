@@ -17,7 +17,7 @@ namespace MantaChessEngine
 
         public MoveTree()
         {
-            Root = new TreeNode<MoveInfo>(null, null);
+            Root = new TreeNode<MoveInfo>(new MoveInfo(null, 0), null);
             _currentNode = Root;
             ResetChildIndex();
             CurrentLevel = 0;
@@ -87,6 +87,38 @@ namespace MantaChessEngine
             {
                 _currentNode.AddChild(new MoveInfo(move, 0));
             }
+        }
+
+        public MoveInfo GetChildMaxMoveInfo()
+        {
+            float currentMaxScore = -10000;
+            MoveBase currentBestMove = null;
+
+            foreach (var child in _currentNode.Children)
+            {
+                if (child.Data.Score > currentMaxScore)
+                {
+                    currentMaxScore = child.Data.Score;
+                    currentBestMove = child.Data.Move;
+                }
+            }
+            return new MoveInfo(currentBestMove, currentMaxScore);
+        }
+
+        public MoveInfo GetChildMinMoveInfo()
+        {
+            float currentMinScore = 10000;
+            MoveBase currentBestMove = null;
+
+            foreach (var child in _currentNode.Children)
+            {
+                if (child.Data.Score < currentMinScore)
+                {
+                    currentMinScore = child.Data.Score;
+                    currentBestMove = child.Data.Move;
+                }
+            }
+            return new MoveInfo(currentBestMove, currentMinScore);
         }
 
     }

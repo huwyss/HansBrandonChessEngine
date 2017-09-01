@@ -52,7 +52,7 @@ namespace MantaChessEngineTest
         }
 
         [TestMethod]
-        public void CreateEvaluateTreeTest_WhenWhenQueenCanBeCaptured_ThenCaptureQueen_White()
+        public void EvaluateTest_WhenTreeBuilt_ThenEvaluateCorrectly()
         {
             // create search tree from test before copied
             var gen = new FakeMoveGenerator();
@@ -68,19 +68,46 @@ namespace MantaChessEngineTest
                 new NormalMove('n', 'g', 8, 'f', 6, '.'),
             };
 
-            FakeEvaluator fakeEval = new FakeEvaluator(new List<float> { -1, 1, 2, 3 });
+            FakeEvaluator fakeEval = new FakeEvaluator(new List<float> {-1, 1, 2, 3});
             var target = new SearchMinimaxTree(fakeEval, gen);
             var board = new Board();
 
             target.CreateSearchTree(board, Definitions.ChessColor.White);
-            
+
             target.Evaluate();
 
             Assert.AreEqual(-1, target.MoveRoot.GetChild(0).GetChild(0).Data.Score);
-            Assert.AreEqual( 1, target.MoveRoot.GetChild(0).GetChild(1).Data.Score);
-            Assert.AreEqual( 2, target.MoveRoot.GetChild(1).GetChild(0).Data.Score);
-            Assert.AreEqual( 3, target.MoveRoot.GetChild(1).GetChild(1).Data.Score);
+            Assert.AreEqual(1, target.MoveRoot.GetChild(0).GetChild(1).Data.Score);
+            Assert.AreEqual(2, target.MoveRoot.GetChild(1).GetChild(0).Data.Score);
+            Assert.AreEqual(3, target.MoveRoot.GetChild(1).GetChild(1).Data.Score);
         }
 
+        [TestMethod]
+        public void SelectBestMoveTest_WhenTreeEvaluated_ThenSelectBestMove()
+        {
+            // create search tree from test before copied
+            var gen = new FakeMoveGenerator();
+            gen.ReturnsWhiteGetAllMoves = new List<MoveBase>()
+            {
+                new NormalMove('P', 'e', 2, 'e', 4, '.'),
+                new NormalMove('N', 'g', 1, 'f', 3, '.'),
+            };
+
+            gen.ReturnsBlackGetAllMoves = new List<MoveBase>()
+            {
+                new NormalMove('p', 'e', 7, 'e', 5, '.'),
+                new NormalMove('n', 'g', 8, 'f', 6, '.'),
+            };
+
+            FakeEvaluator fakeEval = new FakeEvaluator(new List<float> {-1, 1, 2, 3});
+            var target = new SearchMinimaxTree(fakeEval, gen);
+            var board = new Board();
+
+            target.CreateSearchTree(board, Definitions.ChessColor.White);
+            target.Evaluate();
+            var bestMove = target.SelectBestMove();
+
+            Assert.AreEqual(new NormalMove('N', 'g', 1, 'f', 3, '.'), bestMove);
+        }
     }
 }

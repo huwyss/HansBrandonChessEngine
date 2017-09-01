@@ -65,7 +65,7 @@ namespace MantaChessEngine
                 return false;
             }
 
-            // If parameter cannot be cast to Move return false.
+            // If parameter cannot be cast to CurrentMove return false.
             MoveBase other = obj as MoveBase;
             if ((System.Object)other == null)
             {
@@ -80,7 +80,7 @@ namespace MantaChessEngine
             //equal &= EnPassant == other.EnPassant;
 
             // note: only check MovingPiece if they are set in both objects
-            // new Move("a2a3") is equal to new Move('p', a, 2, a, 3, nocapture, enpassant=false)
+            // new CurrentMove("a2a3") is equal to new CurrentMove('p', a, 2, a, 3, nocapture, enpassant=false)
             // --> this is useful for tests!
             if (MovingPiece != (char) 0 && other.MovingPiece != (char) 0)
             {

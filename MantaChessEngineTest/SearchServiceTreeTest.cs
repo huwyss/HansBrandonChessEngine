@@ -25,6 +25,7 @@ namespace MantaChessEngineTest
             };
 
             var target = new SearchMinimaxTree(null, gen);
+            target.SetLevel(2);
             var board = new Board();
 
             target.CreateSearchTree(board, Definitions.ChessColor.White);
@@ -70,6 +71,7 @@ namespace MantaChessEngineTest
 
             FakeEvaluator fakeEval = new FakeEvaluator(new List<float> {-1, 1, 2, 3});
             var target = new SearchMinimaxTree(fakeEval, gen);
+            target.SetLevel(2);
             var board = new Board();
 
             target.CreateSearchTree(board, Definitions.ChessColor.White);
@@ -102,6 +104,7 @@ namespace MantaChessEngineTest
             FakeEvaluator fakeEval = new FakeEvaluator(new List<float> {-1, 1, 2, 3});
             var target = new SearchMinimaxTree(fakeEval, gen);
             var board = new Board();
+            target.SetLevel(2);
 
             target.CreateSearchTree(board, Definitions.ChessColor.White);
             target.Evaluate();

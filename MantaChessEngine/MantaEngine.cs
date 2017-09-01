@@ -12,7 +12,8 @@ namespace MantaChessEngine
         DepthHalf,
         DepthOne,
         Minmax,
-        MinmaxPosition
+        MinmaxPosition,
+        MinmaxSearchTree
     }
 
     public class MantaEngine
@@ -51,6 +52,11 @@ namespace MantaChessEngine
             {
                 _evaluator = new EvaluatorPosition();
                 _search = new SearchMinimax(_evaluator, _moveGenerator);
+            }
+            else if (engineType == EngineType.MinmaxSearchTree)
+            {
+                _evaluator = new EvaluatorPosition();
+                _search = new SearchMinimaxTree(_evaluator, _moveGenerator);
             }
         }
 

@@ -31,8 +31,8 @@ namespace MantaConsole
 
             Board board = new Board();
             board.SetInitialPosition();
-            MantaEngine whiteEngine = new MantaEngine(EngineType.MinmaxPosition);
-            MantaEngine blackEngine = new MantaEngine(EngineType.MinmaxPosition);
+            MantaEngine whiteEngine = new MantaEngine(EngineType.MinmaxSearchTree);
+            MantaEngine blackEngine = new MantaEngine(EngineType.MinmaxSearchTree);
             whiteEngine.SetBoard(board);
             blackEngine.SetBoard(board);
 

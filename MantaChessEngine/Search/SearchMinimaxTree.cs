@@ -19,6 +19,7 @@ namespace MantaChessEngine
         private IEvaluator _evaluator;
         private IMoveGenerator _moveGenerator;
         private BuildTreeState _state;
+        private int DEFAULT_LEVEL = 2;
 
         public TreeNode<MoveInfo> MoveRoot { get { return _tree.Root; } }
 
@@ -29,19 +30,16 @@ namespace MantaChessEngine
             _evaluator = evaluator;
             _moveGenerator = generator;
             _tree = new MoveTree();
+            _maxPly = DEFAULT_LEVEL;
+        }
+
+        public void SetLevel(int level)
+        {
+            _maxPly = level;
         }
 
         public IMove Search(Board board, Definitions.ChessColor color, out float score)
         {
-
-            // todo
-            // 0. MoveTree mit test erstellen. braucht noch GetSibling und GetParent
-            // 1. Create complete tree with all possible moves of required depth --> test
-            // 2. take tree and evaluate each position. --> test
-            // Auf diese Weise können beide schritte getestet werden
-            // und später können opitimiertere Suchen implementiert werden mit dem gleichen bereits
-            // erstellten kompletten Baum.
-
             CreateSearchTree(board, color);
             Evaluate();
             IMove bestMove = SelectBestMove();
@@ -242,14 +240,6 @@ namespace MantaChessEngine
             }
             return true;
         }
-
-        //float scoreCurrentMove = _evaluator.Evaluate(board);
-        //if (IsBestMoveSofar(color, bestScore, scoreCurrentMove))
-        //{
-        //    bestMove = possibleSecondMoves[j];
-        //    bestScore = scoreCurrentMove;
-        //}
-        //}
 
         private float InitBestScoreSofar(Definitions.ChessColor color)
         {

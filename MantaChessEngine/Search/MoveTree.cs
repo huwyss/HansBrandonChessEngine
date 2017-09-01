@@ -9,18 +9,23 @@ namespace MantaChessEngine
 {
     public class MoveTree
     {
-        public TreeNode<MoveBase> Root { get; private set; }
+        public TreeNode<MoveInfo> Root { get; private set; }
 
-        private TreeNode<MoveBase> _currentNode;
+        private TreeNode<MoveInfo> _currentNode;
         private List<int> _currentChildrenIndex;
         public int CurrentLevel { get; private set; }
 
         public MoveTree()
         {
-            Root = new TreeNode<MoveBase>(null, null);
+            Root = new TreeNode<MoveInfo>(null, null);
             _currentNode = Root;
-            _currentChildrenIndex = new List<int> {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            ResetChildIndex();
             CurrentLevel = 0;
+        }
+
+        public void ResetChildIndex()
+        {
+            _currentChildrenIndex = Enumerable.Repeat(0, 20).ToList();
         }
 
         public bool IsCurrentRoot()
@@ -30,7 +35,13 @@ namespace MantaChessEngine
 
         public MoveBase CurrentMove
         {
-            get { return _currentNode.Data; }
+            get { return _currentNode.Data.Move; }
+        }
+
+        public float CurrentScore
+        {
+            get { return _currentNode.Data.Score; }
+            set { _currentNode.Data.Score = value; }
         }
 
         public bool HasCurrentNextChild()
@@ -50,6 +61,7 @@ namespace MantaChessEngine
                 _currentNode = _currentNode.GetChild(_currentChildrenIndex[CurrentLevel]);
                 _currentChildrenIndex[CurrentLevel]++; // next index might point to not existing node. therefore client must call HasCurrentNextChild.
                 CurrentLevel++;
+                _currentChildrenIndex[CurrentLevel] = 0;
             }
         }
 
@@ -73,7 +85,7 @@ namespace MantaChessEngine
 
             foreach (var move in moves)
             {
-                _currentNode.AddChild(move);
+                _currentNode.AddChild(new MoveInfo(move, 0));
             }
         }
 

@@ -13,16 +13,42 @@ namespace MantaChessEngineTest
         public void AddChildrenTest_WhenAddingChild_ThenHasNextChildTrue()
         {
             var target = new MoveTree();
-            Assert.IsFalse(target.HasNextChild());
+            Assert.IsFalse(target.HasCurrentNextChild());
 
             var moves = new List<MoveBase>() {new NormalMove('p', 'e', 2, 'e', 4, '.')};
             target.AddChildren(moves);
 
-            Assert.IsTrue(target.HasNextChild(), "should have next child.");
+            Assert.IsTrue(target.HasCurrentNextChild(), "should have next child.");
         }
 
         [TestMethod]
-        public void AddChildrenTest_WhenAddingChildren_ThenCanGotoChildren()
+        public void AddChildrenTest_WhenAddingChildren_ThenCanGotoChildren_Depth1()
+        {
+            var target = new MoveTree();
+            var move1 = new NormalMove('p', 'e', 2, 'e', 4, '.');
+            var move2 = new NormalMove('p', 'e', 2, 'e', 3, '.');
+            var move3 = new NormalMove('p', 'e', 7, 'e', 5, '.');
+            var move4 = new NormalMove('p', 'e', 7, 'e', 6, '.');
+
+            var movesWhite = new List<MoveBase> { move1, move2 };
+            target.AddChildren(movesWhite);
+
+            Assert.IsTrue(target.HasCurrentNextChild(), "should have next child.");
+
+            target.GotoNextChild();
+            Assert.AreEqual(move1, target.CurrentMove);
+            target.GotoParent();
+            Assert.IsTrue(target.HasCurrentNextChild());
+            target.GotoNextChild();
+            Assert.AreEqual(move2, target.CurrentMove);
+            target.GotoParent();
+            Assert.IsFalse(target.HasCurrentNextChild(), "Should not have next child.");
+            Assert.IsTrue(target.IsCurrentRoot(), "We should be at the root node.");
+        }
+
+
+        [TestMethod]
+        public void AddChildrenTest_WhenAddingChildren_ThenCanGotoChildren_Depth2()
         {
             var target = new MoveTree();
             var move1 = new NormalMove('p', 'e', 2, 'e', 4, '.');
@@ -31,19 +57,39 @@ namespace MantaChessEngineTest
             var move4 = new NormalMove('p', 'e', 7, 'e', 6, '.');
 
             var movesWhite = new List<MoveBase> {move1, move2};
+            var movesBlack = new List<MoveBase> {move3, move4};
+
             target.AddChildren(movesWhite);
-
-            Assert.IsTrue(target.HasNextChild(), "should have next child.");
-
+            Assert.IsTrue(target.HasCurrentNextChild(), "should have next child.");
             target.GotoNextChild();
             Assert.AreEqual(move1, target.CurrentMove);
+            target.AddChildren(movesBlack);
+            target.GotoNextChild();
+            Assert.AreEqual(move3, target.CurrentMove);
             target.GotoParent();
-            Assert.IsTrue(target.HasNextChild());
+            Assert.IsTrue(target.HasCurrentNextChild());
+            target.GotoNextChild();
+            Assert.AreEqual(move4, target.CurrentMove);
+            target.GotoParent();
+            Assert.IsFalse(target.HasCurrentNextChild(), "Should not have next child.");
+
+            target.GotoParent(); // now at root
+            Assert.IsTrue(target.IsCurrentRoot());
+            Assert.IsTrue(target.HasCurrentNextChild());
             target.GotoNextChild();
             Assert.AreEqual(move2, target.CurrentMove);
+            target.AddChildren(movesBlack);
+            Assert.IsTrue(target.HasCurrentNextChild(), "second half should have next child. we just added them.");
+            target.GotoNextChild();
+            Assert.AreEqual(move3, target.CurrentMove);
             target.GotoParent();
-            Assert.IsFalse(target.HasNextChild(), "Should not have next child.");
-            Assert.IsTrue(target.IsRoot(), "We should be at the root node.");
+            Assert.IsTrue(target.HasCurrentNextChild(), "second half should have next child. we just added them.");
+            target.GotoNextChild();
+            Assert.AreEqual(move4, target.CurrentMove);
+            target.GotoParent();
+            Assert.IsFalse(target.HasCurrentNextChild(), "Should not have next child.");
+            target.GotoParent();
+            Assert.IsTrue(target.IsCurrentRoot(), "We should be at the root node.");
         }
 
     }

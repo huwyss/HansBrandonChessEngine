@@ -1,18 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Activation;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MantaChessEngine
 {
-    class SearchMinimaxTree : ISearchService
+    public enum BuildTreeState
+    {
+        AddMoves,
+        GoDown,
+        GoUp
+    }
+
+    public class SearchMinimaxTree : ISearchService
     {
         private IEvaluator _evaluator;
         private IMoveGenerator _moveGenerator;
+        private BuildTreeState _state;
 
-        private TreeNode<MoveBase> _movesRoot;
-        public TreeNode<MoveBase> MoveRoot { get { return _movesRoot; } }
+        public TreeNode<MoveBase> MoveRoot { get { return _tree.Root; } }
 
         public SearchMinimaxTree(IEvaluator evaluator, IMoveGenerator generator)
         {
@@ -40,29 +48,96 @@ namespace MantaChessEngine
             return bestMove;
         }
 
-        internal TreeNode<MoveBase> CreateSearchTree(Board board, Definitions.ChessColor color)
+        private Board _board;
+        private Definitions.ChessColor _color;
+        private MoveTree _tree;
+        private int _maxPly = 2; // 2 half moves depth
+
+        internal MoveTree CreateSearchTree(Board board, Definitions.ChessColor color)
         {
-            _movesRoot = new TreeNode<MoveBase>(null, null); // no content, no parent
+            _tree = new MoveTree();
+            _board = board;
+            _color = color;
 
-            var possibleFirstMoves = _moveGenerator.GetAllMoves(board, color);
-            for (int i = 0; i < possibleFirstMoves.Count; i++)
+            while (AlgoStep()) { }
+
+            return _tree;
+        }
+
+        private bool AlgoStep()
+        {
+            switch (_state)
             {
-                _movesRoot.AddChild(possibleFirstMoves[i]);
-                board.Move(possibleFirstMoves[i]);
-                var secondColor = Helper.GetOpositeColor(color);
-                var possibleSecondMoves = _moveGenerator.GetAllMoves(board, secondColor);
+                case BuildTreeState.AddMoves:
+                    _tree.AddChildren(_moveGenerator.GetAllMoves(_board, _color));
+                    _state = BuildTreeState.GoDown;
+                    break;
 
-                for (int j = 0; j < possibleSecondMoves.Count; j++)
-                {
-                    var secondMoveNode = _movesRoot.GetChild(i);
-                    secondMoveNode.AddChild(possibleSecondMoves[j]);
-                }
+                case BuildTreeState.GoDown:
+                    if (_tree.HasCurrentNextChild())
+                    {
+                        _tree.GotoNextChild();
+                        _board.Move(_tree.CurrentMove);
+                        _color = Helper.GetOpositeColor(_color);
+                        if (_tree.CurrentLevel < _maxPly)
+                        {
+                            _state = BuildTreeState.AddMoves;
+                            break;
+                        }
+                        else
+                        {
+                            _state = BuildTreeState.GoUp;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        if (_tree.IsCurrentRoot())
+                        {
+                            return false; // fertig
+                        }
+                        else
+                        {
+                            _state = BuildTreeState.GoUp;
+                            break;
+                        }
+                    }
+                    break;
 
-                board.Back();
+                case BuildTreeState.GoUp:
+                    _board.Back();
+                    _tree.GotoParent();
+                    _color = Helper.GetOpositeColor(_color);
+                    _state = BuildTreeState.GoDown;
+                    break;
             }
 
-            return _movesRoot;
+            return true;
         }
+
+        //internal TreeNode<MoveBase> CreateSearchTree2(Board board, Definitions.ChessColor color)
+        //{
+        //    _movesRoot = new TreeNode<MoveBase>(null, null); // no content, no parent
+
+        //    var possibleFirstMoves = _moveGenerator.GetAllMoves(board, color);
+        //    for (int i = 0; i < possibleFirstMoves.Count; i++)
+        //    {
+        //        _movesRoot.AddChild(possibleFirstMoves[i]);
+        //        board.CurrentMove(possibleFirstMoves[i]);
+        //        var secondColor = Helper.GetOpositeColor(color);
+        //        var possibleSecondMoves = _moveGenerator.GetAllMoves(board, secondColor);
+
+        //        for (int j = 0; j < possibleSecondMoves.Count; j++)
+        //        {
+        //            var secondMoveNode = _movesRoot.GetChild(i);
+        //            secondMoveNode.AddChild(possibleSecondMoves[j]);
+        //        }
+
+        //        board.Back();
+        //    }
+
+        //    return _movesRoot;
+        //}
 
         internal void Evaluate()
         {

@@ -13,19 +13,19 @@ namespace MantaChessEngine
 
         private TreeNode<MoveBase> _currentNode;
         private List<int> _currentChildrenIndex;
-        private int _currentLevel;
+        public int CurrentLevel { get; private set; }
 
         public MoveTree()
         {
             Root = new TreeNode<MoveBase>(null, null);
             _currentNode = Root;
-            _currentChildrenIndex = new List<int>();
-            _currentLevel = 0;
+            _currentChildrenIndex = new List<int> {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            CurrentLevel = 0;
         }
 
-        public bool IsRoot()
+        public bool IsCurrentRoot()
         {
-            return _currentLevel == 0;
+            return CurrentLevel == 0;
         }
 
         public MoveBase CurrentMove
@@ -33,45 +33,49 @@ namespace MantaChessEngine
             get { return _currentNode.Data; }
         }
 
-        public bool HasNextChild()
+        public bool HasCurrentNextChild()
         {
             if (_currentNode.ChildrenCount == 0)
             {
                 return false;
             }
 
-            return _currentNode.ChildrenCount >= _currentChildrenIndex.ElementAt(_currentLevel);
+            return _currentNode.ChildrenCount > _currentChildrenIndex.ElementAt(CurrentLevel);
         }
 
         public void GotoNextChild()
         {
-            if (HasNextChild())
+            if (HasCurrentNextChild())
             {
-                _currentNode = _currentNode.GetChild(_currentChildrenIndex[_currentLevel]);
-                _currentChildrenIndex[_currentLevel]++; // next index might point to not existing node. therefore client must call HasNextChild.
-                _currentLevel++;
+                _currentNode = _currentNode.GetChild(_currentChildrenIndex[CurrentLevel]);
+                _currentChildrenIndex[CurrentLevel]++; // next index might point to not existing node. therefore client must call HasCurrentNextChild.
+                CurrentLevel++;
             }
         }
 
         public void GotoParent()
         {
             _currentNode = _currentNode.Parent;
-            _currentLevel--;
+            CurrentLevel--;
         }
 
         public void AddChildren(IEnumerable<MoveBase> moves)
         {
-            if (moves == null)
+            if (moves == null || moves.Count() == 0)
             {
                 return;
+            }
+
+            if (_currentNode.ChildrenCount == 0)
+            {
+                _currentChildrenIndex[CurrentLevel] = 0;
             }
 
             foreach (var move in moves)
             {
                 _currentNode.AddChild(move);
             }
-
-            _currentChildrenIndex.Add(0);
         }
+
     }
 }

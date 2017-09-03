@@ -19,7 +19,7 @@ namespace MantaChessEngine
         private IEvaluator _evaluator;
         private IMoveGenerator _moveGenerator;
         private BuildTreeState _state;
-        private int DEFAULT_LEVEL = 1;
+        private int DEFAULT_LEVEL = 4;
         private Board _board;
         private Definitions.ChessColor _color;
         private MoveTree _tree;
@@ -33,7 +33,7 @@ namespace MantaChessEngine
         {
             _evaluator = evaluator;
             _moveGenerator = generator;
-            _tree = new MoveTree();
+            
             _maxPly = DEFAULT_LEVEL;
         }
 
@@ -44,6 +44,7 @@ namespace MantaChessEngine
 
         public IMove Search(Board board, Definitions.ChessColor color, out float score)
         {
+            _tree = new MoveTree();
             CreateSearchTree(board, color);
             Evaluate();
             IMove bestMove = SelectBestMove();

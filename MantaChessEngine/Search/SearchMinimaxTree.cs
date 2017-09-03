@@ -185,27 +185,11 @@ namespace MantaChessEngine
             switch (_state)
             {
                 case BuildTreeState.GoDown:
-                    if (_tree.HasCurrentNextChild())
+                    if (_tree.HasCurrentNextChild() && _tree.CurrentLevel < _maxPly - 1)
                     {
                         _tree.GotoNextChild();
                         _board.Move(_tree.CurrentMove);
                         _color = Helper.GetOpositeColor(_color);
-                        if (_tree.CurrentLevel == _maxPly - 1)
-                        {
-                            if (_color == Definitions.ChessColor.White)
-                            {
-                                var bestMoveInfo = _tree.GetChildMaxMoveInfo();
-                                _tree.CurrentScore = bestMoveInfo.Score;
-                                _bestMove = bestMoveInfo.Move;
-                            }
-                            else
-                            {
-                                var bestMoveInfo = _tree.GetChildMinMoveInfo();
-                                _tree.CurrentScore = bestMoveInfo.Score;
-                                _bestMove = bestMoveInfo.Move;
-                            }
-                            _state = BuildTreeState.GoUp;
-                        }
                         break;
                     }
                     else
@@ -223,7 +207,7 @@ namespace MantaChessEngine
                             _bestMove = bestMoveInfo.Move;
                         }
                         _state = BuildTreeState.GoUp;
-
+                        
                         if (_tree.IsCurrentRoot())
                         {
                             return false; // fertig

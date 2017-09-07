@@ -9,25 +9,52 @@ namespace MantaConsole
 {
     class Program
     {
+        public enum GameType
+        {
+            HumanVsComputer,
+            ComputerVsComputerOnce,
+            ComputerVsComputerStatistic
+        }
+
         static void Main(string[] args)
         {
-            bool humanGame = true;
+            var gameType = GameType.HumanVsComputer;
 
-            // ----------------------------------------------------------------
+            bool whiteHuman;
+            bool blackHuman;
+            int runStatisticGames; // number of games to be played
+            bool quiet;            // true = print board with every move, false = print only who wins
 
-            bool whiteHuman = false;
-            bool blackHuman = false;
-
-            int runStatisticGames = 1; // run statistic = 1 --> only one game
-            bool quiet = false; // quiet = true --> no display of moves or board
-
-            if (humanGame)
+            switch (gameType)
             {
-                whiteHuman = true;
-                blackHuman = false;
-                runStatisticGames = 1;
-                quiet = false;
-            }
+                case GameType.HumanVsComputer:
+                    whiteHuman = true;
+                    blackHuman = false;
+                    runStatisticGames = 1;
+                    quiet = false;
+                    break;
+
+                case GameType.ComputerVsComputerOnce:
+                    whiteHuman = false;
+                    blackHuman = false;
+                    runStatisticGames = 1;
+                    quiet = false;
+                    break;
+
+                case GameType.ComputerVsComputerStatistic:
+                    whiteHuman = false;
+                    blackHuman = false;
+                    runStatisticGames = 100;
+                    quiet = true;
+                    break;
+
+                default:
+                    whiteHuman = false;
+                    blackHuman = false;
+                    runStatisticGames = 1;
+                    quiet = false;
+                    break;
+            }            
 
             Board board = new Board();
             board.SetInitialPosition();

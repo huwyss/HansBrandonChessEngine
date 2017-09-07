@@ -19,11 +19,12 @@ namespace MantaChessEngine
         private IEvaluator _evaluator;
         private IMoveGenerator _moveGenerator;
         private BuildTreeState _state;
-        private int DEFAULT_LEVEL = 4;
+        private int DEFAULT_LEVEL = 3;
         private Board _board;
         private Definitions.ChessColor _color;
         private MoveTree _tree;
         private int _maxPly;
+        private int _posCount;
 
         public TreeNode<MoveInfo> MoveRoot { get { return _tree.Root; } }
 
@@ -33,7 +34,8 @@ namespace MantaChessEngine
         {
             _evaluator = evaluator;
             _moveGenerator = generator;
-            
+            _tree = new MoveTree();
+
             _maxPly = DEFAULT_LEVEL;
         }
 
@@ -46,7 +48,9 @@ namespace MantaChessEngine
         {
             _tree = new MoveTree();
             CreateSearchTree(board, color);
+            _posCount = 0;
             Evaluate();
+            Console.WriteLine($"evaluated positions: {_posCount}");
             IMove bestMove = SelectBestMove();
             score = _tree.Root.Data.Score;
 
@@ -85,6 +89,7 @@ namespace MantaChessEngine
                         }
                         else
                         {
+                            //_tree.CurrentScore = _evaluator.Evaluate(_board); // eval
                             _state = BuildTreeState.GoUp;
                             break;
                         }
@@ -139,6 +144,7 @@ namespace MantaChessEngine
                         if (_tree.CurrentLevel >= _maxPly)
                         {
                             _tree.CurrentScore = _evaluator.Evaluate(_board);
+                            _posCount++;
                             _state = BuildTreeState.GoUp;
                             break;
                         }

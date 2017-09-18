@@ -29,7 +29,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMoves_WhenRook_ThenAllMoves()
         {
-            MoveGenerator target = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = "........" +
                               "........" +
@@ -40,8 +39,9 @@ namespace MantaChessEngineTest
                               "........" +
                               "........";
             board.SetPosition(position);
-            
-            var moves = target.GetMoves(board, Helper.FileCharToFile('e'), 4); // get moves of Rook
+
+            var rook = new Rook(Definitions.ChessColor.White);
+            var moves = rook.GetMoves(null, board, Helper.FileCharToFile('e'), 4, true); // get moves of Rook
 
             Assert.AreEqual(11, moves.Count);
             Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('R'), 'e', 4, 'e', 5, null)), "e4e5. missing");
@@ -60,7 +60,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMoves_WhenQueen_ThenAllMoves()
         {
-            MoveGenerator target = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = "........" +
                               "........" +
@@ -71,8 +70,9 @@ namespace MantaChessEngineTest
                               ".Q.P...." +
                               "........";
             board.SetPosition(position);
-           
-            var moves = target.GetMoves(board, Helper.FileCharToFile('b'), 2); // get moves of queen
+
+            var queen = new Queen(Definitions.ChessColor.White);
+            var moves = queen.GetMoves(null, board, Helper.FileCharToFile('b'), 2, true); // get moves of queen
 
             Assert.AreEqual(9, moves.Count);
             Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('Q'), 'b', 2, 'b', 3, null)), "b2b3. missing");
@@ -89,7 +89,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMoves_WhenBishop_ThenAllMoves()
         {
-            MoveGenerator target = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = "........" +
                               "........" +
@@ -101,7 +100,8 @@ namespace MantaChessEngineTest
                               "........";
             board.SetPosition(position);
 
-            var moves = target.GetMoves(board, Helper.FileCharToFile('c'), 2); // get moves of bishop
+            var bishop = new Bishop(Definitions.ChessColor.White);
+            var moves = bishop.GetMoves(null, board, Helper.FileCharToFile('c'), 2, true); // get moves of bishop
 
             Assert.AreEqual(5, moves.Count);
             Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('B'), 'c', 2, 'd', 3, null)), "c2d3. missing");

@@ -37,7 +37,7 @@ namespace MantaChessEngine
                     if (board.GetColor(file, rank) == color)
                     {
                         Piece piece = board.GetPiece(file, rank);
-                        if (piece is Knight || piece is King)
+                        if (piece is Knight || piece is King || piece is Bishop || piece is Queen || piece is Rook)
                         {
                             allMoves.AddRange(piece.GetMoves(this, board, file, rank, includeCastling));
                         }
@@ -152,36 +152,36 @@ namespace MantaChessEngine
                 case Definitions.ROOK: 
                 case Definitions.QUEEN:
                 case Definitions.BISHOP:
-                    directionSequences = piece.GetMoveDirectionSequences();
-                    foreach (string sequence in directionSequences)
-                    {
-                        int currentFile = file;
-                        int currentRank = rank;
-                        for (int i = 1; i < 8; i++) // walk in the direction until off board or captured or next is own piece
-                        {
-                            GetEndPosition(currentFile, currentRank, sequence, out targetFile, out targetRank, out valid);
-                            if (!valid)
-                            {
-                                break;
-                            }
-                            Definitions.ChessColor targetColor = board.GetColor(targetFile, targetRank);
-                            if (pieceColor == targetColor)
-                            {
-                                break;
-                            }
+                    //directionSequences = piece.GetMoveDirectionSequences();
+                    //foreach (string sequence in directionSequences)
+                    //{
+                    //    int currentFile = file;
+                    //    int currentRank = rank;
+                    //    for (int i = 1; i < 8; i++) // walk in the direction until off board or captured or next is own piece
+                    //    {
+                    //        GetEndPosition(currentFile, currentRank, sequence, out targetFile, out targetRank, out valid);
+                    //        if (!valid)
+                    //        {
+                    //            break;
+                    //        }
+                    //        Definitions.ChessColor targetColor = board.GetColor(targetFile, targetRank);
+                    //        if (pieceColor == targetColor)
+                    //        {
+                    //            break;
+                    //        }
 
-                            Piece targetPiece = board.GetPiece(targetFile, targetRank);
-                            moves.Add(MoveFactory.MakeNormalMove(piece, file, rank, targetFile, targetRank, targetPiece));
+                    //        Piece targetPiece = board.GetPiece(targetFile, targetRank);
+                    //        moves.Add(MoveFactory.MakeNormalMove(piece, file, rank, targetFile, targetRank, targetPiece));
 
-                            if (Definitions.ChessColor.Empty != targetColor)
-                            {
-                                break;
-                            }
+                    //        if (Definitions.ChessColor.Empty != targetColor)
+                    //        {
+                    //            break;
+                    //        }
 
-                            currentFile = targetFile;
-                            currentRank = targetRank;
-                        }
-                    }
+                    //        currentFile = targetFile;
+                    //        currentRank = targetRank;
+                    //    }
+                    //}
                     break;
 
                 case Definitions.PAWN:

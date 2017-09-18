@@ -8,7 +8,7 @@ namespace MantaChessEngine
 {
     public class MoveFactory
     {
-        public NormalMove MakeNormalMove(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, Piece capturedPiece)
+        public static NormalMove MakeNormalMove(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, Piece capturedPiece)
         {
             return new NormalMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
         }

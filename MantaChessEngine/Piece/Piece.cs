@@ -16,7 +16,9 @@ namespace MantaChessEngine
 
         public abstract char Symbol { get; }
 
-        public abstract IEnumerable<string> GetMoveSequences();
+        public abstract IEnumerable<string> GetMoveDirectionSequences();
+        public virtual IEnumerable<MoveBase> GetMoves(Board board, int file, int rank, bool includeCastling = true)
+        { return null; }
             
         public static Piece MakePiece(char pieceChar)
         {
@@ -55,6 +57,39 @@ namespace MantaChessEngine
         public override bool Equals(object obj)
         {
             return (obj as Piece).Color == Color;
+        }
+
+        // unit tests need access.
+        // valid means move is within board. 
+        internal void GetEndPosition(int file, int rank, string sequence, out int targetFile, out int targetRank, out bool valid)
+        {
+            targetFile = file;
+            targetRank = rank;
+
+            for (int i = 0; i < sequence.Length; i++)
+            {
+                char direction = sequence[i];
+                switch (direction)
+                {
+                    case Definitions.UP:
+                        targetRank++;
+                        break;
+                    case Definitions.RIGHT:
+                        targetFile++;
+                        break;
+                    case Definitions.DOWN:
+                        targetRank--;
+                        break;
+                    case Definitions.LEFT:
+                        targetFile--;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            valid = targetFile >= 1 && targetFile <= 8 &&
+                    targetRank >= 1 && targetRank <= 8;
         }
     }
 }

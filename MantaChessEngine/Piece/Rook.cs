@@ -20,7 +20,7 @@ namespace MantaChessEngine
             }
         }
 
-        public override IEnumerable<string> GetMoveSequences()
+        public override IEnumerable<string> GetMoveDirectionSequences()
         {
             return new List<string>() { "u", "r", "d", "l" }; // up, right, down, left
         }

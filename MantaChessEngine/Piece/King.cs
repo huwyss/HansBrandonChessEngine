@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MantaChessEngine
 {
-    public class King : Piece
+    public class King : SingleStepPiece
     {
         public King(Definitions.ChessColor color) : base(color)
         {
@@ -27,19 +27,7 @@ namespace MantaChessEngine
 
         public override List<MoveBase> GetMoves(MoveGenerator moveGen, Board board, int file, int rank, bool includeCastling = true)
         {
-            int targetRank;
-            int targetFile;
-            bool valid;
-            List<MoveBase> moves = new List<MoveBase>();
-            IEnumerable<string> directionSequences = GetMoveDirectionSequences();
-            foreach (string sequence in directionSequences)
-            {
-                GetEndPosition(file, rank, sequence, out targetFile, out targetRank, out valid);
-                if (valid && Color != board.GetColor(targetFile, targetRank)) // capture or empty field
-                {
-                    moves.Add(MoveFactory.MakeNormalMove(this, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank)));
-                }
-            }
+            var moves = base.GetMoves(moveGen, board, file, rank, includeCastling);
 
             if (!includeCastling)
             {

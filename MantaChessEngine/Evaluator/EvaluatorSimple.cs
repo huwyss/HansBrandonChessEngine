@@ -27,7 +27,7 @@ namespace MantaChessEngine
             {
                 for (int rank = 1; rank <= 8; rank++)
                 {
-                    char piece = board.GetPiece(file, rank);
+                    Piece piece = board.GetPiece(file, rank);
                     float pieceScore = GetPieceScore(piece);
                     if (board.GetColor(file, rank) == Definitions.ChessColor.White)
                     {
@@ -43,26 +43,22 @@ namespace MantaChessEngine
             return scoreWhite - scoreBlack;
         }
 
-        private float GetPieceScore(char piece)
+        private float GetPieceScore(Piece piece)
         {
-            switch (piece.ToString().ToLower()[0])
-            {
-                case Definitions.PAWN:
-                    return ValuePawn;
-                case Definitions.KNIGHT:
-                    return ValueKnight;
-                case Definitions.BISHOP:
-                    return ValueBishop;
-                case Definitions.ROOK:
-                    return ValueRook;
-                case Definitions.QUEEN:
-                    return ValueQueen;
-                case Definitions.KING:
-                    return ValueKing;
-                default:
-                    return 0;
-            }
+            if (piece is Pawn)
+                return ValuePawn;
+            else if (piece is Knight)
+                return ValueKnight;
+            else if (piece is Bishop)
+                return ValueBishop;
+            else if (piece is Rook)
+                return ValueRook;
+            else if (piece is Queen)
+                return ValueQueen;
+            else if (piece is King)
+                return ValueKing;
+            else
+                return 0;
         }
-
     }
 }

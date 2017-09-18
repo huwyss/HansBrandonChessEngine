@@ -8,12 +8,12 @@ namespace MantaChessEngine
 {
     public class EnPassantCaptureMove : MoveBase
     {
-        public EnPassantCaptureMove(char movingPiece, char sourceFile, int sourceRank, char targetFile, int targetRank, char capturedPiece)
+        public EnPassantCaptureMove(Piece movingPiece, char sourceFile, int sourceRank, char targetFile, int targetRank, Piece capturedPiece)
             : base(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece)
         {
         }
 
-        public EnPassantCaptureMove(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, char capturedPiece)
+        public EnPassantCaptureMove(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, Piece capturedPiece)
             : base(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece)
         {
         }
@@ -33,7 +33,7 @@ namespace MantaChessEngine
 
         public override void ExecuteMove(Board board)
         {
-            board.SetPiece(Definitions.EmptyField, CapturedFile, CapturedRank); // remove captured pawn if it is en passant
+            board.SetPiece(null /*Definitions.EmptyField*/, CapturedFile, CapturedRank); // remove captured pawn if it is en passant
             base.ExecuteMove(board);
         }
 

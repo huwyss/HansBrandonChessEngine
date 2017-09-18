@@ -57,6 +57,13 @@
     <Compile Include="Move\MoveFactory.cs" />
     <Compile Include="Move\NoLegalMove.cs" />
     <Compile Include="Move\NormalMove.cs" />
+    <Compile Include="Piece\Rook.cs" />
+    <Compile Include="Piece\Knight.cs" />
+    <Compile Include="Piece\Bishop.cs" />
+    <Compile Include="Piece\Queen.cs" />
+    <Compile Include="Piece\King.cs" />
+    <Compile Include="Piece\Pawn.cs" />
+    <Compile Include="Piece\Piece.cs" />
     <Compile Include="Search\ISearchService.cs" />
     <Compile Include="Move\MoveBase.cs" />
     <Compile Include="MoveGenerator.cs" />

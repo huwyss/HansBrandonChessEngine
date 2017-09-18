@@ -54,13 +54,13 @@ namespace MantaChessEngine
         public List<MoveBase> GetMoves(Board board, int file, int rank, bool includeCastling = true)
         {
             List<MoveBase> moves = new List<MoveBase>();
-            char piece = board.GetPiece(file, rank);
+            Piece piece = board.GetPiece(file, rank);
             int targetRank;
             int targetFile;
             bool valid;
             Definitions.ChessColor pieceColor = board.GetColor(file, rank);
             List<string> directionSequences;
-            char pieceLower = piece.ToString().ToLower()[0];
+            char pieceLower = piece != null ? piece.Symbol.ToString().ToLower()[0] : Definitions.EmptyField;
             switch (pieceLower)
             {
                 case Definitions.KNIGHT:
@@ -81,12 +81,13 @@ namespace MantaChessEngine
                     }
 
                     // Castling
-                    if (piece == Definitions.KING.ToString().ToUpper()[0]) // white king
+                    if (piece is King && piece.Color == Definitions.ChessColor.White) // white king
                     {
                         // check for king side castling (0-0)
+                        Piece maybeWhiteKingRook = board.GetPiece(Helper.FileCharToFile('h'), 1);
                         if (board.CastlingRightWhiteKingSide && // castling right
                             file == Helper.FileCharToFile('e') && rank == 1 && // king initial position
-                            Definitions.ROOK.ToString().ToUpper()[0] == board.GetPiece(Helper.FileCharToFile('h'), 1) && // rook init position
+                            maybeWhiteKingRook is Rook && maybeWhiteKingRook.Color == Definitions.ChessColor.White && // rook init position
                             IsFieldsEmpty(board, Helper.FileCharToFile('f'), 1, Helper.FileCharToFile('g')) && // fields between king and rook empty
                             !IsAttacked(board, pieceColor, Helper.FileCharToFile('e'), 1) && // king not attacked
                             !IsAttacked(board, pieceColor, Helper.FileCharToFile('f'), 1)
@@ -96,9 +97,10 @@ namespace MantaChessEngine
                         }
 
                         // check for queen side castling (0-0-0)
+                        Piece maybeWhiteQueenRook = board.GetPiece(Helper.FileCharToFile('a'), 1);
                         if (board.CastlingRightWhiteQueenSide && // castling right
                             file == Helper.FileCharToFile('e') && rank == 1 && // king initial position
-                            Definitions.ROOK.ToString().ToUpper()[0] == board.GetPiece(Helper.FileCharToFile('a'), 1) && // rook init position
+                            maybeWhiteQueenRook is Rook && maybeWhiteQueenRook.Color == Definitions.ChessColor.White && // rook init position
                             IsFieldsEmpty(board, Helper.FileCharToFile('b'), 1, Helper.FileCharToFile('d')) &&// fields between king and rook empty
                             !IsAttacked(board, pieceColor, Helper.FileCharToFile('e'), 1) && // king not attacked
                             !IsAttacked(board, pieceColor, Helper.FileCharToFile('d'), 1)
@@ -108,12 +110,13 @@ namespace MantaChessEngine
                         }
                     }
 
-                    if (piece == Definitions.KING.ToString().ToLower()[0]) // black king
+                    Piece maybeBlackKingRook = board.GetPiece(Helper.FileCharToFile('h'), 8);
+                    if (piece is King && piece.Color == Definitions.ChessColor.Black) // black king
                     {
                         // check for king side castling (0-0)
                         if (board.CastlingRightBlackKingSide && // castling right
                             file == Helper.FileCharToFile('e') && rank == 8 && // king initial position
-                            Definitions.ROOK.ToString().ToLower()[0] == board.GetPiece(Helper.FileCharToFile('h'), 8) && // rook init position
+                            maybeBlackKingRook is Rook && maybeBlackKingRook.Color == Definitions.ChessColor.Black && // rook init position
                             IsFieldsEmpty(board, Helper.FileCharToFile('f'), 8, Helper.FileCharToFile('g')) && // fields between king and rook empty
                             !IsAttacked(board, pieceColor, Helper.FileCharToFile('e'), 8) && // king not attacked
                             !IsAttacked(board, pieceColor, Helper.FileCharToFile('f'), 8)    // field next to king not attacked
@@ -123,9 +126,10 @@ namespace MantaChessEngine
                         }
 
                         // check for queen side castling (0-0-0)
+                        Piece maybeBlackQueenRook = board.GetPiece(Helper.FileCharToFile('a'), 8);
                         if (board.CastlingRightBlackQueenSide && // castling right
                             file == Helper.FileCharToFile('e') && rank == 8 && // king initial position
-                            Definitions.ROOK.ToString().ToLower()[0] == board.GetPiece(Helper.FileCharToFile('a'), 8) && // rook init position
+                            maybeBlackQueenRook is Rook && maybeBlackQueenRook.Color == Definitions.ChessColor.Black && // rook init position
                             IsFieldsEmpty(board, Helper.FileCharToFile('b'), 8, Helper.FileCharToFile('d')) && // fields between king and rook empty
                             !IsAttacked(board, pieceColor, Helper.FileCharToFile('e'), 8) && // king not attacked
                             !IsAttacked(board, pieceColor, Helper.FileCharToFile('d'), 8)    // field next to king not attacked
@@ -157,7 +161,7 @@ namespace MantaChessEngine
                                 break;
                             }
 
-                            char targetPiece = board.GetPiece(targetFile, targetRank);
+                            Piece targetPiece = board.GetPiece(targetFile, targetRank);
                             moves.Add(_factory.MakeNormalMove(piece, file, rank, targetFile, targetRank, targetPiece));
 
                             if (Definitions.ChessColor.Empty != targetColor)
@@ -188,7 +192,7 @@ namespace MantaChessEngine
                         {
                             if (valid && board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty) // empty field
                             {
-                                moves.Add(_factory.MakeNormalMove(piece, file, rank, targetFile, targetRank, Definitions.EmptyField));
+                                moves.Add(_factory.MakeNormalMove(piece, file, rank, targetFile, targetRank, null));
                             }
                         }
                         else if ((currentSequence == "uu" || currentSequence == "dd") && rank == twoFieldMoveInitRank) // walk straight two fields
@@ -201,7 +205,7 @@ namespace MantaChessEngine
                             if ((valid && board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty) && // end field is empty
                                 (valid2 && board.GetColor(targetFile2, targetRank2) == Definitions.ChessColor.Empty)) // field between current and end field is also empty
                             {
-                                moves.Add(_factory.MakeNormalMove(piece, file, rank, targetFile, targetRank, Definitions.EmptyField));
+                                moves.Add(_factory.MakeNormalMove(piece, file, rank, targetFile, targetRank, null));
                             }
                         }
                         else if (currentSequence == "ul" || currentSequence == "ur" ||
@@ -213,9 +217,9 @@ namespace MantaChessEngine
                             }
                             else if (valid && targetFile == board.History.LastEnPassantFile && targetRank == board.History.LastEnPassantRank)
                             {
-                                char capturedPawn = pieceColor == Definitions.ChessColor.White
-                                    ? Definitions.PAWN.ToString().ToLower()[0]
-                                    : Definitions.PAWN.ToString().ToUpper()[0];
+                                Piece capturedPawn = pieceColor == Definitions.ChessColor.White
+                                    ? Piece.MakePiece(Definitions.PAWN.ToString().ToLower()[0])
+                                    : Piece.MakePiece(Definitions.PAWN.ToString().ToUpper()[0]);
                                 moves.Add(_factory.MakeEnPassantCaptureMove(piece, file, rank, targetFile, targetRank, capturedPawn));
                             }
 
@@ -236,7 +240,7 @@ namespace MantaChessEngine
 
         private bool HasCorrectColorMoved(Board board, MoveBase move)
         {
-            return (Helper.GetPieceColor(move.MovingPiece) == board.SideToMove);
+            return (move.MovingPiece.Color == board.SideToMove);
         }
 
         private List<string> GetMoveDirectionSequence(char piece)
@@ -308,7 +312,7 @@ namespace MantaChessEngine
 
             for (int file = sourceFile; file <= targetFile; file++)
             {
-                empty &= board.GetPiece(file, sourceRank) == Definitions.EmptyField;
+                empty &= board.GetPiece(file, sourceRank) == null; //Definitions.EmptyField;
             }
 
             return empty;
@@ -333,16 +337,16 @@ namespace MantaChessEngine
 
         public bool IsCheck(Board board, Definitions.ChessColor color)
         {
-            char king;
+            //char king;
 
-            if (color == Definitions.ChessColor.White)
-            {
-                king = Definitions.KING.ToString().ToUpper()[0];
-            }
-            else
-            {
-                king = Definitions.KING.ToString().ToLower()[0];
-            }
+            //if (color == Definitions.ChessColor.White)
+            //{
+            //    king = Definitions.KING.ToString().ToUpper()[0];
+            //}
+            //else
+            //{
+            //    king = Definitions.KING.ToString().ToLower()[0];
+            //}
 
             // find all oponent moves
             var moves = GetAllMoves(board, Helper.GetOpositeColor(color), false);
@@ -350,7 +354,7 @@ namespace MantaChessEngine
             // if a move ends in king's position then king is in check
             foreach (MoveBase move in moves)
             {
-                if (move.CapturedPiece == king)
+                if (move.CapturedPiece is King && move.CapturedPiece.Color == color)
                 {
                     return true;
                 }

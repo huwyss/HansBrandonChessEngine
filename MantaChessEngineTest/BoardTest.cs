@@ -11,8 +11,8 @@ namespace MantaChessEngineTest
         public void GetSetPieceTest_WhenSetPieceRookToD8_ThenGetPieceD8ShouldReturnRook()
         {
             var target = new Board();
-            target.SetPiece('R', 4, 8);
-            char piece = target.GetPiece('d', 8);
+            target.SetPiece(Piece.MakePiece('R'), 4, 8);
+            char piece = target.GetPiece('d', 8).Symbol;
             Assert.AreEqual('R', piece);
         }
 
@@ -20,8 +20,8 @@ namespace MantaChessEngineTest
         public void GetSetPieceTest_WhenSetPieceRookTo48_ThenGetPiece48ShouldReturnRook()
         {
             var target = new Board();
-            target.SetPiece('R', 4, 8);
-            char piece = target.GetPiece(4, 8);
+            target.SetPiece(Piece.MakePiece('R'), 4, 8);
+            char piece = target.GetPiece(4, 8).Symbol;
             Assert.AreEqual('R', piece);
         }
 
@@ -29,8 +29,8 @@ namespace MantaChessEngineTest
         public void GetPiece_WhenNewBoard_ThenAllPositionsEmpty()
         {
             var target = new Board();
-            char piece = target.GetPiece('d', 8);
-            Assert.AreEqual(Definitions.EmptyField, piece);
+            Piece piece = target.GetPiece('d', 8);
+            Assert.AreEqual(null, piece);
         }
 
         [TestMethod]
@@ -39,30 +39,30 @@ namespace MantaChessEngineTest
             var target = new Board();
             target.SetInitialPosition();
 
-            Assert.AreEqual('R', target.GetPiece('a', 1));
-            Assert.AreEqual('N', target.GetPiece('b', 1));
-            Assert.AreEqual('B', target.GetPiece('c', 1));
-            Assert.AreEqual('Q', target.GetPiece('d', 1));
-            Assert.AreEqual('K', target.GetPiece('e', 1));
-            Assert.AreEqual('B', target.GetPiece('f', 1));
-            Assert.AreEqual('N', target.GetPiece('g', 1));
-            Assert.AreEqual('R', target.GetPiece('h', 1));
+            Assert.AreEqual(new Rook(Definitions.ChessColor.White), target.GetPiece('a', 1));
+            Assert.AreEqual(new Knight(Definitions.ChessColor.White), target.GetPiece('b', 1));
+            Assert.AreEqual(new Bishop(Definitions.ChessColor.White), target.GetPiece('c', 1));
+            Assert.AreEqual(new Queen(Definitions.ChessColor.White), target.GetPiece('d', 1));
+            Assert.AreEqual(new King(Definitions.ChessColor.White), target.GetPiece('e', 1));
+            Assert.AreEqual(new Bishop(Definitions.ChessColor.White), target.GetPiece('f', 1));
+            Assert.AreEqual(new Knight(Definitions.ChessColor.White), target.GetPiece('g', 1));
+            Assert.AreEqual(new Rook(Definitions.ChessColor.White), target.GetPiece('h', 1));
 
-            Assert.AreEqual('P', target.GetPiece('b', 2)); // white pawn
-            Assert.AreEqual(Definitions.EmptyField, target.GetPiece('c', 3)); // empty
-            Assert.AreEqual(Definitions.EmptyField, target.GetPiece('d', 4)); // empty
-            Assert.AreEqual(Definitions.EmptyField, target.GetPiece('e', 5)); // empty
-            Assert.AreEqual(Definitions.EmptyField, target.GetPiece('f', 6)); // empty
-            Assert.AreEqual('p', target.GetPiece('g', 7)); // black pawn
+            Assert.AreEqual(new Pawn(Definitions.ChessColor.White), target.GetPiece('b', 2)); // white pawn
+            Assert.AreEqual(null, target.GetPiece('c', 3)); // empty
+            Assert.AreEqual(null, target.GetPiece('d', 4)); // empty
+            Assert.AreEqual(null, target.GetPiece('e', 5)); // empty
+            Assert.AreEqual(null, target.GetPiece('f', 6)); // empty
+            Assert.AreEqual(new Pawn(Definitions.ChessColor.Black), target.GetPiece('g', 7)); // black pawn
 
-            Assert.AreEqual('r', target.GetPiece('a', 8));
-            Assert.AreEqual('n', target.GetPiece('b', 8));
-            Assert.AreEqual('b', target.GetPiece('c', 8));
-            Assert.AreEqual('q', target.GetPiece('d', 8));
-            Assert.AreEqual('k', target.GetPiece('e', 8));
-            Assert.AreEqual('b', target.GetPiece('f', 8));
-            Assert.AreEqual('n', target.GetPiece('g', 8));
-            Assert.AreEqual('r', target.GetPiece('h', 8));
+            Assert.AreEqual(new Rook(Definitions.ChessColor.Black), target.GetPiece('a', 8));
+            Assert.AreEqual(new Knight(Definitions.ChessColor.Black), target.GetPiece('b', 8));
+            Assert.AreEqual(new Bishop(Definitions.ChessColor.Black), target.GetPiece('c', 8));
+            Assert.AreEqual(new Queen(Definitions.ChessColor.Black), target.GetPiece('d', 8));
+            Assert.AreEqual(new King(Definitions.ChessColor.Black), target.GetPiece('e', 8));
+            Assert.AreEqual(new Bishop(Definitions.ChessColor.Black), target.GetPiece('f', 8));
+            Assert.AreEqual(new Knight(Definitions.ChessColor.Black), target.GetPiece('g', 8));
+            Assert.AreEqual(new Rook(Definitions.ChessColor.Black), target.GetPiece('h', 8));
 
             Assert.AreEqual(0, target.History.LastEnPassantFile);
             Assert.AreEqual(0, target.History.LastEnPassantRank);
@@ -79,9 +79,9 @@ namespace MantaChessEngineTest
             Board target = new Board();
             target.SetInitialPosition();
 
-            target.Move(new NormalMove('P','e',2,'e',4,Definitions.EmptyField));
-            Assert.AreEqual(Definitions.EmptyField, target.GetPiece('e', 2));
-            Assert.AreEqual('P', target.GetPiece('e', 4));
+            target.Move(new NormalMove(Piece.MakePiece('P'),'e',2,'e',4,null));
+            Assert.AreEqual(null, target.GetPiece('e', 2));
+            Assert.AreEqual(new Pawn(Definitions.ChessColor.White), target.GetPiece('e', 4));
             Assert.AreEqual(Definitions.ChessColor.Black, target.SideToMove);
         }
 
@@ -91,10 +91,10 @@ namespace MantaChessEngineTest
             MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board target = new Board();
             target.SetInitialPosition();
-            target.Move(new NormalMove('P', 'e', 2, 'e', 4, Definitions.EmptyField));
+            target.Move(new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 4, null));
 
-            Assert.AreEqual(Definitions.EmptyField, target.GetPiece('e', 2));
-            Assert.AreEqual('P', target.GetPiece('e', 4));
+            Assert.AreEqual(null, target.GetPiece('e', 2));
+            Assert.AreEqual(new Pawn(Definitions.ChessColor.White), target.GetPiece('e', 4));
             Assert.AreEqual(Definitions.ChessColor.Black, target.SideToMove);
         }
 
@@ -104,16 +104,16 @@ namespace MantaChessEngineTest
             MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board target = new Board();
             target.SetInitialPosition();
-            target.SetPiece(Definitions.EmptyField, 'd', 2);
+            target.SetPiece(null, 'd', 2);
 
-            target.Move(new NormalMove('Q','d',1,'d',7,'p'));
-            Assert.AreEqual(Definitions.EmptyField, target.GetPiece('d', 1));
-            Assert.AreEqual('Q', target.GetPiece('d', 7));
+            target.Move(new NormalMove(new Queen(Definitions.ChessColor.White),'d',1,'d',7,Piece.MakePiece('p')));
+            Assert.AreEqual(null, target.GetPiece('d', 1));
+            Assert.AreEqual(new Queen(Definitions.ChessColor.White), target.GetPiece('d', 7));
             Assert.AreEqual(Definitions.ChessColor.Black, target.SideToMove);
 
             var moveList = target.History.Moves;
             Assert.AreEqual(1, target.History.Moves.Count);
-            Assert.AreEqual(new NormalMove('Q', 4, 1, 4, 7, 'p'), target.History.Moves[0]);
+            Assert.AreEqual(new NormalMove(new Queen(Definitions.ChessColor.White), 4, 1, 4, 7, Piece.MakePiece('p')), target.History.Moves[0]);
         }
 
         [TestMethod]
@@ -130,7 +130,7 @@ namespace MantaChessEngineTest
                               "........" +
                               "...K....";
             board.SetPosition(position);
-            board.Move(new NormalMove('p','a',7,'a',5,Definitions.EmptyField));
+            board.Move(new NormalMove(Piece.MakePiece('p'),'a',7,'a',5,null));
             Assert.AreEqual(Helper.FileCharToFile('a'), board.History.LastEnPassantFile);
             Assert.AreEqual(6, board.History.LastEnPassantRank);
         }
@@ -149,7 +149,7 @@ namespace MantaChessEngineTest
                               ".P......" +
                               "...K....";
             board.SetPosition(position);
-            board.Move(new NormalMove('P','b',2,'b',4,Definitions.EmptyField));
+            board.Move(new NormalMove(Piece.MakePiece('P'),'b',2,'b',4,null));
             Assert.AreEqual(Helper.FileCharToFile('b'), board.History.LastEnPassantFile);
             Assert.AreEqual(3, board.History.LastEnPassantRank);
         }
@@ -168,9 +168,9 @@ namespace MantaChessEngineTest
                               ".P......" +
                               "...K....";
             board.SetPosition(position);
-            board.Move(new NormalMove('P','b',2,'b',4,Definitions.EmptyField));
+            board.Move(new NormalMove(Piece.MakePiece('P'),'b',2,'b',4,null));
 
-            board.Move(new EnPassantCaptureMove('p','a',4,'b',3,'P')); // capture en passant
+            board.Move(new EnPassantCaptureMove(Piece.MakePiece('p'),'a',4,'b',3,Piece.MakePiece('P'))); // capture en passant
 
             string expPosit = ".......k" +
                               "........" +
@@ -181,7 +181,7 @@ namespace MantaChessEngineTest
                               "........" +
                               "...K....";
             Assert.AreEqual(expPosit, board.GetString, "En passant capture not correct move.");
-            Assert.AreEqual(board.History.Moves[1], new EnPassantCaptureMove('p', 'a', 4, 'b', 3, 'P'));
+            Assert.AreEqual(board.History.Moves[1], new EnPassantCaptureMove(Piece.MakePiece('p'), 'a', 4, 'b', 3, Piece.MakePiece('P')));
         }
 
         [TestMethod]
@@ -198,9 +198,9 @@ namespace MantaChessEngineTest
                               "........" +
                               "...K....";
             board.SetPosition(position);
-            board.Move(new NormalMove('p','b',7,'b',5,Definitions.EmptyField));
+            board.Move(new NormalMove(Piece.MakePiece('p'),'b',7,'b',5,null));
 
-            board.Move(new EnPassantCaptureMove('P','a',5,'b',6,'p')); // capture en passant
+            board.Move(new EnPassantCaptureMove(Piece.MakePiece('P'),'a',5,'b',6,Piece.MakePiece('p'))); // capture en passant
 
             string expPosit = ".......k" +
                               "........" +
@@ -211,7 +211,7 @@ namespace MantaChessEngineTest
                               "........" +
                               "...K....";
             Assert.AreEqual(expPosit, board.GetString, "En passant capture not correct move.");
-            Assert.AreEqual(board.History.Moves[1], new EnPassantCaptureMove('P', 'a', 5, 'b', 6, 'p'));
+            Assert.AreEqual(board.History.Moves[1], new EnPassantCaptureMove(Piece.MakePiece('P'), 'a', 5, 'b', 6, Piece.MakePiece('p')));
         }
 
         [TestMethod]
@@ -313,7 +313,7 @@ namespace MantaChessEngineTest
             MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             board.SetInitialPosition();
-            board.Move(new NormalMove('P','e',2,'e',4,Definitions.EmptyField));
+            board.Move(new NormalMove(Piece.MakePiece('P'),'e',2,'e',4,null));
             board.WhiteDidCastling = true; // cannot be. but this should test the cloned board.
             
             Board cloned = board.Clone();
@@ -336,9 +336,9 @@ namespace MantaChessEngineTest
             MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             board.SetInitialPosition();
-            board.Move(new NormalMove('P','e',2,'e',4,Definitions.EmptyField));
-            board.Move(new NormalMove('p','e',7,'e',5,Definitions.EmptyField));
-            board.Move(new NormalMove('K','e',1,'e',2,Definitions.EmptyField)); // white loses castling right
+            board.Move(new NormalMove(Piece.MakePiece('P'),'e',2,'e',4,null));
+            board.Move(new NormalMove(Piece.MakePiece('p'),'e',7,'e',5,null));
+            board.Move(new NormalMove(Piece.MakePiece('K'),'e',1,'e',2,null)); // white loses castling right
 
             Board cloned = board.Clone();
 
@@ -362,8 +362,8 @@ namespace MantaChessEngineTest
             MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board target = new Board();
             target.SetInitialPosition();
-            target.Move(new NormalMove('P','e',2,'e',4,Definitions.EmptyField));
-            target.Move(new NormalMove('p','e',7,'e',5,Definitions.EmptyField));
+            target.Move(new NormalMove(Piece.MakePiece('P'),'e',2,'e',4,null));
+            target.Move(new NormalMove(Piece.MakePiece('p'),'e',7,'e',5,null));
 
             target.Back();
             string expectedString = "rnbqkbnr" +
@@ -409,8 +409,8 @@ namespace MantaChessEngineTest
                               ".P......" +
                               "...K....";
             board.SetPosition(position);
-            board.Move(new NormalMove('P','b',2,'b',4,Definitions.EmptyField));
-            board.Move(new EnPassantCaptureMove('p','a',4,'b',3,'P')); // capture en passant
+            board.Move(new NormalMove(Piece.MakePiece('P'),'b',2,'b',4,null));
+            board.Move(new EnPassantCaptureMove(Piece.MakePiece('p'),'a',4,'b',3, Piece.MakePiece('P'))); // capture en passant
 
             string expPosit = ".......k" + // position after capture en passant
                               "........" +
@@ -466,15 +466,15 @@ namespace MantaChessEngineTest
             Assert.AreEqual(true, board.CastlingRightBlackQueenSide);
             Assert.AreEqual(true, board.CastlingRightBlackKingSide);
 
-            board.Move(new NormalMove('R','h',1,'g',1,Definitions.EmptyField));
+            board.Move(new NormalMove(Piece.MakePiece('R'),'h',1,'g',1,null));
             Assert.AreEqual(true, board.CastlingRightWhiteQueenSide);
             Assert.AreEqual(false, board.CastlingRightWhiteKingSide);
 
-            board.Move(new NormalMove('R','a',1,'c',1,Definitions.EmptyField));
+            board.Move(new NormalMove(Piece.MakePiece('R'),'a',1,'c',1,null));
             Assert.AreEqual(false, board.CastlingRightWhiteQueenSide);
             Assert.AreEqual(false, board.CastlingRightWhiteKingSide);
 
-            board.Move(new NormalMove('k','e',8,'f',8,Definitions.EmptyField));
+            board.Move(new NormalMove(Piece.MakePiece('k'),'e',8,'f',8,null));
             Assert.AreEqual(false, board.CastlingRightWhiteQueenSide);
             Assert.AreEqual(false, board.CastlingRightWhiteKingSide);
             Assert.AreEqual(false, board.CastlingRightBlackQueenSide);

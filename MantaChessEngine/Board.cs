@@ -33,7 +33,7 @@ namespace MantaChessEngine
         public bool WhiteDidCastling { get; set; }
         public bool BlackDidCastling { get; set; }
 
-        private char[] _board;
+        private Piece[] _board;
         string initPosition = "rnbqkbnr" + // black a8-h8
                               "pppppppp" +
                               "........" +
@@ -50,11 +50,11 @@ namespace MantaChessEngine
         /// </summary>
         public Board()
         {
-            _board = new char[64];
+            _board = new Piece[64];
             _attackedFields = new int[64];
             for (int i = 0; i < 64; i++)
             {
-                _board[i] = Definitions.EmptyField;
+                _board[i] = null; // Definitions.EmptyField;
                 _attackedFields[i] = 0;
             }
 
@@ -110,10 +110,12 @@ namespace MantaChessEngine
             {
                 for (int file0 = 0; file0 < 8; file0++)
                 {
-                    _board[8*rank0 + file0] = position[8*(7 - rank0) + file0];
+                    _board[8*rank0 + file0] = Piece.MakePiece(position[8*(7 - rank0) + file0]);
                 }
             }
         }
+
+        
 
         /// <summary>
         /// Returns the chess piece.
@@ -121,7 +123,7 @@ namespace MantaChessEngine
         /// <param name="file">1 to 8</param>
         /// <param name="rank">1 to 8</param>
         /// <returns></returns>
-        public char GetPiece(int file, int rank)
+        public Piece GetPiece(int file, int rank)
         {
             return _board[8*(rank - 1) + file - 1];
         }
@@ -132,7 +134,7 @@ namespace MantaChessEngine
         /// <param name="fileChar">'a' to 'h'</param>
         /// <param name="rank">1 to 8</param>
         /// <returns></returns>
-        public char GetPiece(char fileChar, int rank)
+        public Piece GetPiece(char fileChar, int rank)
         {
             return GetPiece(Helper.FileCharToFile(fileChar), rank);
         }
@@ -143,7 +145,7 @@ namespace MantaChessEngine
         /// <param name="piece">chess piece: p-pawn, k-king, q-queen, r-rook, n-knight, b-bishop, r-rook, ' '-empty. small=black, capital=white</param>
         /// <param name="file">1 to 8</param>
         /// <param name="rank">1 to 8</param>
-        public void SetPiece(char piece, int file, int rank)
+        public void SetPiece(Piece piece, int file, int rank)
         {
             _board[8*(rank - 1) + file - 1] = piece;
         }
@@ -154,7 +156,7 @@ namespace MantaChessEngine
         /// <param name="piece">chess piece: p-pawn, k-king, q-queen, r-rook, n-knight, b-bishop, r-rook, ' '-empty. small=black, capital=white</param>
         /// <param name="fileChar">'a' to 'h'</param>
         /// <param name="rank">1 to 8</param>
-        public void SetPiece(char piece, char fileChar, int rank)
+        public void SetPiece(Piece piece, char fileChar, int rank)
         {
             SetPiece(piece, Helper.FileCharToFile(fileChar), rank);
         }
@@ -175,19 +177,21 @@ namespace MantaChessEngine
 
         public Definitions.ChessColor GetColor(int file, int rank)
         {
-            char piece = GetPiece(file, rank);
-            if (piece >= 'a' && piece <= 'z')
-            {
-                return Definitions.ChessColor.Black;
-            }
-            else if (piece >= 'A' && piece <= 'Z')
-            {
-                return Definitions.ChessColor.White;
-            }
-            else
-            {
-                return Definitions.ChessColor.Empty;
-            }
+            Piece piece = GetPiece(file, rank);
+            return piece != null ? piece.Color : Definitions.ChessColor.Empty;
+            //char piece = GetPiece(file, rank);
+            //if (piece >= 'a' && piece <= 'z')
+            //{
+            //    return Definitions.ChessColor.Black;
+            //}
+            //else if (piece >= 'A' && piece <= 'Z')
+            //{
+            //    return Definitions.ChessColor.White;
+            //}
+            //else
+            //{
+            //    return Definitions.ChessColor.Empty;
+            //}
         }
 
         public bool IsWinner(Definitions.ChessColor color)
@@ -199,13 +203,15 @@ namespace MantaChessEngine
             {
                 for (int file = 1; file <= 8; file++)
                 {
-                    char piece = GetPiece(file, rank);
-                    if (piece == Definitions.KING.ToString().ToUpper()[0])
+                    Piece piece = GetPiece(file, rank);
+                    if (piece is King && piece.Color == Definitions.ChessColor.White)
+                    //if (piece == Definitions.KING.ToString().ToUpper()[0])
                     {
                         hasWhiteKing = true;
                     }
 
-                    if (piece == Definitions.KING.ToString().ToLower()[0])
+                    if (piece is King && piece.Color == Definitions.ChessColor.Black)
+                        //if (piece == Definitions.KING.ToString().ToLower()[0])
                     {
                         hasBlackKing = true;
                     }
@@ -236,8 +242,9 @@ namespace MantaChessEngine
                 {
                     for (int file = 1; file <= 8; file++)
                     {
-                        char piece = GetPiece(file, rank);
-                        boardString += piece;
+                        Piece piece = GetPiece(file, rank);
+
+                        boardString += piece!=null ? piece.Symbol : Definitions.EmptyField;
                     }
                 }
 
@@ -256,9 +263,9 @@ namespace MantaChessEngine
                     boardString += rank + "   ";
                     for (int file = 1; file <= 8; file++)
                     {
-                        char piece = GetPiece(file, rank);
-                        boardString += piece + " ";
-
+                        Piece piece = GetPiece(file, rank);
+                        boardString += piece != null ? piece.Symbol : Definitions.EmptyField;
+                        boardString += " ";
                     }
 
                     boardString += "\n";

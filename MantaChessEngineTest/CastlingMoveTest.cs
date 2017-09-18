@@ -34,16 +34,16 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void CastlingMoveTest_WhenTwoCastlingMoves_ThenEqualsReturnsTrue()
         {
-            MoveBase moveWhiteKingCastl = new CastlingMove(CastlingType.BlackKingSide);
-            MoveBase moveWhiteQueenCastl = new CastlingMove(CastlingType.BlackKingSide);
-            Assert.AreEqual(moveWhiteKingCastl, moveWhiteQueenCastl, "same castling move should be equal");
+            MoveBase moveBlackKingCastl = new CastlingMove(CastlingType.BlackKingSide);
+            MoveBase moveBlackKingCastl1 = new CastlingMove(CastlingType.BlackKingSide);
+            Assert.AreEqual(moveBlackKingCastl, moveBlackKingCastl1, "same castling move should be equal");
         }
 
         [TestMethod]
         public void CastlingMoveTest_WhenCastlingAndNormalKingMove_ThenEqualsReturnsFalse()
         {
             MoveBase moveWhiteKingCastl = new CastlingMove(CastlingType.WhiteKingSide);
-            MoveBase moveWhiteQueenCastl = new NormalMove('K', 'e', 1, 'g', 1, '.');
+            MoveBase moveWhiteQueenCastl = new NormalMove(Piece.MakePiece('K'), 'e', 1, 'g', 1, null);
             Assert.IsFalse(moveWhiteQueenCastl.Equals(moveWhiteKingCastl), "castling and normal move should be unequal");
             Assert.IsFalse(moveWhiteKingCastl.Equals(moveWhiteQueenCastl), "normal and castling move should be unequal");
         }

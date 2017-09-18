@@ -25,34 +25,34 @@ namespace MantaChessEngine
         int _rookCastledRank = 0;
 
         public CastlingMove(CastlingType castlingType)
-            : base((char)0, 0, 0, 0, 0, Definitions.EmptyField)
+            : base(null, 0, 0, 0, 0, null)
         {
             _castlingType = castlingType;
             switch (castlingType)
             {
                 case CastlingType.WhiteKingSide:
-                    MovingPiece = Definitions.KING.ToString().ToUpper()[0];
+                    MovingPiece = Piece.MakePiece(Definitions.KING.ToString().ToUpper()[0]);
                     SourceFile = Helper.FileCharToFile('e');
                     SourceRank = 1;
                     TargetFile = Helper.FileCharToFile('g');
                     TargetRank = 1;
                     break;
                 case CastlingType.WhiteQueenSide:
-                    MovingPiece = Definitions.KING.ToString().ToUpper()[0];
+                    MovingPiece = Piece.MakePiece(Definitions.KING.ToString().ToUpper()[0]);
                     SourceFile = Helper.FileCharToFile('e');
                     SourceRank = 1;
                     TargetFile = Helper.FileCharToFile('c');
                     TargetRank = 1;
                     break;
                 case CastlingType.BlackKingSide:
-                    MovingPiece = Definitions.KING.ToString().ToLower()[0];
+                    MovingPiece = Piece.MakePiece(Definitions.KING.ToString().ToLower()[0]);
                     SourceFile = Helper.FileCharToFile('e');
                     SourceRank = 8;
                     TargetFile = Helper.FileCharToFile('g');
                     TargetRank = 8;
                     break;
                 case CastlingType.BlackQueenSide:
-                    MovingPiece = Definitions.KING.ToString().ToLower()[0];
+                    MovingPiece = Piece.MakePiece(Definitions.KING.ToString().ToLower()[0]);
                     SourceFile = Helper.FileCharToFile('e');
                     SourceRank = 8;
                     TargetFile = Helper.FileCharToFile('c');
@@ -83,8 +83,8 @@ namespace MantaChessEngine
                     break;
             }
 
-            board.SetPiece(_rook, _rookCastledFile, _rookCastledRank); // move rook next to king
-            board.SetPiece(Definitions.EmptyField, _rookOriginalFile, _rookOriginalRank); // remove old rook
+            board.SetPiece(Piece.MakePiece(_rook), _rookCastledFile, _rookCastledRank); // move rook next to king
+            board.SetPiece(null, /*Definitions.EmptyField,*/ _rookOriginalFile, _rookOriginalRank); // remove old rook
 
             base.ExecuteMove(board);
         }
@@ -111,8 +111,8 @@ namespace MantaChessEngine
                     break;
             }
 
-            board.SetPiece(_rook, _rookOriginalFile, _rookOriginalRank); // move rook next to king
-            board.SetPiece(Definitions.EmptyField, _rookCastledFile, _rookCastledRank); // remove old rook
+            board.SetPiece(Piece.MakePiece(_rook), _rookOriginalFile, _rookOriginalRank); // move rook next to king
+            board.SetPiece(null, /*Definitions.EmptyField,*/ _rookCastledFile, _rookCastledRank); // remove old rook
 
             base.UndoMove(board);
         }

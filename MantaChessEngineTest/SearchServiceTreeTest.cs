@@ -14,14 +14,14 @@ namespace MantaChessEngineTest
             var gen = new FakeMoveGenerator();
             gen.ReturnsWhiteGetAllMoves = new List<MoveBase>()
             {
-                new NormalMove('P', 'e', 2, 'e', 4, '.'),
-                new NormalMove('N', 'g', 1, 'f', 3, '.'),
+                new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 4, null),
+                new NormalMove(Piece.MakePiece('N'), 'g', 1, 'f', 3, null),
             };
 
             gen.ReturnsBlackGetAllMoves = new List<MoveBase>()
             {
-                new NormalMove('p', 'e', 7, 'e', 5, '.'),
-                new NormalMove('n', 'g', 8, 'f', 6, '.'),
+                new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 5, null),
+                new NormalMove(Piece.MakePiece('n'), 'g', 8, 'f', 6, null),
             };
 
             var target = new SearchMinimaxTree(null, gen);
@@ -33,23 +33,23 @@ namespace MantaChessEngineTest
             // check search tree
             // first white move
             var moveWhite0 = target.MoveRoot.GetChild(0).Data.Move;
-            Assert.AreEqual(new NormalMove('P', 'e', 2, 'e', 4, '.'), moveWhite0);
+            Assert.AreEqual(new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 4, null), moveWhite0);
 
             var moveBlack00 = target.MoveRoot.GetChild(0).GetChild(0).Data.Move;
-            Assert.AreEqual(new NormalMove('p', 'e', 7, 'e', 5, '.'), moveBlack00);
+            Assert.AreEqual(new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 5, null), moveBlack00);
 
             var moveBlack01 = target.MoveRoot.GetChild(0).GetChild(1).Data.Move;
-            Assert.AreEqual(new NormalMove('n', 'g', 8, 'f', 6, '.'), moveBlack01);
+            Assert.AreEqual(new NormalMove(Piece.MakePiece('n'), 'g', 8, 'f', 6, null), moveBlack01);
 
             // second white move
             var moveWhite1 = target.MoveRoot.GetChild(1).Data.Move;
-            Assert.AreEqual(new NormalMove('N', 'g', 1, 'f', 3, '.'), moveWhite1);
+            Assert.AreEqual(new NormalMove(Piece.MakePiece('N'), 'g', 1, 'f', 3, null), moveWhite1);
 
             var moveBlack10 = target.MoveRoot.GetChild(1).GetChild(0).Data.Move;
-            Assert.AreEqual(new NormalMove('p', 'e', 7, 'e', 5, '.'), moveBlack10);
+            Assert.AreEqual(new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 5, null), moveBlack10);
 
             var moveBlack11 = target.MoveRoot.GetChild(1).GetChild(1).Data.Move;
-            Assert.AreEqual(new NormalMove('n', 'g', 8, 'f', 6, '.'), moveBlack11);
+            Assert.AreEqual(new NormalMove(Piece.MakePiece('n'), 'g', 8, 'f', 6, null), moveBlack11);
         }
 
         [TestMethod]
@@ -59,14 +59,14 @@ namespace MantaChessEngineTest
             var gen = new FakeMoveGenerator();
             gen.ReturnsWhiteGetAllMoves = new List<MoveBase>()
             {
-                new NormalMove('P', 'e', 2, 'e', 4, '.'),
-                new NormalMove('N', 'g', 1, 'f', 3, '.'),
+                new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 4, null),
+                new NormalMove(Piece.MakePiece('N'), 'g', 1, 'f', 3, null),
             };
 
             gen.ReturnsBlackGetAllMoves = new List<MoveBase>()
             {
-                new NormalMove('p', 'e', 7, 'e', 5, '.'),
-                new NormalMove('n', 'g', 8, 'f', 6, '.'),
+                new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 5, null),
+                new NormalMove(Piece.MakePiece('n'), 'g', 8, 'f', 6, null),
             };
 
             FakeEvaluator fakeEval = new FakeEvaluator(new List<float> {-1, 1, 2, 3});
@@ -91,14 +91,14 @@ namespace MantaChessEngineTest
             var gen = new FakeMoveGenerator();
             gen.ReturnsWhiteGetAllMoves = new List<MoveBase>()
             {
-                new NormalMove('P', 'e', 2, 'e', 4, '.'),
-                new NormalMove('N', 'g', 1, 'f', 3, '.'),
+                new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 4, null),
+                new NormalMove(Piece.MakePiece('N'), 'g', 1, 'f', 3, null),
             };
 
             gen.ReturnsBlackGetAllMoves = new List<MoveBase>()
             {
-                new NormalMove('p', 'e', 7, 'e', 5, '.'),
-                new NormalMove('n', 'g', 8, 'f', 6, '.'),
+                new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 5, null),
+                new NormalMove(Piece.MakePiece('n'), 'g', 8, 'f', 6, null),
             };
 
             FakeEvaluator fakeEval = new FakeEvaluator(new List<float> {-1, 1, 2, 3});
@@ -110,7 +110,7 @@ namespace MantaChessEngineTest
             target.Evaluate();
             var bestMove = target.SelectBestMove();
 
-            Assert.AreEqual(new NormalMove('N', 'g', 1, 'f', 3, '.'), bestMove);
+            Assert.AreEqual(new NormalMove(Piece.MakePiece('N'), 'g', 1, 'f', 3, null), bestMove);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace MantaChessEngineTest
             var target = new MoveTree();
             Assert.IsFalse(target.HasCurrentNextChild());
 
-            var moves = new List<MoveBase>() {new NormalMove('p', 'e', 2, 'e', 4, '.')};
+            var moves = new List<MoveBase>() {new NormalMove(Piece.MakePiece('p'), 'e', 2, 'e', 4, null)};
             target.AddChildren(moves);
 
             Assert.IsTrue(target.HasCurrentNextChild(), "should have next child.");
@@ -25,10 +25,10 @@ namespace MantaChessEngineTest
         public void AddChildrenTest_WhenAddingChildren_ThenCanGotoChildren_Depth1()
         {
             var target = new MoveTree();
-            var move1 = new NormalMove('p', 'e', 2, 'e', 4, '.');
-            var move2 = new NormalMove('p', 'e', 2, 'e', 3, '.');
-            var move3 = new NormalMove('p', 'e', 7, 'e', 5, '.');
-            var move4 = new NormalMove('p', 'e', 7, 'e', 6, '.');
+            var move1 = new NormalMove(Piece.MakePiece('p'), 'e', 2, 'e', 4, null);
+            var move2 = new NormalMove(Piece.MakePiece('p'), 'e', 2, 'e', 3, null);
+            var move3 = new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 5, null);
+            var move4 = new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 6, null);
 
             var movesWhite = new List<MoveBase> { move1, move2 };
             target.AddChildren(movesWhite);
@@ -51,10 +51,10 @@ namespace MantaChessEngineTest
         public void AddChildrenTest_WhenAddingChildren_ThenCanGotoChildren_Depth2()
         {
             var target = new MoveTree();
-            var move1 = new NormalMove('p', 'e', 2, 'e', 4, '.');
-            var move2 = new NormalMove('p', 'e', 2, 'e', 3, '.');
-            var move3 = new NormalMove('p', 'e', 7, 'e', 5, '.');
-            var move4 = new NormalMove('p', 'e', 7, 'e', 6, '.');
+            var move1 = new NormalMove(Piece.MakePiece('p'), 'e', 2, 'e', 4, null);
+            var move2 = new NormalMove(Piece.MakePiece('p'), 'e', 2, 'e', 3, null);
+            var move3 = new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 5, null);
+            var move4 = new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 6, null);
 
             var movesWhite = new List<MoveBase> {move1, move2};
             var movesBlack = new List<MoveBase> {move3, move4};

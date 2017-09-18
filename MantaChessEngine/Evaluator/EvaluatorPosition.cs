@@ -36,7 +36,7 @@ namespace MantaChessEngine
             {
                 for (int rank = 1; rank <= 8; rank++)
                 {
-                    char piece = board.GetPiece(file, rank);
+                    Piece piece = board.GetPiece(file, rank);
                     float pieceScore = GetPieceScore(piece, file, rank);
                     if (board.GetColor(file, rank) == Definitions.ChessColor.White)
                     {
@@ -72,36 +72,36 @@ namespace MantaChessEngine
             return scoreWhite - scoreBlack;
         }
 
-        private float GetPieceScore(char piece, int file, int rank)
+        private float GetPieceScore(Piece piece, int file, int rank)
         {
             int index = 8 * (rank - 1) + file - 1;
-            switch (piece.ToString().ToLower()[0])
-            {
-                case Definitions.PAWN:
-                    return ValuePawn * PawnPositionValue[index];
-                case Definitions.KNIGHT:
-                    return ValueKnight * KnightPositionValue[index];
-                case Definitions.BISHOP:
-                    if (piece == Definitions.BISHOP) // black bishop
-                    {
-                        numberBlackBishop++;
-                    }
-                    else
-                    {
-                        numberWhiteBishop++;
-                    }
-                    return ValueBishop;
-                case Definitions.ROOK:
-                    return ValueRook;
-                case Definitions.QUEEN:
-                    return ValueQueen;
-                case Definitions.KING:
-                    return ValueKing;
-                default:
-                    return 0;
-            }
-        }
 
+            if (piece is Pawn)
+                return ValuePawn * PawnPositionValue[index];
+            else if (piece is Knight)
+                return ValueKnight * KnightPositionValue[index];
+            else if (piece is Bishop)
+            {
+                if (piece.Color == Definitions.ChessColor.Black)
+                {
+                    numberBlackBishop++;
+                }
+                else
+                {
+                    numberWhiteBishop++;
+                }
+                return ValueBishop;
+            }
+            else if (piece is Rook)
+                return ValueRook;
+            else if (piece is Queen)
+                return ValueQueen;
+            else if (piece is King)
+                return ValueKing;
+            else
+                return 0;
+        }
+    
         private readonly float[] PawnPositionValue = new float[64] // pawn in center are more valuable (at least in opening)
         {
             1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 

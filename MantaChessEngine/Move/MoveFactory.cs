@@ -8,12 +8,12 @@ namespace MantaChessEngine
 {
     public class MoveFactory
     {
-        public NormalMove MakeNormalMove(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, char capturedPiece)
+        public NormalMove MakeNormalMove(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, Piece capturedPiece)
         {
             return new NormalMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
         }
 
-        public EnPassantCaptureMove MakeEnPassantCaptureMove(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, char capturedPiece)
+        public EnPassantCaptureMove MakeEnPassantCaptureMove(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, Piece capturedPiece)
         {
             return new EnPassantCaptureMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
         }
@@ -31,8 +31,8 @@ namespace MantaChessEngine
 
         public MoveBase MakeCorrectMove(Board board, string moveStringUser) // input is like "e2e4"
         {
-            char movingPiece;
-            char capturedPiece;
+            Piece movingPiece;
+            Piece capturedPiece;
             int sourceFile = 0;
             int sourceRank = 0;
             int targetFile = 0;
@@ -48,8 +48,8 @@ namespace MantaChessEngine
                 if (IsEnPassantCapture(board, sourceFile, sourceRank, targetFile, targetRank))
                 {
                     capturedPiece = board.GetColor(sourceFile, sourceRank) == Definitions.ChessColor.White
-                        ? Definitions.PAWN.ToString().ToLower()[0]
-                        : Definitions.PAWN.ToString().ToUpper()[0];
+                        ? Piece.MakePiece(Definitions.PAWN.ToString().ToLower()[0])
+                        : Piece.MakePiece(Definitions.PAWN.ToString().ToUpper()[0]);
                     enPassant = true;
                 }
                 else
@@ -114,30 +114,30 @@ namespace MantaChessEngine
             }
         }
 
-        private bool IsWhiteKingSideCastling(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
+        private bool IsWhiteKingSideCastling(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
         {
-            return movingPiece == Definitions.KING.ToString().ToUpper()[0] &&
+            return movingPiece is King && movingPiece.Color == Definitions.ChessColor.White &&
                     sourceFile == Helper.FileCharToFile('e') && sourceRank == 1 &&
                     targetFile == Helper.FileCharToFile('g') && targetRank == 1;
         }
 
-        private bool IsWhiteQueenSideCastling(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
+        private bool IsWhiteQueenSideCastling(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
         {
-            return movingPiece == Definitions.KING.ToString().ToUpper()[0] &&
+            return movingPiece is King && movingPiece.Color == Definitions.ChessColor.White &&
                    sourceFile == Helper.FileCharToFile('e') && sourceRank == 1 &&
                    targetFile == Helper.FileCharToFile('c') && targetRank == 1;
         }
 
-        private bool IsBlackKingSideCastling(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
+        private bool IsBlackKingSideCastling(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
         {
-            return movingPiece == Definitions.KING.ToString().ToLower()[0] &&
+            return movingPiece is King && movingPiece.Color == Definitions.ChessColor.Black &&
                 sourceFile == Helper.FileCharToFile('e') && sourceRank == 8 &&
                 targetFile == Helper.FileCharToFile('g') && targetRank == 8;
         }
 
-        private bool IsBlackQueenSideCastling(char movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
+        private bool IsBlackQueenSideCastling(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
         {
-            return movingPiece == Definitions.KING.ToString().ToLower()[0] &&
+            return movingPiece is King && movingPiece.Color == Definitions.ChessColor.Black &&
                    sourceFile == Helper.FileCharToFile('e') && sourceRank == 8 &&
                    targetFile == Helper.FileCharToFile('c') && targetRank == 8;
         }

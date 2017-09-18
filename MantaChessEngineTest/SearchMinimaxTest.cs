@@ -31,7 +31,7 @@ namespace MantaChessEngineTest
 
             float score = 0;
             IMove actualMove = target.SearchLevel(board, Definitions.ChessColor.White, 1, out score); // level 1
-            MoveBase goodMove = new NormalMove('B', 'f', 4, 'e', 5, 'p');
+            MoveBase goodMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
 
             Assert.AreEqual(goodMove, actualMove, "White bishop should capture pawn. We are on level 1");
             Assert.AreEqual(2, score);
@@ -56,7 +56,7 @@ namespace MantaChessEngineTest
 
             float score = 0;
             IMove actualMove = target.SearchLevel(board, Definitions.ChessColor.White, 2, out score); // level 2
-            MoveBase badMove = new NormalMove('B', 'f', 4, 'e', 5, 'p');
+            MoveBase badMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
 
             Assert.AreNotEqual(badMove, actualMove, "White bishop should not capture pawn.");
             Assert.AreEqual(1, score);
@@ -90,8 +90,8 @@ namespace MantaChessEngineTest
 
             float score = 0;
             IMove actualMove = target.SearchLevel(board, Definitions.ChessColor.White, 3, out score); // level 3
-            MoveBase expectedMove = new NormalMove('B', 'f', 4, 'e', 5, 'p');
-            MoveBase expectedMove2 = new NormalMove('N', 'f', 3, 'e', 5, 'p');
+            MoveBase expectedMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
+            MoveBase expectedMove2 = new NormalMove(Piece.MakePiece('N'), 'f', 3, 'e', 5, Piece.MakePiece('p'));
 
             bool passed = actualMove.Equals(expectedMove) ||
                           actualMove.Equals(expectedMove2);
@@ -119,8 +119,8 @@ namespace MantaChessEngineTest
 
             float score = 0;
             IMove actualMove = target.SearchLevel(board, Definitions.ChessColor.White, 4, out score); // level 4
-            MoveBase badMove = new NormalMove('B', 'f', 4, 'e', 5, 'p');
-            MoveBase badMove2 = new NormalMove('N', 'f', 3, 'e', 5, 'p');
+            MoveBase badMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
+            MoveBase badMove2 = new NormalMove(Piece.MakePiece('N'), 'f', 3, 'e', 5, Piece.MakePiece('p'));
 
             Assert.AreNotEqual(badMove, actualMove, "White bishop or knight should not capture black pawn.");
             Assert.AreNotEqual(badMove2, actualMove, "White bishop or knight should not capture black pawn.");
@@ -146,8 +146,8 @@ namespace MantaChessEngineTest
 
             float score = 0;
             IMove actualMove = target.SearchLevel(board, Definitions.ChessColor.White, 3, out score); // level 3
-            MoveBase wrongMove = new NormalMove('R', 'h', 8, 'e', 8, 'q');
-            MoveBase wrongMove2 = new NormalMove('K', 'e', 4, 'd', 5, 'b');
+            MoveBase wrongMove = new NormalMove(Piece.MakePiece('R'), 'h', 8, 'e', 8, Piece.MakePiece('q'));
+            MoveBase wrongMove2 = new NormalMove(Piece.MakePiece('K'), 'e', 4, 'd', 5, Piece.MakePiece('b'));
 
             Assert.AreNotEqual(wrongMove, actualMove, "White must escape check.");
             Assert.AreNotEqual(wrongMove2, actualMove, "White must escape check.");
@@ -200,7 +200,7 @@ namespace MantaChessEngineTest
 
             float score = 0;
             IMove actualMove = target.SearchLevel(board, Definitions.ChessColor.Black, 1, out score); // level 1
-            MoveBase goodMove = new NormalMove('b', 'f', 6, 'e', 5, 'P');
+            MoveBase goodMove = new NormalMove(Piece.MakePiece('b'), 'f', 6, 'e', 5, Piece.MakePiece('P'));
 
             Assert.AreEqual(goodMove, actualMove, "Black bishop should capture pawn. We are on level 1");
             Assert.AreEqual(-2, score);
@@ -225,7 +225,7 @@ namespace MantaChessEngineTest
 
             float score = 0;
             IMove actualMove = target.SearchLevel(board, Definitions.ChessColor.Black, 2, out score); // level 2
-            MoveBase badMove = new NormalMove('b', 'f', 6, 'e', 5, 'P');
+            MoveBase badMove = new NormalMove(Piece.MakePiece('b'), 'f', 6, 'e', 5, Piece.MakePiece('P'));
 
             Assert.AreNotEqual(badMove, actualMove, "Black bishop should not capture pawn.");
             Assert.AreEqual(-1, score);
@@ -259,8 +259,8 @@ namespace MantaChessEngineTest
 
             float score = 0;
             IMove actualMove = target.SearchLevel(board, Definitions.ChessColor.Black, 3, out score); // level 3
-            MoveBase expectedMove = new NormalMove('b', 'd', 6, 'e', 5, 'P');
-            MoveBase expectedMove2 = new NormalMove('n', 'd', 7, 'e', 5, 'P');
+            MoveBase expectedMove = new NormalMove(Piece.MakePiece('b'), 'd', 6, 'e', 5, Piece.MakePiece('P'));
+            MoveBase expectedMove2 = new NormalMove(Piece.MakePiece('n'), 'd', 7, 'e', 5, Piece.MakePiece('P'));
 
             bool passed = actualMove.Equals(expectedMove) ||
                           actualMove.Equals(expectedMove2);
@@ -288,8 +288,8 @@ namespace MantaChessEngineTest
 
             float score = 0;
             IMove actualMove = target.SearchLevel(board, Definitions.ChessColor.Black, 4, out score); // level 4
-            MoveBase badMove = new NormalMove('b', 'd', 6, 'e', 5, 'P');
-            MoveBase badMove2 = new NormalMove('n', 'd', 7, 'e', 5, 'P');
+            MoveBase badMove = new NormalMove(Piece.MakePiece('b'), 'd', 6, 'e', 5, Piece.MakePiece('P'));
+            MoveBase badMove2 = new NormalMove(Piece.MakePiece('n'), 'd', 7, 'e', 5, Piece.MakePiece('P'));
 
             Assert.AreNotEqual(badMove, actualMove, "Black bishop or knight should not capture white pawn.");
             Assert.AreNotEqual(badMove2, actualMove, "Black bishop or knight should not capture white pawn.");

@@ -44,17 +44,17 @@ namespace MantaChessEngineTest
             var moves = target.GetMoves(board, Helper.FileCharToFile('e'), 4); // get moves of Rook
 
             Assert.AreEqual(11, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new NormalMove('R', 'e', 4, 'e', 5, '.')), "e4e5. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('R', 'e', 4, 'e', 6, 'p')), "e4e6p missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('R', 'e', 4, 'f', 4, '.')), "e4f4. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('R', 'e', 4, 'g', 4, '.')), "e4g4. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('R', 'e', 4, 'e', 3, '.')), "e4e3. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('R', 'e', 4, 'e', 2, '.')), "e4e2. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('R', 'e', 4, 'e', 1, '.')), "e4e1. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('R', 'e', 4, 'd', 4, '.')), "e4d4. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('R', 'e', 4, 'c', 4, '.')), "e4c4. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('R', 'e', 4, 'b', 4, '.')), "e4b4. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('R', 'e', 4, 'a', 4, '.')), "e4a4. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('R'), 'e', 4, 'e', 5, null)), "e4e5. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('R'), 'e', 4, 'e', 6, Piece.MakePiece('p'))), "e4e6p missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('R'), 'e', 4, 'f', 4, null)), "e4f4. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('R'), 'e', 4, 'g', 4, null)), "e4g4. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('R'), 'e', 4, 'e', 3, null)), "e4e3. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('R'), 'e', 4, 'e', 2, null)), "e4e2. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('R'), 'e', 4, 'e', 1, null)), "e4e1. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('R'), 'e', 4, 'd', 4, null)), "e4d4. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('R'), 'e', 4, 'c', 4, null)), "e4c4. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('R'), 'e', 4, 'b', 4, null)), "e4b4. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('R'), 'e', 4, 'a', 4, null)), "e4a4. missing");
         }
 
         [TestMethod]
@@ -75,15 +75,15 @@ namespace MantaChessEngineTest
             var moves = target.GetMoves(board, Helper.FileCharToFile('b'), 2); // get moves of queen
 
             Assert.AreEqual(9, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new NormalMove('Q', 'b', 2, 'b', 3, '.')), "b2b3. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('Q', 'b', 2, 'b', 4, 'r')), "b2b4r missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('Q', 'b', 2, 'c', 3, '.')), "b2c3. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('Q', 'b', 2, 'c', 2, '.')), "b2c2. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('Q', 'b', 2, 'c', 1, '.')), "b2c1. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('Q', 'b', 2, 'b', 1, '.')), "b2b1. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('Q', 'b', 2, 'a', 1, '.')), "b2a1. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('Q', 'b', 2, 'a', 2, '.')), "b2a2. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('Q', 'b', 2, 'a', 3, '.')), "b2a3. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('Q'), 'b', 2, 'b', 3, null)), "b2b3. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('Q'), 'b', 2, 'b', 4, Piece.MakePiece('r'))), "b2b4r missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('Q'), 'b', 2, 'c', 3, null)), "b2c3. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('Q'), 'b', 2, 'c', 2, null)), "b2c2. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('Q'), 'b', 2, 'c', 1, null)), "b2c1. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('Q'), 'b', 2, 'b', 1, null)), "b2b1. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('Q'), 'b', 2, 'a', 1, null)), "b2a1. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('Q'), 'b', 2, 'a', 2, null)), "b2a2. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('Q'), 'b', 2, 'a', 3, null)), "b2a3. missing");
         }
 
         [TestMethod]
@@ -104,11 +104,11 @@ namespace MantaChessEngineTest
             var moves = target.GetMoves(board, Helper.FileCharToFile('c'), 2); // get moves of bishop
 
             Assert.AreEqual(5, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new NormalMove('B', 'c', 2, 'd', 3, '.')), "c2d3. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('B', 'c', 2, 'd', 1, '.')), "c2d1. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('B', 'c', 2, 'b', 1, '.')), "c2b1. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('B', 'c', 2, 'b', 3, '.')), "c2b3. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('B', 'c', 2, 'a', 4, 'r')), "c2a4r missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('B'), 'c', 2, 'd', 3, null)), "c2d3. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('B'), 'c', 2, 'd', 1, null)), "c2d1. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('B'), 'c', 2, 'b', 1, null)), "c2b1. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('B'), 'c', 2, 'b', 3, null)), "c2b3. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('B'), 'c', 2, 'a', 4, Piece.MakePiece('r'))), "c2a4r missing");
         }
 
         [TestMethod]
@@ -129,9 +129,9 @@ namespace MantaChessEngineTest
             var moves = target.GetMoves(board, Helper.FileCharToFile('b'), 1); // king
 
             Assert.AreEqual(3, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new NormalMove('K', 'b', 1, 'b', 2, 'r')), "b1b2r missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('K', 'b', 1, 'a', 1, '.')), "b1a1. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('K', 'b', 1, 'a', 2, '.')), "b1a2. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('K'), 'b', 1, 'b', 2, Piece.MakePiece('r'))), "b1b2r missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('K'), 'b', 1, 'a', 1, null)), "b1a1. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('K'), 'b', 1, 'a', 2, null)), "b1a2. missing");
         }
 
         //
@@ -156,10 +156,10 @@ namespace MantaChessEngineTest
             var moves = target.GetMoves(board, Helper.FileCharToFile('c'), 2); // pawn
 
             Assert.AreEqual(4, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new NormalMove('P', 'c', 2, 'c', 3, '.')), "c2c3. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('P', 'c', 2, 'c', 4, '.')), "c2c4. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('P', 'c', 2, 'b', 3, 'r')), "c2b3r missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('P', 'c', 2, 'd', 3, 'b')), "c2d3b missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'c', 2, 'c', 3, null)), "c2c3. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'c', 2, 'c', 4, null)), "c2c4. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'c', 2, 'b', 3, Piece.MakePiece('r'))), "c2b3r missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'c', 2, 'd', 3, Piece.MakePiece('b'))), "c2d3b missing");
         }
 
         [TestMethod]
@@ -180,9 +180,9 @@ namespace MantaChessEngineTest
             var moves = target.GetMoves(board, Helper.FileCharToFile('c'), 2); // pawn
 
             Assert.AreEqual(3, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new NormalMove('P', 'c', 2, 'c', 3, '.')), "c2c3. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('P', 'c', 2, 'b', 3, 'r')), "c2b3r missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('P', 'c', 2, 'd', 3, 'b')), "c2d3b missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'c', 2, 'c', 3, null)), "c2c3. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'c', 2, 'b', 3, Piece.MakePiece('r'))), "c2b3r missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'c', 2, 'd', 3, Piece.MakePiece('b'))), "c2d3b missing");
         }
 
         [TestMethod]
@@ -239,15 +239,15 @@ namespace MantaChessEngineTest
                               "........" + 
                               "...K....";
             board.SetPosition(position);
-            board.Move(new NormalMove('p','a',7,'a',5,Definitions.EmptyField));
+            board.Move(new NormalMove(Piece.MakePiece('p'),'a',7,'a',5,null));
             Assert.AreEqual(Helper.FileCharToFile('a'), board.History.LastEnPassantFile);
             Assert.AreEqual(6, board.History.LastEnPassantRank);
 
             var moves = target.GetMoves(board, Helper.FileCharToFile('b'), 5); // white pawn
 
             Assert.AreEqual(2, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new EnPassantCaptureMove('P', 'b', 5, 'a', 6, 'p')), "b5a6pe en passant missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('P', 'b', 5, 'b', 6, '.')), "b5b6. missing");
+            Assert.AreEqual(true, moves.Contains(new EnPassantCaptureMove(Piece.MakePiece('P'), 'b', 5, 'a', 6, Piece.MakePiece('p'))), "b5a6pe en passant missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'b', 5, 'b', 6, null)), "b5b6. missing");
         }
 
         [TestMethod]
@@ -268,10 +268,10 @@ namespace MantaChessEngineTest
             var moves = target.GetMoves(board, Helper.FileCharToFile('c'), 7); // black pawn
 
             Assert.AreEqual(4, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new NormalMove('p', 'c', 7, 'c', 6, '.')), "c7c6. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('p', 'c', 7, 'c', 5, '.')), "c7c5. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('p', 'c', 7, 'b', 6, 'R')), "c7b6R missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('p', 'c', 7, 'd', 6, 'B')), "c7d6B missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('p'), 'c', 7, 'c', 6, null)), "c7c6. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('p'), 'c', 7, 'c', 5, null)), "c7c5. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('p'), 'c', 7, 'b', 6, Piece.MakePiece('R'))), "c7b6R missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('p'), 'c', 7, 'd', 6, Piece.MakePiece('B'))), "c7d6B missing");
         }
 
         [TestMethod]
@@ -292,7 +292,7 @@ namespace MantaChessEngineTest
             var moves = target.GetMoves(board, Helper.FileCharToFile('b'), 5); // black pawn
 
             Assert.AreEqual(1, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new NormalMove('p', 'b', 5, 'b', 4 ,'.')), "b3b4 missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('p'), 'b', 5, 'b', 4 ,null)), "b3b4 missing");
         }
 
         // ----------------------------------------------------------------------------------------------------
@@ -317,12 +317,12 @@ namespace MantaChessEngineTest
             var moves = target.GetAllMoves(board, Definitions.ChessColor.White);
 
             Assert.AreEqual(6, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new NormalMove('P', 'e', 2, 'e', 3, '.')), "e2e3. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('P', 'e', 2, 'e', 4, '.')), "e2e4. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('K', 'e', 1, 'd', 1, '.')), "e1d1. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('K', 'e', 1, 'd', 2, '.')), "e1d2. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('K', 'e', 1, 'f', 2, '.')), "e1f2. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('K', 'e', 1, 'f', 1, '.')), "e1f1. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 3, null)), "e2e3. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 4, null)), "e2e4. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'd', 1, null)), "e1d1. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'd', 2, null)), "e1d2. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'f', 2, null)), "e1f2. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'f', 1, null)), "e1f1. missing");
         }
 
         [TestMethod]
@@ -344,7 +344,7 @@ namespace MantaChessEngineTest
             var moves = target.GetAllMoves(board, Definitions.ChessColor.White);
 
             Assert.AreEqual(1, moves.Count, "Only one move is possible. The other moves for white are in check.");
-            Assert.AreEqual(true, moves.Contains(new NormalMove('K', 'h', 1, 'g', 1, '.')), "h1g1. missing");
+            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('K'), 'h', 1, 'g', 1, null)), "h1g1. missing");
         }
 
         // ----------------------------------------------------------------------------------------------------
@@ -366,7 +366,7 @@ namespace MantaChessEngineTest
                               "........";
             board.SetPosition(position);
             
-            bool valid = target.IsMoveValid(board, new NormalMove('P', 'c', 2, 'c', 3, '.')); // pawn
+            bool valid = target.IsMoveValid(board, new NormalMove(Piece.MakePiece('P'), 'c', 2, 'c', 3, null)); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
         }
 
@@ -385,7 +385,7 @@ namespace MantaChessEngineTest
                               "........";
             board.SetPosition(position);
             
-            bool valid = target.IsMoveValid(board, new NormalMove('P', 'c', 2, 'c', 4, '.')); // pawn
+            bool valid = target.IsMoveValid(board, new NormalMove(Piece.MakePiece('P'), 'c', 2, 'c', 4, null)); // pawn
             Assert.AreEqual(false, valid, "Move should be invalid.");
         }
 
@@ -405,10 +405,10 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
             board.SideToMove = Definitions.ChessColor.Black;
             
-            bool valid = target.IsMoveValid(board, new NormalMove('p', 'c', 7, 'c', 5, '.')); // pawn
+            bool valid = target.IsMoveValid(board, new NormalMove(Piece.MakePiece('p'), 'c', 7, 'c', 5, null)); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
 
-            valid = target.IsMoveValid(board, new NormalMove('p', 'c', 7, 'c', 6, '.')); // pawn
+            valid = target.IsMoveValid(board, new NormalMove(Piece.MakePiece('p'), 'c', 7, 'c', 6, null)); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
         }
 
@@ -419,7 +419,7 @@ namespace MantaChessEngineTest
             Board board = new Board();
             board.SetInitialPosition();
 
-            bool valid = target.IsMoveValid(board, new NormalMove('p', 'e', 7, 'e', 5, '.')); // BLACK pawn
+            bool valid = target.IsMoveValid(board, new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 5, null)); // BLACK pawn
             Assert.AreEqual(false, valid, "This is white's move. Black must not move.");
         }
 
@@ -520,7 +520,7 @@ namespace MantaChessEngineTest
                               "........" +
                               "..K.....";
             board.SetPosition(position);
-            board.Move(new NormalMove('p','c',7,'c',5,Definitions.EmptyField));
+            board.Move(new NormalMove(Piece.MakePiece('p'),'c',7,'c',5,null));
 
             MoveBase actualMove = factory.MakeCorrectMove(board, "d5c6");
             Assert.AreEqual("d5c6pe", actualMove.ToString());
@@ -568,8 +568,8 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             List<MoveBase> kingMoves = generator.GetMoves(board, Helper.FileCharToFile('e'), 1);
-            Assert.AreEqual(false, kingMoves.Contains(new NormalMove('K', 'e', 1, 'g', 1, '.')), "e1g1. 0-0 castling not possible");
-            Assert.AreEqual(false, kingMoves.Contains(new NormalMove('K', 'e', 1, 'c', 1, '.')), "e1c1. 0-0-0 castling not possible");
+            Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'g', 1, null)), "e1g1. 0-0 castling not possible");
+            Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'c', 1, null)), "e1c1. 0-0-0 castling not possible");
         }
 
         [TestMethod]
@@ -588,8 +588,8 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             List<MoveBase> kingMoves = generator.GetMoves(board, Helper.FileCharToFile('e'), 1);
-            Assert.AreEqual(false, kingMoves.Contains(new NormalMove('K', 'e', 1, 'g', 1, '.')), "e1g1. 0-0 castling not possible");
-            Assert.AreEqual(false, kingMoves.Contains(new NormalMove('K', 'e', 1, 'c', 1, '.')), "e1c1. 0-0-0 castling not possible");
+            Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'g', 1, null)), "e1g1. 0-0 castling not possible");
+            Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'c', 1, null)), "e1c1. 0-0-0 castling not possible");
         }
 
         [TestMethod]
@@ -608,8 +608,8 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
             
             List<MoveBase> kingMoves = generator.GetMoves(board, Helper.FileCharToFile('e'), 1);
-            Assert.AreEqual(false, kingMoves.Contains(new NormalMove('K', 'e', 1, 'g', 1, '.')), "e1g1. 0-0 castling not possible. f1 is attacked.");
-            Assert.AreEqual(false, kingMoves.Contains(new NormalMove('K', 'e', 1, 'c', 1, '.')), "e1c1. 0-0-0 castling not possible. d1 is attacked.");
+            Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'g', 1, null)), "e1g1. 0-0 castling not possible. f1 is attacked.");
+            Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'c', 1, null)), "e1c1. 0-0-0 castling not possible. d1 is attacked.");
         }
 
         // black
@@ -650,8 +650,8 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             List<MoveBase> kingMoves = generator.GetMoves(board, Helper.FileCharToFile('e'), 8);
-            Assert.AreEqual(false, kingMoves.Contains(new NormalMove('k', 'e', 8, 'g', 8, '.')), "e8g8. 0-0 castling not possible");
-            Assert.AreEqual(false, kingMoves.Contains(new NormalMove('k', 'e', 8, 'c', 8, '.')), "e8c8. 0-0-0 castling not possible");
+            Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('k'), 'e', 8, 'g', 8, null)), "e8g8. 0-0 castling not possible");
+            Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('k'), 'e', 8, 'c', 8, null)), "e8c8. 0-0-0 castling not possible");
         }
 
         [TestMethod]
@@ -670,8 +670,8 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             List<MoveBase> kingMoves = generator.GetMoves(board, Helper.FileCharToFile('e'), 8);
-            Assert.AreEqual(false, kingMoves.Contains(new NormalMove('k', 'e', 8, 'g', 8, '.')), "e8g8. 0-0 castling not possible");
-            Assert.AreEqual(false, kingMoves.Contains(new NormalMove('k', 'e', 8, 'c', 8, '.')), "e8c8. 0-0-0 castling not possible");
+            Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('k'), 'e', 8, 'g', 8, null)), "e8g8. 0-0 castling not possible");
+            Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('k'), 'e', 8, 'c', 8, null)), "e8c8. 0-0-0 castling not possible");
         }
 
         [TestMethod]
@@ -690,8 +690,8 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             List<MoveBase> kingMoves = generator.GetMoves(board, Helper.FileCharToFile('e'), 8);
-            Assert.AreEqual(false, kingMoves.Contains(new NormalMove('k', 'e', 8, 'g', 8, '.')), "e8g8. 0-0 castling not possible. F8 attacked");
-            Assert.AreEqual(false, kingMoves.Contains(new NormalMove('k', 'e', 8, 'c', 8, '.')), "e8c8. 0-0-0 castling not possible. D8 attacked");
+            Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('k'), 'e', 8, 'g', 8, null)), "e8g8. 0-0 castling not possible. F8 attacked");
+            Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('k'), 'e', 8, 'c', 8, null)), "e8c8. 0-0-0 castling not possible. D8 attacked");
         }
 
         // ----------------------------------------------------------------

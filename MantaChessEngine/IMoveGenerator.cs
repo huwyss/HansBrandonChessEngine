@@ -13,7 +13,7 @@ namespace MantaChessEngine
         /// <param name="rank"></param>
         /// <returns></returns>
         /// todo: pawn promotion
-        List<MoveBase> GetMoves(Board board, int file, int rank, bool includeCastling = true);
+        //List<MoveBase> GetMoves(Board board, int file, int rank, bool includeCastling = true);
 
         bool IsMoveValid(Board board, MoveBase move);
         bool IsAttacked(Board board, Definitions.ChessColor color, int file, int rank);

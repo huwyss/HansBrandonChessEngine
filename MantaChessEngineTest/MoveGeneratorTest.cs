@@ -142,7 +142,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMoves_WhenWhitePawn_ThenAllMoves() // en passant not included
         {
-            MoveGenerator target = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = "........" +
                               "........" +
@@ -153,8 +152,9 @@ namespace MantaChessEngineTest
                               "..P....." +
                               "........";
             board.SetPosition(position);
-            
-            var moves = target.GetMoves(board, Helper.FileCharToFile('c'), 2); // pawn
+
+            var pawn = new Pawn(Definitions.ChessColor.White);
+            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('c'), 2, true); // pawn
 
             Assert.AreEqual(4, moves.Count);
             Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'c', 2, 'c', 3, null)), "c2c3. missing");
@@ -166,7 +166,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMoves_WhenWhitePawnBlocked_ThenAllMoves() // en passant not included
         {
-            MoveGenerator target = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = "........" +
                               "........" +
@@ -178,7 +177,8 @@ namespace MantaChessEngineTest
                               "........";
             board.SetPosition(position);
 
-            var moves = target.GetMoves(board, Helper.FileCharToFile('c'), 2); // pawn
+            var pawn = new Pawn(Definitions.ChessColor.White);
+            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('c'), 2, true); // pawn
 
             Assert.AreEqual(3, moves.Count);
             Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'c', 2, 'c', 3, null)), "c2c3. missing");
@@ -189,7 +189,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMoves_WhenWhitePawnBlockedInMiddleOfBoard_ThenAllMoves()
         {
-            MoveGenerator target = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = "........" +
                               "........" + 
@@ -201,7 +200,8 @@ namespace MantaChessEngineTest
                               "........";
             board.SetPosition(position);
 
-            var moves = target.GetMoves(board, Helper.FileCharToFile('c'), 5); // white pawn
+            var pawn = new Pawn(Definitions.ChessColor.White);
+            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('c'), 5, true); // white pawn
 
             Assert.AreEqual(0, moves.Count);
         }
@@ -209,7 +209,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMoves_WhenWhitePawnAtA5_ThenAllMoves()
         {
-            MoveGenerator target = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = "........" +
                               "........" + 
@@ -221,7 +220,8 @@ namespace MantaChessEngineTest
                               "........";
             board.SetPosition(position);
 
-            var moves = target.GetMoves(board, Helper.FileCharToFile('c'), 2); // white pawn
+            var pawn = new Pawn(Definitions.ChessColor.White);
+            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('c'), 2, true); // white pawn
 
             Assert.AreEqual(0, moves.Count);
         }
@@ -229,7 +229,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMoves_WhenWhiteCanCaptureEnPassant_ThenListEnPassant()
         {
-            MoveGenerator target = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = ".......k" +
                               "p......." +
@@ -240,11 +239,12 @@ namespace MantaChessEngineTest
                               "........" + 
                               "...K....";
             board.SetPosition(position);
-            board.Move(new NormalMove(Piece.MakePiece('p'),'a',7,'a',5,null));
+            board.Move(new NormalMove(new Pawn(Definitions.ChessColor.Black),'a',7,'a',5,null));
             Assert.AreEqual(Helper.FileCharToFile('a'), board.History.LastEnPassantFile);
             Assert.AreEqual(6, board.History.LastEnPassantRank);
 
-            var moves = target.GetMoves(board, Helper.FileCharToFile('b'), 5); // white pawn
+            var pawn = new Pawn(Definitions.ChessColor.White);
+            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('b'), 5, true); // white pawn
 
             Assert.AreEqual(2, moves.Count);
             Assert.AreEqual(true, moves.Contains(new EnPassantCaptureMove(Piece.MakePiece('P'), 'b', 5, 'a', 6, Piece.MakePiece('p'))), "b5a6pe en passant missing");
@@ -254,7 +254,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMoves_WhenBlackPawn_ThenAllMoves()
         {
-            MoveGenerator target = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = "........" +
                               "..p....." +
@@ -265,8 +264,9 @@ namespace MantaChessEngineTest
                               "........" +
                               "........";
             board.SetPosition(position);
-            
-            var moves = target.GetMoves(board, Helper.FileCharToFile('c'), 7); // black pawn
+
+            var pawn = new Pawn(Definitions.ChessColor.Black);
+            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('c'), 7, true); // black pawn
 
             Assert.AreEqual(4, moves.Count);
             Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('p'), 'c', 7, 'c', 6, null)), "c7c6. missing");
@@ -278,7 +278,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMoves_WhenBlackPawnAta4_ThenAllMoves()
         {
-            MoveGenerator target = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = "........" +
                               "........" +
@@ -290,7 +289,8 @@ namespace MantaChessEngineTest
                               "........";
             board.SetPosition(position);
 
-            var moves = target.GetMoves(board, Helper.FileCharToFile('b'), 5); // black pawn
+            var pawn = new Pawn(Definitions.ChessColor.Black);
+            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('b'), 5, true); // black pawn
 
             Assert.AreEqual(1, moves.Count);
             Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('p'), 'b', 5, 'b', 4 ,null)), "b3b4 missing");
@@ -570,7 +570,8 @@ namespace MantaChessEngineTest
                               "...QK...";
             board.SetPosition(position);
 
-            List<MoveBase> kingMoves = generator.GetMoves(board, Helper.FileCharToFile('e'), 1);
+            var king = new King(Definitions.ChessColor.White);
+            List<MoveBase> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 1, true);
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'g', 1, null)), "e1g1. 0-0 castling not possible");
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'c', 1, null)), "e1c1. 0-0-0 castling not possible");
         }
@@ -590,7 +591,8 @@ namespace MantaChessEngineTest
                               "R..QK.NR";
             board.SetPosition(position);
 
-            List<MoveBase> kingMoves = generator.GetMoves(board, Helper.FileCharToFile('e'), 1);
+            var king = new King(Definitions.ChessColor.White);
+            List<MoveBase> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 1, true);
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'g', 1, null)), "e1g1. 0-0 castling not possible");
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'c', 1, null)), "e1c1. 0-0-0 castling not possible");
         }
@@ -609,8 +611,9 @@ namespace MantaChessEngineTest
                               "P......." +
                               "R...K..R";
             board.SetPosition(position);
-            
-            List<MoveBase> kingMoves = generator.GetMoves(board, Helper.FileCharToFile('e'), 1);
+
+            var king = new King(Definitions.ChessColor.White);
+            List<MoveBase> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 1, true);
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'g', 1, null)), "e1g1. 0-0 castling not possible. f1 is attacked.");
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'c', 1, null)), "e1c1. 0-0-0 castling not possible. d1 is attacked.");
         }
@@ -653,7 +656,9 @@ namespace MantaChessEngineTest
                               "...QK...";
             board.SetPosition(position);
 
-            List<MoveBase> kingMoves = generator.GetMoves(board, Helper.FileCharToFile('e'), 8);
+            var king = new King(Definitions.ChessColor.Black);
+            List<MoveBase> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 8, true);
+
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('k'), 'e', 8, 'g', 8, null)), "e8g8. 0-0 castling not possible");
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('k'), 'e', 8, 'c', 8, null)), "e8c8. 0-0-0 castling not possible");
         }
@@ -673,7 +678,9 @@ namespace MantaChessEngineTest
                               "R..QK.NR";
             board.SetPosition(position);
 
-            List<MoveBase> kingMoves = generator.GetMoves(board, Helper.FileCharToFile('e'), 8);
+            var king = new King(Definitions.ChessColor.Black);
+            List<MoveBase> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 8, true);
+
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('k'), 'e', 8, 'g', 8, null)), "e8g8. 0-0 castling not possible");
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('k'), 'e', 8, 'c', 8, null)), "e8c8. 0-0-0 castling not possible");
         }
@@ -693,7 +700,9 @@ namespace MantaChessEngineTest
                               "...RKR..";
             board.SetPosition(position);
 
-            List<MoveBase> kingMoves = generator.GetMoves(board, Helper.FileCharToFile('e'), 8);
+            var king = new King(Definitions.ChessColor.Black);
+            List<MoveBase> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 8, true);
+
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('k'), 'e', 8, 'g', 8, null)), "e8g8. 0-0 castling not possible. F8 attacked");
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('k'), 'e', 8, 'c', 8, null)), "e8c8. 0-0-0 castling not possible. D8 attacked");
         }

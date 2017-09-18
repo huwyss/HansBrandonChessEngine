@@ -20,6 +20,11 @@ namespace MantaChessEngine
             }
         }
 
+        public override IEnumerable<string> GetMoveSequences()
+        {
+            return new List<string>() { "ur", "rd", "dl", "lu" }; // up right, right down, down left, left up
+        }
+
         public override bool Equals(object obj)
         {
             if (obj is Bishop)

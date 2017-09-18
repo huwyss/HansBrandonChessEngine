@@ -59,13 +59,13 @@ namespace MantaChessEngine
             int targetFile;
             bool valid;
             Definitions.ChessColor pieceColor = board.GetColor(file, rank);
-            List<string> directionSequences;
+            IEnumerable<string> directionSequences;
             char pieceLower = piece != null ? piece.Symbol.ToString().ToLower()[0] : Definitions.EmptyField;
             switch (pieceLower)
             {
                 case Definitions.KNIGHT:
                 case Definitions.KING:
-                    directionSequences = GetMoveDirectionSequence(pieceLower);
+                    directionSequences = piece.GetMoveSequences(); 
                     foreach (string sequence in directionSequences)
                     {
                         GetEndPosition(file, rank, sequence, out targetFile, out targetRank, out valid);
@@ -143,7 +143,7 @@ namespace MantaChessEngine
                 case Definitions.ROOK: 
                 case Definitions.QUEEN:
                 case Definitions.BISHOP:
-                    directionSequences = GetMoveDirectionSequence(pieceLower);
+                    directionSequences = piece.GetMoveSequences();
                     foreach (string sequence in directionSequences)
                     {
                         int currentFile = file;
@@ -176,7 +176,7 @@ namespace MantaChessEngine
                     break;
 
                 case Definitions.PAWN:
-                    directionSequences = GetMoveDirectionSequence(pieceLower);
+                    directionSequences = piece.GetMoveSequences();
                     int twoFieldMoveInitRank = 2;
                     foreach (string sequence in directionSequences)
                     {
@@ -243,35 +243,35 @@ namespace MantaChessEngine
             return (move.MovingPiece.Color == board.SideToMove);
         }
 
-        private List<string> GetMoveDirectionSequence(char piece)
-        {
-            List<string> sequence;
-            switch (piece)
-            {
-                case Definitions.KNIGHT:
-                    sequence = new List<string>() { "uul", "uur", "rru", "rrd", "ddr", "ddl", "lld", "llu" }; // up up left, up up right, ...
-                    break;
-                case Definitions.ROOK:
-                    sequence = new List<string>() { "u", "r", "d", "l" }; // up, right, down, left
-                    break;
-                case Definitions.QUEEN:
-                case Definitions.KING:
-                    sequence = new List<string>() { "u", "ur", "r", "rd", "d", "dl", "l", "lu" }; // up, up right, right, right down, ...
-                    break;
-                case Definitions.BISHOP:
-                    sequence = new List<string>() { "ur", "rd", "dl", "lu" }; // up right, right down, down left, left up
-                    break;
-                case Definitions.PAWN:
-                    sequence = new List<string>() { "u", "uu", "ul", "ur" }; // up, up up, up left, up right
-                    break;
+        //private List<string> GetMoveDirectionSequence(char piece)
+        //{
+        //    List<string> sequence;
+        //    switch (piece)
+        //    {
+        //        case Definitions.KNIGHT:
+        //            sequence = new List<string>() { "uul", "uur", "rru", "rrd", "ddr", "ddl", "lld", "llu" }; // up up left, up up right, ...
+        //            break;
+        //        case Definitions.ROOK:
+        //            sequence = new List<string>() { "u", "r", "d", "l" }; // up, right, down, left
+        //            break;
+        //        case Definitions.QUEEN:
+        //        case Definitions.KING:
+        //            sequence = new List<string>() { "u", "ur", "r", "rd", "d", "dl", "l", "lu" }; // up, up right, right, right down, ...
+        //            break;
+        //        case Definitions.BISHOP:
+        //            sequence = new List<string>() { "ur", "rd", "dl", "lu" }; // up right, right down, down left, left up
+        //            break;
+        //        case Definitions.PAWN:
+        //            sequence = new List<string>() { "u", "uu", "ul", "ur" }; // up, up up, up left, up right
+        //            break;
 
-                default:
-                    sequence = new List<string>();
-                    break;
-            }
+        //        default:
+        //            sequence = new List<string>();
+        //            break;
+        //    }
 
-            return sequence;
-        }
+        //    return sequence;
+        //}
 
         // unit tests need access.
         // valid means move is within board. 

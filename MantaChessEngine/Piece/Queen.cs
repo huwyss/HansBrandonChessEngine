@@ -20,6 +20,11 @@ namespace MantaChessEngine
             }
         }
 
+        public override IEnumerable<string> GetMoveSequences()
+        {
+            return new List<string>() { "u", "ur", "r", "rd", "d", "dl", "l", "lu" }; // up, up right, right, right down, ...
+        }
+
         public override bool Equals(object obj)
         {
             if (obj is Queen)

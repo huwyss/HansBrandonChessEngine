@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MantaChessEngine
 {
-    public class Piece
+    public abstract class Piece
     {
         public Definitions.ChessColor Color { get; set; }
         public Piece(Definitions.ChessColor color)
@@ -14,8 +14,10 @@ namespace MantaChessEngine
             Color = color;
         }
 
-        public virtual char Symbol { get; }
+        public abstract char Symbol { get; }
 
+        public abstract IEnumerable<string> GetMoveSequences();
+            
         public static Piece MakePiece(char pieceChar)
         {
             switch (pieceChar)

@@ -20,6 +20,11 @@ namespace MantaChessEngine
             }
         }
 
+        public override IEnumerable<string> GetMoveSequences()
+        {
+            return new List<string>() { "u", "uu", "ul", "ur" }; // up, up up, up left, up right
+        }
+
         public override bool Equals(object obj)
         {
             if (obj is Pawn)

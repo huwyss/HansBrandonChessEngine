@@ -18,7 +18,7 @@ namespace MantaChessEngine
             return new EnPassantCaptureMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
         }
 
-        public CastlingMove MakeCastlingMove(CastlingType castlingType)
+        public static CastlingMove MakeCastlingMove(CastlingType castlingType)
         {
             return new CastlingMove(castlingType);
         }

@@ -63,11 +63,11 @@ namespace MantaChessEngine
                     moves.Add(MoveFactory.MakeCastlingMove(CastlingType.WhiteQueenSide));
                 }
             }
-
-            Piece maybeBlackKingRook = board.GetPiece(Helper.FileCharToFile('h'), 8);
+            
             if (Color == Definitions.ChessColor.Black) // black king
             {
                 // check for king side castling (0-0)
+                Piece maybeBlackKingRook = board.GetPiece(Helper.FileCharToFile('h'), 8);
                 if (board.CastlingRightBlackKingSide && // castling right
                     file == Helper.FileCharToFile('e') && rank == 8 && // king initial position
                     maybeBlackKingRook is Rook && maybeBlackKingRook.Color == Definitions.ChessColor.Black && // rook init position

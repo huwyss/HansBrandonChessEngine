@@ -66,15 +66,17 @@ namespace MantaChessEngine
                 else if (currentSequence == "ul" || currentSequence == "ur" ||
                          currentSequence == "dl" || currentSequence == "dr") // capture
                 {
+                    // normal capture
                     if (valid && Color == Helper.GetOpositeColor(board.GetColor(targetFile, targetRank)))
                     {
                         moves.Add(MoveFactory.MakeNormalMove(this, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank)));
                     }
+                    // en passant capture
                     else if (valid && targetFile == board.History.LastEnPassantFile && targetRank == board.History.LastEnPassantRank)
                     {
-                        Piece capturedPawn = Color == Definitions.ChessColor.White
-                            ? Piece.MakePiece(Definitions.PAWN.ToString().ToLower()[0])
-                            : Piece.MakePiece(Definitions.PAWN.ToString().ToUpper()[0]);
+                        Piece capturedPawn = Color == Definitions.ChessColor.White // moving pawn is white
+                            ? board.GetPiece(targetFile, targetRank - 1)  
+                            : board.GetPiece(targetFile, targetRank + 1); 
                         moves.Add(MoveFactory.MakeEnPassantCaptureMove(this, file, rank, targetFile, targetRank, capturedPawn));
                     }
 

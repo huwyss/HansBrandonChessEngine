@@ -25,8 +25,6 @@ namespace MantaChessEngine
             return new List<string>() { "uul", "uur", "rru", "rrd", "ddr", "ddl", "lld", "llu" }; // up up left, up up right, ...
         }
 
-        
-
         public override bool Equals(object obj)
         {
             if (obj is Knight)

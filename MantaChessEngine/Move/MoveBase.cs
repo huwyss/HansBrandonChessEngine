@@ -81,6 +81,10 @@ namespace MantaChessEngine
             {
                 equal &= CapturedPiece.Equals(other.CapturedPiece);
             }
+            else if (CapturedPiece == null && other.CapturedPiece != null)
+            {
+                equal = false;
+            }
 
             // note: only check MovingPiece if they are set in both objects
             // new CurrentMove("a2a3") is equal to new CurrentMove('p', a, 2, a, 3, nocapture, enpassant=false)

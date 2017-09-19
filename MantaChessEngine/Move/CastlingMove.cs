@@ -18,41 +18,40 @@ namespace MantaChessEngine
     {
         private CastlingType _castlingType;
 
-        char _rook = (char)0;
         int _rookOriginalFile = 0;
         int _rookOriginalRank = 0;
         int _rookCastledFile = 0;
         int _rookCastledRank = 0;
 
-        public CastlingMove(CastlingType castlingType)
+        public CastlingMove(CastlingType castlingType, Piece king)
             : base(null, 0, 0, 0, 0, null)
         {
             _castlingType = castlingType;
             switch (castlingType)
             {
                 case CastlingType.WhiteKingSide:
-                    MovingPiece = Piece.MakePiece(Definitions.KING.ToString().ToUpper()[0]);
+                    MovingPiece = king;
                     SourceFile = Helper.FileCharToFile('e');
                     SourceRank = 1;
                     TargetFile = Helper.FileCharToFile('g');
                     TargetRank = 1;
                     break;
                 case CastlingType.WhiteQueenSide:
-                    MovingPiece = Piece.MakePiece(Definitions.KING.ToString().ToUpper()[0]);
+                    MovingPiece = king;
                     SourceFile = Helper.FileCharToFile('e');
                     SourceRank = 1;
                     TargetFile = Helper.FileCharToFile('c');
                     TargetRank = 1;
                     break;
                 case CastlingType.BlackKingSide:
-                    MovingPiece = Piece.MakePiece(Definitions.KING.ToString().ToLower()[0]);
+                    MovingPiece = king;
                     SourceFile = Helper.FileCharToFile('e');
                     SourceRank = 8;
                     TargetFile = Helper.FileCharToFile('g');
                     TargetRank = 8;
                     break;
                 case CastlingType.BlackQueenSide:
-                    MovingPiece = Piece.MakePiece(Definitions.KING.ToString().ToLower()[0]);
+                    MovingPiece = king;
                     SourceFile = Helper.FileCharToFile('e');
                     SourceRank = 8;
                     TargetFile = Helper.FileCharToFile('c');
@@ -83,8 +82,9 @@ namespace MantaChessEngine
                     break;
             }
 
-            board.SetPiece(Piece.MakePiece(_rook), _rookCastledFile, _rookCastledRank); // move rook next to king
-            board.SetPiece(null, /*Definitions.EmptyField,*/ _rookOriginalFile, _rookOriginalRank); // remove old rook
+            var rookPiece = board.GetPiece(_rookOriginalFile, _rookOriginalRank);
+            board.SetPiece(rookPiece, _rookCastledFile, _rookCastledRank); // move rook next to king
+            board.SetPiece(null, _rookOriginalFile, _rookOriginalRank); // remove old rook
 
             base.ExecuteMove(board);
         }
@@ -111,15 +111,15 @@ namespace MantaChessEngine
                     break;
             }
 
-            board.SetPiece(Piece.MakePiece(_rook), _rookOriginalFile, _rookOriginalRank); // move rook next to king
-            board.SetPiece(null, /*Definitions.EmptyField,*/ _rookCastledFile, _rookCastledRank); // remove old rook
+            var rookPiece = board.GetPiece(_rookCastledFile, _rookCastledRank);
+            board.SetPiece(rookPiece, _rookOriginalFile, _rookOriginalRank); // move rook next to king
+            board.SetPiece(null, _rookCastledFile, _rookCastledRank); // remove old rook
 
             base.UndoMove(board);
         }
 
         private void SetWhiteKingSideRook()
         {
-            _rook = Definitions.ROOK.ToString().ToUpper()[0];
             _rookOriginalFile = Helper.FileCharToFile('h');
             _rookOriginalRank = 1;
             _rookCastledFile = Helper.FileCharToFile('f');
@@ -128,7 +128,6 @@ namespace MantaChessEngine
 
         private void SetWhiteQueenSideRook()
         {
-            _rook = Definitions.ROOK.ToString().ToUpper()[0];
             _rookOriginalFile = Helper.FileCharToFile('a');
             _rookOriginalRank = 1;
             _rookCastledFile = Helper.FileCharToFile('d');
@@ -137,7 +136,6 @@ namespace MantaChessEngine
 
         private void SetBlackKingSideRook()
         {
-            _rook = Definitions.ROOK.ToString().ToLower()[0];
             _rookOriginalFile = Helper.FileCharToFile('h');
             _rookOriginalRank = 8;
             _rookCastledFile = Helper.FileCharToFile('f');
@@ -146,7 +144,6 @@ namespace MantaChessEngine
 
         private void SetBlackQueenSideRook()
         {
-            _rook = Definitions.ROOK.ToString().ToLower()[0];
             _rookOriginalFile = Helper.FileCharToFile('a');
             _rookOriginalRank = 8;
             _rookCastledFile = Helper.FileCharToFile('d');

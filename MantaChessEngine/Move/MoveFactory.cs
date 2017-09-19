@@ -18,9 +18,9 @@ namespace MantaChessEngine
             return new EnPassantCaptureMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
         }
 
-        public static CastlingMove MakeCastlingMove(CastlingType castlingType)
+        public static CastlingMove MakeCastlingMove(CastlingType castlingType, Piece king)
         {
-            return new CastlingMove(castlingType);
+            return new CastlingMove(castlingType, king);
         }
 
         public NoLegalMove MakeNoLegalMove()
@@ -48,8 +48,8 @@ namespace MantaChessEngine
                 if (IsEnPassantCapture(board, sourceFile, sourceRank, targetFile, targetRank))
                 {
                     capturedPiece = board.GetColor(sourceFile, sourceRank) == Definitions.ChessColor.White
-                        ? Piece.MakePiece(Definitions.PAWN.ToString().ToLower()[0])
-                        : Piece.MakePiece(Definitions.PAWN.ToString().ToUpper()[0]);
+                        ? board.GetPiece(targetFile, targetRank - 1)
+                        : board.GetPiece(targetFile, targetRank + 1);
                     enPassant = true;
                 }
                 else
@@ -64,22 +64,22 @@ namespace MantaChessEngine
 
                 if (IsWhiteKingSideCastling(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
                 {
-                    return new CastlingMove(CastlingType.WhiteKingSide);
+                    return new CastlingMove(CastlingType.WhiteKingSide, movingPiece);
                 }
 
                 if (IsWhiteQueenSideCastling(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
                 {
-                    return new CastlingMove(CastlingType.WhiteQueenSide);
+                    return new CastlingMove(CastlingType.WhiteQueenSide, movingPiece);
                 }
 
                 if (IsBlackKingSideCastling(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
                 {
-                    return new CastlingMove(CastlingType.BlackKingSide);
+                    return new CastlingMove(CastlingType.BlackKingSide, movingPiece);
                 }
 
                 if (IsBlackQueenSideCastling(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
                 {
-                    return new CastlingMove(CastlingType.BlackQueenSide);
+                    return new CastlingMove(CastlingType.BlackQueenSide, movingPiece);
                 }
 
                 return new NormalMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);

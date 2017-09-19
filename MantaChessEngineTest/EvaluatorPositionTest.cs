@@ -143,13 +143,13 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             // white castling
-            board.Move(new CastlingMove(CastlingType.WhiteKingSide));
+            board.Move(new CastlingMove(CastlingType.WhiteKingSide, new King(Definitions.ChessColor.White)));
             var target = new EvaluatorPosition();
             var score = target.Evaluate(board);
             Assert.AreEqual(true, score > 0.1f, "White did castling. so white should be better.");
 
             // black castling
-            board.Move(new CastlingMove(CastlingType.BlackKingSide));
+            board.Move(new CastlingMove(CastlingType.BlackKingSide, new King(Definitions.ChessColor.Black)));
             score = target.Evaluate(board);
             Assert.AreEqual(true, score == 0, "White and Black did castling. They are equal.");
 

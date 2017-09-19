@@ -496,7 +496,7 @@ namespace MantaChessEngineTest
                               "R...K..R";
             board.SetPosition(position);
 
-            board.Move(new CastlingMove(CastlingType.WhiteKingSide));
+            board.Move(new CastlingMove(CastlingType.WhiteKingSide, new King(Definitions.ChessColor.White)));
 
             string expecPos = "r...k..r" +
                               "p......." +
@@ -530,7 +530,7 @@ namespace MantaChessEngineTest
                               "R...K..R";
             board.SetPosition(position);
 
-            board.Move(new CastlingMove(CastlingType.WhiteQueenSide));
+            board.Move(new CastlingMove(CastlingType.WhiteQueenSide, new King(Definitions.ChessColor.White)));
 
             string expecPos = "r...k..r" +
                               "p......." +
@@ -564,7 +564,7 @@ namespace MantaChessEngineTest
                               "R...K..R";
             board.SetPosition(position);
 
-            board.Move(new CastlingMove(CastlingType.BlackKingSide));
+            board.Move(new CastlingMove(CastlingType.BlackKingSide, new King(Definitions.ChessColor.Black)));
 
             string expecPos = "r....rk." +
                               "p......." +
@@ -598,7 +598,7 @@ namespace MantaChessEngineTest
                               "R...K..R";
             board.SetPosition(position);
 
-            board.Move(new CastlingMove(CastlingType.BlackQueenSide));
+            board.Move(new CastlingMove(CastlingType.BlackQueenSide, new King(Definitions.ChessColor.Black)));
 
             string expecPos = "..kr...r" +
                               "p......." +

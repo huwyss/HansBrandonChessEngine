@@ -47,7 +47,7 @@ namespace MantaChessEngine
                     !moveGen.IsAttacked(board, Color, Helper.FileCharToFile('f'), 1)
                     )
                 {
-                    moves.Add(MoveFactory.MakeCastlingMove(CastlingType.WhiteKingSide));
+                    moves.Add(MoveFactory.MakeCastlingMove(CastlingType.WhiteKingSide, this));
                 }
 
                 // check for queen side castling (0-0-0)
@@ -60,7 +60,7 @@ namespace MantaChessEngine
                     !moveGen.IsAttacked(board, Color, Helper.FileCharToFile('d'), 1)
                     )
                 {
-                    moves.Add(MoveFactory.MakeCastlingMove(CastlingType.WhiteQueenSide));
+                    moves.Add(MoveFactory.MakeCastlingMove(CastlingType.WhiteQueenSide, this));
                 }
             }
             
@@ -76,7 +76,7 @@ namespace MantaChessEngine
                     !moveGen.IsAttacked(board, Color, Helper.FileCharToFile('f'), 8)    // field next to king not attacked
                 )
                 {
-                    moves.Add(MoveFactory.MakeCastlingMove(CastlingType.BlackKingSide));
+                    moves.Add(MoveFactory.MakeCastlingMove(CastlingType.BlackKingSide, this));
                 }
 
                 // check for queen side castling (0-0-0)
@@ -89,7 +89,7 @@ namespace MantaChessEngine
                     !moveGen.IsAttacked(board, Color, Helper.FileCharToFile('d'), 8)    // field next to king not attacked
                 )
                 {
-                    moves.Add(MoveFactory.MakeCastlingMove(CastlingType.BlackQueenSide));
+                    moves.Add(MoveFactory.MakeCastlingMove(CastlingType.BlackQueenSide, this));
                 }
             }
 

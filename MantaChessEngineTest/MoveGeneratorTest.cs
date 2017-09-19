@@ -551,8 +551,8 @@ namespace MantaChessEngineTest
             var king = new King(Definitions.ChessColor.White);
             var kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 1, true);
 
-            Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(CastlingType.WhiteKingSide)), "e1g1. 0-0 castling missing");
-            Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(CastlingType.WhiteQueenSide)), "e1c1. 0-0-0 castling missing");
+            Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(CastlingType.WhiteKingSide, new King(Definitions.ChessColor.White))), "e1g1. 0-0 castling missing");
+            Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(CastlingType.WhiteQueenSide, new King(Definitions.ChessColor.White))), "e1c1. 0-0-0 castling missing");
         }
 
         [TestMethod]
@@ -637,8 +637,8 @@ namespace MantaChessEngineTest
 
             var king = new King(Definitions.ChessColor.Black);
             List<MoveBase> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 8, true);
-            Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(CastlingType.BlackKingSide)), "e8g8. 0-0 castling missing");
-            Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(CastlingType.BlackQueenSide)), "e8c8. 0-0-0 castling missing");
+            Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(CastlingType.BlackKingSide, new King(Definitions.ChessColor.Black))), "e8g8. 0-0 castling missing");
+            Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(CastlingType.BlackQueenSide, new King(Definitions.ChessColor.Black))), "e8c8. 0-0-0 castling missing");
         }
 
         [TestMethod]

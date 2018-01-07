@@ -47,7 +47,15 @@ namespace MantaChessEngine
                 {
                     if (valid && board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty) // empty field
                     {
-                        moves.Add(MoveFactory.MakeNormalMove(this, file, rank, targetFile, targetRank, null));
+                        if ((currentSequence == "u" && targetRank < 8) ||  // white normal pawn move straight
+                            (currentSequence == "d" && targetRank > 1))    // black normal pawn move straight
+                        {
+                            moves.Add(MoveFactory.MakeNormalMove(this, file, rank, targetFile, targetRank, null));
+                        }
+                        else // pawn is promoted
+                        {
+                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, null));
+                        }
                     }
                 }
                 else if ((currentSequence == "uu" || currentSequence == "dd") && rank == twoFieldMoveInitRank) // walk straight two fields
@@ -69,7 +77,15 @@ namespace MantaChessEngine
                     // normal capture
                     if (valid && Color == Helper.GetOpositeColor(board.GetColor(targetFile, targetRank)))
                     {
-                        moves.Add(MoveFactory.MakeNormalMove(this, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank)));
+                        if ((currentSequence == "ul" || currentSequence == "ur") && targetRank < 8 || // white normal pawn move capture
+                            (currentSequence == "dl" || currentSequence == "dr") && targetRank > 1 )  // black normal pawn move capture
+                        {
+                            moves.Add(MoveFactory.MakeNormalMove(this, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank)));
+                        }
+                        else // pawn is promoted
+                        {
+                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, null));
+                        }
                     }
                     // en passant capture
                     else if (valid && targetFile == board.History.LastEnPassantFile && targetRank == board.History.LastEnPassantRank)

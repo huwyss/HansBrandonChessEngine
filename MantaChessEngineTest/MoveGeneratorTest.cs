@@ -296,6 +296,90 @@ namespace MantaChessEngineTest
             Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('p'), 'b', 5, 'b', 4 ,null)), "b3b4 missing");
         }
 
+        [TestMethod]
+        public void GetMoves_WhenWhitePawnAt8Straight_ThenPromoted()
+        {
+            Board board = new Board();
+            string position = "........" +
+                              ".P......" + // white pawn gets promoted to queen !
+                              "........" +
+                              "........" + 
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........";
+            board.SetPosition(position);
+
+            var pawn = new Pawn(Definitions.ChessColor.White);
+            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('b'), 7, true); // white pawn
+
+            Assert.AreEqual(1, moves.Count);
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'b', 8, null)), "b7b8 missing (promotion walking straight)");
+        }
+
+        [TestMethod]
+        public void GetMoves_WhenBlackPawnAt1Straight_ThenPromoted()
+        {
+            Board board = new Board();
+            string position = "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              ".p......" +  // black pawn gets promoted to queen !
+                              "........";
+            board.SetPosition(position);
+
+            var pawn = new Pawn(Definitions.ChessColor.Black);
+            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('b'), 2, true); // black pawn
+
+            Assert.AreEqual(1, moves.Count);
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'b', 1, null)), "b2b1 missing (promotion walking straight)");
+        }
+
+        [TestMethod]
+        public void GetMoves_WhenWhitePawnAt8Capturing_ThenPromoted()
+        {
+            Board board = new Board();
+            string position = "rN......" +
+                              ".P......" + // white pawn gets promoted to queen !
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........";
+            board.SetPosition(position);
+
+            var pawn = new Pawn(Definitions.ChessColor.White);
+            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('b'), 7, true); // white pawn
+
+            Assert.AreEqual(1, moves.Count);
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'a', 8, null)), "b7a8 missing (promotion when capturing)");
+        }
+
+        [TestMethod]
+        public void GetMoves_WhenBlackPawnAt1Capturing_ThenPromoted()
+        {
+            Board board = new Board();
+            string position = "........" +
+                              "........" + // white pawn gets promoted to queen !
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              ".p......" +
+                              "Rn......";
+            board.SetPosition(position);
+
+            var pawn = new Pawn(Definitions.ChessColor.Black);
+            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('b'), 2, true); // black pawn
+
+            Assert.AreEqual(1, moves.Count);
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'a', 1, null)), "b2a1 missing (promotion when capturing)");
+        }
+
         // ----------------------------------------------------------------------------------------------------
         // Get All Moves Tests
         // ----------------------------------------------------------------------------------------------------

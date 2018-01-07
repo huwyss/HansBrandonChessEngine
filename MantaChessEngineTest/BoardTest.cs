@@ -616,5 +616,41 @@ namespace MantaChessEngineTest
             Assert.AreEqual(true, board.CastlingRightBlackKingSide, "castling right must be true after back.");
             Assert.AreEqual(true, board.CastlingRightBlackQueenSide, "castling right must be true after back.");
         }
+
+        // -------------------------------------------------------------------
+        // Promotion tests
+        // -------------------------------------------------------------------
+
+        [TestMethod]
+        public void MoveTest_WhenWhitePromotion_ThenCorrectMove()
+        {
+            MoveGenerator generator = new MoveGenerator(new MoveFactory());
+            Board board = new Board();
+            string position = "....k..." +
+                              "P......." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "....K...";
+            board.SetPosition(position);
+
+            board.Move(new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'a', 8, null)); 
+
+            string expecPos = "Q...k..." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "....K...";
+            Assert.AreEqual(expecPos, board.GetString, "White straight promotion not correct.");
+
+            board.Back();
+
+            Assert.AreEqual(position, board.GetString, "White straight promotion: back not correct.");
+        }
     }
 }

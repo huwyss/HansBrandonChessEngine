@@ -154,7 +154,7 @@ namespace MantaChessEngine
         public virtual void ExecuteMove(Board board)
         {
             board.SetPiece(MovingPiece, TargetFile, TargetRank); // set MovingPiece to new position (and overwrite captured piece)
-            board.SetPiece(null, /*Definitions.EmptyField,*/ SourceFile, SourceRank); // empty MovingPiece's old position
+            board.SetPiece(null, SourceFile, SourceRank); // empty MovingPiece's old position
 
             int enPassantFile = 0;
             int enPassantRank = 0;

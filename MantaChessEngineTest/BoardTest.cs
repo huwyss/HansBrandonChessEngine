@@ -652,5 +652,69 @@ namespace MantaChessEngineTest
 
             Assert.AreEqual(position, board.GetString, "White straight promotion: back not correct.");
         }
+
+        [TestMethod]
+        public void MoveTest_WhenBlackPromotion_ThenCorrectMove()
+        {
+            MoveGenerator generator = new MoveGenerator(new MoveFactory());
+            Board board = new Board();
+            string position = "....k..." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "p......." +
+                              "....K...";
+            board.SetPosition(position);
+
+            board.Move(new PromotionMove(Piece.MakePiece('p'), 'a', 2, 'a', 1, null));
+
+            string expecPos = "....k..." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "q...K...";
+            Assert.AreEqual(expecPos, board.GetString, "Black straight promotion not correct.");
+
+            board.Back();
+
+            Assert.AreEqual(position, board.GetString, "Black straight promotion: back not correct.");
+        }
+
+        [TestMethod]
+        public void MoveTest_WhenBlackPromotionWithCapture_ThenCorrectMove()
+        {
+            MoveGenerator generator = new MoveGenerator(new MoveFactory());
+            Board board = new Board();
+            string position = "....k..." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "p......." +
+                              ".R..K...";
+            board.SetPosition(position);
+
+            board.Move(new PromotionMove(Piece.MakePiece('p'), 'a', 2, 'b', 1, Piece.MakePiece('R')));
+
+            string expecPos = "....k..." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              ".q..K...";
+            Assert.AreEqual(expecPos, board.GetString, "Black promotion with capture not correct.");
+
+            board.Back();
+
+            Assert.AreEqual(position, board.GetString, "Black promotion with capture: back not correct.");
+        }
     }
 }

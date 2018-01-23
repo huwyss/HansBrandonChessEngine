@@ -154,8 +154,8 @@ namespace MantaChessEngine
 
         private bool IsPromotion(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
         {
-            return ((movingPiece.Color == Definitions.ChessColor.White && targetRank == 8) || // white promotion
-                    (movingPiece.Color == Definitions.ChessColor.Black && targetRank == 1));  // black promotion
+            return ((movingPiece is Pawn && movingPiece.Color == Definitions.ChessColor.White && targetRank == 8) || // white promotion
+                    (movingPiece is Pawn && movingPiece.Color == Definitions.ChessColor.Black && targetRank == 1));  // black promotion
         }
     }
 }

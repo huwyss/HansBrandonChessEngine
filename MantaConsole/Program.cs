@@ -58,6 +58,16 @@ namespace MantaConsole
 
             Board board = new Board();
             board.SetInitialPosition();
+
+            //board.SetPosition(".......k" +
+            //                  "........" +
+            //                  "........" +
+            //                  ".......p" +
+            //                  "........" +
+            //                  "........" +
+            //                  "........" +
+            //                  "K.......");
+
             MantaEngine whiteEngine = new MantaEngine(EngineType.MinmaxSearchTree);
             MantaEngine blackEngine = new MantaEngine(EngineType.MinmaxSearchTree);
             whiteEngine.SetBoard(board);

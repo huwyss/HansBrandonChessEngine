@@ -87,6 +87,11 @@ namespace MantaChessEngine
                     return new CastlingMove(CastlingType.BlackQueenSide, movingPiece);
                 }
 
+                if (IsPromotion(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
+                {
+                    return new PromotionMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, null);
+                }
+
                 return new NormalMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
             }
 
@@ -145,6 +150,12 @@ namespace MantaChessEngine
             return movingPiece is King && movingPiece.Color == Definitions.ChessColor.Black &&
                    sourceFile == Helper.FileCharToFile('e') && sourceRank == 8 &&
                    targetFile == Helper.FileCharToFile('c') && targetRank == 8;
+        }
+
+        private bool IsPromotion(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
+        {
+            return ((movingPiece.Color == Definitions.ChessColor.White && targetRank == 8) || // white promotion
+                    (movingPiece.Color == Definitions.ChessColor.Black && targetRank == 1));  // black promotion
         }
     }
 }

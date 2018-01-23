@@ -611,6 +611,29 @@ namespace MantaChessEngineTest
             Assert.AreEqual("d5c6pe", actualMove.ToString());
         }
 
+        [TestMethod]
+        public void GetCorrectMoveTest_WhenPromotion_ThenReturnPromotionMove()
+        {
+            var factory = new MoveFactory();
+            MoveGenerator target = new MoveGenerator(factory);
+            Board board = new Board();
+            string position = ".......k" +
+                              "P......." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "..K.....";
+            board.SetPosition(position);
+
+            MoveBase actualMove = factory.MakeCorrectMove(board, "a7a8");
+
+            var expectedMove = new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'a', 8, null);
+            Assert.AreEqual("a7a8.", actualMove.ToString());
+            Assert.AreEqual(expectedMove, actualMove);
+        }
+
         // ------------------------------------------------------------------
         // Castling tests
         // ------------------------------------------------------------------

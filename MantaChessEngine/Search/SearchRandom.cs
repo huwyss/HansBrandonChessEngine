@@ -11,6 +11,9 @@ namespace MantaChessEngine
         private Random _rand;
         private MoveGenerator _moveGenerator;
 
+        public void SetMaxDepth(int level)
+        { }
+
         public SearchRandom(MoveGenerator moveGenerator)
         {
             _moveGenerator = moveGenerator;

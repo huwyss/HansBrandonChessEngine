@@ -19,7 +19,6 @@ namespace MantaChessEngine
         private IEvaluator _evaluator;
         private IMoveGenerator _moveGenerator;
         private BuildTreeState _state;
-        private int DEFAULT_LEVEL = 3;
         private Board _board;
         private Definitions.ChessColor _color;
         private MoveTree _tree;
@@ -30,13 +29,21 @@ namespace MantaChessEngine
 
         private IMove _bestMove;
 
+        public void SetMaxDepth(int level)
+        {
+            if (level > 0)
+            {
+                _maxPly = level;
+            }
+        }
+
         public SearchMinimaxTree(IEvaluator evaluator, IMoveGenerator generator)
         {
             _evaluator = evaluator;
             _moveGenerator = generator;
             _tree = new MoveTree();
 
-            _maxPly = DEFAULT_LEVEL;
+            _maxPly = Definitions.DEFAULT_MAXLEVEL; ;
         }
 
         public void SetLevel(int level)

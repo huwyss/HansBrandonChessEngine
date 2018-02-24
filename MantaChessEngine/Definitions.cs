@@ -28,5 +28,7 @@ namespace MantaChessEngine
         public const char DOWN = 'd';
         public const char LEFT = 'l';
         public const char RIGHT = 'r';
+
+        public const int DEFAULT_MAXLEVEL = 3;
     }
 }

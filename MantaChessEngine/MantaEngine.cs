@@ -150,5 +150,13 @@ namespace MantaChessEngine
             _board.Back();
             _board.Back();
         }
+
+        public void SetMaxSearchDepth(int depth)
+        {
+            if (_search != null)
+            {
+                _search.SetMaxDepth(depth);
+            }
+        }
     }
 }

@@ -13,15 +13,22 @@ namespace MantaChessEngine
         private MoveGenerator _moveGenerator;
         private IEvaluator _evaluator;
         private int _level;
-        const int DEFAULT_LEVEL = 4;
 
         private static int evaluatedPositions;
+
+        public void SetMaxDepth(int level)
+        {
+            if (level > 0)
+            {
+                _level = level;
+            }
+        }
 
         public SearchMinimax(IEvaluator evaluator, MoveGenerator moveGenerator)
         {
             _evaluator = evaluator;
             _moveGenerator = moveGenerator;
-            _level = DEFAULT_LEVEL;
+            _level = Definitions.DEFAULT_MAXLEVEL;
         }
 
         /// <summary>

@@ -13,6 +13,9 @@ namespace MantaChessEngine
         private IEvaluator _evaluator;
         private MoveGenerator _moveGenerator;
 
+        public void SetMaxDepth(int level)
+        { }
+
         public SearchServiceDepthOne(IEvaluator evaluator, MoveGenerator moveGenerator)
         {
             _evaluator = evaluator;

@@ -74,20 +74,20 @@ namespace MantaChessEngineTest
         public void IsCorrectMoveTest_WhenCorrect_ThenTrue()
         {
             String correctMoveString = "a2a3";
-            Assert.AreEqual(true, MoveBase.IsCorrectMove(correctMoveString));
+            Assert.AreEqual(true, Helper.IsCorrectMove(correctMoveString));
         }
 
         [TestMethod]
         public void IsCorrectMoveTest_WhenBadInput_ThenFalse()
         {
             String wrongMoveString = "abcd";
-            Assert.AreEqual(false, MoveBase.IsCorrectMove(wrongMoveString));
+            Assert.AreEqual(false, Helper.IsCorrectMove(wrongMoveString));
 
             wrongMoveString = "abcde";
-            Assert.AreEqual(false, MoveBase.IsCorrectMove(wrongMoveString));
+            Assert.AreEqual(false, Helper.IsCorrectMove(wrongMoveString));
 
             wrongMoveString = "abcdef";
-            Assert.AreEqual(false, MoveBase.IsCorrectMove(wrongMoveString));
+            Assert.AreEqual(false, Helper.IsCorrectMove(wrongMoveString));
         }
 
         [TestMethod]

@@ -44,7 +44,7 @@ namespace MantaChessEngine
             int targetRank = 0;
             bool enPassant = false;
 
-            if (MoveBase.IsCorrectMove(moveStringUser))
+            if (Helper.IsCorrectMove(moveStringUser))
             {
                 GetPositions(moveStringUser, out sourceFile, out sourceRank, out targetFile, out targetRank);
                 movingPiece = board.GetPiece(sourceFile, sourceRank);

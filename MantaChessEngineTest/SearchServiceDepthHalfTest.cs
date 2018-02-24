@@ -26,7 +26,7 @@ namespace MantaChessEngineTest
 
             float score = 0;
             IMove actualMove = target.Search(board, Definitions.ChessColor.White, out score);
-            MoveBase expectedMove = new NormalMove(Piece.MakePiece('P'), 'f', 4, 'e', 5, Piece.MakePiece('q'));
+            IMove expectedMove = new NormalMove(Piece.MakePiece('P'), 'f', 4, 'e', 5, Piece.MakePiece('q'));
             Assert.AreEqual(expectedMove, actualMove, "Queen should be captured.");
         }
 
@@ -49,7 +49,7 @@ namespace MantaChessEngineTest
 
             float score = 0;
             IMove actualMove = target.Search(board, Definitions.ChessColor.Black, out score);
-            MoveBase expectedMove = new NormalMove(Piece.MakePiece('p'), 'e', 5, 'd', 4, Piece.MakePiece('Q'));
+            IMove expectedMove = new NormalMove(Piece.MakePiece('p'), 'e', 5, 'd', 4, Piece.MakePiece('Q'));
             Assert.AreEqual(expectedMove, actualMove, "Queen should be captured.");
         }
     }

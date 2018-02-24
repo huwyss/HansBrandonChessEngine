@@ -8,10 +8,10 @@ namespace MantaChessEngine
 {
     public class MoveInfo
     {
-        public MoveBase Move { get; set; }
+        public IMove Move { get; set; }
         public float Score { get; set; }
 
-        public MoveInfo(MoveBase move, float score)
+        public MoveInfo(IMove move, float score)
         {
             Move = move;
             Score = score;

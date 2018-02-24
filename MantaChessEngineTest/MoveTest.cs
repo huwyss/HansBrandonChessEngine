@@ -35,7 +35,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void ConstructorTest_WhenStringParameter_ThenCorrectObject()
         {
-            MoveBase move = new NormalMove(Piece.MakePiece('q'), 5, 2, 4, 3, Piece.MakePiece('p'));
+            IMove move = new NormalMove(Piece.MakePiece('q'), 5, 2, 4, 3, Piece.MakePiece('p'));
             Assert.AreEqual(Piece.MakePiece('q'), move.MovingPiece);
             Assert.AreEqual('e'-'a' + 1, move.SourceFile);
             Assert.AreEqual(2, move.SourceRank);
@@ -93,8 +93,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenEnPassant_ThenCheckEnPassantCorrect()
         {
-            MoveBase move = new EnPassantCaptureMove(Piece.MakePiece('p'), 1, 2, 2, 3, Piece.MakePiece('p'));
-            MoveBase move2 = new NormalMove(Piece.MakePiece('p'), 1, 2, 2, 3, Piece.MakePiece('p'));
+            IMove move = new EnPassantCaptureMove(Piece.MakePiece('p'), 1, 2, 2, 3, Piece.MakePiece('p'));
+            IMove move2 = new NormalMove(Piece.MakePiece('p'), 1, 2, 2, 3, Piece.MakePiece('p'));
             // Assert.AreEqual("a2b3pe", move.ToString());
             Assert.AreNotEqual(move2, move);
             //Assert.AreEqual(new Move("a2b3pe"), move);
@@ -104,8 +104,8 @@ namespace MantaChessEngineTest
         public void MoveTest_WhenNormalMove_ThenEqualsCorrect()
         {
             // equal
-            MoveBase move = new NormalMove(Piece.MakePiece('p'), 'a', 2, 'b', 3, Piece.MakePiece('q'));
-            MoveBase move2 = new NormalMove(Piece.MakePiece('p'), 1,  2,  2,  3, Piece.MakePiece('q'));
+            IMove move = new NormalMove(Piece.MakePiece('p'), 'a', 2, 'b', 3, Piece.MakePiece('q'));
+            IMove move2 = new NormalMove(Piece.MakePiece('p'), 1,  2,  2,  3, Piece.MakePiece('q'));
             Assert.AreEqual(move2, move);
 
             // not equal different MovingPiece

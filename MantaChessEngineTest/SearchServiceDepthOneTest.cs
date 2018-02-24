@@ -25,8 +25,8 @@ namespace MantaChessEngineTest
             board.SetPosition(boardString);
 
             float score = 0;
-            MoveBase actualMove = target.CalcScoreLevelZero(board, Definitions.ChessColor.White, out score);
-            MoveBase expectedMove = new NormalMove(Piece.MakePiece('P'), 'f', 4, 'e', 5, Piece.MakePiece('q'));
+            IMove actualMove = target.CalcScoreLevelZero(board, Definitions.ChessColor.White, out score);
+            IMove expectedMove = new NormalMove(Piece.MakePiece('P'), 'f', 4, 'e', 5, Piece.MakePiece('q'));
 
 
             Assert.AreEqual(expectedMove, actualMove, "Queen should be captured.");
@@ -51,8 +51,8 @@ namespace MantaChessEngineTest
                                  "RNB.KBNR";
             board.SetPosition(boardString);
 
-            MoveBase actualMove = target.CalcScoreLevelZero(board, Definitions.ChessColor.Black, out score);
-            MoveBase expectedMove = new NormalMove(Piece.MakePiece('p'), 'e', 5, 'd', 4, Piece.MakePiece('Q'));
+            IMove actualMove = target.CalcScoreLevelZero(board, Definitions.ChessColor.Black, out score);
+            IMove expectedMove = new NormalMove(Piece.MakePiece('p'), 'e', 5, 'd', 4, Piece.MakePiece('Q'));
 
             Assert.AreEqual(expectedMove, actualMove, "Queen should be captured.");
             Assert.AreEqual(-9, score);
@@ -77,7 +77,7 @@ namespace MantaChessEngineTest
 
             float score = 0;
             IMove actualMove = target.Search(board, Definitions.ChessColor.White, out score);
-            MoveBase verybadMove = new NormalMove(Piece.MakePiece('Q'), 'b', 4, 'c', 5, Piece.MakePiece('p'));
+            IMove verybadMove = new NormalMove(Piece.MakePiece('Q'), 'b', 4, 'c', 5, Piece.MakePiece('p'));
             Assert.AreNotEqual(verybadMove, actualMove, "Queen must not capture pawn. Otherwise queen gets lost.");
         }
 
@@ -100,7 +100,7 @@ namespace MantaChessEngineTest
 
             float score = 0;
             IMove actualMove = target.Search(board, Definitions.ChessColor.White, out score);
-            MoveBase goodMove = new NormalMove(Piece.MakePiece('P'), 'b', 4, 'c', 5, Piece.MakePiece('q'));
+            IMove goodMove = new NormalMove(Piece.MakePiece('P'), 'b', 4, 'c', 5, Piece.MakePiece('q'));
             Assert.AreEqual(goodMove, actualMove, "Pawn must capture queen.");
         }
 

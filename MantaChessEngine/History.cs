@@ -16,11 +16,11 @@ namespace MantaChessEngine
         public List<bool> CastlingRightBlackQueenSide { get; set; }
         public List<bool> CastlingRightBlackKingSide { get; set; }
 
-        public List<MoveBase> Moves { get; set; }
+        public List<IMove> Moves { get; set; }
 
         public History()
         {
-            Moves = new List<MoveBase>();
+            Moves = new List<IMove>();
 
             EnPassantFile = new List<int>();
             EnPassantRank = new List<int>();
@@ -39,7 +39,7 @@ namespace MantaChessEngine
             CastlingRightBlackKingSide.Add(true);
         }
 
-        public void Add(MoveBase move, int enPassantFile, int enPassantRank, bool castlingRightWhiteQueenSide, bool castlingRightWhiteKingSide, bool castlingRightBlackQueenSide, bool castlingRightBlackKingSide)
+        public void Add(IMove move, int enPassantFile, int enPassantRank, bool castlingRightWhiteQueenSide, bool castlingRightWhiteKingSide, bool castlingRightBlackQueenSide, bool castlingRightBlackKingSide)
         {
             Moves.Add(move);
             EnPassantFile.Add(enPassantFile);
@@ -68,7 +68,7 @@ namespace MantaChessEngine
 
         public int Count { get { return Moves.Count; } }
 
-        public MoveBase LastMove
+        public IMove LastMove
         {
             get
             {

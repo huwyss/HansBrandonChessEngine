@@ -12,13 +12,13 @@ namespace MantaChessEngineTest
         public void CreateSearchTreeTest_When2MovesOnEachLevel_ThenBuildCorrectTree()
         {
             var gen = new FakeMoveGenerator();
-            gen.ReturnsWhiteGetAllMoves = new List<MoveBase>()
+            gen.ReturnsWhiteGetAllMoves = new List<IMove>()
             {
                 new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 4, null),
                 new NormalMove(Piece.MakePiece('N'), 'g', 1, 'f', 3, null),
             };
 
-            gen.ReturnsBlackGetAllMoves = new List<MoveBase>()
+            gen.ReturnsBlackGetAllMoves = new List<IMove>()
             {
                 new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 5, null),
                 new NormalMove(Piece.MakePiece('n'), 'g', 8, 'f', 6, null),
@@ -57,13 +57,13 @@ namespace MantaChessEngineTest
         {
             // create search tree from test before copied
             var gen = new FakeMoveGenerator();
-            gen.ReturnsWhiteGetAllMoves = new List<MoveBase>()
+            gen.ReturnsWhiteGetAllMoves = new List<IMove>()
             {
                 new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 4, null),
                 new NormalMove(Piece.MakePiece('N'), 'g', 1, 'f', 3, null),
             };
 
-            gen.ReturnsBlackGetAllMoves = new List<MoveBase>()
+            gen.ReturnsBlackGetAllMoves = new List<IMove>()
             {
                 new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 5, null),
                 new NormalMove(Piece.MakePiece('n'), 'g', 8, 'f', 6, null),
@@ -89,13 +89,13 @@ namespace MantaChessEngineTest
         {
             // create search tree from test before copied
             var gen = new FakeMoveGenerator();
-            gen.ReturnsWhiteGetAllMoves = new List<MoveBase>()
+            gen.ReturnsWhiteGetAllMoves = new List<IMove>()
             {
                 new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 4, null),
                 new NormalMove(Piece.MakePiece('N'), 'g', 1, 'f', 3, null),
             };
 
-            gen.ReturnsBlackGetAllMoves = new List<MoveBase>()
+            gen.ReturnsBlackGetAllMoves = new List<IMove>()
             {
                 new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 5, null),
                 new NormalMove(Piece.MakePiece('n'), 'g', 8, 'f', 6, null),

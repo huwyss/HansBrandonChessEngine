@@ -87,7 +87,7 @@ namespace MantaChessEngine
 
         public bool Move(string moveStringUser)
         {
-            MoveBase syntaxCorrectMove = _moveFactory.MakeCorrectMove(_board, moveStringUser);
+            IMove syntaxCorrectMove = _moveFactory.MakeCorrectMove(_board, moveStringUser);
             if (syntaxCorrectMove == null)
             {
                 return false;

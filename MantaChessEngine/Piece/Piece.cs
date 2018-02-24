@@ -17,7 +17,7 @@ namespace MantaChessEngine
         public abstract char Symbol { get; }
 
         public abstract IEnumerable<string> GetMoveDirectionSequences();
-        public virtual List<MoveBase> GetMoves(MoveGenerator moveGen, Board board, int file, int rank, bool includeCastling = true)
+        public virtual List<IMove> GetMoves(MoveGenerator moveGen, Board board, int file, int rank, bool includeCastling = true)
         { return null; }
             
         public static Piece MakePiece(char pieceChar)

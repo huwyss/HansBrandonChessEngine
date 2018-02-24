@@ -10,7 +10,7 @@ namespace MantaChessEngine
     {
         public Definitions.ChessColor SideToMove { get; set; }
         public History History { get; set; }
-        public MoveBase LastMove { get { return History.LastMove; } }
+        public IMove LastMove { get { return History.LastMove; } }
 
         public int EnPassantFile { get { return !IsClonedBoard ? History.LastEnPassantFile : ClonedEnPassantFile; } }
         public int EnPassantRank { get { return !IsClonedBoard ? History.LastEnPassantRank : ClonedEnPassantRank; } }
@@ -166,7 +166,7 @@ namespace MantaChessEngine
         /// </summary>
         public void Move(IMove nextMove)
         {
-            MoveBase move = nextMove as MoveBase;
+            IMove move = nextMove as IMove;
             if (move == null)
             {
                 return;

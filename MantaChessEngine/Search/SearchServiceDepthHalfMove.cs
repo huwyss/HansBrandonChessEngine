@@ -19,11 +19,11 @@ namespace MantaChessEngine
 
         public IMove Search(Board board, Definitions.ChessColor color, out float score)
         {
-            MoveBase bestMove = null;
+            IMove bestMove = null;
             float bestScore = InitBestScoreSofar(color);
 
             var possibleMoves = _moveGenerator.GetAllMoves(board, color);
-            foreach (MoveBase currentMove in possibleMoves)
+            foreach (IMove currentMove in possibleMoves)
             {
                 Board boardWithMove = board.Clone();
                 boardWithMove.Move(currentMove);

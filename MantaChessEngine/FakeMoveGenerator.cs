@@ -8,21 +8,21 @@ namespace MantaChessEngine
 {
     public class FakeMoveGenerator : IMoveGenerator
     {
-        public List<MoveBase> ReturnsWhiteGetAllMoves { get; set; }
-        public List<MoveBase> ReturnsBlackGetAllMoves { get; set; }
-        public List<MoveBase> GetAllMoves(Board board, Definitions.ChessColor color, bool includeCastling = true)
+        public List<IMove> ReturnsWhiteGetAllMoves { get; set; }
+        public List<IMove> ReturnsBlackGetAllMoves { get; set; }
+        public List<IMove> GetAllMoves(Board board, Definitions.ChessColor color, bool includeCastling = true)
         {
             return color == Definitions.ChessColor.White ? ReturnsWhiteGetAllMoves : ReturnsBlackGetAllMoves;
         }
 
-        public List<MoveBase> ReturnsGetMoves { get; set; }
-        public List<MoveBase> GetMoves(Board board, int file, int rank, bool includeCastling = true)
+        public List<IMove> ReturnsGetMoves { get; set; }
+        public List<IMove> GetMoves(Board board, int file, int rank, bool includeCastling = true)
         {
             return ReturnsGetMoves;
         }
 
         public bool ReturnsIsValid { get; set; }
-        public bool IsMoveValid(Board board, MoveBase move)
+        public bool IsMoveValid(Board board, IMove move)
         {
             return ReturnsIsValid;
         }

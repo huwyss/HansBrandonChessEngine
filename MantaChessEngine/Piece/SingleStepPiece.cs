@@ -15,12 +15,12 @@ namespace MantaChessEngine
         {
         }
 
-        public override List<MoveBase> GetMoves(MoveGenerator moveGen, Board board, int file, int rank, bool includeCastling = true)
+        public override List<IMove> GetMoves(MoveGenerator moveGen, Board board, int file, int rank, bool includeCastling = true)
         {
             int targetRank;
             int targetFile;
             bool valid;
-            List<MoveBase> moves = new List<MoveBase>();
+            List<IMove> moves = new List<IMove>();
             IEnumerable<string> directionSequences = GetMoveDirectionSequences();
             foreach (string sequence in directionSequences)
             {

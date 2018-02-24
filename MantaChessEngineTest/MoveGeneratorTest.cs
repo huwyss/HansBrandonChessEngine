@@ -565,8 +565,8 @@ namespace MantaChessEngineTest
             MoveGenerator target = new MoveGenerator(factory);
             Board board = new Board();
             board.SetInitialPosition();
-            
-            MoveBase actualMove = factory.MakeCorrectMove(board, "e2e4");
+
+            IMove actualMove = factory.MakeCorrectMove(board, "e2e4");
             Assert.AreEqual("e2e4.", actualMove.ToString());
         }
 
@@ -586,7 +586,7 @@ namespace MantaChessEngineTest
                               "..K.....";
             board.SetPosition(position);
 
-            MoveBase actualMove = factory.MakeCorrectMove(board, "d5c6");
+            IMove actualMove = factory.MakeCorrectMove(board, "d5c6");
             Assert.AreEqual("d5c6p", actualMove.ToString());
         }
 
@@ -607,7 +607,7 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
             board.Move(new NormalMove(Piece.MakePiece('p'),'c',7,'c',5,null));
 
-            MoveBase actualMove = factory.MakeCorrectMove(board, "d5c6");
+            IMove actualMove = factory.MakeCorrectMove(board, "d5c6");
             Assert.AreEqual("d5c6pe", actualMove.ToString());
         }
 
@@ -627,7 +627,7 @@ namespace MantaChessEngineTest
                               "..K.....";
             board.SetPosition(position);
 
-            MoveBase actualMove = factory.MakeCorrectMove(board, "a7a8");
+            IMove actualMove = factory.MakeCorrectMove(board, "a7a8");
 
             var expectedMove = new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'a', 8, null);
             Assert.AreEqual("a7a8.", actualMove.ToString());
@@ -678,7 +678,7 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             var king = new King(Definitions.ChessColor.White);
-            List<MoveBase> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 1, true);
+            List<IMove> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 1, true);
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'g', 1, null)), "e1g1. 0-0 castling not possible");
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'c', 1, null)), "e1c1. 0-0-0 castling not possible");
         }
@@ -699,7 +699,7 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             var king = new King(Definitions.ChessColor.White);
-            List<MoveBase> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 1, true);
+            List<IMove> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 1, true);
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'g', 1, null)), "e1g1. 0-0 castling not possible");
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'c', 1, null)), "e1c1. 0-0-0 castling not possible");
         }
@@ -720,7 +720,7 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             var king = new King(Definitions.ChessColor.White);
-            List<MoveBase> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 1, true);
+            List<IMove> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 1, true);
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'g', 1, null)), "e1g1. 0-0 castling not possible. f1 is attacked.");
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'c', 1, null)), "e1c1. 0-0-0 castling not possible. d1 is attacked.");
         }
@@ -743,7 +743,7 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             var king = new King(Definitions.ChessColor.Black);
-            List<MoveBase> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 8, true);
+            List<IMove> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 8, true);
             Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(CastlingType.BlackKingSide, new King(Definitions.ChessColor.Black))), "e8g8. 0-0 castling missing");
             Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(CastlingType.BlackQueenSide, new King(Definitions.ChessColor.Black))), "e8c8. 0-0-0 castling missing");
         }
@@ -764,7 +764,7 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             var king = new King(Definitions.ChessColor.Black);
-            List<MoveBase> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 8, true);
+            List<IMove> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 8, true);
 
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('k'), 'e', 8, 'g', 8, null)), "e8g8. 0-0 castling not possible");
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('k'), 'e', 8, 'c', 8, null)), "e8c8. 0-0-0 castling not possible");
@@ -786,7 +786,7 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             var king = new King(Definitions.ChessColor.Black);
-            List<MoveBase> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 8, true);
+            List<IMove> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 8, true);
 
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('k'), 'e', 8, 'g', 8, null)), "e8g8. 0-0 castling not possible");
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('k'), 'e', 8, 'c', 8, null)), "e8c8. 0-0-0 castling not possible");
@@ -808,7 +808,7 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             var king = new King(Definitions.ChessColor.Black);
-            List<MoveBase> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 8, true);
+            List<IMove> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 8, true);
 
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('k'), 'e', 8, 'g', 8, null)), "e8g8. 0-0 castling not possible. F8 attacked");
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('k'), 'e', 8, 'c', 8, null)), "e8c8. 0-0-0 castling not possible. D8 attacked");

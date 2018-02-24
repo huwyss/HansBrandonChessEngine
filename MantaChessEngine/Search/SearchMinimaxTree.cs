@@ -28,7 +28,7 @@ namespace MantaChessEngine
 
         public TreeNode<MoveInfo> MoveRoot { get { return _tree.Root; } }
 
-        private MoveBase _bestMove;
+        private IMove _bestMove;
 
         public SearchMinimaxTree(IEvaluator evaluator, IMoveGenerator generator)
         {
@@ -173,7 +173,7 @@ namespace MantaChessEngine
             return true;
         }
 
-        internal MoveBase SelectBestMove()
+        internal IMove SelectBestMove()
         {
             if (!_tree.IsCurrentRoot())
             {

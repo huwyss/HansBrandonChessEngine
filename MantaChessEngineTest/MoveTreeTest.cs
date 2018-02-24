@@ -15,7 +15,7 @@ namespace MantaChessEngineTest
             var target = new MoveTree();
             Assert.IsFalse(target.HasCurrentNextChild());
 
-            var moves = new List<MoveBase>() {new NormalMove(Piece.MakePiece('p'), 'e', 2, 'e', 4, null)};
+            var moves = new List<IMove>() {new NormalMove(Piece.MakePiece('p'), 'e', 2, 'e', 4, null)};
             target.AddChildren(moves);
 
             Assert.IsTrue(target.HasCurrentNextChild(), "should have next child.");
@@ -30,7 +30,7 @@ namespace MantaChessEngineTest
             var move3 = new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 5, null);
             var move4 = new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 6, null);
 
-            var movesWhite = new List<MoveBase> { move1, move2 };
+            var movesWhite = new List<IMove> { move1, move2 };
             target.AddChildren(movesWhite);
 
             Assert.IsTrue(target.HasCurrentNextChild(), "should have next child.");
@@ -56,8 +56,8 @@ namespace MantaChessEngineTest
             var move3 = new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 5, null);
             var move4 = new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 6, null);
 
-            var movesWhite = new List<MoveBase> {move1, move2};
-            var movesBlack = new List<MoveBase> {move3, move4};
+            var movesWhite = new List<IMove> {move1, move2};
+            var movesBlack = new List<IMove> {move3, move4};
 
             target.AddChildren(movesWhite);
             Assert.IsTrue(target.HasCurrentNextChild(), "should have next child.");

@@ -20,15 +20,15 @@ namespace MantaChessEngine
 
         // Note: Manta is a king capture engine. 
         // This means even if we are in check then also moves that do not remove the check are returned here.
-        public List<MoveBase> GetAllMoves(Board board, Definitions.ChessColor color, bool includeCastling = true)
+        public List<IMove> GetAllMoves(Board board, Definitions.ChessColor color, bool includeCastling = true)
         {
             var allMovesUnchecked = GetAllMovesUnchecked(board, color, includeCastling);
             return allMovesUnchecked;
         }
 
-        private List<MoveBase> GetAllMovesUnchecked(Board board, Definitions.ChessColor color, bool includeCastling = true)
+        private List<IMove> GetAllMovesUnchecked(Board board, Definitions.ChessColor color, bool includeCastling = true)
         {
-            List<MoveBase> allMoves = new List<MoveBase>();
+            List<IMove> allMoves = new List<IMove>();
 
             for (int file = 1; file <= 8; file++)
             {
@@ -45,14 +45,14 @@ namespace MantaChessEngine
             return allMoves;
         }
 
-        public bool IsMoveValid(Board board, MoveBase move)
+        public bool IsMoveValid(Board board, IMove move)
         {
             bool valid = HasCorrectColorMoved(board, move);
             valid &= move.MovingPiece.GetMoves(this, board, move.SourceFile, move.SourceRank).Contains(move);
             return valid;
         }
 
-        private bool HasCorrectColorMoved(Board board, MoveBase move)
+        private bool HasCorrectColorMoved(Board board, IMove move)
         {
             return (move.MovingPiece.Color == board.SideToMove);
         }
@@ -107,7 +107,7 @@ namespace MantaChessEngine
             // find all oponent moves
             var moves = GetAllMoves(board, Helper.GetOpositeColor(color), false);
 
-            foreach (MoveBase move in moves)
+            foreach (IMove move in moves)
             {
                 if (move.TargetFile == file && move.TargetRank == rank)
                 {
@@ -124,7 +124,7 @@ namespace MantaChessEngine
             var moves = GetAllMoves(board, Helper.GetOpositeColor(color), false);
 
             // if a move ends in king's position then king is in check
-            foreach (MoveBase move in moves)
+            foreach (IMove move in moves)
             {
                 if (move.CapturedPiece is King && move.CapturedPiece.Color == color)
                 {

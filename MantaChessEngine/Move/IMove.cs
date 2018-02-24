@@ -1,15 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MantaChessEngine
+﻿namespace MantaChessEngine
 {
     public interface IMove
     {
-        bool Equals(System.Object obj);
-        string ToString();
+        int CapturedFile { get; }
+        Piece CapturedPiece { get; set; }
+        int CapturedRank { get; }
+        Definitions.ChessColor Color { get; }
+        Piece MovingPiece { get; set; }
+        int SourceFile { get; set; }
+        int SourceRank { get; set; }
+        int TargetFile { get; set; }
+        int TargetRank { get; set; }
+
+        bool Equals(object obj);
+        void ExecuteMove(Board board);
         int GetHashCode();
+        void InitializeMove(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, Piece capturedPiece);
+        string ToString();
+        void UndoMove(Board board);
     }
 }

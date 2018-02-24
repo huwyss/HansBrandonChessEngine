@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace MantaChessEngine
 {
-    public class NoLegalMove : IMove
+    public class NoLegalMove : MoveBase
     {
+        public NoLegalMove() : base(null, 'a', 1, 'a', 1, null)
+        { }
+
         public override bool Equals(System.Object obj)
         {
             IMove other = obj as NoLegalMove;

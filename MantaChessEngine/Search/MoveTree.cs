@@ -33,7 +33,7 @@ namespace MantaChessEngine
             return CurrentLevel == 0;
         }
 
-        public MoveBase CurrentMove
+        public IMove CurrentMove
         {
             get { return _currentNode.Data.Move; }
         }
@@ -71,7 +71,7 @@ namespace MantaChessEngine
             CurrentLevel--;
         }
 
-        public void AddChildren(IEnumerable<MoveBase> moves)
+        public void AddChildren(IEnumerable<IMove> moves)
         {
             if (moves == null || moves.Count() == 0)
             {
@@ -92,7 +92,7 @@ namespace MantaChessEngine
         public MoveInfo GetChildMaxMoveInfo()
         {
             float currentMaxScore = -10000;
-            MoveBase currentBestMove = null;
+            IMove currentBestMove = null;
 
             foreach (var child in _currentNode.Children)
             {
@@ -108,7 +108,7 @@ namespace MantaChessEngine
         public MoveInfo GetChildMinMoveInfo()
         {
             float currentMinScore = 10000;
-            MoveBase currentBestMove = null;
+            IMove currentBestMove = null;
 
             foreach (var child in _currentNode.Children)
             {

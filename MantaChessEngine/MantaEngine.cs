@@ -11,9 +11,10 @@ namespace MantaChessEngine
         Random,
         DepthHalf,
         DepthOne,
-        Minmax,
-        MinmaxPosition,
-        MinmaxSearchTree
+        Minimax,
+        MinimaxPosition,
+        MinimaxSearchTree,
+        MinimaxWithClone
     }
 
     public class MantaEngine
@@ -29,34 +30,46 @@ namespace MantaChessEngine
             _moveFactory = new MoveFactory();
             _moveGenerator = new MoveGenerator(_moveFactory);
 
-            if (engineType == EngineType.Random)
+            switch (engineType)
             {
-                _search = new SearchRandom(_moveGenerator);
-            }
-            else if (engineType == EngineType.DepthHalf)
-            {
-                _evaluator = new EvaluatorSimple();
-                _search = new SearchServiceDepthHalfMove(_evaluator, _moveGenerator);
-            }
-            else if (engineType == EngineType.DepthOne)
-            {
-                _evaluator = new EvaluatorSimple();
-                _search = new SearchServiceDepthOne(_evaluator, _moveGenerator);
-            }
-            else if (engineType == EngineType.Minmax)
-            {
-                _evaluator = new EvaluatorSimple();
-                _search = new SearchMinimax(_evaluator, _moveGenerator);
-            }
-            else if (engineType == EngineType.MinmaxPosition)
-            {
-                _evaluator = new EvaluatorPosition();
-                _search = new SearchMinimax(_evaluator, _moveGenerator);
-            }
-            else if (engineType == EngineType.MinmaxSearchTree)
-            {
-                _evaluator = new EvaluatorPosition();
-                _search = new SearchMinimaxTree(_evaluator, _moveGenerator);
+                case EngineType.Random:
+                    _search = new SearchRandom(_moveGenerator);
+                    break;
+
+                case EngineType.DepthHalf:
+                    _evaluator = new EvaluatorSimple();
+                    _search = new SearchServiceDepthHalfMove(_evaluator, _moveGenerator);
+                    break;
+
+                case EngineType.DepthOne:
+                    _evaluator = new EvaluatorSimple();
+                    _search = new SearchServiceDepthOne(_evaluator, _moveGenerator);
+                    break;
+
+                case EngineType.Minimax:
+                    _evaluator = new EvaluatorSimple();
+                    _search = new SearchMinimax(_evaluator, _moveGenerator);
+                    break;
+
+                // strongest --------------------------------
+                case EngineType.MinimaxPosition:
+                    _evaluator = new EvaluatorPosition();
+                    _search = new SearchMinimax(_evaluator, _moveGenerator);
+                    break;
+                    // --------------------------------------
+
+                case EngineType.MinimaxSearchTree:
+                    _evaluator = new EvaluatorPosition();
+                    _search = new SearchMinimaxTree(_evaluator, _moveGenerator);
+                    break;
+
+                case EngineType.MinimaxWithClone:
+                    _evaluator = new EvaluatorPosition();
+                    _search = new SearchMinimaxWithClone(_evaluator, _moveGenerator);
+                    break;
+
+                default:
+                    throw new Exception("No engine type defined.");
             }
         }
 

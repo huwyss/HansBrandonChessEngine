@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 [assembly: InternalsVisibleTo("MantaChessEngineTest")]
 namespace MantaChessEngine
 {
-    class SearchMinimax : ISearchService
+    class SearchMinimaxWithClone : ISearchService
     {
         private MoveGenerator _moveGenerator;
         private IEvaluator _evaluator;
@@ -17,7 +17,7 @@ namespace MantaChessEngine
 
         private static int evaluatedPositions;
 
-        public SearchMinimax(IEvaluator evaluator, MoveGenerator moveGenerator)
+        public SearchMinimaxWithClone(IEvaluator evaluator, MoveGenerator moveGenerator)
         {
             _evaluator = evaluator;
             _moveGenerator = moveGenerator;
@@ -70,25 +70,23 @@ namespace MantaChessEngine
             var possibleMoves = _moveGenerator.GetAllMoves(board, color);
             foreach (IMove currentMove in possibleMoves)
             {
-                board.Move(currentMove);
+                Board boardWithMove = board.Clone();
+                boardWithMove.Move(currentMove);
 
-                if (level > 1) // we need to do more move levels...
+                if (level > 1) // we need to do another move level...
                 {
-                    if (board.IsWinner(color))
+                    if (boardWithMove.IsWinner(color))
                     {
-                        currentScore = InitWithWorstScorePossible(Helper.GetOpositeColor(color)); // opposite color has lost king
-                        board.Back();
+                        currentScore = InitWithWorstScorePossible(Helper.GetOpositeColor(color)); // oposit color has lost king
                     }
                     else
                     {
-                        IMove moveRec = SearchLevel(board, Helper.GetOpositeColor(color), level - 1, out currentScore);
-                        board.Back();
+                        IMove moveRec = SearchLevel(boardWithMove, Helper.GetOpositeColor(color), level - 1, out currentScore);
                     }
                 }
                 else // we calculated all levels and reached the last position that we need to evaluate
                 {
-                    currentScore = _evaluator.Evaluate(board);
-                    board.Back();
+                    currentScore = _evaluator.Evaluate(boardWithMove);
                     evaluatedPositions++;
                 }
 

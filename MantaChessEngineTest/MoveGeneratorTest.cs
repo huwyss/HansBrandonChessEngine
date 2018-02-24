@@ -821,7 +821,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void IsCheckTest_WhenKingAttacked_ThenTrue()
         {
-            MantaEngine engine = new MantaEngine(EngineType.MinmaxPosition);
+            MantaEngine engine = new MantaEngine(EngineType.MinimaxPosition);
             Board board = new Board();
             string position = "....rk.." +
                               "........" +
@@ -840,7 +840,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void IsCheckTest_WhenKingNotAttacked_ThenFalse()
         {
-            MantaEngine engine = new MantaEngine(EngineType.MinmaxPosition);
+            MantaEngine engine = new MantaEngine(EngineType.MinimaxPosition);
             Board board = new Board();
             string position = ".....k.." +
                               ".....p.." +

@@ -68,7 +68,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void DoBestMoveTest_WhenWhiteIsCheckMate_ThenNoLegalMove_WhiteMoves()
         {
-            var engine = new MantaEngine(EngineType.MinmaxPosition);
+            var engine = new MantaEngine(EngineType.MinimaxPosition);
             engine.SetBoard(new Board());
             string boardString = "........" +
                                  "........" +

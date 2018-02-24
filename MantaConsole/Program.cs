@@ -68,8 +68,8 @@ namespace MantaConsole
             //                  "........" +
             //                  "K.......");
 
-            MantaEngine whiteEngine = new MantaEngine(EngineType.MinmaxSearchTree);
-            MantaEngine blackEngine = new MantaEngine(EngineType.MinmaxSearchTree);
+            MantaEngine whiteEngine = new MantaEngine(EngineType.MinimaxPosition);
+            MantaEngine blackEngine = new MantaEngine(EngineType.MinimaxPosition);
             whiteEngine.SetBoard(board);
             blackEngine.SetBoard(board);
 

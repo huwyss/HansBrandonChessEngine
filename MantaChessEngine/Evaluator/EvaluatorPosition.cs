@@ -13,7 +13,7 @@ namespace MantaChessEngine
         public readonly float ValueBishop = 3f;
         public readonly float ValueRook = 5f;
         public readonly float ValueQueen = 9f;
-        public readonly float ValueKing = 1000f;
+        public readonly float ValueKing = 10000f;
 
         private readonly float AdvantageDoubleBishop = 0.5f;
         private readonly float CastlingScore = 1f;

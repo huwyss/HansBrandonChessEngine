@@ -13,7 +13,7 @@ namespace MantaChessEngine
         public float ValueBishop = 3f;
         public float ValueRook = 5f;
         public float ValueQueen = 9f;
-        public float ValueKing = 1000f;
+        public float ValueKing = 10000f;
 
         /// <summary>
         /// Calculates the score from white's point. + --> white is better, - --> black is better.

@@ -54,41 +54,34 @@ namespace MantaConsole
                     runStatisticGames = 1;
                     quiet = false;
                     break;
-            }            
-
-            Board board = new Board();
-            board.SetInitialPosition();
-
-            //board.SetPosition(".......k" +
-            //                  "........" +
-            //                  "........" +
-            //                  ".......p" +
-            //                  "........" +
-            //                  "........" +
-            //                  "........" +
-            //                  "K.......");
-
-            //board.SetPosition("........" +
-            //                     "........" +
-            //                     "........" +
-            //                     "........" +
-            //                     "........" +
-            //                     "..K....." +
-            //                     "....R..." +
-            //                     "K.......");
+            }
 
             MantaEngine whiteEngine = new MantaEngine(EngineType.MinimaxPosition);
             whiteEngine.SetMaxSearchDepth(3);
             MantaEngine blackEngine = new MantaEngine(EngineType.MinimaxPosition);
             blackEngine.SetMaxSearchDepth(3);
-            whiteEngine.SetBoard(board);
-            blackEngine.SetBoard(board);
 
             float whiteWins = 0;
+            float blackWins = 0;
             bool isMoveValid;
 
             for (int i = 0; i < runStatisticGames; i++)
             {
+                Board board = new Board();
+                board.SetInitialPosition();
+
+                //board.SetPosition(".......k" +
+                //                  "........" +
+                //                  "........" +
+                //                  ".......p" +
+                //                  "........" +
+                //                  "........" +
+                //                  "........" +
+                //                  "K.......");
+
+                whiteEngine.SetBoard(board);
+                blackEngine.SetBoard(board);
+            
                 int moveCount = 1;
 
                 if (!quiet)
@@ -142,7 +135,6 @@ namespace MantaConsole
                         if (!whiteHuman && whiteEngine.SideToMove() == Definitions.ChessColor.White)
                         {
                             moveComputer = whiteEngine.DoBestMove(Definitions.ChessColor.White);
-
                             if (moveComputer is NoLegalMove)
                             {
                                 // check for stall mate and check mate
@@ -154,6 +146,7 @@ namespace MantaConsole
                                 {
                                     Console.WriteLine("\nWhite is stall mate. Game is draw!");
                                     whiteWins += 0.5f;
+                                    blackWins += 0.5f;
                                 }
                                 break;
                             }
@@ -162,8 +155,6 @@ namespace MantaConsole
                         else if (!blackHuman && whiteEngine.SideToMove() == Definitions.ChessColor.Black)
                         {
                             moveComputer = blackEngine.DoBestMove(Definitions.ChessColor.Black);
-                            //whiteEngine.Move(moveComputer);
-
                             if (moveComputer is NoLegalMove)
                             {
                                 // check for stall mate and check mate
@@ -176,6 +167,7 @@ namespace MantaConsole
                                 {
                                     Console.WriteLine("\nBlack is stall mate. Game is draw!");
                                     whiteWins += 0.5f;
+                                    blackWins += 0.5f;
                                 }
                                 break;
                             }
@@ -192,14 +184,15 @@ namespace MantaConsole
 
                     if (whiteEngine.IsWinner(Definitions.ChessColor.White))
                     {
+                        whiteWins++;
                         if (!quiet)
                             Console.WriteLine("\nWhite wins!");
-
-                        whiteWins++;
+                        
                         break;
                     }
                     if (whiteEngine.IsWinner(Definitions.ChessColor.Black))
                     {
+                        blackWins++;
                         if (!quiet)
                         {
                             Console.WriteLine("\nBlack wins!");
@@ -209,10 +202,10 @@ namespace MantaConsole
                     }
                 }
 
-                Console.WriteLine("Games: " + i+1 + " - White score: " + whiteWins);
+                Console.WriteLine("Games: " + (i+1).ToString() + " - White score: " + whiteWins + " - Black score: " + blackWins);
             }
 
-            Console.WriteLine("\n\nResult\n\nGames: " + runStatisticGames + " - White score: " + whiteWins);
+            Console.WriteLine("\n\nResult\n\nGames: " + runStatisticGames + " - White score: " + whiteWins + " - Black score: " + blackWins);
             Console.ReadLine();
         }
 

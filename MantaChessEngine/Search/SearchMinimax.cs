@@ -14,6 +14,8 @@ namespace MantaChessEngine
         private IEvaluator _evaluator;
         private int _level;
 
+        private Random _rand;
+
         private static int evaluatedPositions;
 
         /// <summary>
@@ -38,6 +40,7 @@ namespace MantaChessEngine
             _evaluator = evaluator;
             _moveGenerator = moveGenerator;
             _level = Definitions.DEFAULT_MAXLEVEL;
+            _rand = new Random();
         }
 
         /// <summary>
@@ -117,11 +120,11 @@ namespace MantaChessEngine
         {
             if (color == Definitions.ChessColor.White)
             {
-                return -10000;
+                return -1000;
             }
             else
             {
-                return 10000;
+                return 1000;
             }
         }
 
@@ -129,17 +132,25 @@ namespace MantaChessEngine
         {
             if (color == Definitions.ChessColor.White)
             {
-                if (currentScore > bestScoreSoFar)
+                if (currentScore >= bestScoreSoFar)
                 {
                     return true;
                 }
+                //else if (currentScore == bestScoreSoFar)
+                //{
+                //    return _rand.Next(0, 2) == 0;
+                //}
             }
             else
             {
-                if (currentScore < bestScoreSoFar)
+                if (currentScore <= bestScoreSoFar)
                 {
                     return true;
                 }
+                //else if (currentScore == bestScoreSoFar)
+                //{
+                //    return _rand.Next(0, 2) == 0;
+                //}
             }
 
             return false;

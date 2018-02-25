@@ -377,7 +377,7 @@ namespace MantaChessEngineTest
             var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('b'), 2, true); // black pawn
 
             Assert.AreEqual(1, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'a', 1, null)), "b2a1 missing (promotion when capturing)");
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'a', 1, Piece.MakePiece('R'))), "b2a1 missing (promotion when capturing)");
         }
 
         // ----------------------------------------------------------------------------------------------------

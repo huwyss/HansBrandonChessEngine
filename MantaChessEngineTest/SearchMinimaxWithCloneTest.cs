@@ -4,12 +4,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace MantaChessEngineTest
 {
-    /// <summary>
-    /// class is a copy of SearchMinimaxTest
-    /// </summary>
-    
     [TestClass]
-    public class SearchMinimaxWithBackTest
+    public class SearchMinimaxWithCloneTest
     {
         // ---------------------------------------------------------------------------------------------
         // White is first mover
@@ -21,7 +17,7 @@ namespace MantaChessEngineTest
             IEvaluator evaluator = new EvaluatorSimple();
             
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimaxWithClone(evaluator, gen);
             var board = new Board();
             string boardString = "k......." +
                                  "........" +
@@ -46,7 +42,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimaxWithClone(evaluator, gen);
             var board = new Board();
             string boardString = "k......." +
                                  "........" +
@@ -71,7 +67,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimaxWithClone(evaluator, gen);
             var board = new Board();
             string boardString = "k......." +
                                  "...n...." +
@@ -109,7 +105,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimaxWithClone(evaluator, gen);
             var board = new Board();
             string boardString = "k......." +
                                  "...n...." +
@@ -136,7 +132,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimaxWithClone(evaluator, gen);
             var board = new Board();
             string boardString = "....q..R" +
                                  "........" +
@@ -162,7 +158,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimaxWithClone(evaluator, gen);
             var board = new Board();
             string boardString = "........" +
                                  "........" +
@@ -190,7 +186,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimaxWithClone(evaluator, gen);
             var board = new Board();
             string boardString = "k......." +
                                  "........" +
@@ -215,7 +211,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimaxWithClone(evaluator, gen);
             var board = new Board();
             string boardString = "k......." +
                                  "........" +
@@ -240,7 +236,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimaxWithClone(evaluator, gen);
             var board = new Board();
             string boardString = "k......." +
                                  "...n...." +
@@ -278,7 +274,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimaxWithClone(evaluator, gen);
             var board = new Board();
             string boardString = "k......." +
                                  "...n...." +

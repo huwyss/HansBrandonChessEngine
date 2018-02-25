@@ -75,7 +75,7 @@ namespace MantaChessEngine
                          currentSequence == "dl" || currentSequence == "dr") // capture
                 {
                     // normal capture
-                    if (valid && Color == Helper.GetOpositeColor(board.GetColor(targetFile, targetRank)))
+                    if (valid && Color == Helper.GetOppositeColor(board.GetColor(targetFile, targetRank)))
                     {
                         if ((currentSequence == "ul" || currentSequence == "ur") && targetRank < 8 || // white normal pawn move capture
                             (currentSequence == "dl" || currentSequence == "dr") && targetRank > 1 )  // black normal pawn move capture
@@ -84,7 +84,7 @@ namespace MantaChessEngine
                         }
                         else // pawn is promoted
                         {
-                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, null));
+                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank)));
                         }
                     }
                     // en passant capture

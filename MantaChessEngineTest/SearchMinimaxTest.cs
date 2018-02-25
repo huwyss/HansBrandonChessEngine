@@ -4,6 +4,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace MantaChessEngineTest
 {
+    /// <summary>
+    /// class is a copy of SearchMinimaxTest
+    /// </summary>
+    
     [TestClass]
     public class SearchMinimaxTest
     {
@@ -17,7 +21,7 @@ namespace MantaChessEngineTest
             IEvaluator evaluator = new EvaluatorSimple();
             
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimaxWithClone(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen);
             var board = new Board();
             string boardString = "k......." +
                                  "........" +
@@ -42,7 +46,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimaxWithClone(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen);
             var board = new Board();
             string boardString = "k......." +
                                  "........" +
@@ -67,7 +71,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimaxWithClone(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen);
             var board = new Board();
             string boardString = "k......." +
                                  "...n...." +
@@ -105,7 +109,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimaxWithClone(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen);
             var board = new Board();
             string boardString = "k......." +
                                  "...n...." +
@@ -132,7 +136,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimaxWithClone(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen);
             var board = new Board();
             string boardString = "....q..R" +
                                  "........" +
@@ -158,7 +162,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimaxWithClone(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen);
             var board = new Board();
             string boardString = "........" +
                                  "........" +
@@ -186,7 +190,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimaxWithClone(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen);
             var board = new Board();
             string boardString = "k......." +
                                  "........" +
@@ -211,7 +215,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimaxWithClone(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen);
             var board = new Board();
             string boardString = "k......." +
                                  "........" +
@@ -236,7 +240,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimaxWithClone(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen);
             var board = new Board();
             string boardString = "k......." +
                                  "...n...." +
@@ -274,7 +278,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimaxWithClone(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen);
             var board = new Board();
             string boardString = "k......." +
                                  "...n...." +
@@ -294,6 +298,35 @@ namespace MantaChessEngineTest
             Assert.AreNotEqual(badMove, actualMove, "Black bishop or knight should not capture white pawn.");
             Assert.AreNotEqual(badMove2, actualMove, "Black bishop or knight should not capture white pawn.");
             Assert.AreEqual(1, score);
+        }
+
+        // ---------------------------------------------------------------------------------------------
+        // White is stall mate
+        // ---------------------------------------------------------------------------------------------
+
+        [Ignore]
+        [TestMethod]
+        public void SearchBestMoveTest_WhenWhiteStallmate_ThenNoLegalMoveAndBestScore0()
+        {
+            IEvaluator evaluator = new EvaluatorSimple();
+            MoveGenerator gen = new MoveGenerator(new MoveFactory());
+            var target = new SearchMinimax(evaluator, gen);
+            var board = new Board();
+            string boardString = "........" +
+                                 "........" +
+                                 "........" +
+                                 "........" +
+                                 "........" +
+                                 "..k....." +
+                                 ".r......" +
+                                 "K.......";
+            board.SetPosition(boardString);
+
+            float score = 0;
+            IMove actualMove = target.SearchLevel(board, Definitions.ChessColor.White, 1, out score);
+
+            Assert.AreEqual(0, score, "stalemate score should be 0");
+            Assert.AreEqual(new NoLegalMove(), actualMove, "Should be NoLegalMove, white is stalemate");
         }
     }
 }

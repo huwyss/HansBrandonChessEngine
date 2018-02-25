@@ -84,11 +84,11 @@ namespace MantaChessEngine
                 {
                     if (boardWithMove.IsWinner(color))
                     {
-                        currentScore = InitWithWorstScorePossible(Helper.GetOpositeColor(color)); // oposit color has lost king
+                        currentScore = InitWithWorstScorePossible(Helper.GetOppositeColor(color)); // oposit color has lost king
                     }
                     else
                     {
-                        IMove moveRec = SearchLevel(boardWithMove, Helper.GetOpositeColor(color), level - 1, out currentScore);
+                        IMove moveRec = SearchLevel(boardWithMove, Helper.GetOppositeColor(color), level - 1, out currentScore);
                     }
                 }
                 else // we calculated all levels and reached the last position that we need to evaluate

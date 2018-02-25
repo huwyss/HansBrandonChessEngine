@@ -88,7 +88,7 @@ namespace MantaChessEngine
                     {
                         _tree.GotoNextChild();
                         _board.Move(_tree.CurrentMove);
-                        _color = Helper.GetOpositeColor(_color);
+                        _color = Helper.GetOppositeColor(_color);
                         if (_tree.CurrentLevel < _maxPly)
                         {
                             _state = BuildTreeState.AddMoves;
@@ -118,7 +118,7 @@ namespace MantaChessEngine
                 case BuildTreeState.GoUp:
                     _board.Back();
                     _tree.GotoParent();
-                    _color = Helper.GetOpositeColor(_color);
+                    _color = Helper.GetOppositeColor(_color);
                     _state = BuildTreeState.GoDown;
                     break;
             }
@@ -147,7 +147,7 @@ namespace MantaChessEngine
                     {
                         _tree.GotoNextChild();
                         _board.Move(_tree.CurrentMove);
-                        _color = Helper.GetOpositeColor(_color);
+                        _color = Helper.GetOppositeColor(_color);
                         if (_tree.CurrentLevel >= _maxPly)
                         {
                             _tree.CurrentScore = _evaluator.Evaluate(_board);
@@ -173,7 +173,7 @@ namespace MantaChessEngine
                 case BuildTreeState.GoUp:
                     _board.Back();
                     _tree.GotoParent();
-                    _color = Helper.GetOpositeColor(_color);
+                    _color = Helper.GetOppositeColor(_color);
                     _state = BuildTreeState.GoDown;
                     break;
             }
@@ -203,7 +203,7 @@ namespace MantaChessEngine
                     {
                         _tree.GotoNextChild();
                         _board.Move(_tree.CurrentMove);
-                        _color = Helper.GetOpositeColor(_color);
+                        _color = Helper.GetOppositeColor(_color);
                         break;
                     }
                     else
@@ -233,7 +233,7 @@ namespace MantaChessEngine
                 case BuildTreeState.GoUp:
                     _board.Back();
                     _tree.GotoParent();
-                    _color = Helper.GetOpositeColor(_color);
+                    _color = Helper.GetOppositeColor(_color);
                     _state = BuildTreeState.GoDown;
                     break;
             }

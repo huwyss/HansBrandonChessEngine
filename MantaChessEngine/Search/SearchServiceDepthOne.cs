@@ -24,7 +24,7 @@ namespace MantaChessEngine
 
         public IMove Search(Board board, Definitions.ChessColor color, out float score)
         {
-            float bestScoreSecondMover = InitBestScoreSofar(Helper.GetOpositeColor(color));
+            float bestScoreSecondMover = InitBestScoreSofar(Helper.GetOppositeColor(color));
             float bestScoreFirstMover = InitBestScoreSofar(color);
             IMove bestMoveFirstMover = null;
 
@@ -34,7 +34,7 @@ namespace MantaChessEngine
                 Board boardWithMove = board.Clone();
                 boardWithMove.Move(currentMove);
 
-                IMove bestMoveSecondMover = CalcScoreLevelZero(boardWithMove, Helper.GetOpositeColor(color), out bestScoreSecondMover);
+                IMove bestMoveSecondMover = CalcScoreLevelZero(boardWithMove, Helper.GetOppositeColor(color), out bestScoreSecondMover);
                 if (IsBestMoveSofar(color, bestScoreFirstMover, bestScoreSecondMover))
                 {
                     bestScoreFirstMover = bestScoreSecondMover;

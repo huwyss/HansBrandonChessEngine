@@ -141,7 +141,7 @@ namespace MantaChessEngine
 
             board.History.Add(this, enPassantFile, enPassantRank, castlingRightWhiteQueenSide, castlingRightWhiteKingSide,
                 castlingRightBlackQueenSide, castlingRightBlackKingSide);
-            board.SideToMove = Helper.GetOpositeColor(board.SideToMove);
+            board.SideToMove = Helper.GetOppositeColor(board.SideToMove);
         }
 
         public virtual void UndoMove(Board board)
@@ -151,7 +151,7 @@ namespace MantaChessEngine
             board.SetPiece(CapturedPiece, CapturedFile, CapturedRank); // TargetRank differs from TargetRank for en passant capture
 
             board.History.Back();
-            board.SideToMove = Helper.GetOpositeColor(board.SideToMove);
+            board.SideToMove = Helper.GetOppositeColor(board.SideToMove);
         }
 
         private void SetEnPassantFields(MoveBase move, out int enPassantFile, out int enPassantRank)

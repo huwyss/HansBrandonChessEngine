@@ -16,6 +16,15 @@ namespace MantaChessEngine
 
         private static int evaluatedPositions;
 
+        /// <summary>
+        /// Set the number of moves that are calculated in advance.
+        /// </summary>
+        /// <param name="level">
+        /// Level = 1 means: engine calculate 1 half move (if white's move: calculate move of white.)
+        /// Level = 2 means: engine calculate 2 half moves (if white's move: calculate move of white and of black.)
+        /// Level = 3 means: engine calculate 3 half moves (if white's move: calculate move of white, black, white)
+        /// Level = 4 means: engine calculate 4 half moves (if white's move: calculate move of white, black, white, black)
+        /// </param>
         public void SetMaxDepth(int level)
         {
             if (level > 0)
@@ -29,20 +38,6 @@ namespace MantaChessEngine
             _evaluator = evaluator;
             _moveGenerator = moveGenerator;
             _level = Definitions.DEFAULT_MAXLEVEL;
-        }
-
-        /// <summary>
-        /// Set the number of moves that are calculated in advance.
-        /// </summary>
-        /// <param name="level">
-        /// Level = 1 means: engine calculate 1 half move (if white's move: calculate move of white.)
-        /// Level = 2 means: engine calculate 2 half moves (if white's move: calculate move of white and of black.)
-        /// Level = 3 means: engine calculate 3 half moves (if white's move: calculate move of white, black, white)
-        /// Level = 4 means: engine calculate 4 half moves (if white's move: calculate move of white, black, white, black)
-        /// </param>
-        public void SetLevel(int level)
-        {
-            _level = level;
         }
 
         /// <summary>
@@ -83,12 +78,12 @@ namespace MantaChessEngine
                 {
                     if (board.IsWinner(color))
                     {
-                        currentScore = InitWithWorstScorePossible(Helper.GetOpositeColor(color)); // opposite color has lost king
+                        currentScore = InitWithWorstScorePossible(Helper.GetOppositeColor(color)); // opposite color has lost king
                         board.Back();
                     }
                     else
                     {
-                        IMove moveRec = SearchLevel(board, Helper.GetOpositeColor(color), level - 1, out currentScore);
+                        IMove moveRec = SearchLevel(board, Helper.GetOppositeColor(color), level - 1, out currentScore);
                         board.Back();
                     }
                 }
@@ -110,6 +105,7 @@ namespace MantaChessEngine
             score = bestScore;
             if (bestMove == null)
             {
+                score = 0; // todo check out stall mate
                 var factory = new MoveFactory();
                 return factory.MakeNoLegalMove();
             }

@@ -20,7 +20,7 @@ namespace MantaChessEngine
             return file;
         }
 
-        public static Definitions.ChessColor GetOpositeColor(Definitions.ChessColor color)
+        public static Definitions.ChessColor GetOppositeColor(Definitions.ChessColor color)
         {
             Definitions.ChessColor oposite = Definitions.ChessColor.Empty;
 

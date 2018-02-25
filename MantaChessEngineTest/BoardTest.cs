@@ -654,6 +654,38 @@ namespace MantaChessEngineTest
         }
 
         [TestMethod]
+        public void MoveTest_WhenWhitePromotionWithCapture_ThenCorrectMove()
+        {
+            MoveGenerator generator = new MoveGenerator(new MoveFactory());
+            Board board = new Board();
+            string position = ".r..k..." +
+                              "P......." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "....K...";
+            board.SetPosition(position);
+
+            board.Move(new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'b', 8, Piece.MakePiece('r')));
+
+            string expecPos = ".Q..k..." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "....K...";
+            Assert.AreEqual(expecPos, board.GetString, "White promotion with capture not correct.");
+
+            board.Back();
+
+            Assert.AreEqual(position, board.GetString, "White promotion with capture: back not correct.");
+        }
+
+        [TestMethod]
         public void MoveTest_WhenBlackPromotion_ThenCorrectMove()
         {
             MoveGenerator generator = new MoveGenerator(new MoveFactory());

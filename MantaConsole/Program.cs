@@ -68,10 +68,19 @@ namespace MantaConsole
             //                  "........" +
             //                  "K.......");
 
+            //board.SetPosition("........" +
+            //                     "........" +
+            //                     "........" +
+            //                     "........" +
+            //                     "........" +
+            //                     "..K....." +
+            //                     "....R..." +
+            //                     "K.......");
+
             MantaEngine whiteEngine = new MantaEngine(EngineType.MinimaxPosition);
-            whiteEngine.SetMaxSearchDepth(4);
+            whiteEngine.SetMaxSearchDepth(3);
             MantaEngine blackEngine = new MantaEngine(EngineType.MinimaxPosition);
-            blackEngine.SetMaxSearchDepth (3);
+            blackEngine.SetMaxSearchDepth(3);
             whiteEngine.SetBoard(board);
             blackEngine.SetBoard(board);
 
@@ -143,7 +152,7 @@ namespace MantaConsole
                                 }
                                 else
                                 {
-                                    Console.WriteLine("\nBlack is stall mate. Game is draw!");
+                                    Console.WriteLine("\nWhite is stall mate. Game is draw!");
                                     whiteWins += 0.5f;
                                 }
                                 break;
@@ -165,7 +174,7 @@ namespace MantaConsole
                                 }
                                 else
                                 {
-                                    Console.WriteLine("\nWhite is stall mate. Game is draw!");
+                                    Console.WriteLine("\nBlack is stall mate. Game is draw!");
                                     whiteWins += 0.5f;
                                 }
                                 break;
@@ -200,10 +209,10 @@ namespace MantaConsole
                     }
                 }
 
-                Console.WriteLine("Games: " + i+1 + " - White wins: " + whiteWins);
+                Console.WriteLine("Games: " + i+1 + " - White score: " + whiteWins);
             }
 
-            Console.WriteLine("\n\nResult\n\nGames: " + runStatisticGames + " - White wins: " + whiteWins);
+            Console.WriteLine("\n\nResult\n\nGames: " + runStatisticGames + " - White score: " + whiteWins);
             Console.ReadLine();
         }
 

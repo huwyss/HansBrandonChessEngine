@@ -28,9 +28,9 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetOpositColorTest_WhenWhite_ThenOpositeIsBlack_AndViceVersa()
         {
-            Assert.AreEqual(Definitions.ChessColor.Black, Helper.GetOpositeColor(Definitions.ChessColor.White));
-            Assert.AreEqual(Definitions.ChessColor.White, Helper.GetOpositeColor(Definitions.ChessColor.Black));
-            Assert.AreEqual(Definitions.ChessColor.Empty, Helper.GetOpositeColor(Definitions.ChessColor.Empty));
+            Assert.AreEqual(Definitions.ChessColor.Black, Helper.GetOppositeColor(Definitions.ChessColor.White));
+            Assert.AreEqual(Definitions.ChessColor.White, Helper.GetOppositeColor(Definitions.ChessColor.Black));
+            Assert.AreEqual(Definitions.ChessColor.Empty, Helper.GetOppositeColor(Definitions.ChessColor.Empty));
         }
     }
 }

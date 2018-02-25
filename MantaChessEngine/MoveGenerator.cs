@@ -105,7 +105,7 @@ namespace MantaChessEngine
         public bool IsAttacked(Board board, Definitions.ChessColor color, int file, int rank)
         {
             // find all oponent moves
-            var moves = GetAllMoves(board, Helper.GetOpositeColor(color), false);
+            var moves = GetAllMoves(board, Helper.GetOppositeColor(color), false);
 
             foreach (IMove move in moves)
             {
@@ -121,7 +121,7 @@ namespace MantaChessEngine
         public bool IsCheck(Board board, Definitions.ChessColor color)
         {
             // find all oponent moves
-            var moves = GetAllMoves(board, Helper.GetOpositeColor(color), false);
+            var moves = GetAllMoves(board, Helper.GetOppositeColor(color), false);
 
             // if a move ends in king's position then king is in check
             foreach (IMove move in moves)

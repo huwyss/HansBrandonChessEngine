@@ -15,7 +15,7 @@ namespace MantaChessEngine
         {
         }
 
-        public override List<IMove> GetMoves(MoveGenerator moveGen, Board board, int file, int rank, bool includeCastling = true)
+        public override List<IMove> GetMoves(MoveGenerator moveGen, IBoard board, int file, int rank, bool includeCastling = true)
         {
             int targetRank;
             int targetFile;

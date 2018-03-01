@@ -9,18 +9,18 @@ namespace MantaChessEngine
     public class SearchRandom : ISearchService
     {
         private Random _rand;
-        private MoveGenerator _moveGenerator;
+        private IMoveGenerator _moveGenerator;
 
         public void SetMaxDepth(int level)
         { }
 
-        public SearchRandom(MoveGenerator moveGenerator)
+        public SearchRandom(IMoveGenerator moveGenerator)
         {
             _moveGenerator = moveGenerator;
             _rand = new Random();
         }
 
-        public IMove Search(Board board, Definitions.ChessColor color, out float score)
+        public IMove Search(IBoard board, Definitions.ChessColor color, out float score)
         {
             IMove nextMove = null;
             var possibleMovesComputer = _moveGenerator.GetAllMoves(board, color);

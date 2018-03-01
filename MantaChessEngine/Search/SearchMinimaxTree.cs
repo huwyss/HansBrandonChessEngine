@@ -19,7 +19,7 @@ namespace MantaChessEngine
         private IEvaluator _evaluator;
         private IMoveGenerator _moveGenerator;
         private BuildTreeState _state;
-        private Board _board;
+        private IBoard _board;
         private Definitions.ChessColor _color;
         private MoveTree _tree;
         private int _maxPly;
@@ -51,7 +51,7 @@ namespace MantaChessEngine
             _maxPly = level;
         }
 
-        public IMove Search(Board board, Definitions.ChessColor color, out float score)
+        public IMove Search(IBoard board, Definitions.ChessColor color, out float score)
         {
             _tree = new MoveTree();
             CreateSearchTree(board, color);
@@ -64,7 +64,7 @@ namespace MantaChessEngine
             return bestMove;
         }
         
-        internal void CreateSearchTree(Board board, Definitions.ChessColor color)
+        internal void CreateSearchTree(IBoard board, Definitions.ChessColor color)
         {
             _board = board;
             _color = color;

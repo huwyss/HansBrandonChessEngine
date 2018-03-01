@@ -20,13 +20,13 @@ namespace MantaChessEngine
 
         // Note: Manta is a king capture engine. 
         // This means even if we are in check then also moves that do not remove the check are returned here.
-        public List<IMove> GetAllMoves(Board board, Definitions.ChessColor color, bool includeCastling = true)
+        public List<IMove> GetAllMoves(IBoard board, Definitions.ChessColor color, bool includeCastling = true)
         {
             var allMovesUnchecked = GetAllMovesUnchecked(board, color, includeCastling);
             return allMovesUnchecked;
         }
 
-        private List<IMove> GetAllMovesUnchecked(Board board, Definitions.ChessColor color, bool includeCastling = true)
+        private List<IMove> GetAllMovesUnchecked(IBoard board, Definitions.ChessColor color, bool includeCastling = true)
         {
             List<IMove> allMoves = new List<IMove>();
 
@@ -45,14 +45,14 @@ namespace MantaChessEngine
             return allMoves;
         }
 
-        public bool IsMoveValid(Board board, IMove move)
+        public bool IsMoveValid(IBoard board, IMove move)
         {
             bool valid = HasCorrectColorMoved(board, move);
             valid &= move.MovingPiece.GetMoves(this, board, move.SourceFile, move.SourceRank).Contains(move);
             return valid;
         }
 
-        private bool HasCorrectColorMoved(Board board, IMove move)
+        private bool HasCorrectColorMoved(IBoard board, IMove move)
         {
             return (move.MovingPiece.Color == board.SideToMove);
         }
@@ -90,7 +90,7 @@ namespace MantaChessEngine
                     targetRank >= 1 && targetRank <= 8;
         }
 
-        private bool IsFieldsEmpty(Board board, int sourceFile, int sourceRank, int targetFile)
+        private bool IsFieldsEmpty(IBoard board, int sourceFile, int sourceRank, int targetFile)
         {
             bool empty = true;
 
@@ -102,7 +102,7 @@ namespace MantaChessEngine
             return empty;
         }
 
-        public bool IsAttacked(Board board, Definitions.ChessColor color, int file, int rank)
+        public bool IsAttacked(IBoard board, Definitions.ChessColor color, int file, int rank)
         {
             // find all oponent moves
             var moves = GetAllMoves(board, Helper.GetOppositeColor(color), false);
@@ -118,7 +118,7 @@ namespace MantaChessEngine
             return false;
         }
 
-        public bool IsCheck(Board board, Definitions.ChessColor color)
+        public bool IsCheck(IBoard board, Definitions.ChessColor color)
         {
             // find all oponent moves
             var moves = GetAllMoves(board, Helper.GetOppositeColor(color), false);

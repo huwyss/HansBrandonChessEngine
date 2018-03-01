@@ -19,6 +19,8 @@ namespace MantaConsole
         static void Main(string[] args)
         {
             var gameType = GameType.HumanVsComputer;
+            var whiteLevel = 4;
+            var blackLevel = 4;
 
             bool whiteHuman;
             bool blackHuman;
@@ -57,9 +59,9 @@ namespace MantaConsole
             }
 
             MantaEngine whiteEngine = new MantaEngine(EngineType.MinimaxPosition);
-            whiteEngine.SetMaxSearchDepth(3);
+            whiteEngine.SetMaxSearchDepth(whiteLevel);
             MantaEngine blackEngine = new MantaEngine(EngineType.MinimaxPosition);
-            blackEngine.SetMaxSearchDepth(3);
+            blackEngine.SetMaxSearchDepth(blackLevel);
 
             float whiteWins = 0;
             float blackWins = 0;
@@ -70,13 +72,23 @@ namespace MantaConsole
                 Board board = new Board();
                 board.SetInitialPosition();
 
-                //board.SetPosition(".......k" +
+
+                //board.SetPosition("........" +
                 //                  "........" +
                 //                  "........" +
-                //                  ".......p" +
+                //                  "........" +
+                //                  "........" +
+                //                  ".k......" +
+                //                  "q......." +  // white is check mate --> bug engine thinks it's stall mate
+                //                  "K.......");
+
+                //board.SetPosition("........" +
                 //                  "........" +
                 //                  "........" +
                 //                  "........" +
+                //                  "........" +
+                //                  ".k......" +
+                //                  ".r......" +  // white is stall mate --> ok
                 //                  "K.......");
 
                 whiteEngine.SetBoard(board);

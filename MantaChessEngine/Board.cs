@@ -6,29 +6,19 @@ using System.Threading.Tasks;
 
 namespace MantaChessEngine
 {
-    public class Board
+    public class Board : IBoard
     {
         public Definitions.ChessColor SideToMove { get; set; }
         public History History { get; set; }
         public IMove LastMove { get { return History.LastMove; } }
 
-        public int EnPassantFile { get { return !IsClonedBoard ? History.LastEnPassantFile : ClonedEnPassantFile; } }
-        public int EnPassantRank { get { return !IsClonedBoard ? History.LastEnPassantRank : ClonedEnPassantRank; } }
+        public int EnPassantFile { get { return History.LastEnPassantFile ; } }
+        public int EnPassantRank { get { return History.LastEnPassantRank ; } }
 
-        public bool CastlingRightWhiteQueenSide { get { return !IsClonedBoard ? History.LastCastlingRightWhiteQueenSide : ClonedCastlingRightWhiteQueenSide; } }
-        public bool CastlingRightWhiteKingSide { get { return !IsClonedBoard ? History.LastCastlingRightWhiteKingSide : ClonedCastlingRightWhiteKingSide; } }
-        public bool CastlingRightBlackQueenSide { get { return !IsClonedBoard ? History.LastCastlingRightBlackQueenSide : ClonedCastlingRightBlackQueenSide; } }
-        public bool CastlingRightBlackKingSide { get { return !IsClonedBoard ? History.LastCastlingRightBlackKingSide : ClonedCastlingRightBlackKingSide; } }
-
-        public int ClonedEnPassantFile { get; set; }
-        public int ClonedEnPassantRank { get; set; }
-
-        public bool ClonedCastlingRightWhiteQueenSide { get; set; }
-        public bool ClonedCastlingRightWhiteKingSide { get; set; }
-        public bool ClonedCastlingRightBlackQueenSide { get; set; }
-        public bool ClonedCastlingRightBlackKingSide { get; set; }
-
-        public bool IsClonedBoard { get; set; }
+        public bool CastlingRightWhiteQueenSide { get { return History.LastCastlingRightWhiteQueenSide; } }
+        public bool CastlingRightWhiteKingSide { get { return History.LastCastlingRightWhiteKingSide; } } 
+        public bool CastlingRightBlackQueenSide { get { return History.LastCastlingRightBlackQueenSide; } }
+        public bool CastlingRightBlackKingSide { get { return History.LastCastlingRightBlackKingSide; } } 
 
         public bool WhiteDidCastling { get; set; }
         public bool BlackDidCastling { get; set; }
@@ -62,26 +52,6 @@ namespace MantaChessEngine
         }
 
         /// <summary>
-        /// Clone the Board (not the complete history, only en passant fields)
-        /// </summary>
-        public Board Clone()
-        {
-            Board clonedBoard = new Board();
-            string position = GetString;
-            clonedBoard.SetPosition(position);
-            clonedBoard.ClonedEnPassantFile = EnPassantFile;
-            clonedBoard.ClonedEnPassantRank = EnPassantRank;
-            clonedBoard.ClonedCastlingRightWhiteQueenSide = CastlingRightWhiteQueenSide;
-            clonedBoard.ClonedCastlingRightWhiteKingSide = CastlingRightWhiteKingSide;
-            clonedBoard.ClonedCastlingRightBlackQueenSide = CastlingRightBlackQueenSide;
-            clonedBoard.ClonedCastlingRightBlackKingSide = CastlingRightBlackKingSide;
-            clonedBoard.IsClonedBoard = true;
-            clonedBoard.WhiteDidCastling = WhiteDidCastling;
-            clonedBoard.BlackDidCastling = BlackDidCastling;
-            return clonedBoard;
-        }
-
-        /// <summary>
         /// Sets the initial chess position.
         /// </summary>
         public void SetInitialPosition()
@@ -94,7 +64,6 @@ namespace MantaChessEngine
         {
             SideToMove = Definitions.ChessColor.White;
             History = new History();
-            IsClonedBoard = false;
             WhiteDidCastling = false;
             BlackDidCastling = false;
         }
@@ -114,8 +83,6 @@ namespace MantaChessEngine
                 }
             }
         }
-
-        
 
         /// <summary>
         /// Returns the chess piece.
@@ -179,19 +146,6 @@ namespace MantaChessEngine
         {
             Piece piece = GetPiece(file, rank);
             return piece != null ? piece.Color : Definitions.ChessColor.Empty;
-            //char piece = GetPiece(file, rank);
-            //if (piece >= 'a' && piece <= 'z')
-            //{
-            //    return Definitions.ChessColor.Black;
-            //}
-            //else if (piece >= 'A' && piece <= 'Z')
-            //{
-            //    return Definitions.ChessColor.White;
-            //}
-            //else
-            //{
-            //    return Definitions.ChessColor.Empty;
-            //}
         }
 
         public bool IsWinner(Definitions.ChessColor color)
@@ -205,13 +159,11 @@ namespace MantaChessEngine
                 {
                     Piece piece = GetPiece(file, rank);
                     if (piece is King && piece.Color == Definitions.ChessColor.White)
-                    //if (piece == Definitions.KING.ToString().ToUpper()[0])
                     {
                         hasWhiteKing = true;
                     }
 
                     if (piece is King && piece.Color == Definitions.ChessColor.Black)
-                        //if (piece == Definitions.KING.ToString().ToLower()[0])
                     {
                         hasBlackKing = true;
                     }

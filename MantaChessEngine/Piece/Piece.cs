@@ -17,7 +17,7 @@ namespace MantaChessEngine
         public abstract char Symbol { get; }
 
         public abstract IEnumerable<string> GetMoveDirectionSequences();
-        public virtual List<IMove> GetMoves(MoveGenerator moveGen, Board board, int file, int rank, bool includeCastling = true)
+        public virtual List<IMove> GetMoves(MoveGenerator moveGen, IBoard board, int file, int rank, bool includeCastling = true)
         { return null; }
             
         public static Piece MakePiece(char pieceChar)
@@ -85,7 +85,7 @@ namespace MantaChessEngine
                     targetRank >= 1 && targetRank <= 8;
         }
 
-        internal bool IsFieldsEmpty(Board board, int sourceFile, int sourceRank, int targetFile)
+        internal bool IsFieldsEmpty(IBoard board, int sourceFile, int sourceRank, int targetFile)
         {
             bool empty = true;
 

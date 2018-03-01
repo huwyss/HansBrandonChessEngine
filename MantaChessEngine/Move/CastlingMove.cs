@@ -60,7 +60,7 @@ namespace MantaChessEngine
             }
         }
 
-        public override void ExecuteMove(Board board)
+        public override void ExecuteMove(IBoard board)
         {
             switch (_castlingType)
             {
@@ -89,7 +89,7 @@ namespace MantaChessEngine
             base.ExecuteMove(board);
         }
 
-        public override void UndoMove(Board board)
+        public override void UndoMove(IBoard board)
         {
             switch (_castlingType)
             {

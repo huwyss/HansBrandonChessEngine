@@ -307,50 +307,50 @@ namespace MantaChessEngineTest
         // Clone tests
         // -------------------------------------------------------------------
         
-        [TestMethod]
-        public void CloneTest_CheckEnPassantField()
-        {
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
-            Board board = new Board();
-            board.SetInitialPosition();
-            board.Move(new NormalMove(Piece.MakePiece('P'),'e',2,'e',4,null));
-            board.WhiteDidCastling = true; // cannot be. but this should test the cloned board.
+        //[TestMethod]
+        //public void CloneTest_CheckEnPassantField()
+        //{
+        //    MoveGenerator generator = new MoveGenerator(new MoveFactory());
+        //    Board board = new Board();
+        //    board.SetInitialPosition();
+        //    board.Move(new NormalMove(Piece.MakePiece('P'),'e',2,'e',4,null));
+        //    board.WhiteDidCastling = true; // cannot be. but this should test the cloned board.
             
-            Board cloned = board.Clone();
+        //    Board cloned = board.Clone();
 
-            Assert.AreNotEqual(cloned, board, "must not return the same object!");
-            Assert.AreEqual(board.GetString, cloned.GetString);
+        //    Assert.AreNotEqual(cloned, board, "must not return the same object!");
+        //    Assert.AreEqual(board.GetString, cloned.GetString);
             
-            Assert.AreEqual(board.CastlingRightWhiteKingSide, cloned.CastlingRightWhiteKingSide);
-            Assert.AreEqual(board.CastlingRightWhiteQueenSide, cloned.CastlingRightWhiteQueenSide);
-            Assert.AreEqual(board.CastlingRightBlackKingSide, cloned.CastlingRightBlackKingSide);
-            Assert.AreEqual(board.CastlingRightBlackQueenSide, cloned.CastlingRightBlackQueenSide);
+        //    Assert.AreEqual(board.CastlingRightWhiteKingSide, cloned.CastlingRightWhiteKingSide);
+        //    Assert.AreEqual(board.CastlingRightWhiteQueenSide, cloned.CastlingRightWhiteQueenSide);
+        //    Assert.AreEqual(board.CastlingRightBlackKingSide, cloned.CastlingRightBlackKingSide);
+        //    Assert.AreEqual(board.CastlingRightBlackQueenSide, cloned.CastlingRightBlackQueenSide);
 
-            Assert.AreEqual(board.WhiteDidCastling, cloned.WhiteDidCastling);
-            Assert.AreEqual(board.BlackDidCastling, cloned.BlackDidCastling);
-        }
+        //    Assert.AreEqual(board.WhiteDidCastling, cloned.WhiteDidCastling);
+        //    Assert.AreEqual(board.BlackDidCastling, cloned.BlackDidCastling);
+        //}
 
-        [TestMethod]
-        public void CloneTest_Normalcase()
-        {
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
-            Board board = new Board();
-            board.SetInitialPosition();
-            board.Move(new NormalMove(Piece.MakePiece('P'),'e',2,'e',4,null));
-            board.Move(new NormalMove(Piece.MakePiece('p'),'e',7,'e',5,null));
-            board.Move(new NormalMove(Piece.MakePiece('K'),'e',1,'e',2,null)); // white loses castling right
+        //[TestMethod]
+        //public void CloneTest_Normalcase()
+        //{
+        //    MoveGenerator generator = new MoveGenerator(new MoveFactory());
+        //    Board board = new Board();
+        //    board.SetInitialPosition();
+        //    board.Move(new NormalMove(Piece.MakePiece('P'),'e',2,'e',4,null));
+        //    board.Move(new NormalMove(Piece.MakePiece('p'),'e',7,'e',5,null));
+        //    board.Move(new NormalMove(Piece.MakePiece('K'),'e',1,'e',2,null)); // white loses castling right
 
-            Board cloned = board.Clone();
+        //    Board cloned = board.Clone();
 
-            Assert.AreNotEqual(cloned, board, "must not return the same object!");
-            Assert.AreEqual(board.GetString, cloned.GetString);
+        //    Assert.AreNotEqual(cloned, board, "must not return the same object!");
+        //    Assert.AreEqual(board.GetString, cloned.GetString);
 
-            Assert.AreEqual(false, board.CastlingRightWhiteKingSide);
-            Assert.AreEqual(board.CastlingRightWhiteKingSide, cloned.CastlingRightWhiteKingSide);
-            Assert.AreEqual(board.CastlingRightWhiteQueenSide, cloned.CastlingRightWhiteQueenSide);
-            Assert.AreEqual(board.CastlingRightBlackKingSide, cloned.CastlingRightBlackKingSide);
-            Assert.AreEqual(board.CastlingRightBlackQueenSide, cloned.CastlingRightBlackQueenSide);
-        }
+        //    Assert.AreEqual(false, board.CastlingRightWhiteKingSide);
+        //    Assert.AreEqual(board.CastlingRightWhiteKingSide, cloned.CastlingRightWhiteKingSide);
+        //    Assert.AreEqual(board.CastlingRightWhiteQueenSide, cloned.CastlingRightWhiteQueenSide);
+        //    Assert.AreEqual(board.CastlingRightBlackKingSide, cloned.CastlingRightBlackKingSide);
+        //    Assert.AreEqual(board.CastlingRightBlackQueenSide, cloned.CastlingRightBlackQueenSide);
+        //}
         
         // -------------------------------------------------------------------
         // Back tests

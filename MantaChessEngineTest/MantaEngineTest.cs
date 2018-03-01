@@ -84,8 +84,9 @@ namespace MantaChessEngineTest
 
             string actualBoard = engine.GetString();
             string expectedBoard = boardString;
-            Assert.AreEqual(expectedBoard, actualBoard, "White is check mate");
             Assert.AreEqual(new NoLegalMove(), actualMove, "White is check mate, so no legal move possible");
+            Assert.AreEqual(expectedBoard, actualBoard, "White is check mate");
+            
         }
 
     }

@@ -25,7 +25,7 @@ namespace MantaChessEngine
             return new List<string>() { "u", "uu", "ul", "ur" }; // up, up up, up left, up right
         }
 
-        public override List<IMove> GetMoves(MoveGenerator moveGen, Board board, int file, int rank, bool includeCastling = true)
+        public override List<IMove> GetMoves(MoveGenerator moveGen, IBoard board, int file, int rank, bool includeCastling = true)
         {
             var moves = new List<IMove>();
             int targetRank;

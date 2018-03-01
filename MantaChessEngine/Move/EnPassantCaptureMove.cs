@@ -31,13 +31,13 @@ namespace MantaChessEngine
             }
         }
 
-        public override void ExecuteMove(Board board)
+        public override void ExecuteMove(IBoard board)
         {
             board.SetPiece(null /*Definitions.EmptyField*/, CapturedFile, CapturedRank); // remove captured pawn if it is en passant
             base.ExecuteMove(board);
         }
 
-        public override void UndoMove(Board board)
+        public override void UndoMove(IBoard board)
         {
             // note: CapturedRank is overridden and therefore taken from this class!
             base.UndoMove(board);

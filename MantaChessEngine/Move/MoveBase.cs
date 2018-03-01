@@ -114,7 +114,7 @@ namespace MantaChessEngine
             return ToString().GetHashCode();
         }
         
-        public virtual void ExecuteMove(Board board)
+        public virtual void ExecuteMove(IBoard board)
         {
             board.SetPiece(MovingPiece, TargetFile, TargetRank); // set MovingPiece to new position (and overwrite captured piece)
             board.SetPiece(null, SourceFile, SourceRank); // empty MovingPiece's old position
@@ -144,7 +144,7 @@ namespace MantaChessEngine
             board.SideToMove = Helper.GetOppositeColor(board.SideToMove);
         }
 
-        public virtual void UndoMove(Board board)
+        public virtual void UndoMove(IBoard board)
         {
             board.SetPiece(MovingPiece, SourceFile, SourceRank);
             board.SetPiece(null, /*Definitions.EmptyField,*/ TargetFile, TargetRank);     // TargetFile is equal to CapturedFile

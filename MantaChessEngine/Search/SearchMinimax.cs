@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 [assembly: InternalsVisibleTo("MantaChessEngineTest")]
 namespace MantaChessEngine
 {
-    class SearchMinimax : ISearchService
+    public class SearchMinimax : ISearchService
     {
-        private MoveGenerator _moveGenerator;
+        private IMoveGenerator _moveGenerator;
         private IEvaluator _evaluator;
         private int _level;
 
@@ -35,13 +35,24 @@ namespace MantaChessEngine
             }
         }
 
-        public SearchMinimax(IEvaluator evaluator, MoveGenerator moveGenerator)
+        public SearchMinimax(IEvaluator evaluator, IMoveGenerator moveGenerator)
         {
             _evaluator = evaluator;
             _moveGenerator = moveGenerator;
             _level = Definitions.DEFAULT_MAXLEVEL;
             _rand = new Random();
         }
+
+        // Explanation:
+
+        // ceckmate now --> SearchLevel(2) --> NoLegalMove
+
+        // checkmate in 2  --> SearchLevel(2) --> normal move
+        //                 --> SearchLevel(4) --> NoLegalMove
+
+        // checkmate in 4  --> SearchLevel(2) --> normal move
+        //                 --> SearchLevel(4) --> normal Move
+        //                 --> SearchLevel(6) --> NoLegalMove
 
         /// <summary>
         /// Search for the best move.
@@ -50,10 +61,20 @@ namespace MantaChessEngine
         /// <param name="color">Color of next move</param>
         /// <param name="score">Score of endposition of the returned move.</param>
         /// <returns>best move for color.</returns>
-        public IMove Search(Board board, Definitions.ChessColor color, out float score)
+        public IMove Search(IBoard board, Definitions.ChessColor color, out float score)
         {
+            int currentLevel = _level;
             evaluatedPositions = 0;
-            IMove move = SearchLevel(board, color, _level, out score);
+            IMove move;
+
+            // try finding a legal move. Play until actually check mate.
+            // Example: If it was not legal for level 4 try find a move for level 2
+            do
+            {
+                move = SearchLevel(board, color, currentLevel, out score);
+                currentLevel = currentLevel - (currentLevel % 2)- 2;
+            } while (move is NoLegalMove && currentLevel > 0);
+
             Console.WriteLine("evaluated positons: " + evaluatedPositions);
             return move;
         }
@@ -66,9 +87,9 @@ namespace MantaChessEngine
         /// <param name="level">Number of levels to be searched (1=ie whites move, 2=moves of white, black, 3=move of white,black,white...</param>
         /// <param name="score">Score of position on current level</param>
         /// <returns></returns>
-        internal IMove SearchLevel(Board board, Definitions.ChessColor color, int level, out float score)
+        internal virtual IMove SearchLevel(IBoard board, Definitions.ChessColor color, int level, out float score)
         {
-            IMove bestMove = null;
+            IMove bestMove = null; // todo should probably be NoLegalMove !?
             float bestScore = InitWithWorstScorePossible(color);
             float currentScore;
 
@@ -79,12 +100,13 @@ namespace MantaChessEngine
 
                 if (level > 1) // we need to do more move levels...
                 {
-                    if (board.IsWinner(color))
-                    {
-                        currentScore = InitWithWorstScorePossible(Helper.GetOppositeColor(color)); // opposite color has lost king
-                        board.Back();
-                    }
-                    else
+                    // todo: dies ist ein Spezialfall einer Optimierung, die mit einem besseren Suchalgorithmus nicht mehr nötig ist!
+                    //if (board.IsWinner(color))
+                    //{
+                    //    currentScore = InitWithWorstScorePossible(Helper.GetOppositeColor(color)); // opposite color has lost king
+                    //    board.Back();
+                    //}
+                    //else
                     {
                         IMove moveRec = SearchLevel(board, Helper.GetOppositeColor(color), level - 1, out currentScore);
                         board.Back();
@@ -106,9 +128,9 @@ namespace MantaChessEngine
             }
 
             score = bestScore;
-            if (bestMove == null)
+            if (bestScore > 1000 && color == Definitions.ChessColor.Black ||
+                bestScore < -1000 && color == Definitions.ChessColor.White)
             {
-                score = 0; // todo check out stall mate
                 var factory = new MoveFactory();
                 return factory.MakeNoLegalMove();
             }
@@ -120,11 +142,11 @@ namespace MantaChessEngine
         {
             if (color == Definitions.ChessColor.White)
             {
-                return -1000;
+                return -10000;
             }
             else
             {
-                return 1000;
+                return 10000;
             }
         }
 
@@ -132,7 +154,7 @@ namespace MantaChessEngine
         {
             if (color == Definitions.ChessColor.White)
             {
-                if (currentScore >= bestScoreSoFar)
+                if (currentScore > bestScoreSoFar)
                 {
                     return true;
                 }
@@ -143,7 +165,7 @@ namespace MantaChessEngine
             }
             else
             {
-                if (currentScore <= bestScoreSoFar)
+                if (currentScore < bestScoreSoFar)
                 {
                     return true;
                 }

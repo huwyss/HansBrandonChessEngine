@@ -19,7 +19,7 @@ namespace MantaChessEngine
 
     public class MantaEngine
     {
-        private MoveGenerator _moveGenerator;
+        private IMoveGenerator _moveGenerator;
         private MoveFactory _moveFactory;
         private ISearchService _search;
         private IEvaluator _evaluator;
@@ -36,15 +36,15 @@ namespace MantaChessEngine
                     _search = new SearchRandom(_moveGenerator);
                     break;
 
-                case EngineType.DepthHalf:
-                    _evaluator = new EvaluatorSimple();
-                    _search = new SearchServiceDepthHalfMove(_evaluator, _moveGenerator);
-                    break;
+                //case EngineType.DepthHalf:
+                //    _evaluator = new EvaluatorSimple();
+                //    _search = new SearchServiceDepthHalfMove(_evaluator, _moveGenerator);
+                //    break;
 
-                case EngineType.DepthOne:
-                    _evaluator = new EvaluatorSimple();
-                    _search = new SearchServiceDepthOne(_evaluator, _moveGenerator);
-                    break;
+                //case EngineType.DepthOne:
+                //    _evaluator = new EvaluatorSimple();
+                //    _search = new SearchServiceDepthOne(_evaluator, _moveGenerator);
+                //    break;
 
                 case EngineType.Minimax:
                     _evaluator = new EvaluatorSimple();
@@ -63,10 +63,10 @@ namespace MantaChessEngine
                     _search = new SearchMinimaxTree(_evaluator, _moveGenerator);
                     break;
 
-                case EngineType.MinimaxWithClone:
-                    _evaluator = new EvaluatorPosition();
-                    _search = new SearchMinimaxWithClone(_evaluator, _moveGenerator);
-                    break;
+                //case EngineType.MinimaxWithClone:
+                //    _evaluator = new EvaluatorPosition();
+                //    _search = new SearchMinimaxWithClone(_evaluator, _moveGenerator);
+                //    break;
 
                 default:
                     throw new Exception("No engine type defined.");

@@ -13,10 +13,10 @@
         int TargetRank { get; set; }
 
         bool Equals(object obj);
-        void ExecuteMove(Board board);
+        void ExecuteMove(IBoard board);
         int GetHashCode();
         void InitializeMove(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, Piece capturedPiece);
         string ToString();
-        void UndoMove(Board board);
+        void UndoMove(IBoard board);
     }
 }

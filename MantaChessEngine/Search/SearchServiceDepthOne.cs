@@ -1,122 +1,122 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Runtime.CompilerServices;
+//using System.Text;
+//using System.Threading.Tasks;
 
-[assembly: InternalsVisibleTo("MantaChessEngineTest")]
-namespace MantaChessEngine
-{
-    class SearchServiceDepthOne : ISearchService
-    {
-        private IEvaluator _evaluator;
-        private MoveGenerator _moveGenerator;
+//[assembly: InternalsVisibleTo("MantaChessEngineTest")]
+//namespace MantaChessEngine
+//{
+//    class SearchServiceDepthOne : ISearchService
+//    {
+//        private IEvaluator _evaluator;
+//        private MoveGenerator _moveGenerator;
 
-        public void SetMaxDepth(int level)
-        { }
+//        public void SetMaxDepth(int level)
+//        { }
 
-        public SearchServiceDepthOne(IEvaluator evaluator, MoveGenerator moveGenerator)
-        {
-            _evaluator = evaluator;
-            _moveGenerator = moveGenerator;
-        }
+//        public SearchServiceDepthOne(IEvaluator evaluator, MoveGenerator moveGenerator)
+//        {
+//            _evaluator = evaluator;
+//            _moveGenerator = moveGenerator;
+//        }
 
-        public IMove Search(Board board, Definitions.ChessColor color, out float score)
-        {
-            float bestScoreSecondMover = InitBestScoreSofar(Helper.GetOppositeColor(color));
-            float bestScoreFirstMover = InitBestScoreSofar(color);
-            IMove bestMoveFirstMover = null;
+//        public IMove Search(Board board, Definitions.ChessColor color, out float score)
+//        {
+//            float bestScoreSecondMover = InitBestScoreSofar(Helper.GetOppositeColor(color));
+//            float bestScoreFirstMover = InitBestScoreSofar(color);
+//            IMove bestMoveFirstMover = null;
 
-            var possibleMoves = _moveGenerator.GetAllMoves(board, color);
-            foreach (IMove currentMove in possibleMoves)
-            {
-                Board boardWithMove = board.Clone();
-                boardWithMove.Move(currentMove);
+//            var possibleMoves = _moveGenerator.GetAllMoves(board, color);
+//            foreach (IMove currentMove in possibleMoves)
+//            {
+//                Board boardWithMove = board.Clone();
+//                boardWithMove.Move(currentMove);
 
-                IMove bestMoveSecondMover = CalcScoreLevelZero(boardWithMove, Helper.GetOppositeColor(color), out bestScoreSecondMover);
-                if (IsBestMoveSofar(color, bestScoreFirstMover, bestScoreSecondMover))
-                {
-                    bestScoreFirstMover = bestScoreSecondMover;
-                    bestMoveFirstMover = currentMove;
-                }
-            }
+//                IMove bestMoveSecondMover = CalcScoreLevelZero(boardWithMove, Helper.GetOppositeColor(color), out bestScoreSecondMover);
+//                if (IsBestMoveSofar(color, bestScoreFirstMover, bestScoreSecondMover))
+//                {
+//                    bestScoreFirstMover = bestScoreSecondMover;
+//                    bestMoveFirstMover = currentMove;
+//                }
+//            }
 
-            score = bestScoreFirstMover;
-            return bestMoveFirstMover;
-        }
+//            score = bestScoreFirstMover;
+//            return bestMoveFirstMover;
+//        }
 
-        //private Move SearchLevel(Board board, Definitions.ChessColor color, int level, out float score)
-        //{
-        //    score = 0;
-        //    Move moveZero;
-        //    float scoreZero = 0;
-        //    level--;
-        //    if (level == 0)
-        //    {
-        //        moveZero = CalcScoreLevelZero(board, color, out scoreZero); // Calculate the score of the final position
+//        //private Move SearchLevel(Board board, Definitions.ChessColor color, int level, out float score)
+//        //{
+//        //    score = 0;
+//        //    Move moveZero;
+//        //    float scoreZero = 0;
+//        //    level--;
+//        //    if (level == 0)
+//        //    {
+//        //        moveZero = CalcScoreLevelZero(board, color, out scoreZero); // Calculate the score of the final position
 
-        //    }
-        //    else if ()
-        //    {
+//        //    }
+//        //    else if ()
+//        //    {
                 
-        //    }
+//        //    }
 
-        //}
+//        //}
 
-        internal IMove CalcScoreLevelZero(Board board, Definitions.ChessColor color, out float score)
-        {
-            IMove bestMove = null;
-            float bestScore = InitBestScoreSofar(color);
+//        internal IMove CalcScoreLevelZero(Board board, Definitions.ChessColor color, out float score)
+//        {
+//            IMove bestMove = null;
+//            float bestScore = InitBestScoreSofar(color);
 
-            var possibleMoves = _moveGenerator.GetAllMoves(board, color);
-            foreach (IMove currentMove in possibleMoves)
-            {
-                Board boardWithMove = board.Clone();
-                boardWithMove.Move(currentMove);
-                float scoreCurrentMove = _evaluator.Evaluate(boardWithMove);
-                if (IsBestMoveSofar(color, bestScore, scoreCurrentMove))
-                {
-                    bestMove = currentMove;
-                    bestScore = scoreCurrentMove;
-                }
-            }
+//            var possibleMoves = _moveGenerator.GetAllMoves(board, color);
+//            foreach (IMove currentMove in possibleMoves)
+//            {
+//                Board boardWithMove = board.Clone();
+//                boardWithMove.Move(currentMove);
+//                float scoreCurrentMove = _evaluator.Evaluate(boardWithMove);
+//                if (IsBestMoveSofar(color, bestScore, scoreCurrentMove))
+//                {
+//                    bestMove = currentMove;
+//                    bestScore = scoreCurrentMove;
+//                }
+//            }
 
-            score = bestScore;
-            return bestMove;
-        }
+//            score = bestScore;
+//            return bestMove;
+//        }
 
-        private float InitBestScoreSofar(Definitions.ChessColor color)
-        {
-            if (color == Definitions.ChessColor.White)
-            {
-                return -10000;
-            }
-            else
-            {
-                return 10000;
-            }
-        }
+//        private float InitBestScoreSofar(Definitions.ChessColor color)
+//        {
+//            if (color == Definitions.ChessColor.White)
+//            {
+//                return -10000;
+//            }
+//            else
+//            {
+//                return 10000;
+//            }
+//        }
 
-        private bool IsBestMoveSofar(Definitions.ChessColor color, float bestScoreSoFar, float currentScore)
-        {
-            if (color == Definitions.ChessColor.White)
-            {
-                if (currentScore > bestScoreSoFar)
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                if (currentScore < bestScoreSoFar)
-                {
-                    return true;
-                }
-            }
+//        private bool IsBestMoveSofar(Definitions.ChessColor color, float bestScoreSoFar, float currentScore)
+//        {
+//            if (color == Definitions.ChessColor.White)
+//            {
+//                if (currentScore > bestScoreSoFar)
+//                {
+//                    return true;
+//                }
+//            }
+//            else
+//            {
+//                if (currentScore < bestScoreSoFar)
+//                {
+//                    return true;
+//                }
+//            }
 
-            return false;
-        }
-    }
-}
+//            return false;
+//        }
+//    }
+//}
 

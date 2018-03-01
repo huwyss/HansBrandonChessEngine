@@ -40,8 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FakeEvaluator.cs" />
-    <Compile Include="FakeMoveGenerator.cs" />
+    <Compile Include="Doubles\FakeBoard.cs" />
+    <Compile Include="Doubles\FakeEvaluator.cs" />
+    <Compile Include="Doubles\FakeMoveGenerator.cs" />
+    <Compile Include="Doubles\FakeMoveGeneratorMulitlevel.cs" />
+    <Compile Include="Doubles\SearchMinimaxDouble_SearchLevelOverwritten.cs" />
+    <Compile Include="IBoard.cs" />
     <Compile Include="IMoveGenerator.cs" />
     <Compile Include="MantaEngine.cs" />
     <Compile Include="Board.cs" />

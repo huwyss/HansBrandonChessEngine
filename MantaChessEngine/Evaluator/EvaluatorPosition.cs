@@ -24,7 +24,7 @@ namespace MantaChessEngine
         /// <summary>
         /// Calculates the score from white's point. + --> white is better, - --> black is better.
         /// </summary>
-        public float Evaluate(Board board)
+        public float Evaluate(IBoard board)
         {
             float scoreWhite = 0;
             float scoreBlack = 0;

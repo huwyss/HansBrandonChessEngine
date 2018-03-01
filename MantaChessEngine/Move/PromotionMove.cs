@@ -52,7 +52,7 @@ namespace MantaChessEngine
             return ToString().GetHashCode();
         }
 
-        public override void ExecuteMove(Board board)
+        public override void ExecuteMove(IBoard board)
         {
             base.ExecuteMove(board);
 
@@ -61,7 +61,7 @@ namespace MantaChessEngine
             board.SetPiece(_queen, TargetFile, TargetRank); 
         }
 
-        public override void UndoMove(Board board)
+        public override void UndoMove(IBoard board)
         {
             board.SetPiece(_pawn, TargetFile, TargetRank);
             base.UndoMove(board);

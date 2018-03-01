@@ -31,5 +31,13 @@ namespace MantaChessEngine
         {
             return ToString().GetHashCode();
         }
+
+        public override void ExecuteMove(IBoard board)
+        {
+        }
+
+        public override void UndoMove(IBoard board)
+        {
+        }
     }
 }

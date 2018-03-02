@@ -40,7 +40,11 @@ namespace MantaChessEngine
                 }
             }
 
-            return scoreWhite - scoreBlack;
+            float score = scoreWhite - scoreBlack;
+            score = score < -1000 ? Definitions.ScoreBlackWins : score;
+            score = score > 1000 ? Definitions.ScoreWhiteWins : score;
+
+            return score;
         }
 
         private float GetPieceScore(Piece piece)

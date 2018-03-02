@@ -51,7 +51,7 @@ namespace MantaChessEngineTest
         public void EvaluateTest_WhenInitialPosition_ThenScoreCorrect()
         {
             Board board = new Board();
-            string position = "........" + // black a8-h8
+            string position = "....k..." + // black a8-h8
                               "........" +
                               "........" +
                               "........" +
@@ -64,12 +64,32 @@ namespace MantaChessEngineTest
             var target = new EvaluatorSimple();
             var score = target.Evaluate(board);
 
-            var expectedScore = 8*target.ValuePawn +
-                                       2*target.ValueKnight +
-                                       2*target.ValueBishop +
-                                       2*target.ValueRook +
-                                       target.ValueQueen +
-                                       target.ValueKing;
+            var expectedScore = 8 * target.ValuePawn +
+                                       2 * target.ValueKnight +
+                                       2 * target.ValueBishop +
+                                       2 * target.ValueRook +
+                                       target.ValueQueen;
+            Assert.AreEqual(expectedScore, score);
+        }
+
+        [TestMethod]
+        public void EvaluateTest_WhenKingMissing_ThenScoreBlackWins()
+        {
+            Board board = new Board();
+            string position = "....k..." + // black a8-h8
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........"; // white a1-h1
+            board.SetPosition(position);
+
+            var target = new EvaluatorSimple();
+            var score = target.Evaluate(board);
+
+            var expectedScore = Definitions.ScoreBlackWins;
             Assert.AreEqual(expectedScore, score);
         }
     }

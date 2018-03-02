@@ -30,5 +30,8 @@ namespace MantaChessEngine
         public const char RIGHT = 'r';
 
         public const int DEFAULT_MAXLEVEL = 3;
+
+        public const float ScoreWhiteWins = 10000;
+        public const float ScoreBlackWins = -10000;
     }
 }

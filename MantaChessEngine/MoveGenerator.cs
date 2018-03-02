@@ -20,6 +20,7 @@ namespace MantaChessEngine
 
         // Note: Manta is a king capture engine. 
         // This means even if we are in check then also moves that do not remove the check are returned here.
+        // However if there is no king then no moves are returned. (Empty list)
         public List<IMove> GetAllMoves(IBoard board, Definitions.ChessColor color, bool includeCastling = true)
         {
             var allMovesUnchecked = GetAllMovesUnchecked(board, color, includeCastling);
@@ -28,6 +29,7 @@ namespace MantaChessEngine
 
         private List<IMove> GetAllMovesUnchecked(IBoard board, Definitions.ChessColor color, bool includeCastling = true)
         {
+            bool kingFound = false;
             List<IMove> allMoves = new List<IMove>();
 
             for (int file = 1; file <= 8; file++)
@@ -37,12 +39,17 @@ namespace MantaChessEngine
                     if (board.GetColor(file, rank) == color)
                     {
                         Piece piece = board.GetPiece(file, rank);
+                        if (piece is King)
+                        {
+                            kingFound = true;
+                        }
+
                         allMoves.AddRange(piece.GetMoves(this, board, file, rank, includeCastling));
                     }
                 }
             }
 
-            return allMoves;
+            return kingFound ? allMoves : new List<IMove>();
         }
 
         public bool IsMoveValid(IBoard board, IMove move)

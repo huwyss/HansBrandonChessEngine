@@ -411,7 +411,28 @@ namespace MantaChessEngineTest
         }
 
         [TestMethod]
+        public void GetAllMoves_WhenNoWhiteKing_ThenNoMovesReturned_White()
+        {
+            MoveGenerator target = new MoveGenerator(new MoveFactory());
+            Board board = new Board();
+            string position = "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              ".......k" +
+                              ".......r" +
+                              ".......R"; // No white King
+            board.SetPosition(position);
+
+            var moves = target.GetAllMoves(board, Definitions.ChessColor.White);
+
+            Assert.AreEqual(0, moves.Count, "white has no king. so no white moves possible.");
+        }
+
+        // this test should probably be in engine tests!
         [Ignore]
+        [TestMethod]
         public void GetAllMoves_WhenCheck_ThenKingMustEscapeCheck()
         {
             MoveGenerator target = new MoveGenerator(new MoveFactory());
@@ -814,6 +835,7 @@ namespace MantaChessEngineTest
             Assert.AreEqual(false, kingMoves.Contains(new NormalMove(Piece.MakePiece('k'), 'e', 8, 'c', 8, null)), "e8c8. 0-0-0 castling not possible. D8 attacked");
         }
 
+        
         // ----------------------------------------------------------------
         // IsCheck Test
         // ----------------------------------------------------------------

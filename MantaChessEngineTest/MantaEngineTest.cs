@@ -10,7 +10,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void DoBestMove_DepthOneSearch_WhenQueenCanBeCaptured_ThenQueenIsCaptured_WhiteMoves()
         {
-            var engine = new MantaEngine(EngineType.DepthHalf);
+            var engine = new MantaEngine(EngineType.Minimax);
+            engine.SetMaxSearchDepth(1);
             engine.SetBoard(new Board());
             string boardString = "rnb.kbnr" +
                                  "ppp.pppp" +
@@ -39,7 +40,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void DoBestMove_DepthOneSearch_WhenQueenCanBeCaptured_ThenQueenIsCaptured_BlackMoves()
         {
-            var engine = new MantaEngine(EngineType.DepthHalf);
+            var engine = new MantaEngine(EngineType.Minimax);
+            engine.SetMaxSearchDepth(1);
             engine.SetBoard(new Board());
             string boardString = "rnbqkbnr" +
                                  "pppp.ppp" +

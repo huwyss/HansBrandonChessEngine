@@ -325,7 +325,7 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            float score = 0; // todo what should be the score for stall mate?
+            float score = 0 ;
             IMove actualMove = target.SearchLevel(board, Definitions.ChessColor.White, 2, out score);
 
             Assert.AreEqual(0, score, "stalemate score should be 0");
@@ -573,19 +573,20 @@ namespace MantaChessEngineTest
         // SearchLevel Tests
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteIsCheckMate_ThenNoLegalMove()
+        public void SearchMinimaxTest_WhenWhiteIsCheckMateIn2_AndMaxDepth2_ThenNoLegalMove()
         {
             //      start
             //     /      \
             //   -1000    -1010     white move -> highest selected (x), but here white has lost king-> no move returned
             //   /           \   
             // -10000x       -10010x     black move -> lowest selected (x)
-            IEvaluator evalFake = new FakeEvaluator(new List<float>() { -10000, -10010 });
+            
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
             moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null) }); // level 1
             moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('b'), 0, 0, 0, 0, null) }); // level 2 a
             moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('b'), 0, 0, 0, 0, null) }); // level 2 b
-
+            moveGenFake.SetIsChecks(new List<bool>() { true, true });
+            IEvaluator evalFake = new FakeEvaluator(new List<float>() { -10000, -10010 });
             IBoard boardFake = new FakeBoard();
 
             var target = new SearchMinimax(evalFake, moveGenFake);
@@ -597,49 +598,45 @@ namespace MantaChessEngineTest
         }
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteIsCheckMateLater_ThenDoNormalMove()
+        public void SearchMinimaxTest_WhenWhiteIsStllMateIn2_ThenNoLegalMoveScore0()
         {
-            // todo what is this test ?????
             //      start
             //     /      \
-            //                white move -> highest selected (x), but here white has lost king-> no move returned
+            //    0x      -10       white move -> highest selected (x)
             //   /           \   
-            // -10000x       -10010x     black move -> lowest selected (x)
-            IEvaluator evalFake = new FakeEvaluator(new List<float>() { -10000, -10010 });
+            // -10000x       -10x     black move -> lowest selected (x)  stall mate here. eval returns -10000, ischeck returns false
+            
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
             moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null) }); // level 1
             moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('b'), 0, 0, 0, 0, null) }); // level 2 a
             moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('b'), 0, 0, 0, 0, null) }); // level 2 b
-
+            moveGenFake.SetIsChecks(new List<bool>() { false, false });
+            IEvaluator evalFake = new FakeEvaluator(new List<float>() { -10000, -10 });
             IBoard boardFake = new FakeBoard();
 
             var target = new SearchMinimax(evalFake, moveGenFake);
             float scoreActual;
             IMove bestMoveActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 2, out scoreActual);
 
-            Assert.IsTrue(-1000 > scoreActual);
+            Assert.AreEqual(0, scoreActual, "stall mate should be score 0");
             Assert.AreEqual(new NoLegalMove(), bestMoveActual);
         }
-
-        
-        // todo tests for stall mate...
-
 
 
         // ---------------------------------------------------------
         // Search Tests
         // ---------------------------------------------------------
 
-        // Überlegung:
+        // Remark:
 
-        // Wenn jetzt checkmate --> SearchLevel(2) --> NoLegalMove
+        // If now checkmate   --> SearchLevel(2) --> NoLegalMove
 
-        // wenn checkmate in 2  --> SearchLevel(2) --> normal move
-        //                      --> SearchLevel(4) --> NoLegalMove
+        // if checkmate in 2  --> SearchLevel(2) --> normal move
+        //                    --> SearchLevel(4) --> NoLegalMove
 
-        // wenn checkmate in 4  --> SearchLevel(2) --> normal move
-        //                      --> SearchLevel(4) --> normal Move
-        //                      --> SearchLevel(6) --> NoLegalMove
+        // if checkmate in 4  --> SearchLevel(2) --> normal move
+        //                    --> SearchLevel(4) --> normal Move
+        //                    --> SearchLevel(6) --> NoLegalMove
 
         [TestMethod]
         public void SearchTest_WhenCheckmateNow_ThenReturnNoLegalMove()

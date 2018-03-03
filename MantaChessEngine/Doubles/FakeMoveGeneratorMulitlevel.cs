@@ -9,31 +9,36 @@ namespace MantaChessEngine.Doubles
     public class FakeMoveGeneratorMulitlevel : IMoveGenerator
     {
         private List<IEnumerable<IMove>> _listOfListOfMoves = new List<IEnumerable<IMove>>();
-        private IEnumerator<IEnumerable<IMove>> _iterator;
+        private IEnumerator<IEnumerable<IMove>> _iteratorMoves;
+        private IEnumerator<bool> _iteratorIsChecks;
 
         public FakeMoveGeneratorMulitlevel()
         {
             ReturnsIsValid = true;
             ReturnsIsAttacked = false;
-            ReturnsIsCheck = false;
         }
 
         public void AddGetAllMoves(IEnumerable<IMove> moves)
         {
             _listOfListOfMoves.Add(moves);
-            _iterator = _listOfListOfMoves.GetEnumerator();
+            _iteratorMoves = _listOfListOfMoves.GetEnumerator();
+        }
+
+        public void SetIsChecks(IEnumerable<bool> isChecksToReturn)
+        {
+            _iteratorIsChecks = isChecksToReturn.GetEnumerator();
         }
 
         public List<IMove> GetAllMoves(IBoard board, Definitions.ChessColor color, bool includeCastling = true)
         {
-            _iterator.MoveNext();
+            _iteratorMoves.MoveNext();
 
-            if (_iterator.Current.First().Color != color)
+            if (_iteratorMoves.Current.First().Color != color)
             {
                 throw new Exception("Expected move of different color!");
             }
 
-            return (List<IMove>)_iterator.Current;
+            return (List<IMove>)_iteratorMoves.Current;
         }
 
         public bool ReturnsIsValid { get; set; }
@@ -48,10 +53,10 @@ namespace MantaChessEngine.Doubles
             return ReturnsIsAttacked;
         }
 
-        public bool ReturnsIsCheck { get; set; }
-        public bool IsCheck(IBoard board, Definitions.ChessColor color)
+        public bool ReturnsIsCheck { get; set; }public bool IsCheck(IBoard board, Definitions.ChessColor color)
         {
-            return ReturnsIsCheck;
+            _iteratorIsChecks.MoveNext();
+            return _iteratorIsChecks.Current;
         }
     }
 }

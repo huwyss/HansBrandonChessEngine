@@ -429,30 +429,7 @@ namespace MantaChessEngineTest
 
             Assert.AreEqual(0, moves.Count, "white has no king. so no white moves possible.");
         }
-
-        // this test should probably be in engine tests!
-        [Ignore]
-        [TestMethod]
-        public void GetAllMoves_WhenCheck_ThenKingMustEscapeCheck()
-        {
-            MoveGenerator target = new MoveGenerator(new MoveFactory());
-            Board board = new Board();
-            string position = "........" +
-                              "........" +
-                              "........" +
-                              "........" +
-                              "........" +
-                              ".......k" +
-                              ".......r" +
-                              ".......K"; // king is in check and must escape. only move is Kh1g1
-            board.SetPosition(position);
-            
-            var moves = target.GetAllMoves(board, Definitions.ChessColor.White);
-
-            Assert.AreEqual(1, moves.Count, "Only one move is possible. The other moves for white are in check.");
-            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('K'), 'h', 1, 'g', 1, null)), "h1g1. missing");
-        }
-
+        
         // ----------------------------------------------------------------------------------------------------
         // Is Move Valid Tests
         // ----------------------------------------------------------------------------------------------------

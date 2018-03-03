@@ -91,5 +91,24 @@ namespace MantaChessEngineTest
             
         }
 
+        [TestMethod]
+        public void DoBestMoveTest_WhenCheck_ThenKingMustEscapeCheck()
+        {
+            var engine = new MantaEngine(EngineType.MinimaxPosition);
+            engine.SetBoard(new Board());
+            string boardString = "........" +
+                                 "........" +
+                                 "........" +
+                                 "........" +
+                                 "........" +
+                                 ".......k" +
+                                 ".......r" +
+                                 ".......K"; // king is in check and must escape. only move is Kh1g1
+            engine.SetPosition(boardString);
+
+            IMove actualMove = engine.DoBestMove(Definitions.ChessColor.White);
+
+            Assert.AreEqual(new NormalMove(Piece.MakePiece('K'), 'h', 1, 'g', 1, null), actualMove, "should be h1g1");
+        }
     }
 }

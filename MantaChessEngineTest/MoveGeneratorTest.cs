@@ -112,7 +112,7 @@ namespace MantaChessEngineTest
         }
 
         [TestMethod]
-        public void GetMoves_WhenKing_ThenAllMoves() // castling not included ! todo!
+        public void GetMoves_WhenKing_ThenAllMoves()
         {
             MoveGenerator target = new MoveGenerator(new MoveFactory());
             Board board = new Board();

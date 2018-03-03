@@ -18,9 +18,9 @@ namespace MantaConsole
 
         static void Main(string[] args)
         {
-            var gameType = GameType.HumanVsComputer;
-            var whiteLevel = 4;
-            var blackLevel = 4;
+            var gameType = GameType.ComputerVsComputerOnce;
+            var whiteLevel = 3;
+            var blackLevel = 3;
 
             bool whiteHuman;
             bool blackHuman;
@@ -153,6 +153,7 @@ namespace MantaConsole
                                 if (whiteEngine.IsCheck(Definitions.ChessColor.White))
                                 {
                                     Console.WriteLine("\nBlack wins!");
+                                    blackWins++;
                                 }
                                 else
                                 {

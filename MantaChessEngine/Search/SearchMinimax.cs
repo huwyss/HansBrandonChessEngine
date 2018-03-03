@@ -89,7 +89,7 @@ namespace MantaChessEngine
         /// <returns></returns>
         internal virtual IMove SearchLevel(IBoard board, Definitions.ChessColor color, int level, out float score)
         {
-            IMove bestMove = null; // todo should probably be NoLegalMove !?
+            IMove bestMove = new NoLegalMove();
             float bestScore = InitWithWorstScorePossible(color);
             float currentScore;
 
@@ -100,19 +100,10 @@ namespace MantaChessEngine
 
                 if (level > 1) // we need to do more move levels...
                 {
-                    // todo: dies ist ein Spezialfall einer Optimierung, die mit einem besseren Suchalgorithmus nicht mehr nötig ist!
-                    //if (board.IsWinner(color))
-                    //{
-                    //    currentScore = InitWithWorstScorePossible(Helper.GetOppositeColor(color)); // opposite color has lost king
-                    //    board.Back();
-                    //}
-                    //else
-                    {
-                        IMove moveRec = SearchLevel(board, Helper.GetOppositeColor(color), level - 1, out currentScore);
-                        board.Back();
-                    }
+                    IMove moveRec = SearchLevel(board, Helper.GetOppositeColor(color), level - 1, out currentScore); // recursive...
+                    board.Back();
                 }
-                else // we calculated all levels and reached the last position that we need to evaluate
+                else // we reached the bottom of the tree and evaluate the position
                 {
                     currentScore = _evaluator.Evaluate(board);
                     board.Back();
@@ -145,12 +136,9 @@ namespace MantaChessEngine
                        bestScore = 0;
                     }
                 }
-
             }
 
             score = bestScore;
-            
-            
             return bestMove;
         }
 
@@ -158,11 +146,11 @@ namespace MantaChessEngine
         {
             if (color == Definitions.ChessColor.White)
             {
-                return -10000;
+                return Definitions.ScoreBlackWins;
             }
             else
             {
-                return 10000;
+                return Definitions.ScoreWhiteWins;
             }
         }
 

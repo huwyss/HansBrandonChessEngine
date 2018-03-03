@@ -21,10 +21,6 @@ namespace MantaChessEngine
             get
             {
                 return MovingPiece.Color;
-                //Definitions.ChessColor color = (MovingPiece >= 'A' && MovingPiece <= 'Z')
-                //    ? Definitions.ChessColor.White
-                //    : Definitions.ChessColor.Black;
-                //return color;
             }
         }
 
@@ -66,9 +62,9 @@ namespace MantaChessEngine
                 return false;
             }
 
-            // If parameter cannot be cast to CurrentMove return false.
+            // If parameter cannot be cast to MoveBase return false.
             MoveBase other = obj as MoveBase;
-            if ((System.Object)other == null)
+            if (other == null)
             {
                 return false;
             }
@@ -86,13 +82,13 @@ namespace MantaChessEngine
                 equal = false;
             }
 
-            // note: only check MovingPiece if they are set in both objects
-            // new CurrentMove("a2a3") is equal to new CurrentMove('p', a, 2, a, 3, nocapture, enpassant=false)
-            // --> this is useful for tests!
-            // todo: is this also for captured piece ???
             if (MovingPiece != null && other.MovingPiece != null)
             {
                 equal &= MovingPiece.Equals(other.MovingPiece);
+            }
+            else
+            {
+                equal = false;
             }
             
             return equal;

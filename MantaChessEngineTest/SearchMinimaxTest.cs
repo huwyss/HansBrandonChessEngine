@@ -325,21 +325,16 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            float score = 0; // todo what should be the score for stall mate
+            float score = 0; // todo what should be the score for stall mate?
             IMove actualMove = target.SearchLevel(board, Definitions.ChessColor.White, 2, out score);
 
             Assert.AreEqual(0, score, "stalemate score should be 0");
             Assert.AreEqual(new NoLegalMove(), actualMove, "Should be NoLegalMove, white is stalemate");
-
-            // todo check score for stall mate and check mate !!
-            Assert.Fail();
         }
 
         [TestMethod]
         public void SearchBestMoveTest_WhenWhiteCheckmate_ThenNoLegalMoveAndBestScoreMinusThousand()
         {
-            // todo check score for stall mate and check mate !!
-
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
             var target = new SearchMinimax(evaluator, gen);
@@ -358,10 +353,7 @@ namespace MantaChessEngineTest
             IMove actualMove = target.SearchLevel(board, Definitions.ChessColor.White, 2, out score);
 
             Assert.AreEqual(new NoLegalMove(), actualMove, "Should be NoLegalMove, white is stalemate");
-            Assert.AreEqual(-10000, score, "check mate score should be -1000");
-
-            // todo check score for stall mate and check mate !!
-            Assert.Fail();
+            Assert.AreEqual(-10000, score, "check mate score should be -10000");
         }
 
         // ---------------------------------------------------------------------------------------------
@@ -629,7 +621,14 @@ namespace MantaChessEngineTest
             Assert.AreEqual(new NoLegalMove(), bestMoveActual);
         }
 
+        
+        // todo tests for stall mate...
+
+
+
+        // ---------------------------------------------------------
         // Search Tests
+        // ---------------------------------------------------------
 
         // Überlegung:
 
@@ -751,8 +750,8 @@ namespace MantaChessEngineTest
         public void SearchTest_WhenCheckmateIn2MaxDepth3_ThenReturnNormalMove()
         {
             // checkmate in 2  --> SearchLevel(2) --> normal move  <-- select this
+            //                 --> SearchLevel(3) --> NoLegalMove
             //                 --> SearchLevel(4) --> NoLegalMove
-            //                 --> SearchLevel(6) --> NoLegalMove
 
             var scoresMoves = new List<MoveAndScore>()
             {
@@ -822,15 +821,53 @@ namespace MantaChessEngineTest
         }
 
         [TestMethod]
-        public void TestFor_Stallmate_in_3()
+        public void SearchTest_WhenStallmateIn2_Level2_ThenReturnNoLegalMove()
         {
-            Assert.Fail();
+            // stall mate in 2 --> SearchLevel(2) -> nolegal move, score 0
+
+            var scoresMoves = new List<MoveAndScore>()
+            {
+                null,
+                null,
+                new MoveAndScore() {Move = new NoLegalMove(), Score = 0}, // level 2: lost king
+            };
+
+            var target = new SearchMinimaxDouble_SearchLevelOverwritten(null, null, scoresMoves.ToArray());
+            target.SetMaxDepth(2);
+
+            float actualScore;
+            var actualMove = target.Search(null, Definitions.ChessColor.White, out actualScore);
+
+            Assert.AreEqual(new NoLegalMove(),  actualMove);
+            Assert.AreEqual(0, actualScore);
         }
 
         [TestMethod]
-        public void TestFor_Stallmate_in_1()
+        public void SearchTest_WhenStallmateIn4_Level6_ThenReturnNoLegalMove()
         {
-            Assert.Fail();
+            // stall mate in 2 --> SearchLevel(2) -> Normal move, score x
+            // stall mate in 2 --> SearchLevel(4) -> nolegal move, score 0
+            // stall mate in 2 --> SearchLevel(6) -> nolegal move, score 0
+
+            var scoresMoves = new List<MoveAndScore>()
+            {
+                null,
+                null,
+                new MoveAndScore() {Move = new NormalMove(Piece.MakePiece('Q'),0,0,0,0,null), Score = 1}, // level 2: lost king
+                null,
+                new MoveAndScore() {Move = new NoLegalMove(), Score = 0}, // level 4: lost king
+                null,
+                new MoveAndScore() {Move = new NoLegalMove(), Score = 0}, // level 6: lost king
+            };
+
+            var target = new SearchMinimaxDouble_SearchLevelOverwritten(null, null, scoresMoves.ToArray());
+            target.SetMaxDepth(6);
+
+            float actualScore;
+            var actualMove = target.Search(null, Definitions.ChessColor.White, out actualScore);
+
+            Assert.AreEqual(new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null), actualMove);
+            Assert.AreEqual(1, actualScore);
         }
 
 

@@ -12,9 +12,12 @@ Manta Chess Engine is reasonably playing. However it does not beat me yet.
 - Evaluation of the current position via position for pawn, knight, bishop, ... Additionally pawn and knight get points for position on board and doulbe bishop gives extra points.
 
 ### Some important features that are missing:
-- Pawn promotion
 - Standard GUI
 
 ### Features for a stronger game
 - Opening book
 - More efficient search, ie alpha beta
+
+### Next Tasks
+- Randomize if 2 or more moves have same score
+- Better logger, ie log4net

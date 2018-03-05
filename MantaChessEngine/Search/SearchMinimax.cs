@@ -4,12 +4,15 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using log4net;
 
 [assembly: InternalsVisibleTo("MantaChessEngineTest")]
 namespace MantaChessEngine
 {
     public class SearchMinimax : ISearchService
     {
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private IMoveGenerator _moveGenerator;
         private IEvaluator _evaluator;
         private int _level;
@@ -75,7 +78,7 @@ namespace MantaChessEngine
                 currentLevel = currentLevel - (currentLevel % 2)- 2;
             } while (move is NoLegalMove && currentLevel > 0);
 
-            Console.WriteLine("evaluated positons: " + evaluatedPositions);
+            _log.Debug("evaluated positons: " + evaluatedPositions);
             return move;
         }
 

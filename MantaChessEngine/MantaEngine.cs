@@ -19,6 +19,8 @@ namespace MantaChessEngine
 
     public class MantaEngine
     {
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private IMoveGenerator _moveGenerator;
         private MoveFactory _moveFactory;
         private ISearchService _search;
@@ -131,7 +133,7 @@ namespace MantaChessEngine
             float score = 0;
             IMove nextMove = _search.Search(_board, color, out score);
             _board.Move(nextMove);
-            Console.WriteLine("Score: " + score);
+            _log.Debug("Score: " + score);
             return nextMove;
         }
         

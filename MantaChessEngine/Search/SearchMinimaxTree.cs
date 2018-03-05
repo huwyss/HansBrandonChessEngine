@@ -16,6 +16,8 @@ namespace MantaChessEngine
 
     public class SearchMinimaxTree : ISearchService
     {
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private IEvaluator _evaluator;
         private IMoveGenerator _moveGenerator;
         private BuildTreeState _state;
@@ -57,7 +59,7 @@ namespace MantaChessEngine
             CreateSearchTree(board, color);
             _posCount = 0;
             Evaluate();
-            Console.WriteLine($"evaluated positions: {_posCount}");
+            _log.Debug("Evaluated positions:" + _posCount);
             IMove bestMove = SelectBestMove();
             score = _tree.Root.Data.Score;
 

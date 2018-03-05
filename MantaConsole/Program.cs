@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MantaChessEngine;
+using log4net;
 
 namespace MantaConsole
 {
     class Program
     {
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public enum GameType
         {
             HumanVsComputer,
@@ -18,10 +21,12 @@ namespace MantaConsole
 
         static void Main(string[] args)
         {
-            var gameType = GameType.ComputerVsComputerOnce;
-            var whiteLevel = 3;
-            var blackLevel = 3;
+            _log.Info("ManteChessEngine started");
 
+            var gameType = GameType.ComputerVsComputerOnce;
+            var whiteLevel = 2;
+            var blackLevel = 2;
+            
             bool whiteHuman;
             bool blackHuman;
             int runStatisticGames; // number of games to be played
@@ -62,6 +67,8 @@ namespace MantaConsole
             whiteEngine.SetMaxSearchDepth(whiteLevel);
             MantaEngine blackEngine = new MantaEngine(EngineType.MinimaxPosition);
             blackEngine.SetMaxSearchDepth(blackLevel);
+
+            DefineLogLevel(quiet);
 
             float whiteWins = 0;
             float blackWins = 0;
@@ -225,6 +232,15 @@ namespace MantaConsole
         private static void PrintBoard(MantaEngine engineRandom)
         {
             Console.Write(engineRandom.GetPrintString().Replace("p", "o"));
+        }
+        
+        private static void DefineLogLevel(bool quiet)
+        {
+            log4net.Core.Level level = quiet ? log4net.Core.Level.Error : log4net.Core.Level.Debug;
+            foreach (ILog logger in log4net.LogManager.GetCurrentLoggers())
+            {
+                ((log4net.Repository.Hierarchy.Logger)logger.Logger).Level = level;
+            }
         }
     }
 }

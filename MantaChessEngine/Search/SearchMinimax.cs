@@ -114,6 +114,26 @@ namespace MantaChessEngine
 
                     // todo: was it check mate or stall mate?
 
+                    // If white is winning and its blacks move then black cannot move
+                    // if black is winning and its whites move then white cannot move
+                    // (assuming we are at the deepest level that we calculate. Search() will then try to 
+                    // calculate a move for a less deeper level)
+                    if (bestScore == Definitions.ScoreWhiteWins && color == Definitions.ChessColor.Black ||
+                        bestScore == Definitions.ScoreBlackWins && color == Definitions.ChessColor.White)
+                    {
+                        var factory = new MoveFactory();
+                        bestMove = factory.MakeNoLegalMove();
+
+                        // Here we know the king was lost in the last move and we just moved the last move back.
+                        // Now we can distinguish between stall mate and check mate.
+                        // for check mate the score is as Evaluate() calculated it.
+                        // for stall mate the score is 0 (draw).
+                        if (bestMove is NoLegalMove && !_moveGenerator.IsCheck(board, color))
+                        {
+                            bestScore = 0;
+                        }
+                    }
+
                 }
 
                 
@@ -125,25 +145,7 @@ namespace MantaChessEngine
                     bestScore = currentScore;
                 }
 
-                // If white is winning and its blacks move then black cannot move
-                // if black is winning and its whites move then white cannot move
-                // (assuming we are at the deepest level that we calculate. Search() will then try to 
-                // calculate a move for a less deeper level)
-                if (bestScore == Definitions.ScoreWhiteWins && color == Definitions.ChessColor.Black ||
-                    bestScore == Definitions.ScoreBlackWins && color == Definitions.ChessColor.White)
-                {
-                    var factory = new MoveFactory();
-                    bestMove = factory.MakeNoLegalMove();
-
-                    // Here we know the king was lost in the last move and we just moved the last move back.
-                    // Now we can distinguish between stall mate and check mate.
-                    // for check mate the score is as Evaluate() calculated it.
-                    // for stall mate the score is 0 (draw).
-                    if (bestMove is NoLegalMove && !_moveGenerator.IsCheck(board, color))
-                    {
-                        bestScore = 0;
-                    }
-                }
+                
             }
 
             

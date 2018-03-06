@@ -98,6 +98,15 @@ namespace MantaConsole
                 //                  ".r......" +  // white is stall mate --> ok
                 //                  "K.......");
 
+                board.SetPosition(  "r.b....." +
+                                    "o.b....." +
+                                    ".....k.." +
+                                    "..N.o..." +
+                                    ".oP..o.." +
+                                    "q....o.." +
+                                    "P......." +
+                                    "RK......");
+
                 whiteEngine.SetBoard(board);
                 blackEngine.SetBoard(board);
             

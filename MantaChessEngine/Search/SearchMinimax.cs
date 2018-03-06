@@ -109,9 +109,14 @@ namespace MantaChessEngine
                 else // we reached the bottom of the tree and evaluate the position
                 {
                     currentScore = _evaluator.Evaluate(board);
-                    board.Back();
                     evaluatedPositions++;
+                    board.Back();
+
+                    // todo: was it check mate or stall mate?
+
                 }
+
+                
 
                 // update the best move in the current level
                 if (IsBestMoveSofar(color, bestScore, currentScore))
@@ -134,12 +139,14 @@ namespace MantaChessEngine
                     // Now we can distinguish between stall mate and check mate.
                     // for check mate the score is as Evaluate() calculated it.
                     // for stall mate the score is 0 (draw).
-                    if (!_moveGenerator.IsCheck(board, color))
+                    if (bestMove is NoLegalMove && !_moveGenerator.IsCheck(board, color))
                     {
-                       bestScore = 0;
+                        bestScore = 0;
                     }
                 }
             }
+
+            
 
             score = bestScore;
             return bestMove;

@@ -236,5 +236,10 @@ namespace MantaChessEngine
                 LastMove.UndoMove(this);
             }
         }
+
+        public void RedoMove()
+        {
+            
+        }
     }
 }

@@ -59,9 +59,17 @@
         /// Do a move and update the board
         /// </summary>
         void Move(IMove nextMove);
+        /// <summary>
+        /// Takes the last move back
+        /// </summary>
+        void Back();
+        /// <summary>
+        /// Does the move taken back move again.
+        /// </summary>
+        void RedoMove();
 
         Definitions.ChessColor GetColor(int file, int rank);
         bool IsWinner(Definitions.ChessColor color);
-        void Back();
+        
     }
 }

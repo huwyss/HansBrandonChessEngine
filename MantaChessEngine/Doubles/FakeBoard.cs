@@ -55,6 +55,10 @@ namespace MantaChessEngine.Doubles
         {
         }
 
+        public void RedoMove()
+        {
+        }
+
         public Definitions.ChessColor GetColor(int file, int rank)
         {
             return Definitions.ChessColor.White;

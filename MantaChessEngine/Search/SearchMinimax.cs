@@ -84,6 +84,9 @@ namespace MantaChessEngine
 
         /// <summary>
         /// Search best move. Calculate level number of moves.
+        /// This method is recursive. condition to stop is 
+        ///     1) we reached the max depth level or 
+        ///     2) there are no legal moves in the current position (king is lost)
         /// </summary>
         /// <param name="board">Board to be searched in</param>
         /// <param name="color">Color of next move</param>
@@ -97,6 +100,16 @@ namespace MantaChessEngine
             float currentScore;
 
             var possibleMoves = _moveGenerator.GetAllMoves(board, color);
+
+            if (possibleMoves == null || possibleMoves.Count == 0)
+            {
+                // the playing color has just lost its king.
+                // we did not reach the search depth yet. 
+                // still, we do not evaluate and we go back up in the tree.
+                score = bestScore; // initialized as worst score
+                return bestMove;  // initialized as NoLegalMove
+            }
+
             foreach (IMove currentMoveLoop in possibleMoves)
             {
                 IMove currentMove = currentMoveLoop;
@@ -113,16 +126,18 @@ namespace MantaChessEngine
                     evaluatedPositions++;
                     board.Back();
                     
+                    // todo the distinction between stall mate and check mate must be done 2 plys before king is lost (2 x back)
                     // If white is winning and its blacks move then black cannot move
                     // if black is winning and its whites move then white cannot move
                     // (assuming we are at the deepest level that we calculate. Search() will then try to 
                     // calculate a move for a less deeper level)
-                    if (currentScore == Definitions.ScoreWhiteWins && color == Definitions.ChessColor.Black ||
-                        currentScore == Definitions.ScoreBlackWins && color == Definitions.ChessColor.White)
+                    if (currentScore == Definitions.ScoreWhiteWins && color == Definitions.ChessColor.White ||
+                        currentScore == Definitions.ScoreBlackWins && color == Definitions.ChessColor.Black)
                     {
                         var factory = new MoveFactory();
                         currentMove = factory.MakeNoLegalMove();
 
+                        board.Back();
                         // Check mate or stall mate?
                         // Here we know the king was lost in the last move and we just moved the last move back.
                         // Now we can distinguish between stall mate and check mate.
@@ -132,6 +147,7 @@ namespace MantaChessEngine
                         {
                             currentScore = 0;
                         }
+                        board.RedoMove();
                     }
 
                 }

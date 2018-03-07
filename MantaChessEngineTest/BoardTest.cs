@@ -443,6 +443,33 @@ namespace MantaChessEngineTest
         }
 
         // -------------------------------------------------------------------
+        //  RedoMove tests
+        // -------------------------------------------------------------------
+
+        [TestMethod]
+        public void RedoMoveTest_WhenBackAndRedo_ThenSamePosition()
+        {
+            Board target = new Board();
+            target.SetInitialPosition();
+            target.Move(new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 4, null));
+
+            target.Back();
+            target.RedoMove();
+            string expectedString = "rnbqkbnr" +
+                                    "pppppppp" +
+                                    "........" +
+                                    "........" +
+                                    "....P..." +
+                                    "........" +
+                                    "PPPP.PPP" +
+                                    "RNBQKBNR";
+            Assert.AreEqual(expectedString, target.GetString);
+            Assert.AreEqual(Definitions.ChessColor.Black, target.SideToMove);
+            Assert.AreEqual(Helper.FileCharToFile('e'), target.EnPassantFile, "en passant file wrong after back and redomove");
+            Assert.AreEqual(3, target.EnPassantRank, "en passant rank wrong after back and redomove");
+        }
+
+        // -------------------------------------------------------------------
         // Castling tests
         // -------------------------------------------------------------------
 
@@ -748,5 +775,6 @@ namespace MantaChessEngineTest
 
             Assert.AreEqual(position, board.GetString, "Black promotion with capture: back not correct.");
         }
+        
     }
 }

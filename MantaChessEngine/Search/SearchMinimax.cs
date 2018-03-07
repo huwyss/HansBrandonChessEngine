@@ -97,8 +97,9 @@ namespace MantaChessEngine
             float currentScore;
 
             var possibleMoves = _moveGenerator.GetAllMoves(board, color);
-            foreach (IMove currentMove in possibleMoves)
+            foreach (IMove currentMoveLoop in possibleMoves)
             {
+                IMove currentMove = currentMoveLoop;
                 board.Move(currentMove);
 
                 if (level > 1) // we need to do more move levels...
@@ -111,26 +112,25 @@ namespace MantaChessEngine
                     currentScore = _evaluator.Evaluate(board);
                     evaluatedPositions++;
                     board.Back();
-
-                    // todo: was it check mate or stall mate?
-
+                    
                     // If white is winning and its blacks move then black cannot move
                     // if black is winning and its whites move then white cannot move
                     // (assuming we are at the deepest level that we calculate. Search() will then try to 
                     // calculate a move for a less deeper level)
-                    if (bestScore == Definitions.ScoreWhiteWins && color == Definitions.ChessColor.Black ||
-                        bestScore == Definitions.ScoreBlackWins && color == Definitions.ChessColor.White)
+                    if (currentScore == Definitions.ScoreWhiteWins && color == Definitions.ChessColor.Black ||
+                        currentScore == Definitions.ScoreBlackWins && color == Definitions.ChessColor.White)
                     {
                         var factory = new MoveFactory();
-                        bestMove = factory.MakeNoLegalMove();
+                        currentMove = factory.MakeNoLegalMove();
 
+                        // Check mate or stall mate?
                         // Here we know the king was lost in the last move and we just moved the last move back.
                         // Now we can distinguish between stall mate and check mate.
                         // for check mate the score is as Evaluate() calculated it.
                         // for stall mate the score is 0 (draw).
-                        if (bestMove is NoLegalMove && !_moveGenerator.IsCheck(board, color))
+                        if (!_moveGenerator.IsCheck(board, color))
                         {
-                            bestScore = 0;
+                            currentScore = 0;
                         }
                     }
 

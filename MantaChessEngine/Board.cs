@@ -8,6 +8,8 @@ namespace MantaChessEngine
 {
     public class Board : IBoard
     {
+        private IMove _undoneMove = null;
+
         public Definitions.ChessColor SideToMove { get; set; }
         public History History { get; set; }
         public IMove LastMove { get { return History.LastMove; } }
@@ -233,13 +235,19 @@ namespace MantaChessEngine
         {
             if (History.Count >= 1)
             {
+                _undoneMove = LastMove;
                 LastMove.UndoMove(this);
             }
         }
 
         public void RedoMove()
         {
-            
+            if (_undoneMove != null)
+            {
+                _undoneMove.ExecuteMove(this);
+            }
+
+            _undoneMove = null;
         }
     }
 }

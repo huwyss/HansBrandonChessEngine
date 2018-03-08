@@ -147,6 +147,7 @@ namespace MantaChessEngine
                         {
                             currentScore = 0;
                         }
+
                         board.RedoMove();
                     }
 

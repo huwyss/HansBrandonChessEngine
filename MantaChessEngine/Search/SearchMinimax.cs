@@ -69,6 +69,7 @@ namespace MantaChessEngine
             int currentLevel = _maxDepth;
             evaluatedPositions = 0;
             IMove move;
+            bool stallMate;
 
             // try finding a legal move. Play until actually check mate.
             // Example: If it was not legal for level 4 try find a move for level 2
@@ -99,8 +100,6 @@ namespace MantaChessEngine
             IMove bestMove = new NoLegalMove();
             float bestScore = InitWithWorstScorePossible(color);
             float currentScore;
-            int stallMateCandidates = 0;
-            int checkMateMoves = 0;
 
             var possibleMoves = _moveGenerator.GetAllMoves(board, color);
 
@@ -113,14 +112,18 @@ namespace MantaChessEngine
                 return bestMove;  // initialized as NoLegalMove
             }
 
+            bool gameHasWinner = false;
+
             foreach (IMove currentMoveLoop in possibleMoves)
             {
                 IMove currentMove = currentMoveLoop;
                 board.Move(currentMove);
+                
 
                 if (level > 1) // we need to do more move levels...
                 {
-                    IMove moveRec = SearchLevel(board, Helper.GetOppositeColor(color), level - 1, out currentScore); // recursive...
+                    IMove moveRecursive = SearchLevel(board, Helper.GetOppositeColor(color), level - 1, out currentScore); // recursive...
+                    gameHasWinner = moveRecursive is NoLegalMove;
                     board.Back();
                 }
                 else // we reached the bottom of the tree and evaluate the position
@@ -128,46 +131,25 @@ namespace MantaChessEngine
                     currentScore = _evaluator.Evaluate(board);
                     evaluatedPositions++;
                     board.Back();
-
+                
                     // todo the distinction between stall mate and check mate must be done 2 plys before king is lost (2 x back)
                     // If white is winning and its blacks move then black cannot move
                     // if black is winning and its whites move then white cannot move
                     // (assuming we are at the deepest level that we calculate. Search() will then try to 
                     // calculate a move for a less deeper level)
-                    if (currentScore == Definitions.ScoreWhiteWins && color == Definitions.ChessColor.White ||
-                        currentScore == Definitions.ScoreBlackWins && color == Definitions.ChessColor.Black)
+                    if (currentScore == Definitions.ScoreWhiteWins || currentScore == Definitions.ScoreBlackWins)
                     {
                         var factory = new MoveFactory();
                         currentMove = factory.MakeNoLegalMove();
-
-                        //board.Back();
-                        //// Check mate or stall mate?
-                        //// Here we know the king was lost in the last move and we just moved the last move back.
-                        //// Now we can distinguish between stall mate and check mate.
-                        //// for check mate the score is as Evaluate() calculated it.
-                        //// for stall mate the score is 0 (draw). 
-
-
-                        //// todo: it can only be stall mate it this is the only move in this level!!
-                        //// ------------------------------------------------------------------------
-                        //if (!_moveGenerator.IsCheck(board, color))
-                        //{
-                        //    stallMateCandidates++;
-                        //}
-                        //else
-                        //{
-                        //    checkMateMoves++;
-                        //}
-
-                        //board.RedoMove();
                     }
                 }
 
                 // update the best move in the current level
                 if (IsBestMoveSofar(color, bestScore, currentScore))
                 {
-                    bestMove = currentMove;
+                    bestMove = gameHasWinner ? new NoLegalMove() : currentMove;
                     bestScore = currentScore;
+                    
                 }
             }
 
@@ -178,15 +160,6 @@ namespace MantaChessEngine
                     bestScore = 0;
                 }
             }
-
-            //// we only found stall mate candidates -> it is stall mate
-            //if (possibleMoves.Count == stallMateCandidates)
-            //{
-            //    bestScore = 0;
-            //    bestMove = new NoLegalMove();
-            //}
-
-            
 
             score = bestScore;
             return bestMove;

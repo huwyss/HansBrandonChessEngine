@@ -629,7 +629,7 @@ namespace MantaChessEngineTest
             IMove bestMoveActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 3, out scoreActual);
 
             Assert.AreEqual(10000, scoreActual);
-            Assert.IsTrue(bestMoveActual is NormalMove);
+            Assert.IsTrue(bestMoveActual is NoLegalMove);
         }
 
         [TestMethod]
@@ -748,7 +748,7 @@ namespace MantaChessEngineTest
             IMove bestMoveActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 3, out scoreActual);
 
             Assert.AreEqual(0, scoreActual, "stall mate should be score 0");
-            Assert.IsTrue(bestMoveActual is NormalMove);
+            Assert.IsTrue(bestMoveActual is NoLegalMove);
         }
 
         [TestMethod]
@@ -1030,6 +1030,20 @@ namespace MantaChessEngineTest
             Assert.AreEqual(new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null), actualMove);
             Assert.AreEqual(1, actualScore);
         }
+
+        [TestMethod]
+        public void SearchTest_WhenCheckmateIn1_Depth3_ThenNormalMove()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void SearchTest_WhenStallmateIn1_Depth3_ThenNormalMove()
+        {
+            Assert.Fail();
+        }
+
+
 
 
 

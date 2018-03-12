@@ -240,7 +240,10 @@ namespace MantaChessEngine
             }
         }
 
-        public void RedoMove()
+        /// <summary>
+        /// can redo 1 move that was previously undone
+        /// </summary>
+        public void RedoMove() 
         {
             if (_undoneMove != null)
             {

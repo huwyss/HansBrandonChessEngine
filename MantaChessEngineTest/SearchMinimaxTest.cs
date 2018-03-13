@@ -654,7 +654,7 @@ namespace MantaChessEngineTest
             moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('N'), 0, 0, 0, 0, null) }); // level 3 b
             moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('n'), 0, 0, 0, 0, null) }); // level 4 b
             moveGenFake.SetIsChecks(new List<bool>() { true, true });
-            IEvaluator evalFake = new FakeEvaluator(new List<float>() { -10000, -10010 });
+            IEvaluator evalFake = new FakeEvaluator(new List<float>() { -10000, -10000 });
             IBoard boardFake = new FakeBoard();
 
             var target = new SearchMinimax(evalFake, moveGenFake);
@@ -662,8 +662,8 @@ namespace MantaChessEngineTest
             float scoreActual;
             IMove bestMoveActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 4, out scoreActual);
 
-            Assert.AreEqual(-01000, scoreActual);
-            Assert.IsTrue(bestMoveActual is NormalMove);
+            Assert.AreEqual(-10000, scoreActual);
+            Assert.IsTrue(bestMoveActual is NormalMove, "should be normal move, check mate is only in 2nd move");
         }
 
         [TestMethod]

@@ -73,12 +73,12 @@ namespace MantaChessEngine
 
             // try finding a legal move. Play until actually check mate.
             // Example: If it was not legal for level 4 try find a move for level 2
-            do
-            {
+            //do
+            //{
                 move = SearchLevel(board, color, currentLevel, out score);
-                currentLevel = currentLevel - (currentLevel % 2)- 2;
+            //    currentLevel = currentLevel - (currentLevel % 2)- 2;
 
-            } while (move is NoLegalMove && currentLevel > 0);
+            //} while (move is NoLegalMove && currentLevel > 0);
 
             _log.Debug("evaluated positons: " + evaluatedPositions);
             return move;
@@ -141,13 +141,14 @@ namespace MantaChessEngine
                     {
                         var factory = new MoveFactory();
                         currentMove = factory.MakeNoLegalMove();
+                        gameHasWinner = true;
                     }
                 }
 
                 // update the best move in the current level
                 if (IsBestMoveSofar(color, bestScore, currentScore))
                 {
-                    bestMove = gameHasWinner ? new NoLegalMove() : currentMove;
+                    bestMove = gameHasWinner && level <= 2 ? new NoLegalMove() : currentMove;
                     bestScore = currentScore;
                     
                 }
@@ -169,11 +170,11 @@ namespace MantaChessEngine
         {
             if (color == Definitions.ChessColor.White)
             {
-                return Definitions.ScoreBlackWins;
+                return Int32.MinValue;
             }
             else
             {
-                return Definitions.ScoreWhiteWins;
+                return Int32.MaxValue;
             }
         }
 

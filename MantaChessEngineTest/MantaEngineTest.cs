@@ -68,9 +68,27 @@ namespace MantaChessEngineTest
         }
 
         [TestMethod]
-        public void DoBestMoveTest_WhenWhiteIsCheckMate_ThenNoLegalMove_WhiteMoves()
+        public void DoBestMoveTest_WhenWhiteIsCheckMate_ThenNoLegalMove_WhiteMoves_Depth2()
+        {
+            DoBestMoveTest_WhenWhiteIsCheckMate_ThenNoLegalMove_WhiteMoves(2);
+        }
+
+        [TestMethod]
+        public void DoBestMoveTest_WhenWhiteIsCheckMate_ThenNoLegalMove_WhiteMoves_Depth3()
+        {
+            DoBestMoveTest_WhenWhiteIsCheckMate_ThenNoLegalMove_WhiteMoves(3);
+        }
+
+        [TestMethod]
+        public void DoBestMoveTest_WhenWhiteIsCheckMate_ThenNoLegalMove_WhiteMoves_Depth4()
+        {
+            DoBestMoveTest_WhenWhiteIsCheckMate_ThenNoLegalMove_WhiteMoves(4);
+        }
+
+        public void DoBestMoveTest_WhenWhiteIsCheckMate_ThenNoLegalMove_WhiteMoves(int depth)
         {
             var engine = new MantaEngine(EngineType.MinimaxPosition);
+            engine.SetMaxSearchDepth(depth);
             engine.SetBoard(new Board());
             string boardString = "........" +
                                  "........" +
@@ -88,7 +106,49 @@ namespace MantaChessEngineTest
             string expectedBoard = boardString;
             Assert.AreEqual(new NoLegalMove(), actualMove, "White is check mate, so no legal move possible");
             Assert.AreEqual(expectedBoard, actualBoard, "White is check mate");
+            Assert.IsTrue(engine.IsCheck(Definitions.ChessColor.White), "white is check mate. must be check");
+        }
+
+        [TestMethod]
+        public void DoBestMoveTest_WhenWhiteIsStallMate_ThenNoLegalMove_WhiteMoves_Depth2()
+        {
+            DoBestMoveTest_WhenWhiteIsStallMate_ThenNoLegalMove_WhiteMoves(2);
+        }
+
+        [TestMethod]
+        public void DoBestMoveTest_WhenWhiteIsStallMate_ThenNoLegalMove_WhiteMoves_Depth3()
+        {
+            DoBestMoveTest_WhenWhiteIsStallMate_ThenNoLegalMove_WhiteMoves(3);
+        }
+
+        [TestMethod]
+        public void DoBestMoveTest_WhenWhiteIsStallMate_ThenNoLegalMove_WhiteMoves_Depth4()
+        {
+            DoBestMoveTest_WhenWhiteIsStallMate_ThenNoLegalMove_WhiteMoves(4);
+        }
+
+        public void DoBestMoveTest_WhenWhiteIsStallMate_ThenNoLegalMove_WhiteMoves(int depth)
+        {
+            var engine = new MantaEngine(EngineType.MinimaxPosition);
+            engine.SetMaxSearchDepth(depth);
+            engine.SetBoard(new Board());
+            string boardString = "........" +
+                                 "........" +
+                                 "........" +
+                                 "........" +
+                                 "........" +
+                                 "..k....." +
+                                 ".r......" +
+                                 "K.......";
+            engine.SetPosition(boardString);
+
+            IMove actualMove = engine.DoBestMove(Definitions.ChessColor.White);
             
+            string actualBoard = engine.GetString();
+            string expectedBoard = boardString;
+            Assert.AreEqual(new NoLegalMove(), actualMove, "White is stall mate, so no legal move possible");
+            Assert.AreEqual(expectedBoard, actualBoard, "White is stall mate");
+            Assert.IsFalse(engine.IsCheck(Definitions.ChessColor.White), "white is stall mate. not check");
         }
 
         [TestMethod]

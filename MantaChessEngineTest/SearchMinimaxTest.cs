@@ -606,11 +606,11 @@ namespace MantaChessEngineTest
         {
             //       start
             //     /       \
-            //   10000x    10000x     white move -> highest selected (x)
+            //   10000x    10000x     white move -> highest selected (x) (legal move)
             //    /           \   
-            //  10000x      10000x     black move -> lowest selected (x)
+            //  10000x      10000x     black move -> lowest selected (x) (black king is/goes in check -> not legal)
             //   /            \   
-            // 10000x        10000x     white move -> highest selected (x), black king lost
+            // 10000x        10000x     white move -> highest selected (x), black king lost (white captures king -> not legal)
             // check         check (2 ply earlier)
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
@@ -629,7 +629,7 @@ namespace MantaChessEngineTest
             IMove bestMoveActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 3, out scoreActual);
 
             Assert.AreEqual(10000, scoreActual);
-            Assert.IsTrue(bestMoveActual is NoLegalMove);
+            Assert.IsTrue(bestMoveActual is NormalMove); // the first move of white is legal
         }
 
         [TestMethod]
@@ -637,13 +637,13 @@ namespace MantaChessEngineTest
         {
             //      start
             //     /      \
-            //   -1000    -1010     white move -> highest selected (x), but here white has lost king-> no move returned
+            //   -1000    -1010     white move -> highest selected (x), legal move
             //   /           \   
-            // -10000x       -10010x     black move -> lowest selected (x)
+            // -10000x       -10010x     black move -> lowest selected (x), legal move
             //   /           \   
-            // -10000x       -10010x     white move -> highest selected (x)
+            // -10000x       -10010x     white move -> highest selected (x), king is/goes in check -> not legal
             //   /           \   
-            // -10000x       -10010x     black move -> lowest selected (x)
+            // -10000x       -10010x     black move -> lowest selected (x), king is captured -> not legal
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
             moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null) }); // level 1
@@ -662,8 +662,8 @@ namespace MantaChessEngineTest
             float scoreActual;
             IMove bestMoveActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 4, out scoreActual);
 
-            Assert.IsTrue(-1000 > scoreActual);
-            Assert.AreEqual(new NoLegalMove(), bestMoveActual);
+            Assert.AreEqual(-01000, scoreActual);
+            Assert.IsTrue(bestMoveActual is NormalMove);
         }
 
         [TestMethod]
@@ -697,11 +697,11 @@ namespace MantaChessEngineTest
         public void SearchMinimaxTest_WhenWhiteIsStallMateIn2MoreOptions_ThenNoLegalMoveScore0()
         {
             //              start
-            //                0  (not check here)
+            //                0  (not check here) (white is stall mate)
             //          /            \
-            //     -10000x          -10000x       white move -> highest selected (x)
+            //     -10000x          -10000x       white move -> highest selected (x) (white king goes in check -> not legal)
             //     a/    \b         c/    \d   
-            // -10000x  -10        10  -10000x     black move -> lowest selected (x), white king lost here
+            // -10000x  -10        10  -10000x     black move -> lowest selected (x), white king lost here (black captures white king -> not legal)
             // not check    not check
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
             moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null) }); // level 1
@@ -717,7 +717,7 @@ namespace MantaChessEngineTest
             IMove bestMoveActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 2, out scoreActual);
 
             Assert.AreEqual(0, scoreActual, "stall mate should be score 0");
-            Assert.AreEqual(new NoLegalMove(), bestMoveActual);
+            Assert.IsTrue(bestMoveActual is NoLegalMove);
         }
 
         [TestMethod]
@@ -726,11 +726,11 @@ namespace MantaChessEngineTest
             //      start
             //        0
             //     /      \
-            //  10000x    10000x       black move -> lowest selected (x)  (not check)
+            //  10000x    10000x       black move -> lowest selected (x)  (not check) legal move
             //   /           \   
-            //  10000x    10000x       white move -> highest selected (x)
+            //  10000x    10000x       white move -> highest selected (x) white king is in check or goes in check -> not legal
             //   /           \   
-            // 10000x     10000x      black move -> lowest selected (x)  stall mate here. eval returns -10000, ischeck returns false
+            // 10000x     10000x      black move -> lowest selected (x)  black captures white king -> not legal move
             // not check    not  (2 plys earlier)
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
             moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null) }); // level 1
@@ -748,7 +748,7 @@ namespace MantaChessEngineTest
             IMove bestMoveActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 3, out scoreActual);
 
             Assert.AreEqual(0, scoreActual, "stall mate should be score 0");
-            Assert.IsTrue(bestMoveActual is NoLegalMove);
+            Assert.IsTrue(bestMoveActual is NormalMove);
         }
 
         [TestMethod]
@@ -757,13 +757,13 @@ namespace MantaChessEngineTest
             //      start
             //        0
             //     /      \
-            // -10000x   -10000x       white move -> highest selected (x)
+            // -10000x   -10000x       white move -> highest selected (x) legal move
             //   /2a        \2b   
-            // -10000x   -10000x       black move -> lowest selected (x) (not check)
+            // -10000x   -10000x       black move -> lowest selected (x) (not check) legal move
             //   /3a        \3b   
-            // -10000x   -10000x       white move -> highest selected (x)
+            // -10000x   -10000x       white move -> highest selected (x) white king goes to check -> not legal
             //   /4a        \4b   
-            // -10000x     -10000x     black move -> lowest selected (x)  stall mate here. eval returns -10000, ischeck returns false
+            // -10000x     -10000x     black move -> lowest selected (x)  black captures white king -> not legal
             // not check    not  (2 plys earlier)
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
             moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null) }); // level 1
@@ -783,7 +783,7 @@ namespace MantaChessEngineTest
             IMove bestMoveActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 4, out scoreActual);
 
             Assert.AreEqual(0, scoreActual, "stall mate should be score 0");
-            Assert.AreEqual(new NoLegalMove(), bestMoveActual);
+            Assert.IsTrue(bestMoveActual is NormalMove);
         }
 
 
@@ -802,246 +802,252 @@ namespace MantaChessEngineTest
         //                    --> SearchLevel(4) --> normal Move
         //                    --> SearchLevel(6) --> NoLegalMove
 
-        [TestMethod]
-        public void SearchTest_WhenCheckmateNow_ThenReturnNoLegalMove()
-        {
-            // checkmate now --> Search(level 2) -> nolegal move
+        //[TestMethod]
+        //public void SearchTest_WhenCheckmateNow_ThenReturnNoLegalMove()
+        //{
+        //    // checkmate now --> Search(level 2) -> nolegal move
 
-            var scoresMoves = new List<MoveAndScore>()
-            {
-                null,
-                null,
-                new MoveAndScore() {Move = new NoLegalMove(), Score = -10000}, // level 2: king lost
-                null,
-                new MoveAndScore() {Move = new NoLegalMove(), Score = -10000}, // level 4 king lost
+        //    var scoresMoves = new List<MoveAndScore>()
+        //    {
+        //        null,
+        //        null,
+        //        new MoveAndScore() {Move = new NoLegalMove(), Score = -10000}, // level 2: king lost
+        //        null,
+        //        new MoveAndScore() {Move = new NoLegalMove(), Score = -10000}, // level 4 king lost
 
-            };
-            var target = new SearchMinimaxDouble_SearchLevelOverwritten(null, null, scoresMoves.ToArray());
-            target.SetMaxDepth(4);
+        //    };
+        //    var target = new SearchMinimaxDouble_SearchLevelOverwritten(null, null, scoresMoves.ToArray());
+        //    target.SetMaxDepth(4);
 
-            float actualScore;
-            var actualMove = target.Search(null, Definitions.ChessColor.Empty, out actualScore);
+        //    float actualScore;
+        //    var actualMove = target.Search(null, Definitions.ChessColor.Empty, out actualScore);
 
-            Assert.AreEqual(new NoLegalMove(), actualMove);
-            Assert.AreEqual(-10000, actualScore);
-        }
+        //    Assert.AreEqual(new NoLegalMove(), actualMove);
+        //    Assert.AreEqual(-10000, actualScore);
+        //}
         
-        [TestMethod]
-        public void SearchTest_WhenCheckmateIn2_ThenReturnNormalMove()
-        {
-            // checkmate in 2  --> SearchLevel(2) --> normal move
-            //                 --> SearchLevel(4) --> NoLegalMove
+        //[TestMethod]
+        //public void SearchTest_WhenCheckmateIn2_ThenReturnNormalMove()
+        //{
+        //    // checkmate in 2  --> SearchLevel(2) --> normal move
+        //    //                 --> SearchLevel(4) --> NoLegalMove
 
-            var scoresMoves = new List<MoveAndScore>()
-            {
-                null,
-                null,
-                new MoveAndScore() {Move = new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null), Score = 0}, // level 2: checkmate
-                null,
-                new MoveAndScore() {Move = new NoLegalMove(), Score = -10000}, // level 4: king lost
+        //    var scoresMoves = new List<MoveAndScore>()
+        //    {
+        //        null,
+        //        null,
+        //        new MoveAndScore() {Move = new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null), Score = 0}, // level 2: checkmate
+        //        null,
+        //        new MoveAndScore() {Move = new NoLegalMove(), Score = -10000}, // level 4: king lost
 
-            };
-            var target = new SearchMinimaxDouble_SearchLevelOverwritten(null, null, scoresMoves.ToArray());
-            target.SetMaxDepth(4);
+        //    };
+        //    var target = new SearchMinimaxDouble_SearchLevelOverwritten(null, null, scoresMoves.ToArray());
+        //    target.SetMaxDepth(4);
 
-            float actualScore;
-            var actualMove = target.Search(null, Definitions.ChessColor.Empty, out actualScore);
+        //    float actualScore;
+        //    var actualMove = target.Search(null, Definitions.ChessColor.Empty, out actualScore);
 
-            Assert.AreEqual(new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null), actualMove);
-            Assert.AreEqual(0, actualScore);
-        }
+        //    Assert.AreEqual(new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null), actualMove);
+        //    Assert.AreEqual(0, actualScore);
+        //}
 
-        [TestMethod]
-        public void SearchTest_WhenCheckmateIn4MaxDepth6_ThenReturnNormalMove()
-        {
-            // checkmate in 4  --> SearchLevel(2) --> normal move
-            //                 --> SearchLevel(4) --> normal Move  <-- select this
-            //                 --> SearchLevel(6) --> NoLegalMove
+        //[TestMethod]
+        //public void SearchTest_WhenCheckmateIn4MaxDepth6_ThenReturnNormalMove()
+        //{
+        //    // checkmate in 4  --> SearchLevel(2) --> normal move
+        //    //                 --> SearchLevel(4) --> normal Move  <-- select this
+        //    //                 --> SearchLevel(6) --> NoLegalMove
 
-            var scoresMoves = new List<MoveAndScore>()
-            {
-                null,
-                null,
-                new MoveAndScore() {Move = new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), Score = 1}, // level 2: checkmate in 2
-                null,
-                new MoveAndScore() {Move = new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null), Score = 2}, // level 4: check mate
-                null,
-                new MoveAndScore() {Move = new NoLegalMove(), Score = -10000}, // level 6: lost king
+        //    var scoresMoves = new List<MoveAndScore>()
+        //    {
+        //        null,
+        //        null,
+        //        new MoveAndScore() {Move = new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), Score = 1}, // level 2: checkmate in 2
+        //        null,
+        //        new MoveAndScore() {Move = new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null), Score = 2}, // level 4: check mate
+        //        null,
+        //        new MoveAndScore() {Move = new NoLegalMove(), Score = -10000}, // level 6: lost king
 
-            };
-            var target = new SearchMinimaxDouble_SearchLevelOverwritten(null, null, scoresMoves.ToArray());
-            target.SetMaxDepth(6);
+        //    };
+        //    var target = new SearchMinimaxDouble_SearchLevelOverwritten(null, null, scoresMoves.ToArray());
+        //    target.SetMaxDepth(6);
 
-            float actualScore;
-            var actualMove = target.Search(null, Definitions.ChessColor.Empty, out actualScore);
+        //    float actualScore;
+        //    var actualMove = target.Search(null, Definitions.ChessColor.Empty, out actualScore);
 
-            Assert.AreEqual(new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null), actualMove);
-            Assert.AreEqual(2, actualScore);
-        }
+        //    Assert.AreEqual(new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null), actualMove);
+        //    Assert.AreEqual(2, actualScore);
+        //}
 
-        [TestMethod]
-        public void SearchTest_WhenCheckmateIn2MaxDepth6_ThenReturnNormalMove()
-        {
-            // checkmate in 2  --> SearchLevel(2) --> normal move  <-- select this
-            //                 --> SearchLevel(4) --> NoLegalMove
-            //                 --> SearchLevel(6) --> NoLegalMove
+        //[TestMethod]
+        //public void SearchTest_WhenCheckmateIn2MaxDepth6_ThenReturnNormalMove()
+        //{
+        //    // checkmate in 2  --> SearchLevel(2) --> normal move  <-- select this
+        //    //                 --> SearchLevel(4) --> NoLegalMove
+        //    //                 --> SearchLevel(6) --> NoLegalMove
 
-            var scoresMoves = new List<MoveAndScore>()
-            {
-                null,
-                null,
-                new MoveAndScore() {Move = new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), Score = 1}, // level 2: checkmate
-                null,
-                new MoveAndScore() {Move = new NoLegalMove(), Score = -10000}, // level 4: lost king
-                null,
-                new MoveAndScore() {Move = new NoLegalMove(), Score = -10000}, // level 6: lost king
+        //    var scoresMoves = new List<MoveAndScore>()
+        //    {
+        //        null,
+        //        null,
+        //        new MoveAndScore() {Move = new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), Score = 1}, // level 2: checkmate
+        //        null,
+        //        new MoveAndScore() {Move = new NoLegalMove(), Score = -10000}, // level 4: lost king
+        //        null,
+        //        new MoveAndScore() {Move = new NoLegalMove(), Score = -10000}, // level 6: lost king
 
-            };
-            var target = new SearchMinimaxDouble_SearchLevelOverwritten(null, null, scoresMoves.ToArray());
-            target.SetMaxDepth(6);
+        //    };
+        //    var target = new SearchMinimaxDouble_SearchLevelOverwritten(null, null, scoresMoves.ToArray());
+        //    target.SetMaxDepth(6);
 
-            float actualScore;
-            var actualMove = target.Search(null, Definitions.ChessColor.Empty, out actualScore);
+        //    float actualScore;
+        //    var actualMove = target.Search(null, Definitions.ChessColor.Empty, out actualScore);
 
-            Assert.AreEqual(new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), actualMove);
-            Assert.AreEqual(1, actualScore);
-        }
+        //    Assert.AreEqual(new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), actualMove);
+        //    Assert.AreEqual(1, actualScore);
+        //}
 
-        [TestMethod]
-        public void SearchTest_WhenCheckmateIn2MaxDepth3_ThenReturnNormalMove()
-        {
-            // checkmate in 2  --> SearchLevel(2) --> normal move  <-- select this
-            //                 --> SearchLevel(3) --> NoLegalMove
-            //                 --> SearchLevel(4) --> NoLegalMove
+        //[TestMethod]
+        //public void SearchTest_WhenCheckmateIn2MaxDepth3_ThenReturnNormalMove()
+        //{
+        //    // checkmate in 2  --> SearchLevel(2) --> normal move  <-- select this
+        //    //                 --> SearchLevel(3) --> NoLegalMove
+        //    //                 --> SearchLevel(4) --> NoLegalMove
 
-            var scoresMoves = new List<MoveAndScore>()
-            {
-                null,
-                null,
-                new MoveAndScore() {Move = new NoLegalMove(), Score = -10000}, // level 2: lost king
-                new MoveAndScore() {Move = new NoLegalMove(), Score = -10000}, // level 3: lost king
+        //    var scoresMoves = new List<MoveAndScore>()
+        //    {
+        //        null,
+        //        null,
+        //        new MoveAndScore() {Move = new NoLegalMove(), Score = -10000}, // level 2: lost king
+        //        new MoveAndScore() {Move = new NoLegalMove(), Score = -10000}, // level 3: lost king
 
-            };
-            var target = new SearchMinimaxDouble_SearchLevelOverwritten(null, null, scoresMoves.ToArray());
-            target.SetMaxDepth(3);
+        //    };
+        //    var target = new SearchMinimaxDouble_SearchLevelOverwritten(null, null, scoresMoves.ToArray());
+        //    target.SetMaxDepth(3);
 
-            float actualScore;
-            var actualMove = target.Search(null, Definitions.ChessColor.Empty, out actualScore);
+        //    float actualScore;
+        //    var actualMove = target.Search(null, Definitions.ChessColor.Empty, out actualScore);
 
-            Assert.AreEqual(new NoLegalMove(), actualMove);
-            Assert.AreEqual(-10000, actualScore);
-        }
+        //    Assert.AreEqual(new NoLegalMove(), actualMove);
+        //    Assert.AreEqual(-10000, actualScore);
+        //}
 
-        [TestMethod]
-        public void SearchTest_WhenCheckmateNow_Level3_ThenReturnNormalMove()
-        {
-            // check mate in 2  --> SearchLevel(3) --> NoLegalMove
-            //                  --> SearchLevel(2) --> NoLegalMove
+        //[TestMethod]
+        //public void SearchTest_WhenCheckmateNow_Level3_ThenReturnNormalMove()
+        //{
+        //    // check mate in 2  --> SearchLevel(3) --> NoLegalMove
+        //    //                  --> SearchLevel(2) --> NoLegalMove
 
-            var scoresMoves = new List<MoveAndScore>()
-            {
-                null,
-                null,
-                new MoveAndScore() {Move = new NoLegalMove(), Score = -10001}, // level 2: lost king
-                new MoveAndScore() {Move = new NoLegalMove(), Score = -10000}, // level 3: lost king
+        //    var scoresMoves = new List<MoveAndScore>()
+        //    {
+        //        null,
+        //        null,
+        //        new MoveAndScore() {Move = new NoLegalMove(), Score = -10001}, // level 2: lost king
+        //        new MoveAndScore() {Move = new NoLegalMove(), Score = -10000}, // level 3: lost king
 
-            };
-            var target = new SearchMinimaxDouble_SearchLevelOverwritten(null, null, scoresMoves.ToArray());
-            target.SetMaxDepth(3);
+        //    };
+        //    var target = new SearchMinimaxDouble_SearchLevelOverwritten(null, null, scoresMoves.ToArray());
+        //    target.SetMaxDepth(3);
 
-            float actualScore;
-            var actualMove = target.Search(null, Definitions.ChessColor.Empty, out actualScore);
+        //    float actualScore;
+        //    var actualMove = target.Search(null, Definitions.ChessColor.Empty, out actualScore);
 
-            Assert.AreEqual(new NoLegalMove(), actualMove);
-            Assert.AreEqual(-10000, actualScore);
-        }
+        //    Assert.AreEqual(new NoLegalMove(), actualMove);
+        //    Assert.AreEqual(-10000, actualScore);
+        //}
 
-        [TestMethod]
-        public void SearchTest_WhenCheckmatIn2_Level5_ThenReturnNormalMove()
-        {
-            // check mate in 2  --> SearchLevel(5) --> NoLegalMove
-            //                  --> SearchLevel(2) --> Normal move
+        //[TestMethod]
+        //public void SearchTest_WhenCheckmatIn2_Level5_ThenReturnNormalMove()
+        //{
+        //    // check mate in 2  --> SearchLevel(5) --> NoLegalMove
+        //    //                  --> SearchLevel(2) --> Normal move
 
-            var scoresMoves = new List<MoveAndScore>()
-            {
-                null,
-                null,
-                new MoveAndScore() {Move = new NormalMove(Piece.MakePiece('Q'),0,0,0,0,null), Score = 1}, // level 2: lost king
-                null,
-                null,
-                new MoveAndScore() {Move = new NoLegalMove(), Score = -10000}, // level 5: lost king
-            };
-            var target = new SearchMinimaxDouble_SearchLevelOverwritten(null, null, scoresMoves.ToArray());
-            target.SetMaxDepth(5);
+        //    var scoresMoves = new List<MoveAndScore>()
+        //    {
+        //        null,
+        //        null,
+        //        new MoveAndScore() {Move = new NormalMove(Piece.MakePiece('Q'),0,0,0,0,null), Score = 1}, // level 2: lost king
+        //        null,
+        //        null,
+        //        new MoveAndScore() {Move = new NoLegalMove(), Score = -10000}, // level 5: lost king
+        //    };
+        //    var target = new SearchMinimaxDouble_SearchLevelOverwritten(null, null, scoresMoves.ToArray());
+        //    target.SetMaxDepth(5);
 
-            float actualScore;
-            var actualMove = target.Search(null, Definitions.ChessColor.Empty, out actualScore);
+        //    float actualScore;
+        //    var actualMove = target.Search(null, Definitions.ChessColor.Empty, out actualScore);
 
-            Assert.AreEqual(new NormalMove(Piece.MakePiece('Q'),0,0,0,0,null), actualMove);
-            Assert.AreEqual(1, actualScore);
-        }
+        //    Assert.AreEqual(new NormalMove(Piece.MakePiece('Q'),0,0,0,0,null), actualMove);
+        //    Assert.AreEqual(1, actualScore);
+        //}
 
-        [TestMethod]
-        public void SearchTest_WhenStallmateIn2_Level2_ThenReturnNoLegalMove()
-        {
-            // stall mate in 2 --> SearchLevel(2) -> nolegal move, score 0
+        //[TestMethod]
+        //public void SearchTest_WhenStallmateIn2_Level2_ThenReturnNoLegalMove()
+        //{
+        //    // stall mate in 2 --> SearchLevel(2) -> nolegal move, score 0
 
-            var scoresMoves = new List<MoveAndScore>()
-            {
-                null,
-                null,
-                new MoveAndScore() {Move = new NoLegalMove(), Score = 0}, // level 2: lost king
-            };
+        //    var scoresMoves = new List<MoveAndScore>()
+        //    {
+        //        null,
+        //        null,
+        //        new MoveAndScore() {Move = new NoLegalMove(), Score = 0}, // level 2: lost king
+        //    };
 
-            var target = new SearchMinimaxDouble_SearchLevelOverwritten(null, null, scoresMoves.ToArray());
-            target.SetMaxDepth(2);
+        //    var target = new SearchMinimaxDouble_SearchLevelOverwritten(null, null, scoresMoves.ToArray());
+        //    target.SetMaxDepth(2);
 
-            float actualScore;
-            var actualMove = target.Search(null, Definitions.ChessColor.White, out actualScore);
+        //    float actualScore;
+        //    var actualMove = target.Search(null, Definitions.ChessColor.White, out actualScore);
 
-            Assert.AreEqual(new NoLegalMove(),  actualMove);
-            Assert.AreEqual(0, actualScore);
-        }
+        //    Assert.AreEqual(new NoLegalMove(),  actualMove);
+        //    Assert.AreEqual(0, actualScore);
+        //}
 
-        [TestMethod]
-        public void SearchTest_WhenStallmateIn4_Level6_ThenReturnNoLegalMove()
-        {
-            // stall mate in 2 --> SearchLevel(2) -> Normal move, score x
-            // stall mate in 2 --> SearchLevel(4) -> nolegal move, score 0
-            // stall mate in 2 --> SearchLevel(6) -> nolegal move, score 0
+        //[TestMethod]
+        //public void SearchTest_WhenStallmateIn4_Level6_ThenReturnNoLegalMove()
+        //{
+        //    // stall mate in 2 --> SearchLevel(2) -> Normal move, score x
+        //    // stall mate in 2 --> SearchLevel(4) -> nolegal move, score 0
+        //    // stall mate in 2 --> SearchLevel(6) -> nolegal move, score 0
 
-            var scoresMoves = new List<MoveAndScore>()
-            {
-                null,
-                null,
-                new MoveAndScore() {Move = new NormalMove(Piece.MakePiece('Q'),0,0,0,0,null), Score = 1}, // level 2: lost king
-                null,
-                new MoveAndScore() {Move = new NoLegalMove(), Score = 0}, // level 4: lost king
-                null,
-                new MoveAndScore() {Move = new NoLegalMove(), Score = 0}, // level 6: lost king
-            };
+        //    var scoresMoves = new List<MoveAndScore>()
+        //    {
+        //        null,
+        //        null,
+        //        new MoveAndScore() {Move = new NormalMove(Piece.MakePiece('Q'),0,0,0,0,null), Score = 1}, // level 2: lost king
+        //        null,
+        //        new MoveAndScore() {Move = new NoLegalMove(), Score = 0}, // level 4: lost king
+        //        null,
+        //        new MoveAndScore() {Move = new NoLegalMove(), Score = 0}, // level 6: lost king
+        //    };
 
-            var target = new SearchMinimaxDouble_SearchLevelOverwritten(null, null, scoresMoves.ToArray());
-            target.SetMaxDepth(6);
+        //    var target = new SearchMinimaxDouble_SearchLevelOverwritten(null, null, scoresMoves.ToArray());
+        //    target.SetMaxDepth(6);
 
-            float actualScore;
-            var actualMove = target.Search(null, Definitions.ChessColor.White, out actualScore);
+        //    float actualScore;
+        //    var actualMove = target.Search(null, Definitions.ChessColor.White, out actualScore);
 
-            Assert.AreEqual(new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null), actualMove);
-            Assert.AreEqual(1, actualScore);
-        }
+        //    Assert.AreEqual(new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null), actualMove);
+        //    Assert.AreEqual(1, actualScore);
+        //}
 
-        [TestMethod]
-        public void SearchTest_WhenCheckmateIn1_Depth3_ThenNormalMove()
-        {
-            Assert.Fail();
-        }
+        //[TestMethod]
+        //public void SearchTest_WhenCheckmateIn1_Depth3_ThenNormalMove()
+        //{
+        //    Assert.Fail();
+        //}
 
-        [TestMethod]
-        public void SearchTest_WhenStallmateIn1_Depth3_ThenNormalMove()
-        {
-            Assert.Fail();
-        }
+        //[TestMethod]
+        //public void SearchTest_WhenStallmateIn1_Depth3_ThenNormalMove()
+        //{
+        //    Assert.Fail();
+        //}
+
+        //[TestMethod]
+        //public void SearchLevelTest_WhenKingLostAndNotMaxDepthReached_then()
+        //{
+        //    Assert.Fail();
+        //}
 
 
 

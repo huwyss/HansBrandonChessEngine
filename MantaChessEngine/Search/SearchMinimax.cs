@@ -68,17 +68,7 @@ namespace MantaChessEngine
         {
             int currentLevel = _maxDepth;
             evaluatedPositions = 0;
-            IMove move;
-            bool stallMate;
-
-            // try finding a legal move. Play until actually check mate.
-            // Example: If it was not legal for level 4 try find a move for level 2
-            //do
-            //{
-                move = SearchLevel(board, color, currentLevel, out score);
-            //    currentLevel = currentLevel - (currentLevel % 2)- 2;
-
-            //} while (move is NoLegalMove && currentLevel > 0);
+            IMove move = SearchLevel(board, color, currentLevel, out score);
 
             _log.Debug("evaluated positons: " + evaluatedPositions);
             return move;
@@ -150,7 +140,6 @@ namespace MantaChessEngine
                 {
                     bestMove = gameHasWinner && level <= 2 ? new NoLegalMove() : currentMove;
                     bestScore = currentScore;
-                    
                 }
             }
 
@@ -166,6 +155,7 @@ namespace MantaChessEngine
             return bestMove;
         }
 
+        // Must return a worse score than the score for a lost game so that losing is better than the initialized best score.
         private float InitWithWorstScorePossible(Definitions.ChessColor color)
         {
             if (color == Definitions.ChessColor.White)

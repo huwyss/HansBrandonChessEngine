@@ -33,6 +33,11 @@ namespace MantaChessEngine.Doubles
         {
             _iteratorMoves.MoveNext();
 
+            if (_iteratorMoves.Current.Count() == 0)
+            {
+                return new List<IMove>();
+            }
+
             if (_iteratorMoves.Current.First().Color != color)
             {
                 throw new Exception("Expected move of different color!");

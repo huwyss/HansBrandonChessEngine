@@ -68,8 +68,9 @@ namespace MantaChessEngine
         {
             int currentLevel = _maxDepth;
             evaluatedPositions = 0;
-            IMove move = SearchLevel(board, color, currentLevel, out score);
-
+            Rating rating;
+            IMove move = SearchLevel(board, color, currentLevel, out rating);
+            score = rating.Score;
             _log.Debug("evaluated positons: " + evaluatedPositions);
             return move;
         }
@@ -85,11 +86,15 @@ namespace MantaChessEngine
         /// <param name="level">Number of levels to be searched (1=ie whites move, 2=moves of white, black, 3=move of white,black,white...</param>
         /// <param name="score">Score of position on current level</param>
         /// <returns></returns>
-        internal virtual IMove SearchLevel(IBoard board, Definitions.ChessColor color, int level, out float score)
+        internal virtual IMove SearchLevel(IBoard board, Definitions.ChessColor color, int level, out Rating rating)
         {
             IMove bestMove = new NoLegalMove();
             float bestScore = InitWithWorstScorePossible(color);
-            float currentScore;
+            Rating currentRating = new Rating();
+            rating = new Rating();
+
+            bool gameHasWinner = false;
+            int winAtLevel = -1;
 
             var possibleMoves = _moveGenerator.GetAllMoves(board, color);
 
@@ -98,11 +103,14 @@ namespace MantaChessEngine
                 // the playing color has just lost its king.
                 // we did not reach the search depth yet. 
                 // still, we do not evaluate and we go back up in the tree.
-                score = bestScore; // initialized as worst score
+                winAtLevel = level;
+                rating = new Rating() { Score = bestScore };// score initialized as worst score
                 return bestMove;  // initialized as NoLegalMove
             }
 
-            bool gameHasWinner = false;
+            // solution:
+            // - winAtLevel zurückgeben (out) oder
+            // - neue moves: KingCaptureMove, NoKingMove, WalkInCheckMove
 
             foreach (IMove currentMoveLoop in possibleMoves)
             {
@@ -112,13 +120,13 @@ namespace MantaChessEngine
 
                 if (level > 1) // we need to do more move levels...
                 {
-                    IMove moveRecursive = SearchLevel(board, Helper.GetOppositeColor(color), level - 1, out currentScore); // recursive...
+                    IMove moveRecursive = SearchLevel(board, Helper.GetOppositeColor(color), level - 1, out currentRating); // recursive...
                     gameHasWinner = moveRecursive is NoLegalMove;
                     board.Back();
                 }
                 else // we reached the bottom of the tree and evaluate the position
                 {
-                    currentScore = _evaluator.Evaluate(board);
+                    currentRating.Score = _evaluator.Evaluate(board);
                     evaluatedPositions++;
                     board.Back();
                 
@@ -127,7 +135,7 @@ namespace MantaChessEngine
                     // if black is winning and its whites move then white cannot move
                     // (assuming we are at the deepest level that we calculate. Search() will then try to 
                     // calculate a move for a less deeper level)
-                    if (currentScore == Definitions.ScoreWhiteWins || currentScore == Definitions.ScoreBlackWins)
+                    if (currentRating.Score == Definitions.ScoreWhiteWins || currentRating.Score == Definitions.ScoreBlackWins)
                     {
                         var factory = new MoveFactory();
                         currentMove = factory.MakeNoLegalMove();
@@ -136,10 +144,10 @@ namespace MantaChessEngine
                 }
 
                 // update the best move in the current level
-                if (IsBestMoveSofar(color, bestScore, currentScore))
+                if (IsBestMoveSofar(color, bestScore, currentRating.Score))
                 {
                     bestMove = gameHasWinner && level <= 2 ? new NoLegalMove() : currentMove;
-                    bestScore = currentScore;
+                    bestScore = currentRating.Score;
                 }
             }
 
@@ -151,7 +159,7 @@ namespace MantaChessEngine
                 }
             }
 
-            score = bestScore;
+            rating.Score = bestScore;
             return bestMove;
         }
 

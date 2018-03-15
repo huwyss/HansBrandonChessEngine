@@ -8,25 +8,25 @@ namespace MantaChessEngine.Doubles
 {
     public class SearchMinimaxDouble_SearchLevelOverwritten : SearchMinimax
     {
-        private MoveAndScore[] _moveAndScores;
+        private MoveAndScore[] _moveAndRating;
 
         public SearchMinimaxDouble_SearchLevelOverwritten(IEvaluator evaluator, IMoveGenerator moveGenerator, MoveAndScore[] scoresAndMoves) 
             : base(evaluator, moveGenerator)
         {
-            _moveAndScores = scoresAndMoves;
+            _moveAndRating = scoresAndMoves;
         }
 
-        internal override IMove SearchLevel(IBoard board, Definitions.ChessColor color, int level, out float score)
+        internal override IMove SearchLevel(IBoard board, Definitions.ChessColor color, int level, out Rating rating)
         {
-            score = _moveAndScores[level].Score;
-            return _moveAndScores[level].Move;
+            rating = _moveAndRating[level].Rating;
+            return _moveAndRating[level].Move;
         }
     }
 
     public class MoveAndScore
     {
         public IMove Move { get; set; }
-        public float Score { get; set; }
+        public Rating Rating { get; set; }
     }
 
 }

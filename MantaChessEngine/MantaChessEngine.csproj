@@ -80,6 +80,7 @@
     <Compile Include="MoveGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Search\MoveInfo.cs" />
+    <Compile Include="Search\Rating.cs" />
     <Compile Include="Search\SearchMinimax.cs" />
     <Compile Include="Search\SearchMinimaxWithClone.cs" />
     <Compile Include="Search\SearchRandom.cs" />

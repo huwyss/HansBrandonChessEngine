@@ -99,9 +99,12 @@ namespace MantaChessEngine
                 // the playing color has just lost its king.
                 // we did not reach the search depth yet. 
                 // still, we do not evaluate and we go back up in the tree.
-                rating = bestRating;  // score initialized as worst score
-                rating.IsLegal = false;      // not legal, game is lost
-                rating.IllegalMoveCount = 2; // there is no king
+                rating = new Rating()
+                {
+                    Score = color == Definitions.ChessColor.White ? Definitions.ScoreBlackWins : Definitions.ScoreWhiteWins,
+                    IsLegal = false,      // not legal, game is lost
+                    IllegalMoveCount = 1  // there is no king
+                };
                 return bestMove;  // initialized as NoLegalMove
             }
 
@@ -121,7 +124,7 @@ namespace MantaChessEngine
                     evaluatedPositions++;
                     board.Back();
                 
-                    // todo the distinction between stall mate and check mate must be done 2 plys before king is lost (2 x back)
+                    // the distinction between stall mate and check mate must be done 2 plys before king is lost (2 x back)
                     // If white is winning and its blacks move then black cannot move
                     // if black is winning and its whites move then white cannot move
                     // (assuming we are at the deepest level that we calculate. Search() will then try to 
@@ -131,19 +134,19 @@ namespace MantaChessEngine
                         var factory = new MoveFactory();
                         currentMove = factory.MakeNoLegalMove();
                         currentRating.IsLegal = false;
-                        currentRating.IllegalMoveCount = 2;
+                        currentRating.IllegalMoveCount = 1;
                     }
                 }
 
                 // update the best move in the current level
                 if (IsBestMoveSofar(color, bestRating.Score, currentRating.Score))
                 {
-                    bestMove = (!currentRating.IsLegal) && level <= 2 ? new NoLegalMove() : currentMove;
+                    bestMove = (!currentRating.IsLegal) && 0 <= currentRating.IllegalMoveCount ? new NoLegalMove() : currentMove;
                     bestRating = currentRating.Clone();
                 }
             }
 
-            if (level == 2 && bestMove is NoLegalMove)
+            if (currentRating.IllegalMoveCount == 0 && bestMove is NoLegalMove)
             {
                 if (!_moveGenerator.IsCheck(board, color))
                 {

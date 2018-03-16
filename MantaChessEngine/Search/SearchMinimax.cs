@@ -89,7 +89,7 @@ namespace MantaChessEngine
         internal virtual IMove SearchLevel(IBoard board, Definitions.ChessColor color, int level, out Rating rating)
         {
             IMove bestMove = new NoLegalMove();
-            float bestScore = InitWithWorstScorePossible(color);
+            Rating bestRating = new Rating() { Score = InitWithWorstScorePossible(color) };
             Rating currentRating = new Rating();
 
             var possibleMoves = _moveGenerator.GetAllMoves(board, color);
@@ -99,12 +99,9 @@ namespace MantaChessEngine
                 // the playing color has just lost its king.
                 // we did not reach the search depth yet. 
                 // still, we do not evaluate and we go back up in the tree.
-                rating = new Rating()
-                {
-                    Score = bestScore,   // score initialized as worst score
-                    IsLegal = false,     // not legal, game is lost
-                    IllegalMoveCount = 2 // there is no king
-                };
+                rating = bestRating;  // score initialized as worst score
+                rating.IsLegal = false;      // not legal, game is lost
+                rating.IllegalMoveCount = 2; // there is no king
                 return bestMove;  // initialized as NoLegalMove
             }
 
@@ -112,7 +109,6 @@ namespace MantaChessEngine
             {
                 IMove currentMove = currentMoveLoop;
                 board.Move(currentMove);
-                
 
                 if (level > 1) // we need to do more move levels...
                 {
@@ -140,10 +136,10 @@ namespace MantaChessEngine
                 }
 
                 // update the best move in the current level
-                if (IsBestMoveSofar(color, bestScore, currentRating.Score))
+                if (IsBestMoveSofar(color, bestRating.Score, currentRating.Score))
                 {
                     bestMove = (!currentRating.IsLegal) && level <= 2 ? new NoLegalMove() : currentMove;
-                    bestScore = currentRating.Score;
+                    bestRating = currentRating.Clone();
                 }
             }
 
@@ -151,15 +147,13 @@ namespace MantaChessEngine
             {
                 if (!_moveGenerator.IsCheck(board, color))
                 {
-                    bestScore = 0;
+                    bestRating.Score = 0;
                 }
             }
 
-            rating = new Rating()
-            {
-                Score = bestScore,
-                IsLegal = !(bestMove is NoLegalMove)
-            };
+            rating = bestRating;
+            rating.IsLegal = !(bestMove is NoLegalMove);
+            rating.IllegalMoveCount--;
             return bestMove;
         }
 

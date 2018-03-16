@@ -33,5 +33,15 @@ namespace MantaChessEngine
             IsLegal = true;
             IllegalMoveCount = 0;
         }
+
+        public Rating Clone()
+        {
+            return new Rating()
+            {
+                Score = this.Score,
+                IsLegal = this.IsLegal,
+                IllegalMoveCount = this.IllegalMoveCount
+            };
+        }
     }
 }

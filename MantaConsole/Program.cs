@@ -65,7 +65,7 @@ namespace MantaConsole
 
             MantaEngine whiteEngine = new MantaEngine(EngineType.MinimaxPosition);
             whiteEngine.SetMaxSearchDepth(whiteLevel);
-            MantaEngine blackEngine = new MantaEngine(EngineType.MinimaxPosition);
+            MantaEngine blackEngine = new MantaEngine(EngineType.Minimax);
             blackEngine.SetMaxSearchDepth(blackLevel);
 
             DefineLogLevel(quiet);
@@ -106,6 +106,15 @@ namespace MantaConsole
                 //                    "q....o.." +
                 //                    "P......." +
                 //                    "RK......");
+
+                //board.SetPosition("........" +
+                //                  "........" +
+                //                  "........" +
+                //                  "........" +
+                //                  "........" +
+                //                  ".....k.." +
+                //                  ".....r.." +  
+                //                  "K.......");
 
                 whiteEngine.SetBoard(board);
                 blackEngine.SetBoard(board);

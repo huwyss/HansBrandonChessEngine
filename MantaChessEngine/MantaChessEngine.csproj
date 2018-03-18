@@ -82,11 +82,8 @@
     <Compile Include="Search\MoveInfo.cs" />
     <Compile Include="Search\Rating.cs" />
     <Compile Include="Search\SearchMinimax.cs" />
-    <Compile Include="Search\SearchMinimaxWithClone.cs" />
     <Compile Include="Search\SearchRandom.cs" />
     <Compile Include="Search\SearchMinimaxTree.cs" />
-    <Compile Include="Search\SearchServiceDepthOne.cs" />
-    <Compile Include="Search\SearchServiceDepthHalfMove.cs" />
     <Compile Include="Search\MoveTree.cs" />
     <Compile Include="Search\TreeNode.cs" />
   </ItemGroup>

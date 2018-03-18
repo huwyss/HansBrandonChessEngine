@@ -9,12 +9,9 @@ namespace MantaChessEngine
     public enum EngineType
     {
         Random,
-        DepthHalf,
-        DepthOne,
         Minimax,
         MinimaxPosition,
-        MinimaxSearchTree,
-        MinimaxWithClone
+        MinimaxSearchTree  // do not use
     }
 
     public class MantaEngine
@@ -38,16 +35,6 @@ namespace MantaChessEngine
                     _search = new SearchRandom(_moveGenerator);
                     break;
 
-                //case EngineType.DepthHalf:
-                //    _evaluator = new EvaluatorSimple();
-                //    _search = new SearchServiceDepthHalfMove(_evaluator, _moveGenerator);
-                //    break;
-
-                //case EngineType.DepthOne:
-                //    _evaluator = new EvaluatorSimple();
-                //    _search = new SearchServiceDepthOne(_evaluator, _moveGenerator);
-                //    break;
-
                 case EngineType.Minimax:
                     _evaluator = new EvaluatorSimple();
                     _search = new SearchMinimax(_evaluator, _moveGenerator);
@@ -58,17 +45,12 @@ namespace MantaChessEngine
                     _evaluator = new EvaluatorPosition();
                     _search = new SearchMinimax(_evaluator, _moveGenerator);
                     break;
-                    // --------------------------------------
+                // --------------------------------------
 
                 case EngineType.MinimaxSearchTree:
                     _evaluator = new EvaluatorPosition();
                     _search = new SearchMinimaxTree(_evaluator, _moveGenerator);
                     break;
-
-                //case EngineType.MinimaxWithClone:
-                //    _evaluator = new EvaluatorPosition();
-                //    _search = new SearchMinimaxWithClone(_evaluator, _moveGenerator);
-                //    break;
 
                 default:
                     throw new Exception("No engine type defined.");

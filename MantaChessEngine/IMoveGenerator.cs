@@ -7,7 +7,8 @@ namespace MantaChessEngine
         List<IMove> GetAllMoves(IBoard board, Definitions.ChessColor color, bool includeCastling = true);
 
         /// <summary>
-        /// Returns all pseudo legal moves of that piece. (King might be under attack).
+        /// Returns all pseudo legal moves of that piece. Pseudo means the king is allowed to be under attack but
+        /// otherwise the move must be legal.
         /// </summary>
         /// <param name="file"></param>
         /// <param name="rank"></param>

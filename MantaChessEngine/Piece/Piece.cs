@@ -91,7 +91,7 @@ namespace MantaChessEngine
 
             for (int file = sourceFile; file <= targetFile; file++)
             {
-                empty &= board.GetPiece(file, sourceRank) == null; //Definitions.EmptyField;
+                empty &= board.GetPiece(file, sourceRank) == null;
             }
 
             return empty;

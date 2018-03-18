@@ -181,10 +181,10 @@ namespace MantaChessEngine
                 {
                     return true;
                 }
-                //else if (currentScore == bestScoreSoFar)
-                //{
-                //    return _rand.Next(0, 2) == 0;
-                //}
+                else if (currentScore == bestScoreSoFar)
+                {
+                    return _rand.Next(0, 2) == 0;
+                }
             }
             else
             {
@@ -192,10 +192,10 @@ namespace MantaChessEngine
                 {
                     return true;
                 }
-                //else if (currentScore == bestScoreSoFar)
-                //{
-                //    return _rand.Next(0, 2) == 0;
-                //}
+                else if (currentScore == bestScoreSoFar)
+                {
+                    return _rand.Next(0, 2) == 0;
+                }
             }
 
             return false;

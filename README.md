@@ -17,7 +17,9 @@ Manta Chess Engine is reasonably playing. However it does not beat me yet.
 ### Features for a stronger game
 - Opening book
 - More efficient search, ie alpha beta
+- Keep searching after max depth but only capture moves
+- How to improve endgame?
 
 ### Next Tasks
 - Randomize if 2 or more moves have same score
-- Better logger, ie log4net
+

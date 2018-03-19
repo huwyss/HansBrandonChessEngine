@@ -68,11 +68,12 @@ namespace MantaChessEngine
         {
             int currentLevel = _maxDepth;
             evaluatedPositions = 0;
-            Rating rating;
-            IMove move = SearchLevel(board, color, currentLevel, out rating);
-            score = rating.Score;
+            IEnumerable<MoveRating> moveRatings = SearchLevel(board, color, currentLevel);
+
+            MoveRating firstRating = moveRatings.First();
+            score = firstRating.Score;
             _log.Debug("evaluated positons: " + evaluatedPositions);
-            return move;
+            return firstRating.Move;
         }
 
         /// <summary>
@@ -86,11 +87,11 @@ namespace MantaChessEngine
         /// <param name="level">Number of levels to be searched (1=ie whites move, 2=moves of white, black, 3=move of white,black,white...</param>
         /// <param name="score">Score of position on current level</param>
         /// <returns></returns>
-        internal virtual IMove SearchLevel(IBoard board, Definitions.ChessColor color, int level, out Rating rating)
+        internal virtual IEnumerable<MoveRating> SearchLevel(IBoard board, Definitions.ChessColor color, int level)
         {
-            IMove bestMove = new NoLegalMove();
-            Rating bestRating = new Rating() { Score = InitWithWorstScorePossible(color) };
-            Rating currentRating = new Rating();
+            float bestScore = InitWithWorstScorePossible(color);
+            MoveRating currentRating = new MoveRating();
+            List<MoveRating> bestMoveRatings = null;
 
             var possibleMoves = _moveGenerator.GetAllMoves(board, color);
 
@@ -99,13 +100,16 @@ namespace MantaChessEngine
                 // the playing color has just lost its king.
                 // we did not reach the search depth yet. 
                 // still, we do not evaluate and we go back up in the tree.
-                rating = new Rating()
+                return new MoveRating[]
                 {
-                    Score = color == Definitions.ChessColor.White ? Definitions.ScoreBlackWins : Definitions.ScoreWhiteWins,
-                    IsLegal = false,      // not legal, game is lost
-                    IllegalMoveCount = 1  // there is no king
+                    new MoveRating()
+                    {
+                        Score = color == Definitions.ChessColor.White ? Definitions.ScoreBlackWins : Definitions.ScoreWhiteWins,
+                        IsLegal = false,      // not legal, game is lost
+                        IllegalMoveCount = 1, // there is no king
+                        Move = new NoLegalMove()
+                    }
                 };
-                return bestMove;  // initialized as NoLegalMove
             }
 
             foreach (IMove currentMoveLoop in possibleMoves)
@@ -115,12 +119,14 @@ namespace MantaChessEngine
 
                 if (level > 1) // we need to do more move levels...
                 {
-                    IMove moveDeeper = SearchLevel(board, Helper.GetOppositeColor(color), level - 1, out currentRating); // recursive...
+                    currentRating = SearchLevel(board, Helper.GetOppositeColor(color), level - 1).First(); // recursive...
                     board.Back();
                 }
                 else // we reached the bottom of the tree and evaluate the position
                 {
                     currentRating.Score = _evaluator.Evaluate(board);
+                    currentRating.IsLegal = true;
+                    currentRating.IllegalMoveCount = -1;
                     evaluatedPositions++;
                     board.Back();
                 
@@ -132,32 +138,35 @@ namespace MantaChessEngine
                     if (currentRating.Score == Definitions.ScoreWhiteWins || currentRating.Score == Definitions.ScoreBlackWins)
                     {
                         var factory = new MoveFactory();
-                        currentMove = factory.MakeNoLegalMove();
+                        currentRating.Move = factory.MakeNoLegalMove();
                         currentRating.IsLegal = false;
                         currentRating.IllegalMoveCount = 1;
                     }
                 }
 
                 // update the best move in the current level
-                if (IsBestMoveSofar(color, bestRating.Score, currentRating.Score))
+                if (IsBestMoveSofar(color, bestScore, currentRating.Score))
                 {
-                    bestMove = (!currentRating.IsLegal) && 0 <= currentRating.IllegalMoveCount ? new NoLegalMove() : currentMove;
-                    bestRating = currentRating.Clone();
+                    currentRating.Move = (!currentRating.IsLegal) && 0 <= currentRating.IllegalMoveCount ? new NoLegalMove() : currentMove;
+                    bestScore = currentRating.Score;
+                    if (currentRating.IllegalMoveCount == 0 && currentRating.Move is NoLegalMove)
+                    {
+                        if (!_moveGenerator.IsCheck(board, color))
+                        {
+                            currentRating.Score = 0;
+                        }
+                    }
+                    currentRating.IllegalMoveCount--;
+                    bestMoveRatings = new List<MoveRating> { currentRating.Clone() };
                 }
             }
 
-            if (currentRating.IllegalMoveCount == 0 && bestMove is NoLegalMove)
-            {
-                if (!_moveGenerator.IsCheck(board, color))
-                {
-                    bestRating.Score = 0;
-                }
-            }
+           
 
-            rating = bestRating;
-            rating.IsLegal = !(bestMove is NoLegalMove);
-            rating.IllegalMoveCount--;
-            return bestMove;
+            //rating = bestRating;
+            //rating.IsLegal = !(bestMove is NoLegalMove);
+            //rating.IllegalMoveCount--;
+            return bestMoveRatings;
         }
 
         // Must return a worse score than the score for a lost game so that losing is better than the initialized best score.
@@ -181,10 +190,10 @@ namespace MantaChessEngine
                 {
                     return true;
                 }
-                else if (currentScore == bestScoreSoFar)
-                {
-                    return _rand.Next(0, 2) == 0;
-                }
+                //else if (currentScore == bestScoreSoFar)
+                //{
+                //    return _rand.Next(0, 2) == 0;
+                //}
             }
             else
             {
@@ -192,14 +201,17 @@ namespace MantaChessEngine
                 {
                     return true;
                 }
-                else if (currentScore == bestScoreSoFar)
-                {
-                    return _rand.Next(0, 2) == 0;
-                }
+                //else if (currentScore == bestScoreSoFar)
+                //{
+                //    return _rand.Next(0, 2) == 0;
+                //}
             }
 
             return false;
         }
     }
+
+   
+
 }
 

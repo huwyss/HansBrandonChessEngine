@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace MantaChessEngine
 {
-    public class Rating
+    public class MoveRating
     {
+        /// <summary>
+        /// Move that is being rated.
+        /// </summary>
+        public IMove Move { get; set; }
+
         /// <summary>
         /// Score of the move. Positive means good for white, negative means good for black.
         /// </summary>
@@ -27,20 +32,22 @@ namespace MantaChessEngine
         /// </summary>
         public int IllegalMoveCount { get; set; }
 
-        public Rating()
+        public MoveRating()
         {
             Score = 0;
             IsLegal = true;
-            IllegalMoveCount = 0;
+            IllegalMoveCount = -1;
+            Move = null;
         }
 
-        public Rating Clone()
+        public MoveRating Clone()
         {
-            return new Rating()
+            return new MoveRating()
             {
                 Score = this.Score,
                 IsLegal = this.IsLegal,
-                IllegalMoveCount = this.IllegalMoveCount
+                IllegalMoveCount = this.IllegalMoveCount,
+                Move = this.Move
             };
         }
     }

@@ -16,17 +16,18 @@ namespace MantaChessEngine.Doubles
             _moveAndRating = scoresAndMoves;
         }
 
-        internal override IMove SearchLevel(IBoard board, Definitions.ChessColor color, int level, out Rating rating)
+        internal override IEnumerable<MoveRating> SearchLevel(IBoard board, Definitions.ChessColor color, int level)
         {
-            rating = _moveAndRating[level].Rating;
-            return _moveAndRating[level].Move;
+            //rating = _moveAndRating[level].Rating;
+            //return _moveAndRating[level].Move;
+            return null;
         }
     }
 
     public class MoveAndScore
     {
         public IMove Move { get; set; }
-        public Rating Rating { get; set; }
+        public MoveRating Rating { get; set; }
     }
 
 }

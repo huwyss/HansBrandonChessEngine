@@ -696,6 +696,58 @@ namespace MantaChessEngineTest
         }
 
         [TestMethod]
+        public void SearchMinimaxTest_WhenWhiteIsNotStallMate_ThenNormalMove()
+        {
+            //              start
+            //               -10  (not check here) (white is not stall mate)
+            //          /            \
+            //     -10000            -10x       white move -> highest selected (x) (white king goes in check -> not legal)
+            //     a/    \b         c/    \d   
+            // -10000x  -10        -10x   -1     black move -> lowest selected (x), white king lost here (black captures white king -> not legal)
+            // not check    not check
+            FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
+            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('b'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('n'), 0, 0, 0, 0, null) }); // level 2 ab
+            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('q'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('k'), 0, 0, 0, 0, null) }); // level 2 cd
+            moveGenFake.SetIsChecks(new List<bool>() { false, false, false, false });
+            IEvaluator evalFake = new FakeEvaluator(new List<float>() { -10000, -10, -10, -1 });
+            IBoard boardFake = new FakeBoard();
+
+            var target = new SearchMinimax(evalFake, moveGenFake);
+            target.SetMaxDepth(2);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 2).First();
+
+            Assert.AreEqual(-10, bestRatingActual.Score, "white is not stall mate. score should be -10");
+            Assert.IsTrue(bestRatingActual.Move is NormalMove);
+        }
+
+        [TestMethod]
+        public void SearchMinimaxTest_WhenWhiteIsNotStallMate2_ThenNormalMove()
+        {
+            //              start
+            //               -10  (not check here) (white is not stall mate)
+            //          /            \
+            //        -10          -10000         white move -> highest selected (x) (white king goes in check -> not legal)
+            //      a/    \b       c/    \d   
+            //   -10x    -1     -10000x  -10       black move -> lowest selected (x), white king lost here (black captures white king -> not legal)
+            // not check    not check
+            FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
+            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('b'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('n'), 0, 0, 0, 0, null) }); // level 2 ab
+            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('q'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('k'), 0, 0, 0, 0, null) }); // level 2 cd
+            moveGenFake.SetIsChecks(new List<bool>() { false, false, false, false });
+            IEvaluator evalFake = new FakeEvaluator(new List<float>() { -10, -1, -10000, -10 });
+            IBoard boardFake = new FakeBoard();
+
+            var target = new SearchMinimax(evalFake, moveGenFake);
+            target.SetMaxDepth(2);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 2).First();
+
+            Assert.AreEqual(-10, bestRatingActual.Score, "white is not stall mate. score should be -10");
+            Assert.IsTrue(bestRatingActual.Move is NormalMove);
+        }
+
+        [TestMethod]
         public void SearchMinimaxTest_WhenBlackIsStallMateIn3_Depth3_ThenNoLegalMoveScore0()
         {
             //      start

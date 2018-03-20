@@ -119,6 +119,7 @@ namespace MantaChessEngine
 
                 if (level > 1) // we need to do more move levels...
                 {
+                    // we are only interested in the first score. all scores are the same.
                     currentRating = SearchLevel(board, Helper.GetOppositeColor(color), level - 1).First(); // recursive...
                     board.Back();
                 }
@@ -129,7 +130,7 @@ namespace MantaChessEngine
                     currentRating.IllegalMoveCount = -1;
                     evaluatedPositions++;
                     board.Back();
-                
+
                     // the distinction between stall mate and check mate must be done 2 plys before king is lost (2 x back)
                     // If white is winning and its blacks move then black cannot move
                     // if black is winning and its whites move then white cannot move
@@ -149,23 +150,25 @@ namespace MantaChessEngine
                 {
                     currentRating.Move = (!currentRating.IsLegal) && 0 <= currentRating.IllegalMoveCount ? new NoLegalMove() : currentMove;
                     bestScore = currentRating.Score;
-                    if (currentRating.IllegalMoveCount == 0 && currentRating.Move is NoLegalMove)
-                    {
-                        if (!_moveGenerator.IsCheck(board, color))
-                        {
-                            currentRating.Score = 0;
-                        }
-                    }
-                    currentRating.IllegalMoveCount--;
                     bestMoveRatings = new List<MoveRating> { currentRating.Clone() };
                 }
             }
 
-           
+            // update score to 0 if it is stall mate
+            foreach (var bestRating in bestMoveRatings)
+            {
+                if (bestRating.IllegalMoveCount == 0 && bestRating.Move is NoLegalMove)
+                {
+                    if (!_moveGenerator.IsCheck(board, color))
+                    {
+                        bestRating.Score = 0;
+                    }
+                }
 
-            //rating = bestRating;
-            //rating.IsLegal = !(bestMove is NoLegalMove);
-            //rating.IllegalMoveCount--;
+                bestRating.IllegalMoveCount--;
+            }
+
+            
             return bestMoveRatings;
         }
 

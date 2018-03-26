@@ -905,6 +905,58 @@ namespace MantaChessEngineTest
             Assert.IsTrue(bestRatingActual.Move is NoLegalMove);
         }
 
+        // ---------------------------------------------------------
+        // check return value is a Collection
+        // ---------------------------------------------------------
+
+        [TestMethod]
+        public void SearchMinimaxTest_When2MovesHaveSameRating_ThenReturn2Moves()
+        {
+            //      start
+            //     /      \
+            //    1x       1x    white move -> highest selected (x) 
+            IEvaluator evalFake = new FakeEvaluator(new List<float>() { 1, 1 });
+            FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
+            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null) }); // first level
+
+            IBoard boardFake = new FakeBoard();
+
+            var target = new SearchMinimax(evalFake, moveGenFake);
+            var ratings = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1);
+            var rating0 = ratings.ElementAt(0);
+            var rating1 = ratings.ElementAt(1);
+
+            Assert.AreEqual(2, ratings.Count());
+
+            Assert.AreEqual(1, rating0.Score);
+            Assert.AreEqual(new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), rating0.Move);
+
+            Assert.AreEqual(1, rating1.Score);
+            Assert.AreEqual(new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null), rating1.Move);
+        }
+
+        [TestMethod]
+        public void SearchMinimaxTest_When2MovesHaveDifferentRating_ThenReturn1Move()
+        {
+            //      start
+            //     /      \
+            //    1       2x    white move -> highest selected (x) 
+            IEvaluator evalFake = new FakeEvaluator(new List<float>() { 1, 2 });
+            FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
+            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null) }); // first level
+
+            IBoard boardFake = new FakeBoard();
+
+            var target = new SearchMinimax(evalFake, moveGenFake);
+            var ratings = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1);
+            var rating0 = ratings.ElementAt(0);
+
+            Assert.AreEqual(1, ratings.Count());
+
+            Assert.AreEqual(2, rating0.Score);
+            Assert.AreEqual(new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null), rating0.Move);
+        }
+
 
         // ---------------------------------------------------------
         // Search Tests

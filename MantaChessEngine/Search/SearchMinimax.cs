@@ -91,7 +91,7 @@ namespace MantaChessEngine
         {
             float bestScore = InitWithWorstScorePossible(color);
             MoveRating currentRating = new MoveRating();
-            List<MoveRating> bestMoveRatings = null;
+            List<MoveRating> bestMoveRatings = new List<MoveRating>();
 
             var possibleMoves = _moveGenerator.GetAllMoves(board, color);
 
@@ -146,12 +146,19 @@ namespace MantaChessEngine
                 }
 
                 // update the best move in the current level
-                if (IsBestMoveSofar(color, bestScore, currentRating.Score))
+                if (IsEquallyGood(color, bestScore, currentRating.Score))
+                {
+                    currentRating.Move = (!currentRating.IsLegal) && 0 <= currentRating.IllegalMoveCount ? new NoLegalMove() : currentMove;
+                    bestScore = currentRating.Score;
+                    bestMoveRatings.Add(currentRating.Clone());
+                }
+                else if (IsBestMoveSofar(color, bestScore, currentRating.Score))
                 {
                     currentRating.Move = (!currentRating.IsLegal) && 0 <= currentRating.IllegalMoveCount ? new NoLegalMove() : currentMove;
                     bestScore = currentRating.Score;
                     bestMoveRatings = new List<MoveRating> { currentRating.Clone() };
                 }
+                
             }
 
             // update score to 0 if it is stall mate
@@ -183,6 +190,26 @@ namespace MantaChessEngine
             {
                 return Int32.MaxValue;
             }
+        }
+
+        private bool IsEquallyGood(Definitions.ChessColor color, float bestScoreSoFar, float currentScore)
+        {
+            if (color == Definitions.ChessColor.White)
+            {
+                if (currentScore == bestScoreSoFar)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if (currentScore == bestScoreSoFar)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private bool IsBestMoveSofar(Definitions.ChessColor color, float bestScoreSoFar, float currentScore)

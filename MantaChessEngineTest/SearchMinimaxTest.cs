@@ -957,6 +957,64 @@ namespace MantaChessEngineTest
             Assert.AreEqual(new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null), rating0.Move);
         }
 
+        [TestMethod]
+        public void SearchMinimaxTest_When2MovesInTolerance_secondIsBiggest_ThenReturn2Moves()
+        {
+            //       start
+            //     /   |    \
+            //    1  1.99x   2x    white move -> highest selected (x) 
+            IEvaluator evalFake = new FakeEvaluator(new List<float>() { 1, 1.99f, 2 });
+            FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
+            moveGenFake.AddGetAllMoves(new List<IMove>() {
+                new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null),
+                new NormalMove(Piece.MakePiece('R'), 0, 0, 0, 0, null),
+                new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null) }); 
+
+            IBoard boardFake = new FakeBoard();
+
+            var target = new SearchMinimax(evalFake, moveGenFake);
+            var ratings = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1);
+            var rating0 = ratings.ElementAt(0);
+            var rating1 = ratings.ElementAt(1);
+
+            Assert.AreEqual(2, ratings.Count());
+
+            Assert.AreEqual(1.99f, rating0.Score);
+            Assert.AreEqual(new NormalMove(Piece.MakePiece('R'), 0, 0, 0, 0, null), rating0.Move);
+
+            Assert.AreEqual(2, rating1.Score);
+            Assert.AreEqual(new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null), rating1.Move);
+        }
+
+        [TestMethod]
+        public void SearchMinimaxTest_When2MovesInTolerance_FirstIsBiggest_ThenReturn2Moves()
+        {
+            //       start
+            //     /   |    \
+            //    1    2x  1.99x    white move -> highest selected (x) 
+            IEvaluator evalFake = new FakeEvaluator(new List<float>() { 1, 2, 1.99f });
+            FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
+            moveGenFake.AddGetAllMoves(new List<IMove>() {
+                new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null),
+                new NormalMove(Piece.MakePiece('R'), 0, 0, 0, 0, null),
+                new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null) });
+
+            IBoard boardFake = new FakeBoard();
+
+            var target = new SearchMinimax(evalFake, moveGenFake);
+            var ratings = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1);
+            var rating0 = ratings.ElementAt(0);
+            var rating1 = ratings.ElementAt(1);
+
+            Assert.AreEqual(2, ratings.Count());
+
+            Assert.AreEqual(2, rating0.Score);
+            Assert.AreEqual(new NormalMove(Piece.MakePiece('R'), 0, 0, 0, 0, null), rating0.Move);
+
+            Assert.AreEqual(1.99f, rating1.Score);
+            Assert.AreEqual(new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null), rating1.Move);
+        }
+
 
         // ---------------------------------------------------------
         // Search Tests

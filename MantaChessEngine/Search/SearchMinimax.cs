@@ -12,7 +12,7 @@ namespace MantaChessEngine
     public class SearchMinimax : ISearchService
     {
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
+        private const float Tolerance = 0.01f;
         private IMoveGenerator _moveGenerator;
         private IEvaluator _evaluator;
         private int _maxDepth;
@@ -192,18 +192,21 @@ namespace MantaChessEngine
             }
         }
 
+        /// <summary>
+        /// True if current score is as good as best within tolerance.
+        /// </summary>
         private bool IsEquallyGood(Definitions.ChessColor color, float bestScoreSoFar, float currentScore)
         {
             if (color == Definitions.ChessColor.White)
             {
-                if (currentScore == bestScoreSoFar)
+                if (currentScore < bestScoreSoFar + Tolerance && currentScore > bestScoreSoFar - Tolerance)
                 {
                     return true;
                 }
             }
             else
             {
-                if (currentScore == bestScoreSoFar)
+                if (currentScore > bestScoreSoFar + Tolerance && currentScore < bestScoreSoFar - Tolerance)
                 {
                     return true;
                 }
@@ -212,11 +215,18 @@ namespace MantaChessEngine
             return false;
         }
 
+        /// <summary>
+        /// True if current score is better than best plus tolerance.
+        /// </summary>
+        /// <param name="color"></param>
+        /// <param name="bestScoreSoFar"></param>
+        /// <param name="currentScore"></param>
+        /// <returns></returns>
         private bool IsBestMoveSofar(Definitions.ChessColor color, float bestScoreSoFar, float currentScore)
         {
             if (color == Definitions.ChessColor.White)
             {
-                if (currentScore > bestScoreSoFar)
+                if (currentScore > bestScoreSoFar + Tolerance)
                 {
                     return true;
                 }
@@ -227,7 +237,7 @@ namespace MantaChessEngine
             }
             else
             {
-                if (currentScore < bestScoreSoFar)
+                if (currentScore < bestScoreSoFar - Tolerance)
                 {
                     return true;
                 }

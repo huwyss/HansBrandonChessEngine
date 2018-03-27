@@ -12,7 +12,7 @@ namespace MantaChessEngine
     public class SearchMinimax : ISearchService
     {
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private const float Tolerance = 0.01f;
+        private const float Tolerance = 0.05f;
         private IMoveGenerator _moveGenerator;
         private IEvaluator _evaluator;
         private int _maxDepth;
@@ -69,11 +69,12 @@ namespace MantaChessEngine
             int currentLevel = _maxDepth;
             evaluatedPositions = 0;
             IEnumerable<MoveRating> moveRatings = SearchLevel(board, color, currentLevel);
-
-            MoveRating firstRating = moveRatings.First();
-            score = firstRating.Score;
+            var count = moveRatings.Count();
+            var randomIndex = _rand.Next(0, count);
+            MoveRating rating = moveRatings.ElementAt(randomIndex);
+            score = rating.Score;
             _log.Debug("evaluated positons: " + evaluatedPositions);
-            return firstRating.Move;
+            return rating.Move;
         }
 
         /// <summary>
@@ -149,7 +150,6 @@ namespace MantaChessEngine
                 if (IsEquallyGood(color, bestScore, currentRating.Score))
                 {
                     currentRating.Move = (!currentRating.IsLegal) && 0 <= currentRating.IllegalMoveCount ? new NoLegalMove() : currentMove;
-                    bestScore = currentRating.Score;
                     bestMoveRatings.Add(currentRating.Clone());
                 }
                 else if (IsBestMoveSofar(color, bestScore, currentRating.Score))
@@ -197,22 +197,7 @@ namespace MantaChessEngine
         /// </summary>
         private bool IsEquallyGood(Definitions.ChessColor color, float bestScoreSoFar, float currentScore)
         {
-            if (color == Definitions.ChessColor.White)
-            {
-                if (currentScore < bestScoreSoFar + Tolerance && currentScore > bestScoreSoFar - Tolerance)
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                if (currentScore > bestScoreSoFar + Tolerance && currentScore < bestScoreSoFar - Tolerance)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return (currentScore < bestScoreSoFar + Tolerance && currentScore > bestScoreSoFar - Tolerance);
         }
 
         /// <summary>
@@ -226,32 +211,13 @@ namespace MantaChessEngine
         {
             if (color == Definitions.ChessColor.White)
             {
-                if (currentScore > bestScoreSoFar + Tolerance)
-                {
-                    return true;
-                }
-                //else if (currentScore == bestScoreSoFar)
-                //{
-                //    return _rand.Next(0, 2) == 0;
-                //}
+                return (currentScore > bestScoreSoFar + Tolerance);
             }
             else
             {
-                if (currentScore < bestScoreSoFar - Tolerance)
-                {
-                    return true;
-                }
-                //else if (currentScore == bestScoreSoFar)
-                //{
-                //    return _rand.Next(0, 2) == 0;
-                //}
+                return (currentScore < bestScoreSoFar - Tolerance);
             }
-
-            return false;
         }
     }
-
-   
-
 }
 

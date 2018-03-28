@@ -106,7 +106,7 @@ namespace MantaChessEngine
                     new MoveRating()
                     {
                         Score = color == Definitions.ChessColor.White ? Definitions.ScoreBlackWins : Definitions.ScoreWhiteWins,
-                        IsLegal = false,      // not legal, game is lost
+                        //IsLegal = false,      // not legal, game is lost
                         IllegalMoveCount = 1, // there is no king
                         Move = new NoLegalMove()
                     }
@@ -127,7 +127,7 @@ namespace MantaChessEngine
                 else // we reached the bottom of the tree and evaluate the position
                 {
                     currentRating.Score = _evaluator.Evaluate(board);
-                    currentRating.IsLegal = true;
+                    //currentRating.IsLegal = true;
                     currentRating.IllegalMoveCount = -1;
                     evaluatedPositions++;
                     board.Back();
@@ -141,7 +141,7 @@ namespace MantaChessEngine
                     {
                         var factory = new MoveFactory();
                         currentRating.Move = factory.MakeNoLegalMove();
-                        currentRating.IsLegal = false;
+                        //currentRating.IsLegal = false;
                         currentRating.IllegalMoveCount = 1;
                     }
                 }
@@ -149,12 +149,12 @@ namespace MantaChessEngine
                 // update the best move in the current level
                 if (IsEquallyGood(color, bestScore, currentRating.Score))
                 {
-                    currentRating.Move = (!currentRating.IsLegal) && 0 <= currentRating.IllegalMoveCount ? new NoLegalMove() : currentMove;
+                    currentRating.Move = /*(!currentRating.IsLegal) &&*/ 0 <= currentRating.IllegalMoveCount ? new NoLegalMove() : currentMove;
                     bestMoveRatings.Add(currentRating.Clone());
                 }
                 else if (IsBestMoveSofar(color, bestScore, currentRating.Score))
                 {
-                    currentRating.Move = (!currentRating.IsLegal) && 0 <= currentRating.IllegalMoveCount ? new NoLegalMove() : currentMove;
+                    currentRating.Move = /*(!currentRating.IsLegal) &&*/ 0 <= currentRating.IllegalMoveCount ? new NoLegalMove() : currentMove;
                     bestScore = currentRating.Score;
                     bestMoveRatings = new List<MoveRating> { currentRating.Clone() };
                 }

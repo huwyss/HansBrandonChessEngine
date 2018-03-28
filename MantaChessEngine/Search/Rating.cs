@@ -21,7 +21,7 @@ namespace MantaChessEngine
         /// <summary>
         /// True means legal, false means illegal (king is left in check, capture the opponents king, or own king is lost)
         /// </summary>
-        public bool IsLegal { get; set; }
+        //public bool IsLegal { get; set; }
 
         /// <summary>
         /// The number of illegal moves already played.
@@ -35,7 +35,7 @@ namespace MantaChessEngine
         public MoveRating()
         {
             Score = 0;
-            IsLegal = true;
+            //IsLegal = true;
             IllegalMoveCount = -1;
             Move = null;
         }
@@ -45,7 +45,7 @@ namespace MantaChessEngine
             return new MoveRating()
             {
                 Score = this.Score,
-                IsLegal = this.IsLegal,
+                //IsLegal = this.IsLegal,
                 IllegalMoveCount = this.IllegalMoveCount,
                 Move = this.Move
             };

@@ -79,6 +79,7 @@ namespace MantaChessEngineTest
             DoBestMoveTest_WhenWhiteIsCheckMate_ThenNoLegalMove_WhiteMoves(3);
         }
 
+        // todo ugly bug !!!
         [TestMethod]
         public void DoBestMoveTest_WhenWhiteIsCheckMate_ThenNoLegalMove_WhiteMoves_Depth4()
         {

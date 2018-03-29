@@ -197,7 +197,7 @@ namespace MantaChessEngine
         /// </summary>
         private bool IsEquallyGood(Definitions.ChessColor color, float bestScoreSoFar, float currentScore)
         {
-            return (currentScore < bestScoreSoFar + Tolerance && currentScore > bestScoreSoFar - Tolerance);
+            return (currentScore <= bestScoreSoFar + Tolerance && currentScore >= bestScoreSoFar - Tolerance);
         }
 
         /// <summary>

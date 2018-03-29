@@ -1045,6 +1045,41 @@ namespace MantaChessEngineTest
             Assert.AreEqual(new NormalMove(Piece.MakePiece('q'), 0, 0, 0, 0, null), rating1.Move);
         }
 
+        [TestMethod]
+        public void SearchMinimaxTest_WhenCheckMateInDifferentDepths_ThenSelectTheOneIn_LESS_Depth()
+        {
+            //       start        // white is check mate -> nolegal move. it must select the left move!!
+            //       -10000
+            //      /      \
+            //  -10000x   -10000x       white move -> highest selected (x)  white is/goes in check -> no legal
+            //    /           \   
+            // -10000x      -10000x       black move -> lowest selected (x)  black captures white king -> no legal
+            // no / moves      \    
+            //                10000x        white move -> highest selected (x)  no white king -> no moves returned from move generator
+            //                  \
+            //                 -10000x        black move -> lowest selected (x)
+            FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
+            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('b'), 0, 0, 0, 0, null) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { }); // level 3 a  no white king -> no moves
+            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('n'), 0, 0, 0, 0, null) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('K'), 0, 0, 0, 0, null) }); // level 3 b  
+            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('q'), 0, 0, 0, 0, null) }); // level 4 b
+
+            moveGenFake.SetIsChecks(new List<bool>() { true, true });
+            IEvaluator evalFake = new FakeEvaluator(new List<float>() { -10000 }); // eval called for 4b 
+            IBoard boardFake = new FakeBoard();
+
+            var target = new SearchMinimax(evalFake, moveGenFake);
+            target.SetMaxDepth(4);
+            var bestRatingsActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 4);
+
+            Assert.AreEqual(1, bestRatingsActual.Count(), "Check mate, can only have nolegal move");
+
+            Assert.AreEqual(-10000, bestRatingsActual.First().Score, "check mate should be score -10000");
+            Assert.IsTrue(bestRatingsActual.First().Move is NoLegalMove);
+        }
+
 
         // ---------------------------------------------------------
         // Search Tests

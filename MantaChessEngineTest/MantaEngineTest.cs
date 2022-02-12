@@ -101,11 +101,11 @@ namespace MantaChessEngineTest
                                  "...K....";
             engine.SetPosition(boardString);
 
-            IMove actualMove = engine.DoBestMove(Definitions.ChessColor.White);
+            var actualMove = engine.DoBestMove(Definitions.ChessColor.White);
 
             string actualBoard = engine.GetString();
             string expectedBoard = boardString;
-            Assert.AreEqual(new NoLegalMove(), actualMove, "White is check mate, so no legal move possible");
+            Assert.AreEqual(new NoLegalMove(), actualMove.Move, "White is check mate, so no legal move possible");
             Assert.AreEqual(expectedBoard, actualBoard, "White is check mate");
             Assert.IsTrue(engine.IsCheck(Definitions.ChessColor.White), "white is check mate. must be check");
         }
@@ -143,11 +143,11 @@ namespace MantaChessEngineTest
                                  "K.......";
             engine.SetPosition(boardString);
 
-            IMove actualMove = engine.DoBestMove(Definitions.ChessColor.White);
+            var actualMove = engine.DoBestMove(Definitions.ChessColor.White);
             
             string actualBoard = engine.GetString();
             string expectedBoard = boardString;
-            Assert.AreEqual(new NoLegalMove(), actualMove, "White is stall mate, so no legal move possible");
+            Assert.AreEqual(new NoLegalMove(), actualMove.Move, "White is stall mate, so no legal move possible");
             Assert.AreEqual(expectedBoard, actualBoard, "White is stall mate");
             Assert.IsFalse(engine.IsCheck(Definitions.ChessColor.White), "white is stall mate. not check");
         }
@@ -167,9 +167,9 @@ namespace MantaChessEngineTest
                                  ".......K"; // king is in check and must escape. only move is Kh1g1
             engine.SetPosition(boardString);
 
-            IMove actualMove = engine.DoBestMove(Definitions.ChessColor.White);
+            var actualMove = engine.DoBestMove(Definitions.ChessColor.White);
 
-            Assert.AreEqual(new NormalMove(Piece.MakePiece('K'), 'h', 1, 'g', 1, null), actualMove, "should be h1g1");
+            Assert.AreEqual(new NormalMove(Piece.MakePiece('K'), 'h', 1, 'g', 1, null), actualMove.Move, "should be h1g1");
         }
     }
 }

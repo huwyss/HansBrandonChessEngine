@@ -23,9 +23,9 @@ namespace MantaConsole
         {
             _log.Info("ManteChessEngine started");
 
-            var gameType = GameType.ComputerVsComputerOnce;
-            var whiteLevel = 2;
-            var blackLevel = 2;
+            var gameType = GameType.HumanVsComputer;
+            var whiteLevel = 4;
+            var blackLevel = 4;
             
             bool whiteHuman;
             bool blackHuman;
@@ -79,6 +79,14 @@ namespace MantaConsole
                 Board board = new Board();
                 board.SetInitialPosition();
 
+                board.SetPosition("........" +
+                                  "........" +
+                                  "........" +
+                                  "........" +
+                                  "........" +
+                                  "..k....." +
+                                  ".......q" +
+                                  ".K......"); // black should find winning move if human moves 1. Kb1a1, with level 4 it does find it but doesnt find it's checkmate.
 
                 //board.SetPosition("........" +
                 //                  "........" +
@@ -167,12 +175,12 @@ namespace MantaConsole
                     }
                     else
                     {
-                        IMove moveComputer = null;
+                        IEvaluatedMove moveComputer = null;
                         // computer move for white
                         if (!whiteHuman && whiteEngine.SideToMove() == Definitions.ChessColor.White)
                         {
                             moveComputer = whiteEngine.DoBestMove(Definitions.ChessColor.White);
-                            if (moveComputer is NoLegalMove)
+                            if (moveComputer.Move is NoLegalMove)
                             {
                                 // check for stall mate and check mate
                                 if (whiteEngine.IsCheck(Definitions.ChessColor.White))
@@ -187,6 +195,11 @@ namespace MantaConsole
                                     blackWins += 0.5f;
                                 }
                                 break;
+                            }
+                            else if (moveComputer.Score == Definitions.ScoreWhiteWins)
+                            {
+                                Console.WriteLine("\nWhite wins!");
+                                whiteWins++;
                             }
                         }
                         // computer move for black
@@ -208,6 +221,11 @@ namespace MantaConsole
                                     blackWins += 0.5f;
                                 }
                                 break;
+                            }
+                            else if (moveComputer.Score == Definitions.ScoreBlackWins)
+                            {
+                                Console.WriteLine("\nBlack wins!");
+                                blackWins++;
                             }
                         }
 

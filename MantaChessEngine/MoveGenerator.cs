@@ -65,7 +65,7 @@ namespace MantaChessEngine
         }
 
         // unit tests need access.
-        // valid means move is within board. 
+        // valid means move is within board.
         internal void GetEndPosition(int file, int rank, string sequence, out int targetFile, out int targetRank, out bool valid)
         {
             targetFile = file;
@@ -141,7 +141,5 @@ namespace MantaChessEngine
 
             return false;
         }
-
-
     }
 }

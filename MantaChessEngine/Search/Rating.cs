@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static MantaChessEngine.Definitions;
 
 namespace MantaChessEngine
 {
@@ -27,11 +28,17 @@ namespace MantaChessEngine
         /// </summary>
         public int IllegalMoveCount { get; set; }
 
+        public int KingCapturedAtLevel { get; set; }
+
+        public ChessColor CapturedKing { get; set; }
+
         public MoveRating()
         {
             Score = 0;
             IllegalMoveCount = -1;
             Move = null;
+            KingCapturedAtLevel = 0;
+            CapturedKing = ChessColor.Empty;
         }
 
         public MoveRating Clone()
@@ -40,7 +47,9 @@ namespace MantaChessEngine
             {
                 Score = this.Score,
                 IllegalMoveCount = this.IllegalMoveCount,
-                Move = this.Move
+                Move = this.Move,
+                KingCapturedAtLevel = this.KingCapturedAtLevel,
+                CapturedKing = this.CapturedKing
             };
         }
     }

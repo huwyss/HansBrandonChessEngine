@@ -115,7 +115,6 @@ namespace MantaChessEngine
                             break;
                         }
                     }
-                    break;
 
                 case BuildTreeState.GoUp:
                     _board.Back();
@@ -230,7 +229,6 @@ namespace MantaChessEngine
                         }
                         break;
                     }
-                    break;
 
                 case BuildTreeState.GoUp:
                     _board.Back();

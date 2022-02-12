@@ -11,7 +11,6 @@ namespace MantaChessEngine
         /// <summary>
         /// Multistep pieces are queen, rook and bishop
         /// </summary>
-        /// <param name="color"></param>
         public MultiStepPiece(Definitions.ChessColor color) : base(color)
         {
         }

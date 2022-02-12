@@ -110,13 +110,14 @@ namespace MantaChessEngine
             return _board.IsWinner(color);
         }
 
-        public IMove DoBestMove(Definitions.ChessColor color)
+        public IEvaluatedMove DoBestMove(Definitions.ChessColor color)
         {
             float score = 0;
             IMove nextMove = _search.Search(_board, color, out score);
             _board.Move(nextMove);
             _log.Debug("Score: " + score);
-            return nextMove;
+
+            return new EvaluatedMove() { Move = nextMove, Score = score };
         }
         
         public Definitions.ChessColor SideToMove()

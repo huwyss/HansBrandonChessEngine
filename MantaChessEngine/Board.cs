@@ -26,6 +26,7 @@ namespace MantaChessEngine
         public bool BlackDidCastling { get; set; }
 
         private Piece[] _board;
+
         string initPosition = "rnbqkbnr" + // black a8-h8
                               "pppppppp" +
                               "........" +
@@ -35,19 +36,16 @@ namespace MantaChessEngine
                               "PPPPPPPP" +
                               "RNBQKBNR"; // white a1-h1
 
-        private int[] _attackedFields;
-
         /// <summary>
         /// Constructor. Board is empty.
         /// </summary>
         public Board()
         {
             _board = new Piece[64];
-            _attackedFields = new int[64];
+
             for (int i = 0; i < 64; i++)
             {
                 _board[i] = null; // Definitions.EmptyField;
-                _attackedFields[i] = 0;
             }
 
             InitVariables();
@@ -152,6 +150,8 @@ namespace MantaChessEngine
 
         public bool IsWinner(Definitions.ChessColor color)
         {
+            // todo das stimmt nicht. Winner ist schon vorher, wenn noch König vorhanden aber im Schachmatt!
+
             bool hasWhiteKing = false;
             bool hasBlackKing = false;
 

@@ -40,4 +40,39 @@ namespace MantaChessEngine
         {
         }
     }
+
+    public class KingCaptureMove : NoLegalMove
+    {
+        public KingCaptureMove() : base()
+        { }
+
+        public override bool Equals(System.Object obj)
+        {
+            IMove other = obj as KingCaptureMove;
+            if (other != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public override string ToString()
+        {
+            return "KingCaptureMove";
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
+
+        public override void ExecuteMove(IBoard board)
+        {
+        }
+
+        public override void UndoMove(IBoard board)
+        {
+        }
+    }
 }

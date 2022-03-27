@@ -14,7 +14,7 @@ namespace MantaChessEngineTest
     public class SearchMinimaxTestsWithMocks_CheckAndStallMate
     {
         // -------------------------------------------------
-        // checkmate and stall mate
+        // checkmate and stall mate now
         // -------------------------------------------------
 
         // SearchLevel Tests
@@ -29,8 +29,8 @@ namespace MantaChessEngineTest
             // 10000x
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(1) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(2) }); // level 2
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(1) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(2) }); // level 2
             moveGenFake.SetIsChecks(new List<bool>() { true }); // in Position *** black is in check
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { 10000 });
             IBoard boardFake = new FakeBoard();
@@ -53,8 +53,8 @@ namespace MantaChessEngineTest
             // 10000x
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(1) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(2) }); // level 2
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(1) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(2) }); // level 2
             moveGenFake.SetIsChecks(new List<bool>() { false }); // in Position *** black is not in check
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { 10000 });
             IBoard boardFake = new FakeBoard();
@@ -79,8 +79,8 @@ namespace MantaChessEngineTest
             // no more moves
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(1) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(2) }); // level 2
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(1) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(2) }); // level 2
             moveGenFake.AddGetAllMoves(new List<IMove>() { }); // level 3 no moves
             moveGenFake.SetIsChecks(new List<bool>() { true }); // in Position *** black is in check
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { }); // eval not called!
@@ -106,8 +106,8 @@ namespace MantaChessEngineTest
             // no more moves
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(1) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(2) }); // level 2
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(1) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(2) }); // level 2
             moveGenFake.AddGetAllMoves(new List<IMove>() { }); // level 3 no moves
             moveGenFake.SetIsChecks(new List<bool>() { false }); // in Position *** black is not in check
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { }); // eval not called!
@@ -133,8 +133,8 @@ namespace MantaChessEngineTest
             // no more moves
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(1) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(2) }); // level 2
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(1) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(2) }); // level 2
             moveGenFake.AddGetAllMoves(new List<IMove>() { }); // level 3 no moves
             ////moveGenFake.AddGetAllMoves(new List<IMove>() { }); // level 4 no moves
             moveGenFake.SetIsChecks(new List<bool>() { true }); // in Position *** black is in check
@@ -161,8 +161,8 @@ namespace MantaChessEngineTest
             // no more moves
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(1) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(2) }); // level 2
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(1) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(2) }); // level 2
             moveGenFake.AddGetAllMoves(new List<IMove>() { }); // level 3 no moves
             moveGenFake.AddGetAllMoves(new List<IMove>() { }); // level 4 no moves
             moveGenFake.SetIsChecks(new List<bool>() { false }); // in Position *** black is not in check
@@ -177,28 +177,52 @@ namespace MantaChessEngineTest
             Assert.AreEqual(new NoLegalMove(), bestRatingActual.Move);
         }
 
+        [TestMethod]
+        public void SearchMinimaxTest_WhenWhiteIsCheckMate_Now_AndWhiteMoves_MaxDepth2_Then_BlackWins_NoLegalMove()
+        {
+            //      start ***
+            //     /              white move -> highest selected (x), the only move white can do is an illegal move.    
+            //  -10000x
+            //   /                black move -> lowest selected (x), black move captures the white king, which is also an illegal move. ==> this should be KingCaptureMove
+            // -10000x
+
+            FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2) }); // level 2
+            moveGenFake.SetIsChecks(new List<bool>() { true }); // in Position *** black is in check
+            IEvaluator evalFake = new FakeEvaluator(new List<float>() { -10000 });
+            IBoard boardFake = new FakeBoard();
+
+            var target = new SearchMinimax(evalFake, moveGenFake);
+            target.SetMaxDepth(2);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 2).First();
+
+            Assert.AreEqual(-10000, bestRatingActual.Score); // Note: this means white wins.
+            Assert.AreEqual(new NoLegalMove(), bestRatingActual.Move); // note: this means the game is over in its original position.
+        }
+
         // -------------------------------------------------
         // Search chooses between normal move and winning/loosing move
         // -------------------------------------------------
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteChoosesBetweenGoodMoveAndLosing_ThenWhiteSelectsNormalGoodMove()
+        public void SearchMinimaxTest_WhenWhiteChoosesBetweenGoodMoveAndLosing_ThenWhiteSelectsGoodMove()
         {
             //       start
             //    1a /     \1b
-            //   1010x   -10000 ***    white move -> highest selected (x), 1b is check mate for black, white must not select this.
+            //   1010x   -10000     white move -> highest selected (x), 1b is check mate for black, white must not select this.
             //   2a/        2b\   
             //  1010x     -10000x     black move -> lowest selected (x)
             //   3a/         3b\   
             //  1010x       -10000x     white move -> highest selected (x)
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMove = MakeWhiteMove(1, 1);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMove, MakeWhiteMove(1, 2) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2) }); // level 2 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(3) }); // level 3 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2, 2) }); // level 2 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(3, 2) }); // level 3 b
+            var bestMove = MoveMaker.White(1, 1);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMove, MoveMaker.White(1, 2) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3, 2) }); // level 3 b
             moveGenFake.SetIsChecks(new List<bool>() { true });
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { 1010, -10000 });
             IBoard boardFake = new FakeBoard();
@@ -223,12 +247,12 @@ namespace MantaChessEngineTest
             //  1010x        10000x     white move -> highest selected (x)
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMove = MakeWhiteMove(1, 2);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(1, 1), bestMove  } ); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2) }); // level 2 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(3) }); // level 3 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2, 2) }); // level 2 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(3, 2) }); // level 3 b
+            var bestMove = MoveMaker.White(1, 2);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), bestMove  } ); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3, 2) }); // level 3 b
             moveGenFake.SetIsChecks(new List<bool>() { true });
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { 1010, 10000 });
             IBoard boardFake = new FakeBoard();
@@ -253,12 +277,12 @@ namespace MantaChessEngineTest
             // -1010x        10000x    black move -> lowest selected (x)
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMove = MakeBlackMove(1, 1);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMove, MakeBlackMove(1, 2) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(2) }); // level 2 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(3) }); // level 3 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(2, 2) }); // level 2 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(3, 2) }); // level 3 b
+            var bestMove = MoveMaker.Black(1, 1);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMove, MoveMaker.Black(1, 2) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(2) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(3) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(3, 2) }); // level 3 b
             moveGenFake.SetIsChecks(new List<bool>() { true });
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { -1010, 10000 });
             IBoard boardFake = new FakeBoard();
@@ -283,12 +307,12 @@ namespace MantaChessEngineTest
             //  1010x        -10000x     black move -> lowest selected (x)
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMove = MakeBlackMove(1, 2);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(1, 1), bestMove }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(2) }); // level 2 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(3) }); // level 3 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(2, 2) }); // level 2 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(3, 2) }); // level 3 b
+            var bestMove = MoveMaker.Black(1, 2);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(1, 1), bestMove }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(2) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(3) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(3, 2) }); // level 3 b
             moveGenFake.SetIsChecks(new List<bool>() { true });
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { 1010, -10000 });
             IBoard boardFake = new FakeBoard();
@@ -301,9 +325,39 @@ namespace MantaChessEngineTest
             Assert.AreEqual(bestMove, bestRatingActual.Move);
         }
 
+        [TestMethod]
+        public void SearchMinimaxTest_WhenWhiteChoosesBetweenBadMoveAndLosing_ThenWhiteSelectsBadMove()
+        {
+            //       start
+            //    1a /     \1b
+            //   -1010x   -10000     white move -> highest selected (x), 1b is check mate for black, white must not select this.
+            //   2a/        2b\   
+            //  -1010x     -10000x     black move -> lowest selected (x)
+            //   3a/         3b\   
+            //  -1010x       -10000x     white move -> highest selected (x)
+
+            FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
+            var bestMove = MoveMaker.White(1, 1);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMove, MoveMaker.White(1, 2) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3, 2) }); // level 3 b
+            moveGenFake.SetIsChecks(new List<bool>() { true });
+            IEvaluator evalFake = new FakeEvaluator(new List<float>() { -1010, -10000 });
+            IBoard boardFake = new FakeBoard();
+
+            var target = new SearchMinimax(evalFake, moveGenFake);
+            target.SetMaxDepth(3);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 3).First();
+
+            Assert.AreEqual(-1010, bestRatingActual.Score);
+            Assert.AreEqual(bestMove, bestRatingActual.Move);
+        }
+
         // -------------------------------------------------
         // Search chooses between normal move and winning/loosing move.
-        // Capture happens before deepest level. Move generator delivers no more move because king is lost.
+        // King capture happens before deepest level. Move generator delivers no more move because king is lost.
         // -------------------------------------------------
 
         [TestMethod]
@@ -320,13 +374,13 @@ namespace MantaChessEngineTest
             //  1010x       no moves    black move -> lowest selected (x). 4b no black moves returned as black has no king.
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMove = MakeWhiteMove(1, 2);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(1, 1), bestMove }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2) }); // level 2 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(3) }); // level 3 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(4) }); // level 4 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2, 2) }); // level 2 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(3, 2) }); // level 3 b
+            var bestMove = MoveMaker.White(1, 2);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), bestMove }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4) }); // level 4 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3, 2) }); // level 3 b
             moveGenFake.AddGetAllMoves(new List<IMove>()); // no move generated for 4b
             moveGenFake.SetIsChecks(new List<bool>() { true });
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { 1010 }); // eval not called for right branch
@@ -356,15 +410,15 @@ namespace MantaChessEngineTest
             //  1010x       no moves    white move -> highest selected (x). 5b no white moves returned as white has no king.
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMove = MakeWhiteMove(1, 1);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMove, MakeWhiteMove(1, 2) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2) }); // level 2 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(3) }); // level 3 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(4) }); // level 4 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(5) }); // level 5 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2, 2) }); // level 2 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(3, 2) }); // level 3 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(4, 2) }); // level 4 b
+            var bestMove = MoveMaker.White(1, 1);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMove, MoveMaker.White(1, 2) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4) }); // level 4 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(5) }); // level 5 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3, 2) }); // level 3 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // level 4 b
             moveGenFake.AddGetAllMoves(new List<IMove>()); // no move generated for 5b
             moveGenFake.SetIsChecks(new List<bool>() { true });
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { 1010 }); // eval not called for right branch
@@ -394,12 +448,12 @@ namespace MantaChessEngineTest
             //  1010x        10000x    white move -> highest selected (x)
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMove = MakeWhiteMove(1, 1);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMove, MakeWhiteMove(1, 2) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2) }); // level 2 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(3) }); // level 3 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2, 2) }); // level 2 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(3, 2) }); // level 3 b
+            var bestMove = MoveMaker.White(1, 1);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMove, MoveMaker.White(1, 2) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3, 2) }); // level 3 b
             moveGenFake.SetIsChecks(new List<bool>() { false }); // stall mate at ***
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { 1010, 10000 });
             IBoard boardFake = new FakeBoard();
@@ -424,12 +478,12 @@ namespace MantaChessEngineTest
             // -1010x        10000x    white move -> highest selected (x)
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMove = MakeWhiteMove(1, 2);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(1, 1), bestMove  }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2) }); // level 2 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(3) }); // level 3 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2, 2) }); // level 2 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(3, 2) }); // level 3 b
+            var bestMove = MoveMaker.White(1, 2);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), bestMove  }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3, 2) }); // level 3 b
             moveGenFake.SetIsChecks(new List<bool>() { false }); // stall mate at ***
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { -1010, -10000 });
             IBoard boardFake = new FakeBoard();
@@ -454,12 +508,12 @@ namespace MantaChessEngineTest
             // -1010x        -10000x     black move -> lowest selected (x)
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMove = MakeBlackMove(1, 1);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMove, MakeBlackMove(1, 2) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(2) }); // level 2 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(3) }); // level 3 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(2, 2) }); // level 2 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(3, 2) }); // level 3 b
+            var bestMove = MoveMaker.Black(1, 1);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMove, MoveMaker.Black(1, 2) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(2) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(3) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(3, 2) }); // level 3 b
             moveGenFake.SetIsChecks(new List<bool>() { false }); // stall mate at ***
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { -1010, -10000 });
             IBoard boardFake = new FakeBoard();
@@ -484,12 +538,12 @@ namespace MantaChessEngineTest
             //  1010x        -10000x    black move -> lowest selected (x)
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMove = MakeBlackMove(1, 2);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(1, 1), bestMove }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(2) }); // level 2 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(3) }); // level 3 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(2, 2) }); // level 2 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(3, 2) }); // level 3 b
+            var bestMove = MoveMaker.Black(1, 2);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(1, 1), bestMove }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(2) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(3) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(3, 2) }); // level 3 b
             moveGenFake.SetIsChecks(new List<bool>() { false }); // stall mate at ***
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { 1010, -10000 });
             IBoard boardFake = new FakeBoard();
@@ -521,13 +575,13 @@ namespace MantaChessEngineTest
             //  1010x       no moves    black move -> lowest selected (x). 4b no black moves returned as black has no king.
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMove = MakeWhiteMove(1, 1);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMove, MakeWhiteMove(1, 2) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2) }); // level 2 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(3) }); // level 3 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(4) }); // level 4 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2, 2) }); // level 2 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(3, 2) }); // level 3 b
+            var bestMove = MoveMaker.White(1, 1);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMove, MoveMaker.White(1, 2) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4) }); // level 4 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3, 2) }); // level 3 b
             moveGenFake.AddGetAllMoves(new List<IMove>()); // no move generated for 4b
             moveGenFake.SetIsChecks(new List<bool>() { false });
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { 1010 }); // eval not called for right branch
@@ -557,15 +611,15 @@ namespace MantaChessEngineTest
             // -1010x       no moves    white move -> highest selected (x). 5b no moves returned as white has no king.
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMove = MakeWhiteMove(1, 2);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(1, 1), bestMove }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2) }); // level 2 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(3) }); // level 3 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(4) }); // level 4 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(5) }); // level 5 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2, 2) }); // level 2 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(3, 2) }); // level 3 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(4, 2) }); // level 4 b
+            var bestMove = MoveMaker.White(1, 2);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), bestMove }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4) }); // level 4 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(5) }); // level 5 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3, 2) }); // level 3 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // level 4 b
             moveGenFake.AddGetAllMoves(new List<IMove>()); // no move generated for 5b
             moveGenFake.SetIsChecks(new List<bool>() { false });
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { -1010 }); // eval not called for right branch
@@ -595,12 +649,12 @@ namespace MantaChessEngineTest
             //  10000x       10000x    white move -> highest selected (x)
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMove = MakeWhiteMove(1, 1);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMove, MakeWhiteMove(1, 2) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2) }); // level 2 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(3) }); // level 3 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2, 2) }); // level 2 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(3, 2) }); // level 3 b
+            var bestMove = MoveMaker.White(1, 1);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMove, MoveMaker.White(1, 2) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3, 2) }); // level 3 b
             moveGenFake.SetIsChecks(new List<bool>() { true, false });
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { 10000, 10000 });
             IBoard boardFake = new FakeBoard();
@@ -625,12 +679,12 @@ namespace MantaChessEngineTest
             //  10000x       10000x    white move -> highest selected (x)
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMove = MakeWhiteMove(1, 2);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(1, 1), bestMove }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2) }); // level 2 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(3) }); // level 3 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2, 2) }); // level 2 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(3, 2) }); // level 3 b
+            var bestMove = MoveMaker.White(1, 2);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), bestMove }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3, 2) }); // level 3 b
             moveGenFake.SetIsChecks(new List<bool>() { false, true });
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { 10000, 10000 });
             IBoard boardFake = new FakeBoard();
@@ -655,12 +709,12 @@ namespace MantaChessEngineTest
             //  -10000x     -10000x   black move -> lowest selected (x)
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMove = MakeBlackMove(1, 1);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMove, MakeBlackMove(1, 2) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(2) }); // level 2 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(3) }); // level 3 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(2, 2) }); // level 2 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(3, 2) }); // level 3 b
+            var bestMove = MoveMaker.Black(1, 1);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMove, MoveMaker.Black(1, 2) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(2) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(3) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(3, 2) }); // level 3 b
             moveGenFake.SetIsChecks(new List<bool>() { true, false });
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { -10000, -10000 });
             IBoard boardFake = new FakeBoard();
@@ -685,12 +739,12 @@ namespace MantaChessEngineTest
             //  -10000x     -10000x   black move -> lowest selected (x)
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMove = MakeBlackMove(1, 2);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(1, 1), bestMove }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(2) }); // level 2 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(3) }); // level 3 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(2, 2) }); // level 2 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(3, 2) }); // level 3 b
+            var bestMove = MoveMaker.Black(1, 2);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(1, 1), bestMove }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(2) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(3) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(3, 2) }); // level 3 b
             moveGenFake.SetIsChecks(new List<bool>() { false, true });
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { -10000, -10000 });
             IBoard boardFake = new FakeBoard();
@@ -717,6 +771,83 @@ namespace MantaChessEngineTest
         // King lost before deepest level. Different levels...
         // -------------------------------------------------
 
+        // -------------------------------------------------
+        // Search chooses check mate in level 1 and check mate in level 1. must choose check mate in level 1
+        // -------------------------------------------------
+
+        [TestMethod]
+        public void SearchMinimaxTest_WhenWhiteChoosesBetweenCheckMateLevel1AndCheckMateLevel3_ThenWhiteSelectsCheckMateLevel1()
+        {
+            //       start
+            //    1a /     \1b
+            //    10000x   10000     white move -> highest selected (x), 1a is check mate, 1b is check mate.
+            //   2a/        2b\   
+            //  10000x      10000x   black move -> lowest selected (x)
+            //  3a/          3b\   
+            //  10000x        10000x   white move -> highest selected (x)
+            //  no/move       4b\   
+            //               10000x   black move -> lowest selected (x)
+            //                5b\   
+            //               10000x   white move -> highest selected (x)
+
+            FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
+            var bestMove = MoveMaker.White(1, 1);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMove, MoveMaker.White(1, 2) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3)}); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { }); // level 4 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3, 2) }); // level 3 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // level 4 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(5, 2) }); // level 5 b
+            moveGenFake.SetIsChecks(new List<bool>() { true, true });
+            IEvaluator evalFake = new FakeEvaluator(new List<float>() { 10000 }); // eval 5b
+            IBoard boardFake = new FakeBoard();
+
+            var target = new SearchMinimax(evalFake, moveGenFake);
+            target.SetMaxDepth(5);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 5).First();
+
+            Assert.AreEqual(10000, bestRatingActual.Score);
+            Assert.AreEqual(bestMove, bestRatingActual.Move);
+        }
+
+        [TestMethod]
+        public void SearchMinimaxTest_WhenWhiteChoosesBetweenCheckMateLevel3AndCheckMateLevel1_ThenWhiteSelectsCheckMateLevel1()
+        {
+            //       start
+            //    1a /     \1b
+            //   10000    10000x     white move -> highest selected (x), 1a is check mate, 1b is check mate.
+            //   2a/        2b\   
+            //  10000x      10000x   black move -> lowest selected (x)
+            //  3a/          3b\   
+            //  10000x       10000x   white move -> highest selected (x)
+            //  4a/           no\move   
+            //  10000x                 black move -> lowest selected (x)
+            //  5a/                
+            //  10000x                 white move -> highest selected (x)
+
+            FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
+            var bestMove = MoveMaker.White(1, 2);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), bestMove }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4) }); // level 4 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(5) }); // level 5 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3, 2) }); // level 3 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { }); // level 4 b
+            moveGenFake.SetIsChecks(new List<bool>() { true, true });
+            IEvaluator evalFake = new FakeEvaluator(new List<float>() { 10000 }); // eval 5a
+            IBoard boardFake = new FakeBoard();
+
+            var target = new SearchMinimax(evalFake, moveGenFake);
+            target.SetMaxDepth(5);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 5).First();
+
+            Assert.AreEqual(10000, bestRatingActual.Score);
+            Assert.AreEqual(bestMove, bestRatingActual.Move);
+        }
 
         /////////////////////////////////////////////////////////////////////////////////////
         // older tests
@@ -724,7 +855,7 @@ namespace MantaChessEngineTest
         /////////////////////////////////////////////////////////////////////////////////////
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteIsCheckMateIn2_AndMaxDepth2_ThenNoLegalMove()
+        public void SearchMinimaxTest_WhenWhiteIsCheckMateNow_AndMaxDepth2_ThenNoLegalMove()
         {
             //      start
             //     /      \
@@ -733,9 +864,9 @@ namespace MantaChessEngineTest
             // -10000x       -10000x     black move -> lowest selected (x)
             
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(1, 1), MakeWhiteMove(1, 2) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2, 1) }); // level 2 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), MoveMaker.White(1, 2) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 1) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 2) }); // level 2 b
             moveGenFake.SetIsChecks(new List<bool>() { true, true });
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { -10000, -10000 });
             IBoard boardFake = new FakeBoard();
@@ -749,7 +880,7 @@ namespace MantaChessEngineTest
         }
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenBlackIsCheckMateIn3_AndMaxDepth3_ThenNormalMove()
+        public void SearchMinimaxTest_WhenBlackIsCheckMateIn1_AndMaxDepth3_ThenNormalMove()
         {
             //       start
             //     /       \
@@ -761,11 +892,11 @@ namespace MantaChessEngineTest
             // check         check (2 ply earlier)
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(1, 1), MakeWhiteMove(1, 2) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2, 1) }); // level 2 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(2, 1) }); // level 3 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeBlackMove(2, 2) }); // level 2 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MakeWhiteMove(2, 2) }); // level 3 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), MoveMaker.White(1, 2) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 1) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(2, 1) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 2) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(2, 2) }); // level 3 b
             moveGenFake.SetIsChecks(new List<bool>() { true, true });
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { 10000, 10000 });
             IBoard boardFake = new FakeBoard();
@@ -779,7 +910,7 @@ namespace MantaChessEngineTest
         }
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteIsCheckMateIn4_AndMaxDepth4_ThenNormalMove()
+        public void SearchMinimaxTest_WhenWhiteIsCheckMateIn2_AndMaxDepth4_ThenNormalMove()
         {
             //      start
             //     /      \
@@ -792,13 +923,13 @@ namespace MantaChessEngineTest
             // -10000x       -10010x     black move -> lowest selected (x), king is captured -> not legal
 
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('b'), 0, 0, 0, 0, null) }); // level 2 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('B'), 0, 0, 0, 0, null) }); // level 3 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('b'), 0, 0, 0, 0, null) }); // level 4 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('n'), 0, 0, 0, 0, null) }); // level 2 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('N'), 0, 0, 0, 0, null) }); // level 3 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('n'), 0, 0, 0, 0, null) }); // level 4 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), MoveMaker.White(1, 2) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 1) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3, 1) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 1) }); // level 4 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 1) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3, 1) }); // level 3 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 1) }); // level 4 b
             moveGenFake.SetIsChecks(new List<bool>() { true, true });
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { -10000, -10000 });
             IBoard boardFake = new FakeBoard();
@@ -812,7 +943,7 @@ namespace MantaChessEngineTest
         }
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteIsStallMateIn2_ThenNoLegalMoveScore0()
+        public void SearchMinimaxTest_WhenWhiteIsStallMateNow_ThenNoLegalMoveScore0()
         {
             //      start
             //        0
@@ -822,9 +953,9 @@ namespace MantaChessEngineTest
             // -10000x     -10000x     black move -> lowest selected (x)  stall mate here. eval returns -10000, ischeck returns false
             // not check    not check
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('b'), 0, 0, 0, 0, null) }); // level 2 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('n'), 0, 0, 0, 0, null) }); // level 2 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), MoveMaker.White(1, 2) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 1) }); // level 2 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 2) }); // level 2 b
             moveGenFake.SetIsChecks(new List<bool>() { false, false });
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { -10000, -10000 });
             IBoard boardFake = new FakeBoard();
@@ -840,17 +971,21 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void SearchMinimaxTest_WhenWhiteIsStallMateIn2MoreOptions_ThenNoLegalMoveScore0()
         {
+            // note: for check mate and stall mate:
+            //       for every move on level 1 there is at least one move on level 2 that captures the king!
+            //       That means that the engine always chooses the king capture move on level 2.
+            //       That also means that on level 1 all moves are NoLegalMoves.
             //              start
             //                0  (not check here) (white is stall mate)
             //          /            \
             //     -10000x          -10000x       white move -> highest selected (x) (white king goes in check -> not legal)
             //     a/    \b         c/    \d   
             // -10000x  -10        10  -10000x     black move -> lowest selected (x), white king lost here (black captures white king -> not legal)
-            // not check    not check
+            // not check                  not check
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('Q'), 0, 0, 0, 0, null) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('b'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('n'), 0, 0, 0, 0, null) }); // level 2 ab
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('q'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('k'), 0, 0, 0, 0, null) }); // level 2 cd
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), MoveMaker.White(1, 2) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 1), MoveMaker.Black(2, 2) }); // level 2 ab
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 3), MoveMaker.Black(2, 4) }); // level 2 cd
             moveGenFake.SetIsChecks(new List<bool>() { false, false, false, false });
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { -10000, -10, 10, -10000 });
             IBoard boardFake = new FakeBoard();
@@ -1153,15 +1288,15 @@ namespace MantaChessEngineTest
             //           /    \   
             //      -10000x  -10000       black move -> lowest selected (x)  black captures white king -> no legal
             //   no / moves     \    
-            //               -10000x        white move -> highest selected (x)  no white king -> no moves returned from move generator
+            //                -10000x        white move -> highest selected (x)  no white king -> no moves returned from move generator
             //                  \
             //               -10000x        black move -> lowest selected (x)
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('P'), 0, 0, 0, 0, null) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('p'), 0, 0, 0, 0, null), new NormalMove(Piece.MakePiece('q'), 0, 0, 0, 0, null) }); // level 2
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 1), MoveMaker.Black(2, 2) }); // level 2
             moveGenFake.AddGetAllMoves(new List<IMove>() { }); // level 3 a  no white king -> no moves
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('N'), 0, 0, 0, 0, null) }); // level 3 b
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('k'), 0, 0, 0, 0, null) }); // level 4 b  
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3) }); // level 3 b
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4) }); // level 4 b  
 
             moveGenFake.SetIsChecks(new List<bool>() { true, true });
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { -10000 }); // eval called for 4b 
@@ -1188,14 +1323,14 @@ namespace MantaChessEngineTest
             //           /    \   
             //      -10000   -10000x       black move -> lowest selected (x)  black captures white king -> no legal
             //       /         no \ moves    
-            //    10000x                      white move -> highest selected (x)  no white king -> no moves returned from move generator
+            //    -10000x                      white move -> highest selected (x)  no white king -> no moves returned from move generator
             //      /
             //   -10000x                        black move -> lowest selected (x)
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('P'), 1, 1, 1, 1, null) }); // level 1
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('k'), 2, 1, 1, 1, null), new NormalMove(Piece.MakePiece('q'), 2, 2, 1, 1, null) }); // level 2
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('B'), 3, 1, 1, 1, null) }); // level 3 a
-            moveGenFake.AddGetAllMoves(new List<IMove>() { new NormalMove(Piece.MakePiece('n'), 4, 1, 1, 1, null) }); // level 4 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1) }); // level 1
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 1), MoveMaker.Black(2, 2) }); // level 2
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(3) }); // level 3 a
+            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4) }); // level 4 a
             moveGenFake.AddGetAllMoves(new List<IMove>() { }); // level 3 b  no white king -> no moves
             
 
@@ -1215,26 +1350,28 @@ namespace MantaChessEngineTest
 
         // Helpers
 
-        private IMove MakeWhiteMove(int file)
+        public class MoveMaker
         {
-            return new NormalMove(Piece.MakePiece('Q'), file, 0, 0, 0, null);
-        }
+            public static IMove White(int file)
+            {
+                return new NormalMove(Piece.MakePiece('Q'), file, 0, 0, 0, null);
+            }
 
-        private IMove MakeWhiteMove(int file, int rank)
-        {
-            return new NormalMove(Piece.MakePiece('Q'), file, rank, 0, 0, null);
-        }
+            public static IMove White(int file, int rank)
+            {
+                return new NormalMove(Piece.MakePiece('Q'), file, rank, 0, 0, null);
+            }
 
-        private IMove MakeBlackMove(int file)
-        {
-            return new NormalMove(Piece.MakePiece('q'), file, 0, 0, 0, null);
-        }
+            public static IMove Black(int file)
+            {
+                return new NormalMove(Piece.MakePiece('q'), file, 0, 0, 0, null);
+            }
 
-        private IMove MakeBlackMove(int file, int rank)
-        {
-            return new NormalMove(Piece.MakePiece('q'), file, rank, 0, 0, null);
+            public static IMove Black(int file, int rank)
+            {
+                return new NormalMove(Piece.MakePiece('q'), file, rank, 0, 0, null);
+            }
         }
-
 
         // ---------------------------------------------------------
         // Search Tests

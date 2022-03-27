@@ -115,9 +115,8 @@ namespace MantaChessEngine
                 };
             }
 
-            foreach (IMove currentMoveLoop in possibleMoves)
+            foreach (IMove currentMove in possibleMoves)
             {
-                IMove currentMove = currentMoveLoop;
                 board.Move(currentMove);
 
                 if (level > 1) // we need to do more move levels...

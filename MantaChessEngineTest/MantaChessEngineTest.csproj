@@ -57,6 +57,7 @@
     <Compile Include="EvaluatorPositionTest.cs" />
     <Compile Include="EvaluatorSimpleTest.cs" />
     <Compile Include="MoveGeneratorTest.cs" />
+    <Compile Include="MoveRatingTest.cs" />
     <Compile Include="MoveTest.cs" />
     <Compile Include="HelperTest.cs" />
     <Compile Include="MoveTreeTest.cs" />

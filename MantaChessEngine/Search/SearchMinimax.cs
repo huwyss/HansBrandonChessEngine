@@ -132,12 +132,12 @@ namespace MantaChessEngine
                 }
 
                 // update the best move in the current level
-                if (currentRating.IsEquallyGood(color, bestRating))
+                if (currentRating.IsEquallyGood(bestRating))
                 {
                     currentRating.Move = currentMove;
                     bestMoveRatings.Add(currentRating.Clone());
                 }
-                else if (currentRating.IsBestMoveSofar(color, bestRating))
+                else if (currentRating.IsBetter(color, bestRating))
                 {
                     currentRating.Move = currentMove;
                     bestRating = currentRating.Clone();

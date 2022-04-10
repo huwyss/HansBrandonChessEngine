@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using log4net;
 
 [assembly: InternalsVisibleTo("MantaChessEngineTest")]
 namespace MantaChessEngine
@@ -38,25 +35,14 @@ namespace MantaChessEngine
             }
         }
 
-        public SearchMinimax(IEvaluator evaluator, IMoveGenerator moveGenerator)
+        public SearchMinimax(IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth = Definitions.DEFAULT_MAXLEVEL)
         {
             _evaluator = evaluator;
             _moveGenerator = moveGenerator;
-            _maxDepth = Definitions.DEFAULT_MAXLEVEL;
+            _maxDepth = maxDepth;
             _rand = new Random();
             _moveFactory = new MoveFactory();
         }
-
-        // Explanation:
-
-        // ceckmate now --> SearchLevel(2) --> NoLegalMove
-
-        // checkmate in 2  --> SearchLevel(2) --> normal move
-        //                 --> SearchLevel(4) --> NoLegalMove
-
-        // checkmate in 4  --> SearchLevel(2) --> normal move
-        //                 --> SearchLevel(4) --> normal Move
-        //                 --> SearchLevel(6) --> NoLegalMove
 
         /// <summary>
         /// Search for the best move.
@@ -67,9 +53,8 @@ namespace MantaChessEngine
         /// <returns>best move for color.</returns>
         public IMove Search(IBoard board, Definitions.ChessColor color, out float score)
         {
-            int currentLevel = _maxDepth;
             evaluatedPositions = 0;
-            IEnumerable<MoveRating> moveRatings = SearchLevel(board, color, currentLevel);
+            IEnumerable<MoveRating> moveRatings = SearchLevel(board, color, 1);
             var count = moveRatings.Count();
             var randomIndex = _rand.Next(0, count);
             MoveRating rating = moveRatings.ElementAt(randomIndex);
@@ -117,10 +102,10 @@ namespace MantaChessEngine
             {
                 board.Move(currentMove);
 
-                if (level > 1) // we need to do more move levels...
+                if (level < _maxDepth) // we need to do more move levels...
                 {
                     // we are only interested in the first score. all scores are the same.
-                    currentRating = SearchLevel(board, Helper.GetOppositeColor(color), level - 1).First(); // recursive...
+                    currentRating = SearchLevel(board, Helper.GetOppositeColor(color), level + 1).First(); // recursive...
                     board.Back();
                 }
                 else // we reached the bottom of the tree and evaluate the position

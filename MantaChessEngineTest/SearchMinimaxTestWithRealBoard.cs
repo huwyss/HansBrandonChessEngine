@@ -23,7 +23,7 @@ namespace MantaChessEngineTest
             IEvaluator evaluator = new EvaluatorSimple();
             
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen, 1);
             var board = new Board();
             string boardString = "k......." +
                                  "........" +
@@ -47,7 +47,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen, 2);
             var board = new Board();
             string boardString = "k......." +
                                  "........" +
@@ -59,7 +59,7 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 2).First(); // level 2
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1).First(); // level 2
             IMove badMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
 
             Assert.AreNotEqual(badMove, bestRatingActual.Move, "White bishop should not capture pawn.");
@@ -71,7 +71,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen, 3);
             var board = new Board();
             string boardString = "k......." +
                                  "...n...." +
@@ -92,7 +92,7 @@ namespace MantaChessEngineTest
                                  //"........" +
                                  //"K.......";
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 3).First(); // level 3
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1).First(); // level 3
             IMove expectedMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
             IMove expectedMove2 = new NormalMove(Piece.MakePiece('N'), 'f', 3, 'e', 5, Piece.MakePiece('p'));
 
@@ -108,7 +108,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen, 4);
             var board = new Board();
             string boardString = "k......." +
                                  "...n...." +
@@ -120,7 +120,7 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 4).First(); // level 4
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1).First(); // level 4
             IMove badMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
             IMove badMove2 = new NormalMove(Piece.MakePiece('N'), 'f', 3, 'e', 5, Piece.MakePiece('p'));
 
@@ -134,7 +134,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen, 3);
             var board = new Board();
             string boardString = "....q..R" +
                                  "........" +
@@ -146,7 +146,7 @@ namespace MantaChessEngineTest
                                  "........";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 3).First(); // level 3
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1).First(); // level 3
             IMove wrongMove = new NormalMove(Piece.MakePiece('R'), 'h', 8, 'e', 8, Piece.MakePiece('q'));
             IMove wrongMove2 = new NormalMove(Piece.MakePiece('K'), 'e', 4, 'd', 5, Piece.MakePiece('b'));
 
@@ -159,7 +159,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen, 3);
             var board = new Board();
             string boardString = "........" +
                                  "........" +
@@ -171,7 +171,7 @@ namespace MantaChessEngineTest
                                  "...K....";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 3).First(); // level 3
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1).First(); // level 3
             IMove expectedMove = new NoLegalMove();
 
             Assert.AreEqual(expectedMove, bestRatingActual.Move, "White is check mate. no legal move possible.");
@@ -186,7 +186,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen, 1);
             var board = new Board();
             string boardString = "k......." +
                                  "........" +
@@ -210,7 +210,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen, 2);
             var board = new Board();
             string boardString = "k......." +
                                  "........" +
@@ -222,7 +222,7 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 2).First(); // level 2
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1).First(); // level 2
             IMove badMove = new NormalMove(Piece.MakePiece('b'), 'f', 6, 'e', 5, Piece.MakePiece('P'));
 
             Assert.AreNotEqual(badMove, bestRatingActual.Move, "Black bishop should not capture pawn.");
@@ -234,7 +234,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen, 3);
             var board = new Board();
             string boardString = "k......." +
                                  "...n...." +
@@ -255,7 +255,7 @@ namespace MantaChessEngineTest
             //"........" +
             //"K.......";
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 3).First(); // level 3
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1).First(); // level 3
             IMove expectedMove = new NormalMove(Piece.MakePiece('b'), 'd', 6, 'e', 5, Piece.MakePiece('P'));
             IMove expectedMove2 = new NormalMove(Piece.MakePiece('n'), 'd', 7, 'e', 5, Piece.MakePiece('P'));
 
@@ -271,7 +271,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen, 4);
             var board = new Board();
             string boardString = "k......." +
                                  "...n...." +
@@ -283,7 +283,7 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 4).First(); // level 4
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1).First(); // level 4
             IMove badMove = new NormalMove(Piece.MakePiece('b'), 'd', 6, 'e', 5, Piece.MakePiece('P'));
             IMove badMove2 = new NormalMove(Piece.MakePiece('n'), 'd', 7, 'e', 5, Piece.MakePiece('P'));
 
@@ -303,7 +303,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen, 2);
             var board = new Board();
             string boardString = "........" +
                                  "........" +
@@ -315,7 +315,7 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 2).First();
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1).First();
 
             Assert.AreEqual(0, bestRatingActual.Score, "stalemate score should be 0");
             Assert.AreEqual(new NoLegalMove(), bestRatingActual.Move, "Should be NoLegalMove, white is stalemate");
@@ -326,7 +326,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen, 2);
             var board = new Board();
             string boardString = "........" +
                                  "........" +
@@ -338,7 +338,7 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 2).First();
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1).First();
 
             Assert.AreEqual(new NoLegalMove(), bestRatingActual.Move, "Should be NoLegalMove, white is checkmate");
             Assert.AreEqual(-10000, bestRatingActual.Score, "check mate score should be -10000");
@@ -349,7 +349,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchMinimax(evaluator, gen);
+            var target = new SearchMinimax(evaluator, gen, 4);
             target.SetMaxDepth(4);
             var board = new Board();
             string boardString = "........" +
@@ -364,7 +364,7 @@ namespace MantaChessEngineTest
 
             IMove expectedMove = new NormalMove(Piece.MakePiece('q'), 'h', 2, 'b', 2, null);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 4).First();
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1).First();
 
             Assert.AreEqual(expectedMove, bestRatingActual.Move, "Should be find checkmate for black: ... Qh2b2 #");
             Assert.AreEqual(-10000, bestRatingActual.Score, "check mate score should be -10000");

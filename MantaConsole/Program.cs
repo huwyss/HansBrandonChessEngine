@@ -19,7 +19,7 @@ namespace MantaConsole
         {
             _log.Info("ManteChessEngine started");
 
-            var gameType = GameType.ComputerVsComputerStatistic;
+            var gameType = GameType.HumanVsComputer;
             var whiteLevel = 2;
             var blackLevel = 2;
             
@@ -168,7 +168,7 @@ namespace MantaConsole
                             {
                                 board.Back();
                                 board.Back();
-                                moveCount -= 2;
+                                moveCount --;
                                 break;
                             }
                             isMoveValid = whiteEngine.Move(moveConsoleString);
@@ -205,6 +205,7 @@ namespace MantaConsole
                             {
                                 Console.WriteLine("\nWhite wins!");
                                 whiteWins++;
+                                break;
                             }
                         }
                         // computer move for black
@@ -231,6 +232,7 @@ namespace MantaConsole
                             {
                                 Console.WriteLine("\nBlack wins!");
                                 blackWins++;
+                                break;
                             }
                         }
 

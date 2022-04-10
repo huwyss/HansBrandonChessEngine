@@ -38,5 +38,10 @@ namespace MantaChessEngine
         {
             return ReturnsIsCheck;
         }
+
+        public List<IMove> GetLegalMoves(IBoard board, Definitions.ChessColor color)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

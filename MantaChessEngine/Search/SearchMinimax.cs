@@ -12,7 +12,7 @@ namespace MantaChessEngine
     public class SearchMinimax : ISearchService
     {
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private const float Tolerance = 0.05f;
+        
         private IMoveGenerator _moveGenerator;
         private IEvaluator _evaluator;
         private int _maxDepth;
@@ -95,22 +95,20 @@ namespace MantaChessEngine
             MoveRating currentRating = new MoveRating();
             List<MoveRating> bestMoveRatings = new List<MoveRating>();
 
-            var possibleMoves = _moveGenerator.GetAllMoves(board, color);
+            var possibleMoves = _moveGenerator.GetLegalMoves(board, color);
 
+            // no legal moves means the game is over. It is either stall mate or check mate.
             if (possibleMoves == null || possibleMoves.Count == 0)
             {
-                // The playing color has just lost its king.
-                // We did not reach the search depth yet.
-                // still, we do not evaluate and we go back up in the tree.
                 return new MoveRating[]
                 {
                         new MoveRating()
                         {
-                            Score = color == Definitions.ChessColor.White ? Definitions.ScoreBlackWins : Definitions.ScoreWhiteWins,
-                            IllegalMoveCount = 1, // there is no king
-                            ////KingCapturedAtLevel = level,
-                            ////CapturedKing =  Helper.GetOppositeColor(color),
-                            Move = new NoLegalMove()
+                            Score = !_moveGenerator.IsCheck(board, color)
+                            ? 0
+                            : color == Definitions.ChessColor.White ? Definitions.ScoreBlackWins : Definitions.ScoreWhiteWins,
+                            Move = new NoLegalMove(),
+                            GameEndLevel = level
                         }
                 };
             }
@@ -128,65 +126,25 @@ namespace MantaChessEngine
                 else // we reached the bottom of the tree and evaluate the position
                 {
                     currentRating.Score = _evaluator.Evaluate(board);
-                    currentRating.IllegalMoveCount = -1;
+                    currentRating.GameEndLevel = level;
                     evaluatedPositions++;
                     board.Back();
-
-                    // the distinction between stall mate and check mate must be done 2 plys before king is lost (2 x back)
-                    // If white is winning and its blacks move then black cannot move
-                    // if black is winning and its whites move then white cannot move
-                    // (assuming we are at the deepest level that we calculate. Search() will then try to 
-                    // calculate a move for a less deeper level)
-                    if (currentRating.Score == Definitions.ScoreWhiteWins || currentRating.Score == Definitions.ScoreBlackWins)
-                    {
-                        currentRating.Move = _moveFactory.MakeNoLegalMove();
-                        currentRating.IllegalMoveCount = 1;
-                        ////currentRating.KingCapturedAtLevel = level;
-                        ////currentRating.CapturedKing = Helper.GetOppositeColor(color);
-                    }
                 }
 
                 // update the best move in the current level
-                if (IsEquallyGood(color, bestRating, currentRating))
+                if (currentRating.IsEquallyGood(color, bestRating))
                 {
-                    ////currentRating.Move = 0 < currentRating.KingCapturedAtLevel ? new NoLegalMove() : currentMove;
-
-                    currentRating.Move = 0 <= currentRating.IllegalMoveCount ? new NoLegalMove() : currentMove;                    
+                    currentRating.Move = currentMove;
                     bestMoveRatings.Add(currentRating.Clone());
                 }
-                else if (IsBestMoveSofar(color, bestRating, currentRating))
+                else if (currentRating.IsBestMoveSofar(color, bestRating))
                 {
-                    ////currentRating.Move = 0 < currentRating.KingCapturedAtLevel ? new NoLegalMove() : currentMove;
-
-                    currentRating.Move = 0 <= currentRating.IllegalMoveCount ? new NoLegalMove() : currentMove;
+                    currentRating.Move = currentMove;
                     bestRating = currentRating.Clone();
                     bestMoveRatings = new List<MoveRating> { currentRating.Clone() };
                 }
             }
 
-
-            // Achtung:
-            // Wir können hier nicht einfach einen Sieg oder Niederlage in ein Patt verwandeln, weil wir 
-            // aufgrund der Sieg oder Niederlage schon die Züge ausgewählt haben.
-            // Aber wie? Beim Evaluieren können wir Patt und Matt nicht unterscheiden. Wir müssen 2 Halbzüge zurück.
-
-            // update score to 0 if it is stall mate
-            foreach (var rating in bestMoveRatings)
-            {
-                //// if (rating.KingCapturedAtLevel == level - 1 && rating.Move is NoLegalMove)
-
-                if (rating.IllegalMoveCount == 0 && rating.Move is NoLegalMove)
-                
-                {
-                    if (!_moveGenerator.IsCheck(board, color))
-                    {
-                        rating.Score = 0;
-                    }
-                }
-
-                rating.IllegalMoveCount--;
-            }
-            
             return bestMoveRatings;
         }
 
@@ -201,77 +159,6 @@ namespace MantaChessEngine
             {
                 return Int32.MaxValue;
             }
-        }
-
-        /// <summary>
-        /// True if current score is as good as best within tolerance.
-        /// </summary>
-        internal bool IsEquallyGood(Definitions.ChessColor color, MoveRating bestRatingSoFar, MoveRating currentRating)
-        {
-            bool bothLost;
-            bool bothWon;
-            
-            if (color == Definitions.ChessColor.White)
-            {
-                bothLost = bestRatingSoFar.Score == Definitions.ScoreBlackWins &&
-                           currentRating.Score == Definitions.ScoreBlackWins;
-                ////bothWon = bestRatingSoFar.Score == Definitions.ScoreWhiteWins &&
-                ////          currentRating.Score == Definitions.ScoreWhiteWins;
-            }
-            else
-            {
-                bothLost = bestRatingSoFar.Score == Definitions.ScoreWhiteWins &&
-                           currentRating.Score == Definitions.ScoreWhiteWins;
-                ////bothWon = bestRatingSoFar.Score == Definitions.ScoreBlackWins &&
-                ////          currentRating.Score == Definitions.ScoreBlackWins;
-            }
-            
-            bool sameScore = currentRating.Score <= bestRatingSoFar.Score + Tolerance &&
-                             currentRating.Score >= bestRatingSoFar.Score - Tolerance;
-            bool sameIllegalMoveCount = bestRatingSoFar.IllegalMoveCount == currentRating.IllegalMoveCount;
-
-            return (sameScore) &&
-                   ((bothLost && sameIllegalMoveCount) || !bothLost);
-
-            ////bool sameCapturedKingLevel = currentRating.KingCapturedAtLevel == bestRatingSoFar.KingCapturedAtLevel;
-            ////return sameScore && !bothWon && !bothLost ||
-            ////       (bothLost && sameCapturedKingLevel) ||
-            ////       (bothWon && sameCapturedKingLevel);
-        }
-
-        /// <summary>
-        /// True if current score is better than best plus tolerance.
-        /// </summary>
-        internal bool IsBestMoveSofar(Definitions.ChessColor color, MoveRating bestRatingSoFar, MoveRating currentRating)
-        {
-            bool bothLost;
-            bool bothWon;
-            bool isCurrentScoreBetter;
-            if (color == Definitions.ChessColor.White)
-            {
-                isCurrentScoreBetter = (currentRating.Score > bestRatingSoFar.Score + Tolerance);
-                bothLost = bestRatingSoFar.Score == Definitions.ScoreBlackWins &&
-                           currentRating.Score == Definitions.ScoreBlackWins;
-                ////bothWon = bestRatingSoFar.Score == Definitions.ScoreWhiteWins &&
-                ////          currentRating.Score == Definitions.ScoreWhiteWins;
-            }
-            else
-            {
-                isCurrentScoreBetter = (currentRating.Score < bestRatingSoFar.Score - Tolerance);
-                bothLost = bestRatingSoFar.Score == Definitions.ScoreWhiteWins &&
-                           currentRating.Score == Definitions.ScoreWhiteWins;
-                ////bothWon = bestRatingSoFar.Score == Definitions.ScoreBlackWins &&
-                ////          currentRating.Score == Definitions.ScoreBlackWins;
-            }
-
-            bool smallerIllegalMoveCount = currentRating.IllegalMoveCount > bestRatingSoFar.IllegalMoveCount;
-            return isCurrentScoreBetter ||
-                (bothLost && smallerIllegalMoveCount);
-
-            //// bool currentCapturedKingEarlier = currentRating.KingCapturedAtLevel > bestRatingSoFar.KingCapturedAtLevel;
-            ////return isCurrentScoreBetter ||
-            ////    (bothLost && !currentCapturedKingEarlier) ||
-            ////    (bothWon && currentCapturedKingEarlier);
         }
     }
 }

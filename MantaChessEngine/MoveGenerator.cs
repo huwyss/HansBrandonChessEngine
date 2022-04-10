@@ -18,6 +18,29 @@ namespace MantaChessEngine
             _factory = factory;
         }
 
+        /// <summary>
+        /// Manta has grown up and now is able to return the legal moves only
+        /// </summary>
+        public List<IMove> GetLegalMoves(IBoard board, Definitions.ChessColor color)
+        {
+            var pseudolegalMoves = GetAllMoves(board, color);
+            var legalMoves = new List<IMove>();
+
+            foreach (var move in pseudolegalMoves)
+            {
+                board.Move(move);
+                var kingPosition = board.GetKing(color);
+                if (!IsAttacked(board, color, kingPosition.File, kingPosition.Rank))
+                {
+                    legalMoves.Add(move);
+                }
+
+                board.Back();
+            }
+
+            return legalMoves;
+        }
+
         // Note: Manta is a king capture engine. 
         // This means even if we are in check then also moves that do not remove the check are returned here.
         // However if there is no king then no moves are returned. (Empty list)

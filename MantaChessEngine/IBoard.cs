@@ -70,6 +70,7 @@
 
         Definitions.ChessColor GetColor(int file, int rank);
         bool IsWinner(Definitions.ChessColor color);
-        
+
+        Position GetKing(Definitions.ChessColor color);
     }
 }

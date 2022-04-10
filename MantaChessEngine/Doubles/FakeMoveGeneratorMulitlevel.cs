@@ -63,5 +63,22 @@ namespace MantaChessEngine.Doubles
             _iteratorIsChecks.MoveNext();
             return _iteratorIsChecks.Current;
         }
+
+        public List<IMove> GetLegalMoves(IBoard board, Definitions.ChessColor color)
+        {
+            _iteratorMoves.MoveNext();
+
+            if (_iteratorMoves.Current.Count() == 0)
+            {
+                return new List<IMove>();
+            }
+
+            if (_iteratorMoves.Current.First().Color != color)
+            {
+                throw new Exception("Expected move of different color!");
+            }
+
+            return (List<IMove>)_iteratorMoves.Current;
+        }
     }
 }

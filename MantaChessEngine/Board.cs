@@ -252,5 +252,28 @@ namespace MantaChessEngine
 
             _undoneMove = null;
         }
+
+        public Position GetKing(Definitions.ChessColor color)
+        {
+            for (int rank = 1; rank <= 8; rank++)
+            {
+                for (int file = 1; file <= 8; file++)
+                {
+                    var king = GetPiece(file, rank) as King;
+                    if (king != null)
+                    {
+                        return new Position { Rank = rank, File = file };
+                    }
+                }
+            }
+
+            return null;
+        }
     }
+
+    public class Position
+    {
+        public int Rank { get; set; }
+        public int File { get; set; }
+    }           
 }

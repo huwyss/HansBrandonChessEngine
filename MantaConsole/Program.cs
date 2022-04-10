@@ -23,9 +23,9 @@ namespace MantaConsole
         {
             _log.Info("ManteChessEngine started");
 
-            var gameType = GameType.HumanVsComputer;
-            var whiteLevel = 4;
-            var blackLevel = 4;
+            var gameType = GameType.ComputerVsComputerOnce;
+            var whiteLevel = 3;
+            var blackLevel = 3;
             
             bool whiteHuman;
             bool blackHuman;
@@ -79,14 +79,14 @@ namespace MantaConsole
                 Board board = new Board();
                 board.SetInitialPosition();
 
-                board.SetPosition("........" +
-                                  "........" +
-                                  "........" +
-                                  "........" +
-                                  "........" +
-                                  "..k....." +
-                                  ".......q" +
-                                  ".K......"); // black should find winning move if human moves 1. Kb1a1, with level 4 it does find it but doesnt find it's checkmate.
+                //board.SetPosition("........" +
+                //                  "........" +
+                //                  "........" +
+                //                  "........" +
+                //                  "........" +
+                //                  "..k....." +
+                //                  ".......q" +
+                //                  ".K......"); // black should find winning move if human moves 1. Kb1a1, with level 4 it does find it but doesnt find it's checkmate.
 
                 //board.SetPosition("........" +
                 //                  "........" +

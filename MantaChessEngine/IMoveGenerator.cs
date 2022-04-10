@@ -4,6 +4,8 @@ namespace MantaChessEngine
 {
     public interface IMoveGenerator
     {
+        List<IMove> GetLegalMoves(IBoard board, Definitions.ChessColor color);
+
         List<IMove> GetAllMoves(IBoard board, Definitions.ChessColor color, bool includeCastling = true);
 
         /// <summary>

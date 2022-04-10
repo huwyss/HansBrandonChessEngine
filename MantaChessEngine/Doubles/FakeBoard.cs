@@ -69,6 +69,9 @@ namespace MantaChessEngine.Doubles
             return false;
         }
 
-        
+        public Position GetKing(Definitions.ChessColor color)
+        {
+            return null;
+        }
     }
 }

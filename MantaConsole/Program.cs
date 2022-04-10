@@ -6,7 +6,7 @@ namespace MantaConsole
 {
     class Program
     {
-        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public enum GameType
         {
@@ -147,11 +147,12 @@ namespace MantaConsole
                         {
                             Console.WriteLine(moveCount++);
                         }
-                    }
 
-                    if (!quiet)
-                    {
                         Console.WriteLine("Next Move: " + whiteEngine.SideToMove());
+                    }
+                    else
+                    {
+                        Console.Write(".");
                     }
 
                     // Human move
@@ -185,6 +186,12 @@ namespace MantaConsole
                         if (!whiteHuman && whiteEngine.SideToMove() == Definitions.ChessColor.White)
                         {
                             moveComputer = whiteEngine.DoBestMove(Definitions.ChessColor.White);
+
+                            if (!quiet && moveComputer.ToString() != "")
+                            {
+                                Console.WriteLine("Computer move: " + moveComputer.Move.ToPrintString());
+                            }
+
                             if (moveComputer.Move is NoLegalMove)
                             {
                                 // check for stall mate and check mate
@@ -212,6 +219,12 @@ namespace MantaConsole
                         else if (!blackHuman && whiteEngine.SideToMove() == Definitions.ChessColor.Black)
                         {
                             moveComputer = blackEngine.DoBestMove(Definitions.ChessColor.Black);
+
+                            if (!quiet && moveComputer.ToString() != "")
+                            {
+                                Console.WriteLine("Computer move: " + moveComputer.Move.ToPrintString());
+                            }
+
                             if (moveComputer.Move is NoLegalMove)
                             {
                                 // check for stall mate and check mate
@@ -235,17 +248,17 @@ namespace MantaConsole
                                 break;
                             }
                         }
-
-                        if (!quiet && moveComputer.ToString() != "")
-                        {
-                            Console.WriteLine("Computer move: " + moveComputer.Move.ToPrintString());
-                        }
                     }
 
                     if (!quiet)
                     {
                         PrintBoard(whiteEngine);
                     }
+                }
+
+                if (!quiet)
+                {
+                    PrintBoard(whiteEngine);
                 }
 
                 Console.WriteLine("Games: " + (i+1).ToString() + " - White score: " + whiteWins + " - Black score: " + blackWins);

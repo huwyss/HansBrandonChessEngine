@@ -11,7 +11,8 @@ namespace MantaChessEngine
         Random,
         Minimax,
         MinimaxPosition,
-        MinimaxSearchTree  // do not use
+        MinimaxSearchTree,  // do not use
+        MinimaxPositionContinueCapture
     }
 
     public class MantaEngine
@@ -46,6 +47,10 @@ namespace MantaChessEngine
                     _search = new SearchMinimax(_evaluator, _moveGenerator);
                     break;
                 // --------------------------------------
+                case EngineType.MinimaxPositionContinueCapture:
+                    _evaluator = new EvaluatorPosition();
+                    _search = new SearchMinimaxContinueCapture(_evaluator, _moveGenerator);
+                    break;
 
                 case EngineType.MinimaxSearchTree:
                     _evaluator = new EvaluatorPosition();

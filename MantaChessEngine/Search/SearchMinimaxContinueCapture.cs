@@ -8,9 +8,9 @@ using log4net;
 namespace MantaChessEngine
 {
     /// <summary>
-    /// Full search until level _maxDepth.
+    /// Full search to level _maxDepth then only search the capture moves until level x.
     /// </summary>
-    public class SearchMinimax : ISearchService
+    public class SearchMinimaxContinueCapture : ISearchService
     {
         private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         
@@ -38,7 +38,7 @@ namespace MantaChessEngine
             }
         }
 
-        public SearchMinimax(IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth = Definitions.DEFAULT_MAXLEVEL)
+        public SearchMinimaxContinueCapture(IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth = Definitions.DEFAULT_MAXLEVEL)
         {
             _evaluator = evaluator;
             _moveGenerator = moveGenerator;
@@ -104,7 +104,7 @@ namespace MantaChessEngine
             {
                 board.Move(currentMove);
 
-                if (level < _maxDepth) // we need to do more move levels...
+                if ((level < _maxDepth || level >= _maxDepth && currentMove.CapturedPiece != null) && level < 6) // we need to do more move levels...
                 {
                     // we are only interested in the first score. all scores are the same.
                     currentRating = SearchLevel(board, Helper.GetOppositeColor(color), level + 1).First(); // recursive...

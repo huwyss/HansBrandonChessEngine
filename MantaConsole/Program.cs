@@ -19,9 +19,9 @@ namespace MantaConsole
         {
             _log.Info("ManteChessEngine started");
 
-            var gameType = GameType.ComputerVsComputerOnce;
-            var whiteLevel = 3;
-            var blackLevel = 3;
+            var gameType = GameType.ComputerVsComputerStatistic;
+            var whiteLevel = 2;
+            var blackLevel = 2;
             
             bool whiteHuman;
             bool blackHuman;
@@ -120,6 +120,15 @@ namespace MantaConsole
                 //                  ".....r.." +  
                 //                  "K.......");
 
+                //board.SetPosition(".rbqkb.r" +
+                //                  "ppppp.pp" +
+                //                  "..n....." +
+                //                  "......N." +
+                //                  "..B....." +
+                //                  "........" +
+                //                  "PPPP.PPP" +
+                //                  "R.BnK..R");
+
                 whiteEngine.SetBoard(board);
                 blackEngine.SetBoard(board);
 
@@ -202,7 +211,7 @@ namespace MantaConsole
                         else if (!blackHuman && whiteEngine.SideToMove() == Definitions.ChessColor.Black)
                         {
                             moveComputer = blackEngine.DoBestMove(Definitions.ChessColor.Black);
-                            if (moveComputer is NoLegalMove)
+                            if (moveComputer.Move is NoLegalMove)
                             {
                                 // check for stall mate and check mate
                                 if (whiteEngine.IsCheck(Definitions.ChessColor.Black))
@@ -227,30 +236,13 @@ namespace MantaConsole
 
                         if (!quiet && moveComputer.ToString() != "")
                         {
-                            Console.WriteLine("Computer move: " + moveComputer.ToString());
+                            Console.WriteLine("Computer move: " + moveComputer.Move.ToPrintString());
                         }
                     }
-                    
+
                     if (!quiet)
+                    {
                         PrintBoard(whiteEngine);
-
-                    if (whiteEngine.IsWinner(Definitions.ChessColor.White))
-                    {
-                        whiteWins++;
-                        if (!quiet)
-                            Console.WriteLine("\nWhite wins!");
-                        
-                        break;
-                    }
-                    if (whiteEngine.IsWinner(Definitions.ChessColor.Black))
-                    {
-                        blackWins++;
-                        if (!quiet)
-                        {
-                            Console.WriteLine("\nBlack wins!");
-                        }
-
-                        break;
                     }
                 }
 

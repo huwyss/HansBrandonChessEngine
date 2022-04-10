@@ -16,6 +16,8 @@ namespace MantaChessEngine
 
         public abstract char Symbol { get; }
 
+        public char UniversalSymbol => Symbol.ToString().ToUpper()[0];
+
         public abstract IEnumerable<string> GetMoveDirectionSequences();
         public virtual List<IMove> GetMoves(MoveGenerator moveGen, IBoard board, int file, int rank, bool includeCastling = true)
         { return null; }

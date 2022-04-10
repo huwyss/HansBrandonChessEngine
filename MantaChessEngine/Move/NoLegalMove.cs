@@ -26,7 +26,12 @@ namespace MantaChessEngine
         {
             return "NoLegalMove";
         }
-        
+
+        public override string ToPrintString()
+        {
+            return ToString();
+        }
+
         public override int GetHashCode()
         {
             return ToString().GetHashCode();

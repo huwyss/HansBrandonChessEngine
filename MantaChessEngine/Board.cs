@@ -231,6 +231,41 @@ namespace MantaChessEngine
             }
         }
 
+        public string GetPrintString2
+        {
+            get
+            {
+                string boardString = "";
+
+                boardString += "    a  b  c  d  e  f  g  h\n";
+                boardString += "  +------------------------+\n";
+
+                for (int rank = 8; rank >= 1; rank--)
+                {
+                    boardString += rank + " |";
+                    for (int file = 1; file <= 8; file++)
+                    {
+                        Piece piece = GetPiece(file, rank);
+                        boardString += " ";
+                        boardString += piece != null ? piece.Symbol : Definitions.EmptyField;
+                        boardString += " ";
+                    }
+
+                    boardString += "| "+ rank + "\n";
+
+                    if (rank != 1)
+                    {
+                        boardString += "  |                        |\n";
+                    }
+                }
+
+                boardString += "  +------------------------+\n";
+                boardString += "    a  b  c  d  e  f  g  h\n";
+
+                return boardString;
+            }
+        }
+
         public void Back()
         {
             if (History.Count >= 1)
@@ -260,7 +295,7 @@ namespace MantaChessEngine
                 for (int file = 1; file <= 8; file++)
                 {
                     var king = GetPiece(file, rank) as King;
-                    if (king != null)
+                    if (king != null && king.Color == color)
                     {
                         return new Position { Rank = rank, File = file };
                     }

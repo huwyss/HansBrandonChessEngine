@@ -105,6 +105,31 @@ namespace MantaChessEngine
             return moveString;
         }
 
+        public virtual string ToPrintString()
+        {
+            string moveString = "";
+            if (!(MovingPiece is Pawn))
+            {
+                moveString += MovingPiece.UniversalSymbol;
+            }
+            moveString += Helper.FileToFileChar(SourceFile);
+            moveString += SourceRank.ToString();
+
+            if (CapturedPiece == null)
+            {
+                moveString += "-";
+            }
+            else
+            {
+                moveString += "x";
+            }
+
+            moveString += Helper.FileToFileChar(TargetFile);
+            moveString += TargetRank;
+            
+            return moveString;
+        }
+
         public override int GetHashCode()
         {
             return ToString().GetHashCode();

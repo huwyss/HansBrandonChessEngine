@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MantaChessEngine
 {
@@ -44,7 +40,8 @@ namespace MantaChessEngine
                     maybeWhiteKingRook is Rook && maybeWhiteKingRook.Color == Definitions.ChessColor.White && // rook init position
                     IsFieldsEmpty(board, Helper.FileCharToFile('f'), 1, Helper.FileCharToFile('g')) && // fields between king and rook empty
                     !moveGen.IsAttacked(board, Color, Helper.FileCharToFile('e'), 1) && // king not attacked
-                    !moveGen.IsAttacked(board, Color, Helper.FileCharToFile('f'), 1)
+                    !moveGen.IsAttacked(board, Color, Helper.FileCharToFile('f'), 1) && // field next to king not attacked
+                    !moveGen.IsAttacked(board, Color, Helper.FileCharToFile('g'), 1)    // new king field not attacked
                     )
                 {
                     moves.Add(MoveFactory.MakeCastlingMove(CastlingType.WhiteKingSide, this));
@@ -57,7 +54,8 @@ namespace MantaChessEngine
                     maybeWhiteQueenRook is Rook && maybeWhiteQueenRook.Color == Definitions.ChessColor.White && // rook init position
                     IsFieldsEmpty(board, Helper.FileCharToFile('b'), 1, Helper.FileCharToFile('d')) &&// fields between king and rook empty
                     !moveGen.IsAttacked(board, Color, Helper.FileCharToFile('e'), 1) && // king not attacked
-                    !moveGen.IsAttacked(board, Color, Helper.FileCharToFile('d'), 1)
+                    !moveGen.IsAttacked(board, Color, Helper.FileCharToFile('d'), 1) && // field next to king not attacked
+                    !moveGen.IsAttacked(board, Color, Helper.FileCharToFile('c'), 1)    // new king field not attacked
                     )
                 {
                     moves.Add(MoveFactory.MakeCastlingMove(CastlingType.WhiteQueenSide, this));
@@ -73,7 +71,8 @@ namespace MantaChessEngine
                     maybeBlackKingRook is Rook && maybeBlackKingRook.Color == Definitions.ChessColor.Black && // rook init position
                     IsFieldsEmpty(board, Helper.FileCharToFile('f'), 8, Helper.FileCharToFile('g')) && // fields between king and rook empty
                     !moveGen.IsAttacked(board, Color, Helper.FileCharToFile('e'), 8) && // king not attacked
-                    !moveGen.IsAttacked(board, Color, Helper.FileCharToFile('f'), 8)    // field next to king not attacked
+                    !moveGen.IsAttacked(board, Color, Helper.FileCharToFile('f'), 8) && // field next to king not attacked
+                    !moveGen.IsAttacked(board, Color, Helper.FileCharToFile('g'), 8)    // new king field not attacked
                 )
                 {
                     moves.Add(MoveFactory.MakeCastlingMove(CastlingType.BlackKingSide, this));
@@ -86,7 +85,8 @@ namespace MantaChessEngine
                     maybeBlackQueenRook is Rook && maybeBlackQueenRook.Color == Definitions.ChessColor.Black && // rook init position
                     IsFieldsEmpty(board, Helper.FileCharToFile('b'), 8, Helper.FileCharToFile('d')) && // fields between king and rook empty
                     !moveGen.IsAttacked(board, Color, Helper.FileCharToFile('e'), 8) && // king not attacked
-                    !moveGen.IsAttacked(board, Color, Helper.FileCharToFile('d'), 8)    // field next to king not attacked
+                    !moveGen.IsAttacked(board, Color, Helper.FileCharToFile('d'), 8) && // field next to king not attacked
+                    !moveGen.IsAttacked(board, Color, Helper.FileCharToFile('c'), 8)    // new king field not attacked
                 )
                 {
                     moves.Add(MoveFactory.MakeCastlingMove(CastlingType.BlackQueenSide, this));

@@ -172,5 +172,10 @@ namespace MantaChessEngine
                 return "0-0-0";
             }
         }
+
+        public override string ToPrintString()
+        {
+            return ToString();
+        }
     }
 }

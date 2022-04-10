@@ -17,6 +17,7 @@
         int GetHashCode();
         void InitializeMove(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, Piece capturedPiece);
         string ToString();
+        string ToPrintString();
         void UndoMove(IBoard board);
     }
 

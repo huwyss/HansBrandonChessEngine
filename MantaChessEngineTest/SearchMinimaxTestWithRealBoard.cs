@@ -296,8 +296,6 @@ namespace MantaChessEngineTest
         // White is stall mate and check mate
         // ---------------------------------------------------------------------------------------------
 
-        
-
         [TestMethod]
         public void SearchBestMoveTest_WhenWhiteStallmate_ThenNoLegalMoveAndBestScore0()
         {
@@ -342,6 +340,29 @@ namespace MantaChessEngineTest
 
             Assert.AreEqual(new NoLegalMove(), bestRatingActual.Move, "Should be NoLegalMove, white is checkmate");
             Assert.AreEqual(-10000, bestRatingActual.Score, "check mate score should be -10000");
+        }
+
+        [TestMethod]
+        public void SearchBestMoveTest_WhenBlackIsCheckmate_ThenNoLegalMoveAndBestScoreThousand()
+        {
+            IEvaluator evaluator = new EvaluatorSimple();
+            MoveGenerator gen = new MoveGenerator(new MoveFactory());
+            var target = new SearchMinimax(evaluator, gen, 2);
+            var board = new Board();
+            string boardString = ".rbqkb.r" +
+                                 "pppppBpp" +
+                                 "..n....." +
+                                 "......N." +
+                                 "........" +
+                                 "........" +
+                                 "PPPP.PPP" +
+                                 "R.BnK..R";
+            board.SetPosition(boardString);
+
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1).First();
+
+            Assert.AreEqual(new NoLegalMove(), bestRatingActual.Move, "Should be NoLegalMove, Black is checkmate");
+            Assert.AreEqual(10000, bestRatingActual.Score, "check mate score should be 10000");
         }
 
         [TestMethod]

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using static MantaChessEngine.Definitions;
 
 [assembly: InternalsVisibleTo("MantaChessEngineTest")]
 namespace MantaChessEngine
@@ -62,6 +58,7 @@ namespace MantaChessEngine
                     if (board.GetColor(file, rank) == color)
                     {
                         Piece piece = board.GetPiece(file, rank);
+                        
                         if (piece is King)
                         {
                             kingFound = true;
@@ -79,6 +76,11 @@ namespace MantaChessEngine
         {
             bool valid = HasCorrectColorMoved(board, move);
             valid &= move.MovingPiece.GetMoves(this, board, move.SourceFile, move.SourceRank).Contains(move);
+
+            board.Move(move);
+            var king = board.GetKing(move.Color);
+            valid &= !IsAttacked(board, move.Color, king.File, king.Rank);
+            board.Back();
             return valid;
         }
 
@@ -132,7 +134,7 @@ namespace MantaChessEngine
             return empty;
         }
 
-        public bool IsAttacked(IBoard board, Definitions.ChessColor color, int file, int rank)
+        public bool IsAttacked(IBoard board, ChessColor color, int file, int rank)
         {
             // find all oponent moves
             var moves = GetAllMoves(board, Helper.GetOppositeColor(color), false);

@@ -79,7 +79,7 @@ namespace MantaChessEngine
 
         public string GetPrintString()
         {
-            return _board.GetPrintString;
+            return _board.GetPrintString2;
         }
 
         public bool Move(string moveStringUser)

@@ -18,6 +18,8 @@
         void InitializeMove(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, Piece capturedPiece);
         string ToString();
         string ToPrintString();
+
+        string ToUciString();
         void UndoMove(IBoard board);
     }
 

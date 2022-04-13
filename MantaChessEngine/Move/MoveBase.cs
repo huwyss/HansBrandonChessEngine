@@ -130,6 +130,16 @@ namespace MantaChessEngine
             return moveString;
         }
 
+        public string ToUciString()
+        {
+            string moveString = "";
+            moveString += Helper.FileToFileChar(SourceFile);
+            moveString += SourceRank.ToString();
+            moveString += Helper.FileToFileChar(TargetFile);
+            moveString += TargetRank;
+            return moveString;
+        }
+
         public override int GetHashCode()
         {
             return ToString().GetHashCode();

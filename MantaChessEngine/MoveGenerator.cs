@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Linq;
 using static MantaChessEngine.Definitions;
 
 [assembly: InternalsVisibleTo("MantaChessEngineTest")]

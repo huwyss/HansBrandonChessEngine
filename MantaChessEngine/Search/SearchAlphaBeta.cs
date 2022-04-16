@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using static MantaChessEngine.Definitions;
 using log4net;
 
 [assembly: InternalsVisibleTo("MantaChessEngineTest")]
@@ -19,7 +20,9 @@ namespace MantaChessEngine
         private int _maxDepth;
 
         private Random _rand;
-        private static int evaluatedPositions;
+        private int evaluatedPositions;
+        private int _pruningCount;
+        private ChessColor _movingColor;
 
         /// <summary>
         /// Set the number of moves that are calculated in advance.
@@ -38,7 +41,7 @@ namespace MantaChessEngine
             }
         }
 
-        public SearchAlphaBeta(IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth = Definitions.DEFAULT_MAXLEVEL)
+        public SearchAlphaBeta(IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth = DEFAULT_MAXLEVEL)
         {
             _evaluator = evaluator;
             _moveGenerator = moveGenerator;
@@ -53,8 +56,10 @@ namespace MantaChessEngine
         /// <param name="color">Color of next move</param>
         /// <param name="score">Score of endposition of the returned move.</param>
         /// <returns>best move for color.</returns>
-        public MoveRating Search(IBoard board, Definitions.ChessColor color)
+        public MoveRating Search(IBoard board, ChessColor color)
         {
+            _movingColor = color;
+            _pruningCount = 0;
             evaluatedPositions = 0;
             IEnumerable<MoveRating> moveRatings = SearchLevel(board, color, 1, float.MinValue, float.MaxValue);
             var count = moveRatings.Count();
@@ -63,6 +68,7 @@ namespace MantaChessEngine
             _log.Debug("evaluated positons: " + evaluatedPositions);
             rating.EvaluatedPositions = evaluatedPositions;
             rating.Depth = _maxDepth;
+            rating.PruningCount = _pruningCount;
             return rating;
         }
 
@@ -77,13 +83,18 @@ namespace MantaChessEngine
         /// <param name="level">Number of levels to be searched (1=ie whites move, 2=moves of white, black, 3=move of white,black,white...</param>
         /// <param name="score">Score of position on current level</param>
         /// <returns></returns>
-        internal virtual IEnumerable<MoveRating> SearchLevel(IBoard board, Definitions.ChessColor color, int level, float alpha, float beta)
+        internal virtual IEnumerable<MoveRating> SearchLevel(IBoard board, ChessColor color, int level, float alpha, float beta)
         {
             var bestRating = new MoveRating() { Score = InitWithWorstScorePossible(color) };
             MoveRating currentRating = new MoveRating();
             List<MoveRating> bestMoveRatings = new List<MoveRating>();
 
             var possibleMoves = _moveGenerator.GetLegalMoves(board, color);
+
+            ////List<IMove> possibleMoves;
+            ////possibleMoves = color == ChessColor.White
+            ////    ? possibleMovesUnsorted.OrderBy(m => m.GetMoveImportance()).ToList()
+            ////    : possibleMovesUnsorted.OrderByDescending(m => m.GetMoveImportance()).ToList();
 
             // no legal moves means the game is over. It is either stall mate or check mate.
             if (possibleMoves == null || possibleMoves.Count == 0)
@@ -94,7 +105,7 @@ namespace MantaChessEngine
                         {
                             Score = !_moveGenerator.IsCheck(board, color)
                             ? 0
-                            : color == Definitions.ChessColor.White ? Definitions.ScoreBlackWins : Definitions.ScoreWhiteWins,
+                            : color == ChessColor.White ? ScoreBlackWins : ScoreWhiteWins,
                             Move = new NoLegalMove(),
                             GameEndLevel = level
                         }
@@ -134,11 +145,12 @@ namespace MantaChessEngine
                     bestMoveRatings = new List<MoveRating> { currentRating.Clone() };
                 }
 
-                if (color == Definitions.ChessColor.White)
+                if (color == ChessColor.White)
                 {
                     alpha = Math.Max(currentRating.Score, alpha);
                     if (beta <= alpha)
                     {
+                        _pruningCount++;
                         break;
                     }
                 }
@@ -147,6 +159,7 @@ namespace MantaChessEngine
                     beta = Math.Min(currentRating.Score, beta);
                     if (beta <= alpha)
                     {
+                        _pruningCount++;
                         break;
                     }
                 }
@@ -156,9 +169,9 @@ namespace MantaChessEngine
         }
 
         // Must return a worse score than the score for a lost game so that losing is better than the initialized best score.
-        private float InitWithWorstScorePossible(Definitions.ChessColor color)
+        private float InitWithWorstScorePossible(ChessColor color)
         {
-            if (color == Definitions.ChessColor.White)
+            if (color == ChessColor.White)
             {
                 return float.MinValue;
             }

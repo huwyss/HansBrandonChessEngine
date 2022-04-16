@@ -214,5 +214,12 @@ namespace MantaChessEngine
                 }
             }
         }
+
+        public virtual int GetMoveImportance()
+        {
+            return CapturedPiece != null
+                ? CapturedPiece.GetPlainPieceValue() - MovingPiece.GetPlainPieceValue() + 9
+                : 0;
+        }
     }
 }

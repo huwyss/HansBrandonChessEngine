@@ -8,11 +8,11 @@ namespace MantaChessEngine
 {
     public class EvaluatorPosition : IEvaluator
     {
-        public readonly float ValuePawn = 1f;
-        public readonly float ValueKnight = 3f;
-        public readonly float ValueBishop = 3f;
-        public readonly float ValueRook = 5f;
-        public readonly float ValueQueen = 9f;
+        public static readonly float ValuePawn = 1f;
+        public static readonly float ValueKnight = 3f;
+        public static readonly float ValueBishop = 3f;
+        public static readonly float ValueRook = 5f;
+        public static readonly float ValueQueen = 9f;
         public readonly float ValueKing = 10000f;
 
         private readonly float AdvantageDoubleBishop = 0.5f;

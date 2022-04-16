@@ -44,6 +44,11 @@ namespace MantaChessEngine
             return base.Equals(obj) && equalPromotion;
         }
 
+        public override int GetMoveImportance()
+        {
+            return base.GetMoveImportance() + 9; //// _promotionPiece.GetPlainPieceValue();
+        }
+
         public override string ToString()
         {
             string moveString = base.ToString();

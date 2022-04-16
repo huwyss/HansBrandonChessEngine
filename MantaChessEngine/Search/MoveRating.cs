@@ -48,6 +48,8 @@ namespace MantaChessEngine
 
         public int Depth { get; set; }
 
+        public int PruningCount { get; set; }
+
         /// <summary>
         /// True if current score is as good as best within tolerance.
         /// </summary>

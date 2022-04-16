@@ -13,6 +13,9 @@
         int TargetRank { get; set; }
 
         bool Equals(object obj);
+
+        int GetMoveImportance();
+
         void ExecuteMove(IBoard board);
         int GetHashCode();
         void InitializeMove(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, Piece capturedPiece);

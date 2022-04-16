@@ -51,7 +51,7 @@ namespace MantaUCI
                 else if (input.StartsWith("go depth"))
                 {
                     var depth = int.Parse(input.Substring(8));
-                    AnswerBestMove(4); // depth);
+                    AnswerBestMove(depth);
                 }
                 // could be:
                 //   go movetime 1000 [ms]
@@ -93,7 +93,10 @@ namespace MantaUCI
                 SetStartPosition();
                 _engine.SetMaxSearchDepth(currentDepth);
                 bestMove = _engine.DoBestMove(_currentColor);
-                Console.WriteLine("info depth " + bestMove.Depth + " nodes " + bestMove.EvaluatedPositions + " pv " + bestMove.Move.ToUciString() + " score cp " + ((int)(100*bestMove.Score)));
+                var scoreFromEngine = _currentColor == Definitions.ChessColor.White
+                    ? (int)(100 * bestMove.Score)
+                    : -(int)(100 * bestMove.Score);
+                Console.WriteLine("info depth " + bestMove.Depth + " seldepth " + bestMove.PruningCount + " nodes " + bestMove.EvaluatedPositions + " pv " + bestMove.Move.ToUciString() + " score cp " + scoreFromEngine);
             }
             
             Console.WriteLine("bestmove " + bestMove.Move.ToUciString());

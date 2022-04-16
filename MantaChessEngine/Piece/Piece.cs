@@ -98,5 +98,7 @@ namespace MantaChessEngine
 
             return empty;
         }
+
+        public abstract int GetPlainPieceValue();
     }
 }

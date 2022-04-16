@@ -13,12 +13,16 @@ namespace MantaChessEngine
         public FakeEvaluator(IEnumerable<float> scores)
         {
             _enumerator = scores.GetEnumerator();
+            EvaluateCalledCounter = 0;
         }
 
         public float Evaluate(IBoard board)
         {
+            EvaluateCalledCounter++;
             _enumerator.MoveNext();
             return _enumerator.Current;
         }
+
+        public int EvaluateCalledCounter {get;set;}
     }
 }

@@ -20,10 +20,10 @@ namespace MantaChessEngine
             _rand = new Random();
         }
 
-        public IMove Search(IBoard board, Definitions.ChessColor color, out float score)
+        public MoveRating Search(IBoard board, Definitions.ChessColor color)
         {
             IMove nextMove = null;
-            var possibleMovesComputer = _moveGenerator.GetAllMoves(board, color);
+            var possibleMovesComputer = _moveGenerator.GetLegalMoves(board, color);
             int numberPossibleMoves = possibleMovesComputer.Count;
 
             if (numberPossibleMoves > 0)
@@ -32,8 +32,7 @@ namespace MantaChessEngine
                 nextMove = possibleMovesComputer[randomMoveIndex];
             }
 
-            score = 0;
-            return nextMove;
+            return new MoveRating() { Move = nextMove };
         }
     }
 }

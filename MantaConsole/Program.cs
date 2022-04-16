@@ -181,13 +181,13 @@ namespace MantaConsole
                     }
                     else
                     {
-                        IEvaluatedMove moveComputer = null;
+                        MoveRating moveComputer = null;
                         // computer move for white
                         if (!whiteHuman && whiteEngine.SideToMove() == Definitions.ChessColor.White)
                         {
                             moveComputer = whiteEngine.DoBestMove(Definitions.ChessColor.White);
 
-                            if (!quiet && moveComputer.ToString() != "")
+                            if (!quiet && moveComputer.Move.ToString() != "")
                             {
                                 Console.WriteLine("Computer move: " + moveComputer.Move.ToPrintString());
                             }
@@ -220,7 +220,7 @@ namespace MantaConsole
                         {
                             moveComputer = blackEngine.DoBestMove(Definitions.ChessColor.Black);
 
-                            if (!quiet && moveComputer.ToString() != "")
+                            if (!quiet && moveComputer.Move.ToString() != "")
                             {
                                 Console.WriteLine("Computer move: " + moveComputer.Move.ToPrintString());
                             }

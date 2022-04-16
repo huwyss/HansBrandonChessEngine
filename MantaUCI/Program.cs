@@ -9,15 +9,16 @@ namespace MantaUCI
 {
     class Program
     {
-        static MantaEngine _engine;
-        static Board _board = new Board();
+        static MantaEngine _engine = null;
+        static Board _board = null;
         static Definitions.ChessColor _currentColor;
+        static string[] _movesFromInitPosition = null;
 
         static void Main(string[] args)
         {
-            var running = true;
+            var _running = true;
 
-            while (running)
+            while (_running)
             {
                 var input = Console.ReadLine().Trim();
 
@@ -33,48 +34,78 @@ namespace MantaUCI
                 }
                 else if (input.Equals("ucinewgame"))
                 {
-                    _engine = new MantaEngine(EngineType.MinimaxPosition);
-                    _engine.SetMaxSearchDepth(2);
-                    _engine.SetBoard(_board);
+                    if (_engine == null)
+                    {
+                        CreateEngine();
+                    }
                 }
+                // position startpos moves e2e4
                 else if (input.StartsWith("position startpos moves"))
                 {
-                    _board.SetInitialPosition();
-                    var moves = input.Substring(24).Split("".ToCharArray());
-                    _currentColor = Definitions.ChessColor.White;
-                    foreach (var move in moves)
-                    {
-                        var valid = _engine.Move(move);
-                        if  (!valid)
-                        {
-                            Console.WriteLine("moveerror");
-                        }
-
-                        _currentColor = Helper.GetOppositeColor(_currentColor);
-                    }
+                    _movesFromInitPosition = input.Substring(24).Split("".ToCharArray());
                 }
                 else if (input.StartsWith("position startpos"))
                 {
-                    _board.SetInitialPosition();
-                    _currentColor = Definitions.ChessColor.White;
-                }
-                else if (input.Equals("go"))
-                {
-                    AnswerBestMove();
+                    _movesFromInitPosition = new string[0];
                 }
                 else if (input.StartsWith("go depth"))
                 {
                     var depth = int.Parse(input.Substring(8));
-                    _engine.SetMaxSearchDepth(Math.Min(4, depth));
-                    AnswerBestMove();
+                    AnswerBestMove(4); // depth);
+                }
+                // could be:
+                //   go movetime 1000 [ms]
+                //   go wtime w btime x winc y binc z (w, x, y, z in ms)
+                //   go wtime w btime x winc 0 binc movestogo y (w, x in ms, y number of moves ==> moves to do in time w)
+                else if (input.StartsWith("go"))
+                {
+                    AnswerBestMove(4);
+                }
+                else if (input.Equals("quit"))
+                {
+                    _running = false;
                 }
             }
         }
 
-        private static void AnswerBestMove()
+        private static void SetStartPosition()
         {
-            var bestMove = _engine.DoBestMove(_currentColor);
+            _board.SetInitialPosition();
+            _currentColor = Definitions.ChessColor.White;
+            foreach (var move in _movesFromInitPosition)
+            {
+                var valid = _engine.Move(move);
+                if (!valid)
+                {
+                    Console.WriteLine("moveerror");
+                }
+
+                _currentColor = Helper.GetOppositeColor(_currentColor);
+            }
+        }
+
+        private static void AnswerBestMove(int depth)
+        {
+            MoveRating bestMove = null;
+
+            for (int currentDepth = 1; currentDepth <= depth; currentDepth++)
+            {
+                SetStartPosition();
+                _engine.SetMaxSearchDepth(currentDepth);
+                bestMove = _engine.DoBestMove(_currentColor);
+                Console.WriteLine("info depth " + bestMove.Depth + " nodes " + bestMove.EvaluatedPositions + " pv " + bestMove.Move.ToUciString());
+            }
+            
             Console.WriteLine("bestmove " + bestMove.Move.ToUciString());
+        }
+
+        private static void CreateEngine()
+        {
+            _board = new Board();
+            _engine = new MantaEngine(EngineType.AlphaBeta);
+            ////_engine = new MantaEngine(EngineType.MinimaxPosition);
+            _engine.SetMaxSearchDepth(3);
+            _engine.SetBoard(_board);
         }
     }
 }

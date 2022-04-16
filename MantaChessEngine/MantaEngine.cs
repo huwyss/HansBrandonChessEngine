@@ -12,7 +12,8 @@ namespace MantaChessEngine
         Minimax,
         MinimaxPosition,
         MinimaxSearchTree,  // do not use
-        MinimaxPositionContinueCapture
+        MinimaxPositionContinueCapture,
+        AlphaBeta
     }
 
     public class MantaEngine
@@ -52,10 +53,15 @@ namespace MantaChessEngine
                     _search = new SearchMinimaxContinueCapture(_evaluator, _moveGenerator);
                     break;
 
-                case EngineType.MinimaxSearchTree:
+                case EngineType.AlphaBeta:
                     _evaluator = new EvaluatorPosition();
-                    _search = new SearchMinimaxTree(_evaluator, _moveGenerator);
+                    _search = new SearchAlphaBeta(_evaluator, _moveGenerator);
                     break;
+
+                ////case EngineType.MinimaxSearchTree:
+                ////    _evaluator = new EvaluatorPosition();
+                ////    _search = new SearchMinimaxTree(_evaluator, _moveGenerator);
+                ////    break;
 
                 default:
                     throw new Exception("No engine type defined.");
@@ -115,14 +121,13 @@ namespace MantaChessEngine
             return _board.IsWinner(color);
         }
 
-        public IEvaluatedMove DoBestMove(Definitions.ChessColor color)
+        public MoveRating DoBestMove(Definitions.ChessColor color)
         {
-            float score = 0;
-            IMove nextMove = _search.Search(_board, color, out score);
-            _board.Move(nextMove);
-            _log.Debug("Score: " + score);
+            MoveRating nextMove = _search.Search(_board, color);
+            _board.Move(nextMove.Move);
+            _log.Debug("Score: " + nextMove.Score);
 
-            return new EvaluatedMove() { Move = nextMove, Score = score };
+            return nextMove;
         }
         
         public Definitions.ChessColor SideToMove()

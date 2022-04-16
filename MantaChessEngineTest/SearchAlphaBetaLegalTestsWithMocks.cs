@@ -7,11 +7,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace MantaChessEngineTest
 {
     /// <summary>
-    /// Tests for SearchMinimax with mock moves and evaluation: normal moves.
+    /// Tests for SearchAlphaBeta with mock moves and evaluation: normal moves.
     /// </summary>
     
     [TestClass]
-    public class SearchMinimaxLegalTestsWithMocks_NormalMoves
+    public class SearchAlphaBetaLegalTestsWithMocks
     {
         // ---------------------------------------------------------------------------------------------
         // Search Level Tests with Mocks
@@ -20,7 +20,7 @@ namespace MantaChessEngineTest
         // Depth 1
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteMovesFirstAnd1Level_ThenCorrectSelected()
+        public void SearchAlphaBetaTest_WhenWhiteMovesFirstAnd1Level_ThenCorrectSelected()
         {
             //      start
             //     /      \
@@ -32,15 +32,15 @@ namespace MantaChessEngineTest
 
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 1);
-            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 1);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1, -100000, 100000).First();
 
             Assert.AreEqual(2, bestRatingActual.Score);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
         }
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenBlackMovesFirstAnd1Level_ThenCorrectSelected()
+        public void SearchTest_WhenBlackMovesFirstAnd1Level_ThenCorrectSelected()
         {
             //      start
             //     /      \
@@ -52,8 +52,8 @@ namespace MantaChessEngineTest
 
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 1);
-            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.Black, 1).First();
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 1);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.Black, 1, -100000, 100000).First();
 
             Assert.AreEqual(1, bestRatingActual.Score);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
@@ -62,7 +62,7 @@ namespace MantaChessEngineTest
         // Depth 2
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteMovesFirstAnd2Levels_ThenCorrectSelected()
+        public void SearchAlphaBetaTest_WhenWhiteMovesFirstAnd2Levels_ThenCorrectSelected()
         {
             //      start
             //     /      \
@@ -78,15 +78,15 @@ namespace MantaChessEngineTest
 
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 2);
-            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 2);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1, -100000, 100000).First();
 
             Assert.AreEqual(3, bestRatingActual.Score);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
         }
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenBlackMovesFirstAnd2Levels_ThenCorrectSelected()
+        public void SearchAlphaBetaTest_WhenBlackMovesFirstAnd2Levels_ThenCorrectSelected()
         {
             //      start
             //     /      \
@@ -102,8 +102,8 @@ namespace MantaChessEngineTest
 
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 2);
-            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.Black, 1).First();
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 2);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.Black, 1, -100000, 100000).First();
 
             Assert.AreEqual(2, bestRatingActual.Score);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
@@ -112,7 +112,7 @@ namespace MantaChessEngineTest
         // Depth 3
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteMovesFirstAnd3Levels_ThenCorrectSelected()
+        public void SearchAlphaBetaTest_WhenWhiteMovesFirstAnd3Levels_ThenCorrectSelected()
         {
             //           start
             //        /          \
@@ -121,7 +121,8 @@ namespace MantaChessEngineTest
             //   2x     8      6      4x     black move -> lowest selected (x)
             //  / \    / \    / \    / \
             // 2x  1  7  8x  5  6x  3  4x    white move -> highest selected (x) 
-            IEvaluator evalFake = new FakeEvaluator(new List<float>() { 2, 1, 7, 8, 5, 6, 3, 4 }); // lowest level evaluation
+            //          noe
+            IEvaluator evalFake = new FakeEvaluator(new List<float>() { 2, 1, 7, /*noeval8,*/ 5, 6, 3, 4 }); // lowest level evaluation
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
             IMove bestMove = MoveMaker.White(1, 2);
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), bestMove }); // 1. level (white)
@@ -134,8 +135,8 @@ namespace MantaChessEngineTest
 
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 3);
-            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 3);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1, -100000, 100000).First();
 
             Assert.AreEqual(4, bestRatingActual.Score);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
@@ -146,7 +147,7 @@ namespace MantaChessEngineTest
         // Depth 1
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteMovesFirstAnd1Level1_ThenCorrectSelected()
+        public void SearchAlphaBetaTest_WhenWhiteMovesFirstAnd1Level1_ThenCorrectSelected()
         {
             //      start
             //     /      
@@ -158,8 +159,8 @@ namespace MantaChessEngineTest
 
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 1);
-            var bestRating = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 1);
+            var bestRating = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1, -100000, 100000).First();
 
             Assert.AreEqual(1, bestRating.Score);
             Assert.AreEqual(bestMove, bestRating.Move);
@@ -168,7 +169,7 @@ namespace MantaChessEngineTest
         // Depth 2
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteMovesFirstAnd2LevelsIrregular_ThenCorrectSelected()
+        public void SearchAlphaBetaTest_WhenWhiteMovesFirstAnd2LevelsIrregular_ThenCorrectSelected()
         {
             //      start
             //     /      \
@@ -184,15 +185,15 @@ namespace MantaChessEngineTest
 
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 2);
-            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 2);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1, -100000, 100000).First();
 
             Assert.AreEqual(4, bestRatingActual.Score);
             Assert.AreEqual(bestFakeMove, bestRatingActual.Move);
         }
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteMovesFirstAnd2LevelsIrregular2_ThenCorrectSelected()
+        public void SearchAlphaBetaTest_WhenWhiteMovesFirstAnd2LevelsIrregular2_ThenCorrectSelected()
         {
             //        start
             //      /      \
@@ -208,8 +209,8 @@ namespace MantaChessEngineTest
 
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 2);
-            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 2);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1, -100000, 100000).First();
 
             Assert.AreEqual(5, bestRatingActual.Score);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
@@ -220,7 +221,7 @@ namespace MantaChessEngineTest
         // ---------------------------------------------------------
 
         [TestMethod]
-        public void SearchMinimaxTest_When2MovesHaveSameRating_ThenReturn2Moves()
+        public void SearchAlphaBetaTest_When2MovesHaveSameRating_ThenReturn2Moves()
         {
             //      start
             //     /      \
@@ -231,8 +232,8 @@ namespace MantaChessEngineTest
 
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 1);
-            var ratings = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1);
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 1);
+            var ratings = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1, -100000, 100000);
             var rating0 = ratings.ElementAt(0);
             var rating1 = ratings.ElementAt(1);
 
@@ -246,7 +247,7 @@ namespace MantaChessEngineTest
         }
 
         [TestMethod]
-        public void SearchMinimaxTest_When2MovesHaveDifferentRating_ThenReturn1Move()
+        public void SearchAlphaBetaTest_When2MovesHaveDifferentRating_ThenReturn1Move()
         {
             //      start
             //     /      \
@@ -257,8 +258,8 @@ namespace MantaChessEngineTest
 
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 1);
-            var ratings = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1);
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 1);
+            var ratings = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1, -100000, 100000);
             var rating0 = ratings.ElementAt(0);
 
             Assert.AreEqual(1, ratings.Count());
@@ -268,7 +269,7 @@ namespace MantaChessEngineTest
         }
 
         [TestMethod]
-        public void SearchMinimaxTest_When2MovesInTolerance_secondIsBiggest_ThenReturn2Moves()
+        public void SearchAlphaBetaTest_When2MovesInTolerance_secondIsBiggest_ThenReturn2Moves()
         {
             //       start
             //     /   |    \
@@ -282,8 +283,8 @@ namespace MantaChessEngineTest
 
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 1);
-            var ratings = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1);
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 1);
+            var ratings = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1, -100000, 100000);
             var rating0 = ratings.ElementAt(0);
             var rating1 = ratings.ElementAt(1);
 
@@ -297,7 +298,7 @@ namespace MantaChessEngineTest
         }
 
         [TestMethod]
-        public void SearchMinimaxTest_When2MovesInTolerance_FirstIsBiggest_ThenReturn2Moves()
+        public void SearchAlphaBetaTest_When2MovesInTolerance_FirstIsBiggest_ThenReturn2Moves()
         {
             //       start
             //     /  /    |    \
@@ -312,8 +313,8 @@ namespace MantaChessEngineTest
 
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 1);
-            var ratings = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1);
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 1);
+            var ratings = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1, -100000, 100000);
             var rating0 = ratings.ElementAt(0);
             var rating1 = ratings.ElementAt(1);
 
@@ -327,7 +328,7 @@ namespace MantaChessEngineTest
         }
 
         [TestMethod]
-        public void SearchMinimaxTest_When2MovesInTolerance_secondIsBiggest_ThenReturn2Moves_blackMoves()
+        public void SearchAlphaBetaTest_When2MovesInTolerance_secondIsBiggest_ThenReturn2Moves_blackMoves()
         {
             //       start
             //     /   |    \
@@ -341,8 +342,8 @@ namespace MantaChessEngineTest
 
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 1);
-            var ratings = target.SearchLevel(boardFake, Definitions.ChessColor.Black, 1);
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 1);
+            var ratings = target.SearchLevel(boardFake, Definitions.ChessColor.Black, 1, -100000, 100000);
             var rating0 = ratings.ElementAt(0);
             var rating1 = ratings.ElementAt(1);
 
@@ -360,7 +361,7 @@ namespace MantaChessEngineTest
         // -----------------------------------------------------------------------------------
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteHasNoMovesAndIsCheck_ThenBlackWins()
+        public void SearchAlphaBetaTest_WhenWhiteHasNoMovesAndIsCheck_ThenBlackWins()
         {
             //      start
             //     /      
@@ -371,15 +372,15 @@ namespace MantaChessEngineTest
             moveGenFake.SetIsChecks(new List<bool>() { true });
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 1);
-            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 1);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1, -100000, 100000).First();
 
             Assert.AreEqual(-10000, bestRatingActual.Score);
             Assert.IsTrue(bestRatingActual.Move is NoLegalMove);
         }
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteHasNoMovesAndIsNotCheck_ThenDraw()
+        public void SearchAlphaBetaTest_WhenWhiteHasNoMovesAndIsNotCheck_ThenDraw()
         {
             //      start
             //     /      
@@ -390,15 +391,15 @@ namespace MantaChessEngineTest
             moveGenFake.SetIsChecks(new List<bool>() { false });
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 1);
-            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 1);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1, -100000, 100000).First();
 
             Assert.AreEqual(0, bestRatingActual.Score);
             Assert.IsTrue(bestRatingActual.Move is NoLegalMove);
         }
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteChoosesBetweenCheckmateAndGoodMove_ThenWhiteSelectsCheckmate()
+        public void SearchAlphaBetaTest_WhenWhiteChoosesBetweenCheckmateAndGoodMove_ThenWhiteSelectsCheckmate()
         {
             //      start
             //   1a /     \1b  
@@ -418,15 +419,15 @@ namespace MantaChessEngineTest
             moveGenFake.SetIsChecks(new List<bool>() { true }); // 2a
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 3);
-            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 3);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1, -100000, 100000).First();
 
             Assert.AreEqual(10000, bestRatingActual.Score);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
         }
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteChoosesBetweenStallmateAndBadMove_ThenWhiteSelectsStallmate()
+        public void SearchAlphaBetaTest_WhenWhiteChoosesBetweenStallmateAndBadMove_ThenWhiteSelectsStallmate()
         {
             //      start
             //   1a /     \1b  
@@ -446,15 +447,15 @@ namespace MantaChessEngineTest
             moveGenFake.SetIsChecks(new List<bool>() { false }); // 2a
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 3);
-            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 3);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1, -100000, 100000).First();
 
             Assert.AreEqual(0, bestRatingActual.Score);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
         }
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteChoosesBetweenStallmateAndGoodMove_ThenWhiteSelectsGoodMove()
+        public void SearchAlphaBetaTest_WhenWhiteChoosesBetweenStallmateAndGoodMove_ThenWhiteSelectsGoodMove()
         {
             //      start
             //   1a /     \1b  
@@ -474,21 +475,21 @@ namespace MantaChessEngineTest
             moveGenFake.SetIsChecks(new List<bool>() { false }); // 2a
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 3);
-            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 3);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1, -100000, 100000).First();
 
             Assert.AreEqual(100, bestRatingActual.Score);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
         }
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteChoosesBeteweenCheckmateAndStallmate_ThenWhiteSelectsCheckmate()
+        public void SearchAlphaBetaTest_WhenWhiteChoosesBeteweenCheckmateAndStallmate_ThenWhiteSelectsCheckmate()
         {
             //      start
             //   1a /     \1b  
             //  10000x     0        white move -> highest selected (x)
             // no/moves    no\moves 2b
-            
+
             IEvaluator evalFake = new FakeEvaluator(new List<float>() { 100 });
             FakeMoveGeneratorMulitlevel moveGenFake = new FakeMoveGeneratorMulitlevel();
             var bestMove = MoveMaker.White(1, 1);
@@ -498,15 +499,15 @@ namespace MantaChessEngineTest
             moveGenFake.SetIsChecks(new List<bool>() { true, false }); // 2a 2b
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 3);
-            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 3);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1, -100000, 100000).First();
 
             Assert.AreEqual(10000, bestRatingActual.Score);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
         }
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteChoosesBeteweenCheckmateAndStallmate_ThenWhiteSelectsCheckmate_mirror()
+        public void SearchAlphaBetaTest_WhenWhiteChoosesBeteweenCheckmateAndStallmate_ThenWhiteSelectsCheckmate_mirror()
         {
             //      start
             //   1a /     \1b  
@@ -522,15 +523,15 @@ namespace MantaChessEngineTest
             moveGenFake.SetIsChecks(new List<bool>() { false, true }); // 2a 2b
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 3);
-            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 3);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1, -100000, 100000).First();
 
             Assert.AreEqual(10000, bestRatingActual.Score);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
         }
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteChoosesBeteweenCheckmateInLevel1AndCheckmateInLevel3_ThenWhiteSelectsCheckmateLevel1()
+        public void SearchAlphaBetaTest_WhenWhiteChoosesBeteweenCheckmateInLevel1AndCheckmateInLevel3_ThenWhiteSelectsCheckmateLevel1()
         {
             //      start
             //   1a /     \1b  
@@ -553,15 +554,15 @@ namespace MantaChessEngineTest
             moveGenFake.SetIsChecks(new List<bool>() { true, true }); // 2a
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 4);
-            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 4);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1, -100000, 100000).First();
 
             Assert.AreEqual(10000, bestRatingActual.Score);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
         }
 
         [TestMethod]
-        public void SearchMinimaxTest_WhenWhiteChoosesBeteweenCheckmateInLevel1AndCheckmateInLevel3_ThenWhiteSelectsCheckmateLevel1_mirror()
+        public void SearchAlphaBetaTest_WhenWhiteChoosesBeteweenCheckmateInLevel1AndCheckmateInLevel3_ThenWhiteSelectsCheckmateLevel1_mirror()
         {
             //      start
             //   1a/       \1b
@@ -584,34 +585,11 @@ namespace MantaChessEngineTest
             moveGenFake.SetIsChecks(new List<bool>() { true, true }); // 2a
             IBoard boardFake = new FakeBoard();
 
-            var target = new SearchMinimax(evalFake, moveGenFake, 4);
-            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
+            var target = new SearchAlphaBeta(evalFake, moveGenFake, 4);
+            var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1, -100000, 100000).First();
 
             Assert.AreEqual(10000, bestRatingActual.Score);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
-        }
-    }
-
-    public class MoveMaker
-    {
-        public static IMove White(int file)
-        {
-            return new NormalMove(Piece.MakePiece('Q'), file, 0, 0, 0, null);
-        }
-
-        public static IMove White(int file, int rank)
-        {
-            return new NormalMove(Piece.MakePiece('Q'), file, rank, 0, 0, null);
-        }
-
-        public static IMove Black(int file)
-        {
-            return new NormalMove(Piece.MakePiece('q'), file, 0, 0, 0, null);
-        }
-
-        public static IMove Black(int file, int rank)
-        {
-            return new NormalMove(Piece.MakePiece('q'), file, rank, 0, 0, null);
         }
     }
 }

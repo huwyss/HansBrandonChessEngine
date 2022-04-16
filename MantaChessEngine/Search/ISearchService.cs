@@ -8,7 +8,7 @@ namespace MantaChessEngine
 {
     public interface ISearchService
     {
-        IMove Search(IBoard board, Definitions.ChessColor color, out float score);
+        MoveRating Search(IBoard board, Definitions.ChessColor color);
         void SetMaxDepth(int maxDepth);
     }
 }

@@ -10,7 +10,7 @@ namespace MantaChessEngine
     /// <summary>
     /// Full search until level _maxDepth.
     /// </summary>
-    public class SearchMinimax : ISearchService
+    public class SearchAlphaBeta : ISearchService
     {
         private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         
@@ -38,7 +38,7 @@ namespace MantaChessEngine
             }
         }
 
-        public SearchMinimax(IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth = Definitions.DEFAULT_MAXLEVEL)
+        public SearchAlphaBeta(IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth = Definitions.DEFAULT_MAXLEVEL)
         {
             _evaluator = evaluator;
             _moveGenerator = moveGenerator;
@@ -56,13 +56,13 @@ namespace MantaChessEngine
         public MoveRating Search(IBoard board, Definitions.ChessColor color)
         {
             evaluatedPositions = 0;
-            IEnumerable<MoveRating> moveRatings = SearchLevel(board, color, 1);
+            IEnumerable<MoveRating> moveRatings = SearchLevel(board, color, 1, float.MinValue, float.MaxValue);
             var count = moveRatings.Count();
             var randomIndex = _rand.Next(0, count);
             MoveRating rating = moveRatings.ElementAt(randomIndex);
+            _log.Debug("evaluated positons: " + evaluatedPositions);
             rating.EvaluatedPositions = evaluatedPositions;
             rating.Depth = _maxDepth;
-            _log.Debug("evaluated positons: " + evaluatedPositions);
             return rating;
         }
 
@@ -77,7 +77,7 @@ namespace MantaChessEngine
         /// <param name="level">Number of levels to be searched (1=ie whites move, 2=moves of white, black, 3=move of white,black,white...</param>
         /// <param name="score">Score of position on current level</param>
         /// <returns></returns>
-        internal virtual IEnumerable<MoveRating> SearchLevel(IBoard board, Definitions.ChessColor color, int level)
+        internal virtual IEnumerable<MoveRating> SearchLevel(IBoard board, Definitions.ChessColor color, int level, float alpha, float beta)
         {
             var bestRating = new MoveRating() { Score = InitWithWorstScorePossible(color) };
             MoveRating currentRating = new MoveRating();
@@ -108,7 +108,7 @@ namespace MantaChessEngine
                 if (level < _maxDepth) // we need to do more move levels...
                 {
                     // we are only interested in the first score. all scores are the same.
-                    currentRating = SearchLevel(board, Helper.GetOppositeColor(color), level + 1).First(); // recursive...
+                    currentRating = SearchLevel(board, Helper.GetOppositeColor(color), level + 1, alpha, beta).First(); // recursive...
                     board.Back();
                 }
                 else // we reached the bottom of the tree and evaluate the position
@@ -120,16 +120,35 @@ namespace MantaChessEngine
                 }
 
                 // update the best move in the current level
-                if (currentRating.IsEquallyGood(bestRating))
-                {
-                    currentRating.Move = currentMove;
-                    bestMoveRatings.Add(currentRating.Clone());
-                }
-                else if (currentRating.IsBetter(color, bestRating))
+                ////if (currentRating.IsEquallyGood(bestRating))
+                ////{
+                ////    currentRating.Move = currentMove;
+                ////    bestMoveRatings.Add(currentRating.Clone());
+                ////    bestMoveRatings.Sort() todo
+                ////}
+                ////else
+                if (currentRating.IsBetter(color, bestRating))
                 {
                     currentRating.Move = currentMove;
                     bestRating = currentRating.Clone();
                     bestMoveRatings = new List<MoveRating> { currentRating.Clone() };
+                }
+
+                if (color == Definitions.ChessColor.White)
+                {
+                    alpha = Math.Max(currentRating.Score, alpha);
+                    if (beta <= alpha)
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    beta = Math.Min(currentRating.Score, beta);
+                    if (beta <= alpha)
+                    {
+                        break;
+                    }
                 }
             }
 

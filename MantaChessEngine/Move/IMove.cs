@@ -22,18 +22,4 @@
         string ToUciString();
         void UndoMove(IBoard board);
     }
-
-    public interface IEvaluatedMove
-    {
-        IMove Move { get; }
-
-        float Score { get; }
-    }
-
-    public class EvaluatedMove : IEvaluatedMove
-    {
-        public IMove Move { get; set; }
-
-        public float Score { get; set; }
-    }
 }

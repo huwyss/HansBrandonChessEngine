@@ -43,6 +43,11 @@ namespace MantaChessEngine
             };
         }
 
+        // Additional Info
+        public int EvaluatedPositions { get; set; }
+
+        public int Depth { get; set; }
+
         /// <summary>
         /// True if current score is as good as best within tolerance.
         /// </summary>

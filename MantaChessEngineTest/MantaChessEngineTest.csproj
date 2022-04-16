@@ -52,6 +52,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AlphaBetaPruningTest.cs" />
     <Compile Include="MantaEngineTest.cs" />
     <Compile Include="BoardTest.cs" />
     <Compile Include="EvaluatorPositionTest.cs" />
@@ -63,12 +64,11 @@
     <Compile Include="MoveTreeTest.cs" />
     <Compile Include="NodeTreeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchMinimaxLegalTestsWithMocks_NormalMoves.cs" />
+    <Compile Include="SearchAlphaBetaLegalTestsWithMocks.cs" />
+    <Compile Include="SearchMinimaxLegalTestsWithMocks.cs" />
     <Compile Include="SearchMinimaxTestWithRealBoard.cs" />
-    <Compile Include="SearchMinimaxWithCloneTest.cs" />
+    <Compile Include="SearchAlphaBetaTestWithRealBoard.cs" />
     <Compile Include="SearchServiceTreeTest.cs" />
-    <Compile Include="SearchServiceDepthOneTest.cs" />
-    <Compile Include="SearchServiceDepthHalfTest.cs" />
     <Compile Include="CastlingMoveTest.cs" />
   </ItemGroup>
   <ItemGroup>

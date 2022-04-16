@@ -53,16 +53,17 @@ namespace MantaChessEngine
         /// <param name="color">Color of next move</param>
         /// <param name="score">Score of endposition of the returned move.</param>
         /// <returns>best move for color.</returns>
-        public IMove Search(IBoard board, Definitions.ChessColor color, out float score)
+        public MoveRating Search(IBoard board, Definitions.ChessColor color)
         {
             evaluatedPositions = 0;
             IEnumerable<MoveRating> moveRatings = SearchLevel(board, color, 1);
             var count = moveRatings.Count();
             var randomIndex = _rand.Next(0, count);
             MoveRating rating = moveRatings.ElementAt(randomIndex);
-            score = rating.Score;
             _log.Debug("evaluated positons: " + evaluatedPositions);
-            return rating.Move;
+            rating.EvaluatedPositions = evaluatedPositions;
+            rating.Depth = _maxDepth;
+            return rating;
         }
 
         /// <summary>

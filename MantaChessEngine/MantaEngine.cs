@@ -11,7 +11,6 @@ namespace MantaChessEngine
         Random,
         Minimax,
         MinimaxPosition,
-        MinimaxSearchTree,  // do not use
         MinimaxPositionContinueCapture,
         AlphaBeta
     }
@@ -57,11 +56,6 @@ namespace MantaChessEngine
                     _evaluator = new EvaluatorPosition();
                     _search = new SearchAlphaBeta(_evaluator, _moveGenerator);
                     break;
-
-                ////case EngineType.MinimaxSearchTree:
-                ////    _evaluator = new EvaluatorPosition();
-                ////    _search = new SearchMinimaxTree(_evaluator, _moveGenerator);
-                ////    break;
 
                 default:
                     throw new Exception("No engine type defined.");

@@ -74,7 +74,7 @@ namespace MantaUCI
             _currentColor = Definitions.ChessColor.White;
             foreach (var move in _movesFromInitPosition)
             {
-                var valid = _engine.Move(move);
+                var valid = _engine.MoveUci(move);
                 if (!valid)
                 {
                     Console.WriteLine("moveerror");
@@ -93,7 +93,7 @@ namespace MantaUCI
                 SetStartPosition();
                 _engine.SetMaxSearchDepth(currentDepth);
                 bestMove = _engine.DoBestMove(_currentColor);
-                Console.WriteLine("info depth " + bestMove.Depth + " nodes " + bestMove.EvaluatedPositions + " pv " + bestMove.Move.ToUciString());
+                Console.WriteLine("info depth " + bestMove.Depth + " nodes " + bestMove.EvaluatedPositions + " pv " + bestMove.Move.ToUciString() + " score cp " + ((int)(100*bestMove.Score)));
             }
             
             Console.WriteLine("bestmove " + bestMove.Move.ToUciString());
@@ -104,6 +104,7 @@ namespace MantaUCI
             _board = new Board();
             _engine = new MantaEngine(EngineType.AlphaBeta);
             ////_engine = new MantaEngine(EngineType.MinimaxPosition);
+            ////_engine = new MantaEngine(EngineType.Random);
             _engine.SetMaxSearchDepth(3);
             _engine.SetBoard(_board);
         }

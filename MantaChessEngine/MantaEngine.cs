@@ -40,22 +40,23 @@ namespace MantaChessEngine
                     _evaluator = new EvaluatorSimple();
                     _search = new SearchMinimax(_evaluator, _moveGenerator);
                     break;
-
-                // strongest --------------------------------
+                
                 case EngineType.MinimaxPosition:
                     _evaluator = new EvaluatorPosition();
                     _search = new SearchMinimax(_evaluator, _moveGenerator);
                     break;
-                // --------------------------------------
+                
                 case EngineType.MinimaxPositionContinueCapture:
                     _evaluator = new EvaluatorPosition();
                     _search = new SearchMinimaxContinueCapture(_evaluator, _moveGenerator);
                     break;
 
+                // strongest --------------------------------
                 case EngineType.AlphaBeta:
                     _evaluator = new EvaluatorPosition();
                     _search = new SearchAlphaBeta(_evaluator, _moveGenerator);
                     break;
+                // -------------------------------------------
 
                 default:
                     throw new Exception("No engine type defined.");
@@ -87,18 +88,35 @@ namespace MantaChessEngine
             return _board.GetPrintString2;
         }
 
-        public bool Move(string moveStringUser)
+        public bool MoveUci(string moveStringUci)
         {
-            IMove syntaxCorrectMove = _moveFactory.MakeCorrectMove(_board, moveStringUser);
-            if (syntaxCorrectMove == null)
+            IMove move = _moveFactory.MakeMoveUci(_board, moveStringUci);
+            if (move == null)
             {
                 return false;
             }
 
-            bool valid = _moveGenerator.IsMoveValid(_board, syntaxCorrectMove);
+            bool valid = _moveGenerator.IsMoveValid(_board, move);
             if (valid)
             {
-                _board.Move(syntaxCorrectMove);
+                _board.Move(move);
+            }
+
+            return valid;
+        }
+
+        public bool Move(string moveStringUser)
+        {
+            IMove move = _moveFactory.MakeMove(_board, moveStringUser);
+            if (move == null)
+            {
+                return false;
+            }
+
+            bool valid = _moveGenerator.IsMoveValid(_board, move);
+            if (valid)
+            {
+                _board.Move(move);
             }
 
             return valid;

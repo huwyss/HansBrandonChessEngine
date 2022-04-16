@@ -663,7 +663,7 @@ namespace MantaChessEngineTest
                               "....K...";
             board.SetPosition(position);
 
-            board.Move(new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'a', 8, null)); 
+            board.Move(new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'a', 8, null, Definitions.QUEEN)); 
 
             string expecPos = "Q...k..." +
                               "........" +
@@ -681,6 +681,38 @@ namespace MantaChessEngineTest
         }
 
         [TestMethod]
+        public void MoveTest_WhenMinorWhitePromotion_ThenCorrectMove()
+        {
+            MoveGenerator generator = new MoveGenerator(new MoveFactory());
+            Board board = new Board();
+            string position = "....k..." +
+                              "P......." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "....K...";
+            board.SetPosition(position);
+
+            board.Move(new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'a', 8, null, Definitions.ROOK));
+
+            string expecPos = "R...k..." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "....K...";
+            Assert.AreEqual(expecPos, board.GetString, "White straight minor (rook) promotion not correct.");
+
+            board.Back();
+
+            Assert.AreEqual(position, board.GetString, "White straight minor (rook) promotion: back not correct.");
+        }
+
+        [TestMethod]
         public void MoveTest_WhenWhitePromotionWithCapture_ThenCorrectMove()
         {
             MoveGenerator generator = new MoveGenerator(new MoveFactory());
@@ -695,7 +727,7 @@ namespace MantaChessEngineTest
                               "....K...";
             board.SetPosition(position);
 
-            board.Move(new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'b', 8, Piece.MakePiece('r')));
+            board.Move(new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'b', 8, Piece.MakePiece('r'), Definitions.QUEEN));
 
             string expecPos = ".Q..k..." +
                               "........" +
@@ -727,7 +759,7 @@ namespace MantaChessEngineTest
                               "....K...";
             board.SetPosition(position);
 
-            board.Move(new PromotionMove(Piece.MakePiece('p'), 'a', 2, 'a', 1, null));
+            board.Move(new PromotionMove(Piece.MakePiece('p'), 'a', 2, 'a', 1, null, Definitions.QUEEN));
 
             string expecPos = "....k..." +
                               "........" +
@@ -759,7 +791,7 @@ namespace MantaChessEngineTest
                               ".R..K...";
             board.SetPosition(position);
 
-            board.Move(new PromotionMove(Piece.MakePiece('p'), 'a', 2, 'b', 1, Piece.MakePiece('R')));
+            board.Move(new PromotionMove(Piece.MakePiece('p'), 'a', 2, 'b', 1, Piece.MakePiece('R'), Definitions.QUEEN));
 
             string expecPos = "....k..." +
                               "........" +

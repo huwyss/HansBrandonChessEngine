@@ -130,7 +130,7 @@ namespace MantaChessEngine
             return moveString;
         }
 
-        public string ToUciString()
+        public virtual string ToUciString()
         {
             string moveString = "";
             moveString += Helper.FileToFileChar(SourceFile);

@@ -18,9 +18,9 @@ namespace MantaChessEngine
             return new EnPassantCaptureMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
         }
 
-        public static PromotionMove MakePromotionMove(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, Piece capturedPiece)
+        public static PromotionMove MakePromotionMove(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, Piece capturedPiece, char promotionPiece)
         {
-            return new PromotionMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
+            return new PromotionMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece, promotionPiece);
         }
 
         public static CastlingMove MakeCastlingMove(CastlingType castlingType, Piece king)
@@ -33,8 +33,30 @@ namespace MantaChessEngine
             return new NoLegalMove();
         }
 
+        public IMove MakeMoveUci(Board board, string moveStringUci) // input is like "e2e4" or "a7a8q" (Promotion)
+        {
+            if (!Helper.IsCorrectMoveUci(moveStringUci))
+            {
+                return null;
+            }
 
-        public IMove MakeCorrectMove(Board board, string moveStringUser) // input is like "e2e4"
+            char promotionPiece = moveStringUci.Length == 5 ? moveStringUci[4] : (char)0;
+
+            return MakeCorrectMoveInternal(board, moveStringUci, promotionPiece);
+        }
+
+
+        public IMove MakeMove(Board board, string moveStringUser) // input is like "e2e4"
+        {
+            if (!Helper.IsCorrectMove(moveStringUser))
+            {
+                return null;
+            }
+
+            return MakeCorrectMoveInternal(board, moveStringUser, Definitions.QUEEN);
+        }
+
+        private IMove MakeCorrectMoveInternal(Board board, string moveString, char promotionPiece)
         {
             Piece movingPiece;
             Piece capturedPiece;
@@ -44,58 +66,53 @@ namespace MantaChessEngine
             int targetRank = 0;
             bool enPassant = false;
 
-            if (Helper.IsCorrectMove(moveStringUser))
+            GetPositions(moveString, out sourceFile, out sourceRank, out targetFile, out targetRank);
+            movingPiece = board.GetPiece(sourceFile, sourceRank);
+
+            // set captured Piece
+            if (IsEnPassantCapture(board, sourceFile, sourceRank, targetFile, targetRank))
             {
-                GetPositions(moveStringUser, out sourceFile, out sourceRank, out targetFile, out targetRank);
-                movingPiece = board.GetPiece(sourceFile, sourceRank);
-
-                // set captured Piece
-                if (IsEnPassantCapture(board, sourceFile, sourceRank, targetFile, targetRank))
-                {
-                    capturedPiece = board.GetColor(sourceFile, sourceRank) == Definitions.ChessColor.White
-                        ? board.GetPiece(targetFile, targetRank - 1)
-                        : board.GetPiece(targetFile, targetRank + 1);
-                    enPassant = true;
-                }
-                else
-                {
-                    capturedPiece = board.GetPiece(targetFile, targetRank);
-                }
-
-                if (enPassant)
-                {
-                    return new EnPassantCaptureMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
-                }
-
-                if (IsWhiteKingSideCastling(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
-                {
-                    return new CastlingMove(CastlingType.WhiteKingSide, movingPiece);
-                }
-
-                if (IsWhiteQueenSideCastling(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
-                {
-                    return new CastlingMove(CastlingType.WhiteQueenSide, movingPiece);
-                }
-
-                if (IsBlackKingSideCastling(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
-                {
-                    return new CastlingMove(CastlingType.BlackKingSide, movingPiece);
-                }
-
-                if (IsBlackQueenSideCastling(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
-                {
-                    return new CastlingMove(CastlingType.BlackQueenSide, movingPiece);
-                }
-
-                if (IsPromotion(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
-                {
-                    return new PromotionMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, null);
-                }
-
-                return new NormalMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
+                capturedPiece = board.GetColor(sourceFile, sourceRank) == Definitions.ChessColor.White
+                    ? board.GetPiece(targetFile, targetRank - 1)
+                    : board.GetPiece(targetFile, targetRank + 1);
+                enPassant = true;
+            }
+            else
+            {
+                capturedPiece = board.GetPiece(targetFile, targetRank);
             }
 
-            return null;
+            if (enPassant)
+            {
+                return new EnPassantCaptureMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
+            }
+
+            if (IsWhiteKingSideCastling(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
+            {
+                return new CastlingMove(CastlingType.WhiteKingSide, movingPiece);
+            }
+
+            if (IsWhiteQueenSideCastling(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
+            {
+                return new CastlingMove(CastlingType.WhiteQueenSide, movingPiece);
+            }
+
+            if (IsBlackKingSideCastling(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
+            {
+                return new CastlingMove(CastlingType.BlackKingSide, movingPiece);
+            }
+
+            if (IsBlackQueenSideCastling(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
+            {
+                return new CastlingMove(CastlingType.BlackQueenSide, movingPiece);
+            }
+
+            if (IsPromotion(movingPiece, sourceFile, sourceRank, targetFile, targetRank))
+            {
+                return new PromotionMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece, promotionPiece);
+            }
+
+            return new NormalMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
         }
         
 

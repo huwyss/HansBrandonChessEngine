@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using MantaChessEngine;
 
 namespace MantaUCI
@@ -13,6 +10,7 @@ namespace MantaUCI
         static Board _board = null;
         static Definitions.ChessColor _currentColor;
         static string[] _movesFromInitPosition = null;
+        static Stopwatch _stopwatch = new Stopwatch();
 
         static void Main(string[] args)
         {
@@ -92,18 +90,23 @@ namespace MantaUCI
             {
                 SetStartPosition();
                 _engine.SetMaxSearchDepth(currentDepth);
+                _stopwatch.Restart();
                 bestMove = _engine.DoBestMove(_currentColor);
+                _stopwatch.Stop();
                 var scoreFromEngine = _currentColor == Definitions.ChessColor.White
                     ? (int)(100 * bestMove.Score)
                     : -(int)(100 * bestMove.Score);
 
                 string principalVariation = string.Empty;
-                foreach (var move in bestMove.PrincipalVariation.Reverse())
+                foreach (var move in bestMove.PrincipalVariation)
                 {
                     principalVariation += move.ToUciString() + " ";
                 }
 
-                Console.WriteLine("info depth " + bestMove.Depth + " seldepth " + bestMove.PruningCount + " nodes " + bestMove.EvaluatedPositions + " pv " + principalVariation + " score cp " + scoreFromEngine);
+                var duration = _stopwatch.ElapsedMilliseconds;
+                var nps = duration != 0 ? (int)(1000 * bestMove.EvaluatedPositions / duration) : 0;
+
+                Console.WriteLine("info depth " + bestMove.Depth + " seldepth " + bestMove.PruningCount + " score cp " + scoreFromEngine + " nodes " + bestMove.EvaluatedPositions + " nps " + nps + " time " + duration + " pv " + principalVariation );
             }
             
             Console.WriteLine("bestmove " + bestMove.Move.ToUciString());

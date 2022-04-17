@@ -55,7 +55,7 @@ namespace MantaChessEngine
                 // strongest --------------------------------
                 case EngineType.AlphaBeta:
                     _evaluator = new EvaluatorPosition();
-                    _moveOrder = new MoveOrder();
+                    _moveOrder = new MoveOrderPV();
                     _search = new SearchAlphaBeta(_evaluator, _moveGenerator, 4, _moveOrder);
                     break;
                 // -------------------------------------------

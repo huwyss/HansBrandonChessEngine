@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using static MantaChessEngine.Definitions;
@@ -8,36 +7,26 @@ using log4net;
 [assembly: InternalsVisibleTo("MantaChessEngineTest")]
 namespace MantaChessEngine
 {
-    /// <summary>
-    /// Full search until level _maxDepth.
-    /// </summary>
     public class SearchAlphaBeta : ISearchService
     {
         private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         
-        private IMoveGenerator _moveGenerator;
-        private IEvaluator _evaluator;
-        private IMoveOrder _moveOrder;
+        private readonly IMoveGenerator _moveGenerator;
+        private readonly IEvaluator _evaluator;
+        private readonly IMoveOrder _moveOrder;
         private int _maxDepth;
+
+        private MoveRating _previousPV;
 
         private int evaluatedPositions;
         private int _pruningCount;
 
         /// <summary>
-        /// Set the number of moves that are calculated in advance.
+        /// Set the search depth in plys (half moves).
         /// </summary>
-        /// <param name="level">
-        /// Level = 1 means: engine calculate 1 half move (if white's move: calculate move of white.)
-        /// Level = 2 means: engine calculate 2 half moves (if white's move: calculate move of white and of black.)
-        /// Level = 3 means: engine calculate 3 half moves (if white's move: calculate move of white, black, white)
-        /// Level = 4 means: engine calculate 4 half moves (if white's move: calculate move of white, black, white, black)
-        /// </param>
-        public void SetMaxDepth(int level)
+        public void SetMaxDepth(int ply)
         {
-            if (level > 0)
-            {
-                _maxDepth = level;
-            }
+            _maxDepth = ply > 0 ? _maxDepth = ply : 1;
         }
 
         public SearchAlphaBeta(IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth, IMoveOrder moveOrder)
@@ -59,25 +48,32 @@ namespace MantaChessEngine
         {
             _pruningCount = 0;
             evaluatedPositions = 0;
-            var moveRatings = SearchLevel(board, color, 1, float.MinValue, float.MaxValue);
+
+            (_moveOrder as MoveOrderPV)?.SetMoveRatingPV(_previousPV);
+            _pruningCount = 0;
+            evaluatedPositions = 0;
+
+            var moveRating = SearchLevel(board, color, 1, float.MinValue, float.MaxValue);
+
             _log.Debug("evaluated positons: " + evaluatedPositions);
-            moveRatings.EvaluatedPositions = evaluatedPositions;
-            moveRatings.Depth = _maxDepth;
-            moveRatings.PruningCount = _pruningCount;
-            return moveRatings;
+            moveRating.EvaluatedPositions = evaluatedPositions;
+            moveRating.Depth = _maxDepth;
+            moveRating.PruningCount = _pruningCount;
+
+            _previousPV = moveRating;
+
+            return moveRating;
         }
 
         /// <summary>
         /// Search best move. Calculate level number of moves.
         /// This method is recursive. condition to stop is 
         ///     1) we reached the max depth level or 
-        ///     2) there are no legal moves in the current position (king is lost)
+        ///     2) there are no legal moves in the current position
         /// </summary>
         /// <param name="board">Board to be searched in</param>
         /// <param name="color">Color of next move</param>
-        /// <param name="level">Number of levels to be searched (1=ie whites move, 2=moves of white, black, 3=move of white,black,white...</param>
-        /// <param name="score">Score of position on current level</param>
-        /// <returns></returns>
+        /// <param name="level">Start level of search </param>
         internal virtual MoveRating SearchLevel(IBoard board, ChessColor color, int level, float alpha, float beta)
         {
             var bestRating = new MoveRating() { Score = InitWithWorstScorePossible(color) };
@@ -86,11 +82,11 @@ namespace MantaChessEngine
             var possibleMovesUnsorted = _moveGenerator.GetLegalMoves(board, color);
 
             var possibleMoves = _moveOrder != null
-                ? _moveOrder.OrderMoves(possibleMovesUnsorted, color)
+                ? _moveOrder.OrderMoves(possibleMovesUnsorted, color, level)
                 : possibleMovesUnsorted;
 
             // no legal moves means the game is over. It is either stall mate or check mate.
-            if (possibleMoves == null || possibleMoves.Count() == 0)
+            if (possibleMoves.Count() == 0)
             {
                 return MakeMoveRatingForGameEnd(board, color, level);
             }
@@ -140,7 +136,7 @@ namespace MantaChessEngine
                 }
             }
 
-            bestRating.PrincipalVariation.Add(bestRating.Move);
+            bestRating.PrincipalVariation.Insert(0, bestRating.Move);
             return bestRating;
         }
 

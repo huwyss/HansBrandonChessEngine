@@ -22,21 +22,14 @@ namespace MantaChessEngine
         private static int evaluatedPositions;
 
         /// <summary>
-        /// Set the number of moves that are calculated in advance.
+        /// Set the search depth in plys (half moves).
         /// </summary>
-        /// <param name="level">
-        /// Level = 1 means: engine calculate 1 half move (if white's move: calculate move of white.)
-        /// Level = 2 means: engine calculate 2 half moves (if white's move: calculate move of white and of black.)
-        /// Level = 3 means: engine calculate 3 half moves (if white's move: calculate move of white, black, white)
-        /// Level = 4 means: engine calculate 4 half moves (if white's move: calculate move of white, black, white, black)
-        /// </param>
-        public void SetMaxDepth(int level)
+        public void SetMaxDepth(int ply)
         {
-            if (level > 0)
-            {
-                _maxDepth = level;
-            }
+            _maxDepth = ply > 0 ? _maxDepth = ply : 1;
         }
+
+        public void SetPreviousPV(MoveRating previousPV) { }
 
         public SearchMinimax(IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth = Definitions.DEFAULT_MAXLEVEL)
         {

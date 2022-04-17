@@ -70,7 +70,7 @@ namespace MantaChessEngine
             movingPiece = board.GetPiece(sourceFile, sourceRank);
 
             // set captured Piece
-            if (IsEnPassantCapture(board, sourceFile, sourceRank, targetFile, targetRank))
+            if (IsEnPassantCapture(board, movingPiece, sourceFile, sourceRank, targetFile, targetRank))
             {
                 capturedPiece = board.GetColor(sourceFile, sourceRank) == Definitions.ChessColor.White
                     ? board.GetPiece(targetFile, targetRank - 1)
@@ -114,11 +114,11 @@ namespace MantaChessEngine
 
             return new NormalMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
         }
-        
 
-        private bool IsEnPassantCapture(Board board, int sourceFile, int sourceRank, int targetFile, int targetRank)
+        private bool IsEnPassantCapture(Board board, Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
         {
-            return board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty &&
+            return movingPiece is Pawn &&
+                   board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty &&
                    board.History.LastEnPassantFile == targetFile && 
                    board.History.LastEnPassantRank == targetRank;
         }

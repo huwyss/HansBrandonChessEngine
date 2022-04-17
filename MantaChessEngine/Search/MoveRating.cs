@@ -1,4 +1,6 @@
 ﻿using static MantaChessEngine.Definitions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MantaChessEngine
 {
@@ -10,6 +12,8 @@ namespace MantaChessEngine
         /// Move that is being rated.
         /// </summary>
         public IMove Move { get; set; }
+
+        public IEnumerable<IMove> PrincipalVariation { get; }
 
         /// <summary>
         /// Score of the move. Positive means good for white, negative means good for black.

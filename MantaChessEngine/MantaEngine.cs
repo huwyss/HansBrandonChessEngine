@@ -24,6 +24,7 @@ namespace MantaChessEngine
         private ISearchService _search;
         private IEvaluator _evaluator;
         private Board _board;
+        private IMoveOrder _moveOrder;
 
         public MantaEngine(EngineType engineType)
         {
@@ -54,7 +55,8 @@ namespace MantaChessEngine
                 // strongest --------------------------------
                 case EngineType.AlphaBeta:
                     _evaluator = new EvaluatorPosition();
-                    _search = new SearchAlphaBeta(_evaluator, _moveGenerator);
+                    _moveOrder = new MoveOrder();
+                    _search = new SearchAlphaBeta(_evaluator, _moveGenerator, 4, _moveOrder);
                     break;
                 // -------------------------------------------
 

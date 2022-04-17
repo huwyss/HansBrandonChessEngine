@@ -59,6 +59,7 @@
     <Compile Include="Helper.cs" />
     <Compile Include="Evaluator\IEvaluator.cs" />
     <Compile Include="History.cs" />
+    <Compile Include="MoveOrder\IMoveOrder.cs" />
     <Compile Include="Move\CastlingMove.cs" />
     <Compile Include="Move\EnPassantCaptureMove.cs" />
     <Compile Include="Move\IMove.cs" />

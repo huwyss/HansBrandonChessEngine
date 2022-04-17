@@ -67,7 +67,7 @@ namespace MantaChessEngineTest
         }
 
         [TestMethod]
-        public void SearchBestMoveOneLevelTest_WhenLevel3_ThenCapturePawn_White()
+        public void SearchBestMoveTest_WhenLevel3_ThenCapturePawn_White()
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());

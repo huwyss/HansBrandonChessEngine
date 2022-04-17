@@ -17,6 +17,7 @@ namespace MantaChessEngine
         
         private IMoveGenerator _moveGenerator;
         private IEvaluator _evaluator;
+        private IMoveOrder _moveOrder;
         private int _maxDepth;
 
         private Random _rand;
@@ -41,11 +42,12 @@ namespace MantaChessEngine
             }
         }
 
-        public SearchAlphaBeta(IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth = DEFAULT_MAXLEVEL)
+        public SearchAlphaBeta(IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth, IMoveOrder moveOrder)
         {
             _evaluator = evaluator;
             _moveGenerator = moveGenerator;
             _maxDepth = maxDepth;
+            _moveOrder = moveOrder;
             _rand = new Random();
         }
 
@@ -89,27 +91,16 @@ namespace MantaChessEngine
             MoveRating currentRating = new MoveRating();
             List<MoveRating> bestMoveRatings = new List<MoveRating>();
 
-            var possibleMoves = _moveGenerator.GetLegalMoves(board, color);
+            var possibleMovesUnsorted = _moveGenerator.GetLegalMoves(board, color);
 
-            ////List<IMove> possibleMoves;
-            ////possibleMoves = color == ChessColor.White
-            ////    ? possibleMovesUnsorted.OrderBy(m => m.GetMoveImportance()).ToList()
-            ////    : possibleMovesUnsorted.OrderByDescending(m => m.GetMoveImportance()).ToList();
+            var possibleMoves = _moveOrder != null
+                ? _moveOrder.OrderMoves(possibleMovesUnsorted, color)
+                : possibleMovesUnsorted;
 
             // no legal moves means the game is over. It is either stall mate or check mate.
-            if (possibleMoves == null || possibleMoves.Count == 0)
+            if (possibleMoves == null || possibleMoves.Count() == 0)
             {
-                return new MoveRating[]
-                {
-                        new MoveRating()
-                        {
-                            Score = !_moveGenerator.IsCheck(board, color)
-                            ? 0
-                            : color == ChessColor.White ? ScoreBlackWins : ScoreWhiteWins,
-                            Move = new NoLegalMove(),
-                            GameEndLevel = level
-                        }
-                };
+                return MakeMoveRatingForGameEnd(board, color, level);
             }
 
             foreach (IMove currentMove in possibleMoves)
@@ -135,7 +126,6 @@ namespace MantaChessEngine
                 ////{
                 ////    currentRating.Move = currentMove;
                 ////    bestMoveRatings.Add(currentRating.Clone());
-                ////    bestMoveRatings.Sort() todo
                 ////}
                 ////else
                 if (currentRating.IsBetter(color, bestRating))
@@ -147,6 +137,8 @@ namespace MantaChessEngine
 
                 if (color == ChessColor.White)
                 {
+                    // todo compare also endlevel !
+                    // todo tests for it
                     alpha = Math.Max(currentRating.Score, alpha);
                     if (beta <= alpha)
                     {
@@ -179,6 +171,21 @@ namespace MantaChessEngine
             {
                 return float.MaxValue;
             }
+        }
+
+        private MoveRating[] MakeMoveRatingForGameEnd(IBoard board, ChessColor color, int curentLevel)
+        {
+            return new MoveRating[]
+            {
+                    new MoveRating()
+                    {
+                        Score = !_moveGenerator.IsCheck(board, color)
+                            ? 0
+                            : color == ChessColor.White ? ScoreBlackWins : ScoreWhiteWins,
+                        Move = new NoLegalMove(),
+                        GameEndLevel = curentLevel
+                    }
+            };
         }
     }
 }

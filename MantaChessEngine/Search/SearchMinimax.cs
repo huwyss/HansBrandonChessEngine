@@ -125,7 +125,8 @@ namespace MantaChessEngine
                     currentRating.Move = currentMove;
                     bestMoveRatings.Add(currentRating.Clone());
                 }
-                else if (currentRating.IsBetter(color, bestRating))
+                else
+                if (currentRating.IsBetter(color, bestRating))
                 {
                     currentRating.Move = currentMove;
                     bestRating = currentRating.Clone();

@@ -20,10 +20,8 @@ namespace MantaChessEngine
         private IMoveOrder _moveOrder;
         private int _maxDepth;
 
-        private Random _rand;
         private int evaluatedPositions;
         private int _pruningCount;
-        private ChessColor _movingColor;
 
         /// <summary>
         /// Set the number of moves that are calculated in advance.
@@ -48,7 +46,6 @@ namespace MantaChessEngine
             _moveGenerator = moveGenerator;
             _maxDepth = maxDepth;
             _moveOrder = moveOrder;
-            _rand = new Random();
         }
 
         /// <summary>
@@ -60,18 +57,14 @@ namespace MantaChessEngine
         /// <returns>best move for color.</returns>
         public MoveRating Search(IBoard board, ChessColor color)
         {
-            _movingColor = color;
             _pruningCount = 0;
             evaluatedPositions = 0;
-            IEnumerable<MoveRating> moveRatings = SearchLevel(board, color, 1, float.MinValue, float.MaxValue);
-            var count = moveRatings.Count();
-            var randomIndex = _rand.Next(0, count);
-            MoveRating rating = moveRatings.ElementAt(randomIndex);
+            var moveRatings = SearchLevel(board, color, 1, float.MinValue, float.MaxValue);
             _log.Debug("evaluated positons: " + evaluatedPositions);
-            rating.EvaluatedPositions = evaluatedPositions;
-            rating.Depth = _maxDepth;
-            rating.PruningCount = _pruningCount;
-            return rating;
+            moveRatings.EvaluatedPositions = evaluatedPositions;
+            moveRatings.Depth = _maxDepth;
+            moveRatings.PruningCount = _pruningCount;
+            return moveRatings;
         }
 
         /// <summary>
@@ -85,11 +78,10 @@ namespace MantaChessEngine
         /// <param name="level">Number of levels to be searched (1=ie whites move, 2=moves of white, black, 3=move of white,black,white...</param>
         /// <param name="score">Score of position on current level</param>
         /// <returns></returns>
-        internal virtual IEnumerable<MoveRating> SearchLevel(IBoard board, ChessColor color, int level, float alpha, float beta)
+        internal virtual MoveRating SearchLevel(IBoard board, ChessColor color, int level, float alpha, float beta)
         {
             var bestRating = new MoveRating() { Score = InitWithWorstScorePossible(color) };
             MoveRating currentRating = new MoveRating();
-            List<MoveRating> bestMoveRatings = new List<MoveRating>();
 
             var possibleMovesUnsorted = _moveGenerator.GetLegalMoves(board, color);
 
@@ -110,7 +102,7 @@ namespace MantaChessEngine
                 if (level < _maxDepth) // we need to do more move levels...
                 {
                     // we are only interested in the first score. all scores are the same.
-                    currentRating = SearchLevel(board, Helper.GetOppositeColor(color), level + 1, alpha, beta).First(); // recursive...
+                    currentRating = SearchLevel(board, Helper.GetOppositeColor(color), level + 1, alpha, beta); // recursive...
                     board.Back();
                 }
                 else // we reached the bottom of the tree and evaluate the position
@@ -122,17 +114,10 @@ namespace MantaChessEngine
                 }
 
                 // update the best move in the current level
-                ////if (currentRating.IsEquallyGood(bestRating))
-                ////{
-                ////    currentRating.Move = currentMove;
-                ////    bestMoveRatings.Add(currentRating.Clone());
-                ////}
-                ////else
                 if (currentRating.IsBetter(color, bestRating))
                 {
                     currentRating.Move = currentMove;
                     bestRating = currentRating.Clone();
-                    bestMoveRatings = new List<MoveRating> { currentRating.Clone() };
                 }
 
                 if (color == ChessColor.White)
@@ -157,7 +142,8 @@ namespace MantaChessEngine
                 }
             }
 
-            return bestMoveRatings;
+            bestRating.PrincipalVariation.Add(bestRating.Move);
+            return bestRating;
         }
 
         // Must return a worse score than the score for a lost game so that losing is better than the initialized best score.
@@ -173,18 +159,15 @@ namespace MantaChessEngine
             }
         }
 
-        private MoveRating[] MakeMoveRatingForGameEnd(IBoard board, ChessColor color, int curentLevel)
+        private MoveRating MakeMoveRatingForGameEnd(IBoard board, ChessColor color, int curentLevel)
         {
-            return new MoveRating[]
+            return new MoveRating()
             {
-                    new MoveRating()
-                    {
-                        Score = !_moveGenerator.IsCheck(board, color)
-                            ? 0
-                            : color == ChessColor.White ? ScoreBlackWins : ScoreWhiteWins,
-                        Move = new NoLegalMove(),
-                        GameEndLevel = curentLevel
-                    }
+                Score = !_moveGenerator.IsCheck(board, color)
+                    ? 0
+                    : color == ChessColor.White ? ScoreBlackWins : ScoreWhiteWins,
+                Move = new NoLegalMove(),
+                GameEndLevel = curentLevel
             };
         }
     }

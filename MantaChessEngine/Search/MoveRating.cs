@@ -13,7 +13,7 @@ namespace MantaChessEngine
         /// </summary>
         public IMove Move { get; set; }
 
-        public IEnumerable<IMove> PrincipalVariation { get; }
+        public IList<IMove> PrincipalVariation { get; set; }
 
         /// <summary>
         /// Score of the move. Positive means good for white, negative means good for black.
@@ -35,6 +35,7 @@ namespace MantaChessEngine
             Score = 0;
             Move = null;
             GameEndLevel = 0;
+            PrincipalVariation = new List<IMove>();
         }
 
         public MoveRating Clone()
@@ -43,7 +44,8 @@ namespace MantaChessEngine
             {
                 Score = this.Score,
                 Move = this.Move,
-                GameEndLevel = this.GameEndLevel
+                GameEndLevel = this.GameEndLevel,
+                PrincipalVariation = this.PrincipalVariation,
             };
         }
 

@@ -96,7 +96,14 @@ namespace MantaUCI
                 var scoreFromEngine = _currentColor == Definitions.ChessColor.White
                     ? (int)(100 * bestMove.Score)
                     : -(int)(100 * bestMove.Score);
-                Console.WriteLine("info depth " + bestMove.Depth + " seldepth " + bestMove.PruningCount + " nodes " + bestMove.EvaluatedPositions + " pv " + bestMove.Move.ToUciString() + " score cp " + scoreFromEngine);
+
+                string principalVariation = string.Empty;
+                foreach (var move in bestMove.PrincipalVariation.Reverse())
+                {
+                    principalVariation += move.ToUciString() + " ";
+                }
+
+                Console.WriteLine("info depth " + bestMove.Depth + " seldepth " + bestMove.PruningCount + " nodes " + bestMove.EvaluatedPositions + " pv " + principalVariation + " score cp " + scoreFromEngine);
             }
             
             Console.WriteLine("bestmove " + bestMove.Move.ToUciString());

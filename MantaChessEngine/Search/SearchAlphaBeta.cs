@@ -15,6 +15,7 @@ namespace MantaChessEngine
         private readonly IEvaluator _evaluator;
         private readonly IMoveOrder _moveOrder;
         private int _maxDepth;
+        private int _selectedDepth;
 
         private MoveRating _previousPV;
 
@@ -27,6 +28,7 @@ namespace MantaChessEngine
         public void SetMaxDepth(int ply)
         {
             _maxDepth = ply > 0 ? _maxDepth = ply : 1;
+            _selectedDepth = ply > 0 ? _maxDepth + 1 : 2;
         }
 
         public SearchAlphaBeta(IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth, IMoveOrder moveOrder)
@@ -95,7 +97,8 @@ namespace MantaChessEngine
             {
                 board.Move(currentMove);
 
-                if (level < _maxDepth) // we need to do more move levels...
+                ////if ((level < _maxDepth || level >= _maxDepth && currentMove.CapturedPiece != null) && level < _selectedDepth) // we need to do more move levels...
+                if (level < _maxDepth) 
                 {
                     // we are only interested in the first score. all scores are the same.
                     currentRating = SearchLevel(board, Helper.GetOppositeColor(color), level + 1, alpha, beta); // recursive...
@@ -104,18 +107,18 @@ namespace MantaChessEngine
                 else // we reached the bottom of the tree and evaluate the position
                 {
                     currentRating.Score = _evaluator.Evaluate(board);
-                    currentRating.GameEndLevel = level;
                     evaluatedPositions++;
                     board.Back();
                 }
 
                 // update the best move in the current level
-                if (currentRating.IsBetterFaster(color, bestRating))
+                if (currentRating.IsBetter(color, bestRating))
                 {
                     currentRating.Move = currentMove;
                     bestRating = currentRating.Clone();
                 }
 
+                // Alpha Beta Pruning
                 if (color == ChessColor.White)
                 {
                     alpha = Math.Max(currentRating.Score, alpha);

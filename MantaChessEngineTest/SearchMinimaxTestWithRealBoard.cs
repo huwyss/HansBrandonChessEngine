@@ -315,7 +315,7 @@ namespace MantaChessEngineTest
 
             var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1).First();
 
-            Assert.AreEqual(0, bestRatingActual.Score, "stalemate score should be 0");
+            AssertHelper.StallMate(bestRatingActual);
             Assert.AreEqual(new NoLegalMove(), bestRatingActual.Move, "Should be NoLegalMove, white is stalemate");
         }
 
@@ -339,7 +339,7 @@ namespace MantaChessEngineTest
             var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1).First();
 
             Assert.AreEqual(new NoLegalMove(), bestRatingActual.Move, "Should be NoLegalMove, white is checkmate");
-            Assert.AreEqual(-10000, bestRatingActual.Score, "check mate score should be -10000");
+            AssertHelper.BlackWins(bestRatingActual);
         }
 
         [TestMethod]
@@ -362,7 +362,7 @@ namespace MantaChessEngineTest
             var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1).First();
 
             Assert.AreEqual(new NoLegalMove(), bestRatingActual.Move, "Should be NoLegalMove, Black is checkmate");
-            Assert.AreEqual(10000, bestRatingActual.Score, "check mate score should be 10000");
+            AssertHelper.WhiteWins(bestRatingActual);
         }
 
         [TestMethod]
@@ -388,7 +388,7 @@ namespace MantaChessEngineTest
             var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1).First();
 
             Assert.AreEqual(expectedMove, bestRatingActual.Move, "Should be find checkmate for black: ... Qh2b2 #");
-            Assert.AreEqual(-10000, bestRatingActual.Score, "check mate score should be -10000");
+            AssertHelper.BlackWins(bestRatingActual);
         }
     }
 }

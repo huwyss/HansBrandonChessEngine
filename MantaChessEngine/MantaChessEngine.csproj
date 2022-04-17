@@ -83,7 +83,6 @@
     <Compile Include="Search\MoveInfo.cs" />
     <Compile Include="Search\MoveRating.cs" />
     <Compile Include="Search\SearchAlphaBeta.cs" />
-    <Compile Include="Search\SearchMinimaxContinueCapture.cs" />
     <Compile Include="Search\SearchMinimax.cs" />
     <Compile Include="Search\SearchRandom.cs" />
   </ItemGroup>

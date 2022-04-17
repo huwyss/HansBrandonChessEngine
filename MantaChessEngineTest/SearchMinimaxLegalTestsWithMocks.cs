@@ -374,7 +374,7 @@ namespace MantaChessEngineTest
             var target = new SearchMinimax(evalFake, moveGenFake, 1);
             var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
 
-            Assert.AreEqual(-10000, bestRatingActual.Score);
+            AssertHelper.BlackWins(bestRatingActual);
             Assert.IsTrue(bestRatingActual.Move is NoLegalMove);
         }
 
@@ -421,7 +421,7 @@ namespace MantaChessEngineTest
             var target = new SearchMinimax(evalFake, moveGenFake, 3);
             var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
 
-            Assert.AreEqual(10000, bestRatingActual.Score);
+            AssertHelper.WhiteWins(bestRatingActual);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
         }
 
@@ -449,7 +449,7 @@ namespace MantaChessEngineTest
             var target = new SearchMinimax(evalFake, moveGenFake, 3);
             var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
 
-            Assert.AreEqual(0, bestRatingActual.Score);
+            AssertHelper.StallMate(bestRatingActual);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
         }
 
@@ -501,7 +501,7 @@ namespace MantaChessEngineTest
             var target = new SearchMinimax(evalFake, moveGenFake, 3);
             var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
 
-            Assert.AreEqual(10000, bestRatingActual.Score);
+            AssertHelper.WhiteWins(bestRatingActual);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
         }
 
@@ -525,7 +525,7 @@ namespace MantaChessEngineTest
             var target = new SearchMinimax(evalFake, moveGenFake, 3);
             var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
 
-            Assert.AreEqual(10000, bestRatingActual.Score);
+            AssertHelper.WhiteWins(bestRatingActual);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
         }
 
@@ -556,7 +556,7 @@ namespace MantaChessEngineTest
             var target = new SearchMinimax(evalFake, moveGenFake, 4);
             var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
 
-            Assert.AreEqual(10000, bestRatingActual.Score);
+            AssertHelper.WhiteWins(bestRatingActual);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
         }
 
@@ -587,7 +587,7 @@ namespace MantaChessEngineTest
             var target = new SearchMinimax(evalFake, moveGenFake, 4);
             var bestRatingActual = target.SearchLevel(boardFake, Definitions.ChessColor.White, 1).First();
 
-            Assert.AreEqual(10000, bestRatingActual.Score);
+            AssertHelper.WhiteWins(bestRatingActual);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
         }
     }

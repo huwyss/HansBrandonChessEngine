@@ -315,10 +315,7 @@ namespace MantaChessEngineTest
 
             var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1, -100000, 100000);
 
-            Assert.AreEqual(0, bestRatingActual.Score, "stalemate score should be 0");
-            Assert.IsFalse(bestRatingActual.WhiteWins);
-            Assert.IsFalse(bestRatingActual.BlackWins);
-            Assert.IsTrue(bestRatingActual.Stallmate);
+            AssertHelper.StallMate(bestRatingActual);
             Assert.AreEqual(new NoLegalMove(), bestRatingActual.Move, "Should be NoLegalMove, white is stalemate");
         }
 
@@ -342,10 +339,7 @@ namespace MantaChessEngineTest
             var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1, -100000, 100000);
 
             Assert.AreEqual(new NoLegalMove(), bestRatingActual.Move, "Should be NoLegalMove, white is checkmate");
-            Assert.IsTrue(bestRatingActual.Score < -9900, "check mate score should be -10000 + level");
-            Assert.IsFalse(bestRatingActual.WhiteWins);
-            Assert.IsTrue(bestRatingActual.BlackWins);
-            Assert.IsFalse(bestRatingActual.Stallmate);
+            AssertHelper.BlackWins(bestRatingActual);
         }
 
         [TestMethod]
@@ -368,10 +362,7 @@ namespace MantaChessEngineTest
             var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1, -100000, 100000);
 
             Assert.AreEqual(new NoLegalMove(), bestRatingActual.Move, "Should be NoLegalMove, Black is checkmate");
-            Assert.IsTrue(bestRatingActual.Score > 9900, "check mate score should be 10000 - level");
-            Assert.IsTrue(bestRatingActual.WhiteWins);
-            Assert.IsFalse(bestRatingActual.BlackWins);
-            Assert.IsFalse(bestRatingActual.Stallmate);
+            AssertHelper.WhiteWins(bestRatingActual);
         }
 
         [TestMethod]
@@ -397,10 +388,7 @@ namespace MantaChessEngineTest
             var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1, -100000, 100000);
 
             Assert.AreEqual(expectedMove, bestRatingActual.Move, "Should be find checkmate for black: ... Qh2b2 #");
-            Assert.IsTrue(bestRatingActual.Score < -9900, "check mate score should be -10000 + level");
-            Assert.IsFalse(bestRatingActual.WhiteWins);
-            Assert.IsTrue(bestRatingActual.BlackWins);
-            Assert.IsFalse(bestRatingActual.Stallmate);
+            AssertHelper.BlackWins(bestRatingActual);
         }
     }
 }

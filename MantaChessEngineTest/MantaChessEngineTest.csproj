@@ -67,6 +67,7 @@
     <Compile Include="SearchMinimaxTestWithRealBoard.cs" />
     <Compile Include="SearchAlphaBetaTestWithRealBoard.cs" />
     <Compile Include="CastlingMoveTest.cs" />
+    <Compile Include="TestHelper\AssertHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MantaChessEngine\MantaChessEngine.csproj">

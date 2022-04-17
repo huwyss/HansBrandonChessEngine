@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MantaChessEngine
 {
@@ -11,7 +7,6 @@ namespace MantaChessEngine
         Random,
         Minimax,
         MinimaxPosition,
-        MinimaxPositionContinueCapture,
         AlphaBeta
     }
 
@@ -47,11 +42,6 @@ namespace MantaChessEngine
                     _search = new SearchMinimax(_evaluator, _moveGenerator);
                     break;
                 
-                case EngineType.MinimaxPositionContinueCapture:
-                    _evaluator = new EvaluatorPosition();
-                    _search = new SearchMinimaxContinueCapture(_evaluator, _moveGenerator);
-                    break;
-
                 // strongest --------------------------------
                 case EngineType.AlphaBeta:
                     _evaluator = new EvaluatorPosition();

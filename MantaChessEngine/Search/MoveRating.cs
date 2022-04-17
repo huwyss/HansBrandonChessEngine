@@ -20,6 +20,12 @@ namespace MantaChessEngine
         /// </summary>
         public float Score { get; set; }
 
+        public bool WhiteWins { get; set; }
+
+        public bool BlackWins { get; set; }
+
+        public bool Stallmate { get; set; }
+
         /// <summary>
         /// The number of illegal moves already played.
         /// 0 = all good
@@ -33,6 +39,9 @@ namespace MantaChessEngine
         public MoveRating()
         {
             Score = 0;
+            WhiteWins = false;
+            BlackWins = false;
+            Stallmate = false;
             Move = null;
             GameEndLevel = 0;
             PrincipalVariation = new List<IMove>();
@@ -43,6 +52,9 @@ namespace MantaChessEngine
             return new MoveRating()
             {
                 Score = this.Score,
+                WhiteWins = this.WhiteWins,
+                BlackWins = this.BlackWins,
+                Stallmate = this.Stallmate,
                 Move = this.Move,
                 GameEndLevel = this.GameEndLevel,
                 PrincipalVariation = this.PrincipalVariation,
@@ -107,6 +119,11 @@ namespace MantaChessEngine
             }
            
             return isCurrentScoreBetter;
+        }
+
+        public bool IsBetterFaster(ChessColor color, MoveRating otherRating)
+        {
+            return color == ChessColor.White ? Score > otherRating.Score : Score < otherRating.Score;
         }
     }
 }

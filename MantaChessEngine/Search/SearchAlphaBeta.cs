@@ -114,7 +114,7 @@ namespace MantaChessEngine
                 }
 
                 // update the best move in the current level
-                if (currentRating.IsBetter(color, bestRating))
+                if (currentRating.IsBetterFaster(color, bestRating))
                 {
                     currentRating.Move = currentMove;
                     bestRating = currentRating.Clone();
@@ -122,8 +122,6 @@ namespace MantaChessEngine
 
                 if (color == ChessColor.White)
                 {
-                    // todo compare also endlevel !
-                    // todo tests for it
                     alpha = Math.Max(currentRating.Score, alpha);
                     if (beta <= alpha)
                     {
@@ -161,13 +159,37 @@ namespace MantaChessEngine
 
         private MoveRating MakeMoveRatingForGameEnd(IBoard board, ChessColor color, int curentLevel)
         {
+            float score;
+            bool whiteWins = false;
+            bool blackWins = false;
+            bool stallmate = false;
+
+            if (_moveGenerator.IsCheck(board, color))
+            {
+                if (color == ChessColor.White)
+                {
+                    score = ScoreBlackWins + curentLevel;
+                    blackWins = true;
+                }
+                else
+                {
+                    score = ScoreWhiteWins - curentLevel;
+                    whiteWins = true;
+                }
+            }
+            else
+            {
+                score = 0;
+                stallmate = true;
+            }
+
             return new MoveRating()
             {
-                Score = !_moveGenerator.IsCheck(board, color)
-                    ? 0
-                    : color == ChessColor.White ? ScoreBlackWins : ScoreWhiteWins,
+                Score = score,
+                WhiteWins = whiteWins,
+                BlackWins = blackWins,
+                Stallmate = stallmate,
                 Move = new NoLegalMove(),
-                GameEndLevel = curentLevel
             };
         }
     }

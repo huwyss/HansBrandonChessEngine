@@ -126,6 +126,12 @@ namespace MantaChessEngine
             return true;
         }
 
+        public bool UndoMove()
+        {
+            _board.Back();
+            return true;
+        }
+
         public bool IsWinner(ChessColor color)
         {
             return _board.IsWinner(color);
@@ -171,6 +177,24 @@ namespace MantaChessEngine
             {
                 _search.SetMaxDepth(depth);
             }
+        }
+
+        public UInt64 Perft(int depth)
+        {
+            if (depth == 0)
+                return 1;
+
+            UInt64 nodes = 0;
+
+            var moves = _moveGenerator.GetLegalMoves(_board, SideToMove());
+            foreach (var move in moves)
+            {
+                Move(move);
+                nodes += Perft(depth - 1);
+                UndoMove();
+            }
+
+            return nodes;
         }
     }
 }

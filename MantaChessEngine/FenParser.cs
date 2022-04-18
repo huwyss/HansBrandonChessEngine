@@ -9,23 +9,28 @@ namespace MantaChessEngine
         {
             var fenParts = fen.Trim().Split(new char[] { ' ' });
 
+            if (fenParts.Length <= 2)
+            {
+                throw new Exception("FEN string must contain at least the position and the color to move!");
+            }
+
             return new PositionInfo()
             {
                 PositionString = GetPositionString(fenParts[0]),
 
                 SideToMove = fenParts[1] == "w" ? ChessColor.White : ChessColor.Black,
 
-                CastlingRightWhiteKingSide = fenParts[2].Contains("K"),
-                CastlingRightWhiteQueenSide = fenParts[2].Contains("Q"),
-                CastlingRightBlackKingSide = fenParts[2].Contains("k"),
-                CastlingRightBlackQueenSide = fenParts[2].Contains("q"),
+                CastlingRightWhiteKingSide = fenParts.Length >= 3 ? fenParts[2].Contains("K") : false,
+                CastlingRightWhiteQueenSide = fenParts.Length >= 3 ? fenParts[2].Contains("Q") : false,
+                CastlingRightBlackKingSide = fenParts.Length >= 3 ? fenParts[2].Contains("k") : false,
+                CastlingRightBlackQueenSide = fenParts.Length >= 3 ? fenParts[2].Contains("q") : false,
 
-                EnPassantFile = GetEnPassantFile(fenParts[3]),
-                EnPassantRank = GetEnPassantRank(fenParts[3]),
+                EnPassantFile = fenParts.Length >= 4 ? GetEnPassantFile(fenParts[3]) : '\0',
+                EnPassantRank = fenParts.Length >= 4 ? GetEnPassantRank(fenParts[3]) : 0,
+                
+                MoveCountSincePawnOrCapture = fenParts.Length >= 5 ? int.Parse(fenParts[4]) : 0,
 
-                MoveCountSincePawnOrCapture = int.Parse(fenParts[4]),
-
-                MoveNumber = int.Parse(fenParts[5])
+                MoveNumber = fenParts.Length >= 6 ? int.Parse(fenParts[5]) : 0
             };
         }
 

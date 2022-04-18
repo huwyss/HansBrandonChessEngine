@@ -179,10 +179,12 @@ namespace MantaChessEngine
             }
         }
 
-        public UInt64 Perft(int depth)
+        public UInt64 Perft(int depth, IMove moveParam)
         {
             if (depth == 0)
-                return 1;
+            {
+                return moveParam is CastlingMove ? (UInt64)1 : 0;
+            }
 
             UInt64 nodes = 0;
 
@@ -190,7 +192,7 @@ namespace MantaChessEngine
             foreach (var move in moves)
             {
                 Move(move);
-                nodes += Perft(depth - 1);
+                nodes += Perft(depth - 1, move);
                 UndoMove();
             }
 

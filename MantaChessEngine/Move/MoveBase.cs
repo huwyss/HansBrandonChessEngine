@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
+﻿using static MantaChessEngine.Definitions;
 
 namespace MantaChessEngine
 {
@@ -16,7 +11,7 @@ namespace MantaChessEngine
         public int TargetRank { get; set; }
         public Piece CapturedPiece { get; set; }
 
-        public Definitions.ChessColor Color
+        public ChessColor Color
         {
             get
             {
@@ -101,7 +96,7 @@ namespace MantaChessEngine
             moveString += SourceRank.ToString();
             moveString += Helper.FileToFileChar(TargetFile);
             moveString += TargetRank;
-            moveString += CapturedPiece != null ? CapturedPiece.Symbol : Definitions.EmptyField;
+            moveString += CapturedPiece != null ? CapturedPiece.Symbol : EmptyField;
             return moveString;
         }
 
@@ -159,12 +154,12 @@ namespace MantaChessEngine
             // if white rook queen side moved --> castling right white queen side = false
             // if white rook king side moved --> castling right white king side = false
             // same for black
-            bool blackKingMoved = MovingPiece is King && MovingPiece.Color == Definitions.ChessColor.Black;
-            bool whiteKingMoved = MovingPiece is King && MovingPiece.Color == Definitions.ChessColor.White;
-            bool blackRookKingSideMoved = MovingPiece is Rook && MovingPiece.Color == Definitions.ChessColor.Black && SourceFile == 8;
-            bool whiteRookKingSideMoved = MovingPiece is Rook && MovingPiece.Color == Definitions.ChessColor.White && SourceFile == 8;
-            bool blackRookQueenSideMoved = MovingPiece is Rook && MovingPiece.Color == Definitions.ChessColor.Black && SourceFile == 1;
-            bool whiteRookQueenSideMoved = MovingPiece is Rook && MovingPiece.Color == Definitions.ChessColor.White && SourceFile == 1;
+            bool blackKingMoved = MovingPiece is King && MovingPiece.Color == ChessColor.Black;
+            bool whiteKingMoved = MovingPiece is King && MovingPiece.Color == ChessColor.White;
+            bool blackRookKingSideMoved = MovingPiece is Rook && MovingPiece.Color == ChessColor.Black && SourceFile == 8;
+            bool whiteRookKingSideMoved = MovingPiece is Rook && MovingPiece.Color == ChessColor.White && SourceFile == 8;
+            bool blackRookQueenSideMoved = MovingPiece is Rook && MovingPiece.Color == ChessColor.Black && SourceFile == 1;
+            bool whiteRookQueenSideMoved = MovingPiece is Rook && MovingPiece.Color == ChessColor.White && SourceFile == 1;
             bool castlingRightWhiteQueenSide = board.History.LastCastlingRightWhiteQueenSide & !whiteKingMoved & !whiteRookQueenSideMoved;
             bool castlingRightWhiteKingSide = board.History.LastCastlingRightWhiteKingSide & !whiteKingMoved & !whiteRookKingSideMoved;
             bool castlingRightBlackQueenSide = board.History.LastCastlingRightBlackQueenSide & !blackKingMoved & !blackRookQueenSideMoved;
@@ -191,7 +186,7 @@ namespace MantaChessEngine
             enPassantRank = 0;
 
             // set black en passant field
-            if (move.MovingPiece is Pawn && move.MovingPiece.Color == Definitions.ChessColor.Black) // black pawn
+            if (move.MovingPiece is Pawn && move.MovingPiece.Color == ChessColor.Black) // black pawn
             {
                 // set en passant field
                 if (move.SourceRank - 2 == move.TargetRank && // if 2 fields move
@@ -203,7 +198,7 @@ namespace MantaChessEngine
             }
 
             // set white en passant field
-            if (move.MovingPiece is Pawn && move.MovingPiece.Color == Definitions.ChessColor.White) // white pawn
+            if (move.MovingPiece is Pawn && move.MovingPiece.Color == ChessColor.White) // white pawn
             {
                 // set en passant field
                 if (move.SourceRank + 2 == move.TargetRank && // if 2 fields move

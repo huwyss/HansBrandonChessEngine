@@ -53,6 +53,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AlphaBetaPruningTest.cs" />
+    <Compile Include="FenParserTest.cs" />
     <Compile Include="MantaEngineTest.cs" />
     <Compile Include="BoardTest.cs" />
     <Compile Include="EvaluatorPositionTest.cs" />

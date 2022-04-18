@@ -1,16 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static MantaChessEngine.Definitions;
 
 namespace MantaChessEngine
 {
     public class Board : IBoard
     {
+        private FenParser _fenParser;
         private IMove _undoneMove = null;
 
-        public Definitions.ChessColor SideToMove { get; set; }
+        public ChessColor SideToMove { get; set; }
+
+        public int MoveCountSincePawnOrCapture { get; set; } // todo implement this rule...
+
         public History History { get; set; }
         public IMove LastMove { get { return History.LastMove; } }
 
@@ -49,6 +50,8 @@ namespace MantaChessEngine
             }
 
             InitVariables();
+
+            _fenParser = new FenParser();
         }
 
         /// <summary>
@@ -62,7 +65,7 @@ namespace MantaChessEngine
 
         private void InitVariables()
         {
-            SideToMove = Definitions.ChessColor.White;
+            SideToMove = ChessColor.White;
             History = new History();
             WhiteDidCastling = false;
             BlackDidCastling = false;
@@ -82,6 +85,43 @@ namespace MantaChessEngine
                     _board[8*rank0 + file0] = Piece.MakePiece(position[8*(7 - rank0) + file0]);
                 }
             }
+        }
+
+        public string SetFenPosition(string fen)
+        {
+            PositionInfo positionInfo;
+            try
+            {
+                positionInfo = _fenParser.ToPositionInfo(fen);
+            }
+            catch (Exception ex)
+            {
+                return "FEN error: " + ex.StackTrace;
+            }
+
+            SetPosition(positionInfo.PositionString);
+            History.Add(
+                null,
+                positionInfo.EnPassantFile - '0',
+                positionInfo.EnPassantRank,
+                positionInfo.CastlingRightWhiteQueenSide,
+                positionInfo.CastlingRightWhiteKingSide,
+                positionInfo.CastlingRightBlackQueenSide,
+                positionInfo.CastlingRightBlackKingSide);
+            SideToMove = positionInfo.SideToMove;
+
+            return string.Empty;
+        }
+
+        public string GetFenString()
+        {
+            var positionInfo = new PositionInfo()
+            {
+                PositionString = GetPositionString
+            };
+
+            var fen = _fenParser.ToFen(positionInfo);
+            return fen;
         }
 
         /// <summary>
@@ -142,13 +182,13 @@ namespace MantaChessEngine
             move.ExecuteMove(this);
         }
 
-        public Definitions.ChessColor GetColor(int file, int rank)
+        public ChessColor GetColor(int file, int rank)
         {
             Piece piece = GetPiece(file, rank);
-            return piece != null ? piece.Color : Definitions.ChessColor.Empty;
+            return piece != null ? piece.Color : ChessColor.Empty;
         }
 
-        public bool IsWinner(Definitions.ChessColor color)
+        public bool IsWinner(ChessColor color)
         {
             // todo das stimmt nicht. Winner ist schon vorher, wenn noch König vorhanden aber im Schachmatt!
 
@@ -160,12 +200,12 @@ namespace MantaChessEngine
                 for (int file = 1; file <= 8; file++)
                 {
                     Piece piece = GetPiece(file, rank);
-                    if (piece is King && piece.Color == Definitions.ChessColor.White)
+                    if (piece is King && piece.Color == ChessColor.White)
                     {
                         hasWhiteKing = true;
                     }
 
-                    if (piece is King && piece.Color == Definitions.ChessColor.Black)
+                    if (piece is King && piece.Color == ChessColor.Black)
                     {
                         hasBlackKing = true;
                     }
@@ -173,12 +213,12 @@ namespace MantaChessEngine
 
             }
 
-            if (color == Definitions.ChessColor.White)
+            if (color == ChessColor.White)
             {
                 return !hasBlackKing;
             }
 
-            if (color == Definitions.ChessColor.Black)
+            if (color == ChessColor.Black)
             {
                 return !hasWhiteKing;
             }
@@ -186,7 +226,7 @@ namespace MantaChessEngine
             return false;
         }
 
-        public string GetString
+        public string GetPositionString
         {
             get
             {
@@ -212,31 +252,6 @@ namespace MantaChessEngine
             {
                 string boardString = "";
 
-                for (int rank = 8; rank >= 1; rank--)
-                {
-                    boardString += rank + "   ";
-                    for (int file = 1; file <= 8; file++)
-                    {
-                        Piece piece = GetPiece(file, rank);
-                        boardString += piece != null ? piece.Symbol : Definitions.EmptyField;
-                        boardString += " ";
-                    }
-
-                    boardString += "\n";
-                }
-
-                boardString += "\n    a b c d e f g h \n";
-
-                return boardString;
-            }
-        }
-
-        public string GetPrintString2
-        {
-            get
-            {
-                string boardString = "";
-
                 boardString += "    a  b  c  d  e  f  g  h\n";
                 boardString += "  +------------------------+\n";
 
@@ -247,7 +262,7 @@ namespace MantaChessEngine
                     {
                         Piece piece = GetPiece(file, rank);
                         boardString += " ";
-                        boardString += piece != null ? piece.Symbol : Definitions.EmptyField;
+                        boardString += piece != null ? piece.Symbol : EmptyField;
                         boardString += " ";
                     }
 
@@ -288,7 +303,7 @@ namespace MantaChessEngine
             _undoneMove = null;
         }
 
-        public Position GetKing(Definitions.ChessColor color)
+        public Position GetKing(ChessColor color)
         {
             for (int rank = 1; rank <= 8; rank++)
             {

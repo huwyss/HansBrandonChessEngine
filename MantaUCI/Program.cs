@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using MantaChessEngine;
 
 namespace MantaUCI
@@ -8,13 +9,15 @@ namespace MantaUCI
     {
         static MantaEngine _engine = null;
         static Board _board = null;
-        static Definitions.ChessColor _currentColor;
-        static string[] _movesFromInitPosition = null;
+        static string[] _movesFromInitPosition = new string[0];
         static Stopwatch _stopwatch = new Stopwatch();
+
+        static string _fenString = "";
 
         static void Main(string[] args)
         {
             var _running = true;
+            CreateEngine();
 
             while (_running)
             {
@@ -40,10 +43,48 @@ namespace MantaUCI
                 // position startpos moves e2e4
                 else if (input.StartsWith("position startpos moves"))
                 {
-                    _movesFromInitPosition = input.Substring(24).Split("".ToCharArray());
+                    _fenString = "";
+                    _movesFromInitPosition = input.Substring(24).Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                 }
-                else if (input.StartsWith("position startpos"))
+                else if (input.StartsWith("position fen"))
                 {
+                    var indexOfMoves = input.IndexOf("moves");
+                    if (indexOfMoves < 0)
+                    {
+                        _fenString = input.Substring(13);
+                        var error = _engine.SetFenPosition(_fenString);
+                        if (string.IsNullOrEmpty(error))
+                        {
+                            Console.WriteLine(error);
+                        }
+                        else
+                        {
+                            _movesFromInitPosition = new string[0];
+                        }
+                    }
+                    else
+                    {
+                        // example: position fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 moves e2e4 e7e5
+                        var lengthOfFen = indexOfMoves - 14;
+                        var lengthOfMoves = input.Length - indexOfMoves - 6;
+                        _fenString = input.Substring(13, lengthOfFen);
+                        var movesString = input.Substring(indexOfMoves + 6, lengthOfMoves);
+                        
+                        var error = _engine.SetFenPosition(_fenString);
+                        if (string.IsNullOrEmpty(error))
+                        {
+                            _movesFromInitPosition = movesString.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                            DoMoves();
+                        }
+                        else
+                        {
+                            Console.WriteLine(error);
+                        }
+                    }
+                }
+                else if (input.Equals("position startpos"))
+                {
+                    _fenString = "";
                     _movesFromInitPosition = new string[0];
                 }
                 else if (input.StartsWith("go depth"))
@@ -68,8 +109,18 @@ namespace MantaUCI
 
         private static void SetStartPosition()
         {
-            _board.SetInitialPosition();
-            _currentColor = Definitions.ChessColor.White;
+            if (string.IsNullOrEmpty(_fenString))
+            {
+                _board.SetInitialPosition();
+            }
+            else
+            {
+                _engine.SetFenPosition(_fenString);
+            }
+        }
+
+        private static void DoMoves()
+        {
             foreach (var move in _movesFromInitPosition)
             {
                 var valid = _engine.MoveUci(move);
@@ -77,8 +128,6 @@ namespace MantaUCI
                 {
                     Console.WriteLine("moveerror");
                 }
-
-                _currentColor = Helper.GetOppositeColor(_currentColor);
             }
         }
 
@@ -89,11 +138,12 @@ namespace MantaUCI
             for (int currentDepth = 1; currentDepth <= depth; currentDepth++)
             {
                 SetStartPosition();
+                DoMoves();
                 _engine.SetMaxSearchDepth(currentDepth);
                 _stopwatch.Restart();
-                bestMove = _engine.DoBestMove(_currentColor);
+                bestMove = _engine.DoBestMove();
                 _stopwatch.Stop();
-                var scoreFromEngine = _currentColor == Definitions.ChessColor.White
+                var scoreFromEngine = bestMove.Move.Color == Definitions.ChessColor.White
                     ? (int)(100 * bestMove.Score)
                     : -(int)(100 * bestMove.Score);
 

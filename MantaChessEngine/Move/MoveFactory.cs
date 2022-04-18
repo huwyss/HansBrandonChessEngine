@@ -33,7 +33,7 @@ namespace MantaChessEngine
             return new NoLegalMove();
         }
 
-        public IMove MakeMoveUci(Board board, string moveStringUci) // input is like "e2e4" or "a7a8q" (Promotion)
+        public IMove MakeMoveUci(IBoard board, string moveStringUci) // input is like "e2e4" or "a7a8q" (Promotion)
         {
             if (!Helper.IsCorrectMoveUci(moveStringUci))
             {
@@ -46,7 +46,7 @@ namespace MantaChessEngine
         }
 
 
-        public IMove MakeMove(Board board, string moveStringUser) // input is like "e2e4"
+        public IMove MakeMove(IBoard board, string moveStringUser) // input is like "e2e4"
         {
             if (!Helper.IsCorrectMove(moveStringUser))
             {
@@ -56,7 +56,7 @@ namespace MantaChessEngine
             return MakeCorrectMoveInternal(board, moveStringUser, Definitions.QUEEN);
         }
 
-        private IMove MakeCorrectMoveInternal(Board board, string moveString, char promotionPiece)
+        private IMove MakeCorrectMoveInternal(IBoard board, string moveString, char promotionPiece)
         {
             Piece movingPiece;
             Piece capturedPiece;
@@ -115,7 +115,7 @@ namespace MantaChessEngine
             return new NormalMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
         }
 
-        private bool IsEnPassantCapture(Board board, Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
+        private bool IsEnPassantCapture(IBoard board, Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank)
         {
             return movingPiece is Pawn &&
                    board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty &&

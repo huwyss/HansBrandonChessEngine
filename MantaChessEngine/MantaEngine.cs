@@ -1,4 +1,5 @@
 ﻿using System;
+using static MantaChessEngine.Definitions;
 
 namespace MantaChessEngine
 {
@@ -18,7 +19,7 @@ namespace MantaChessEngine
         private MoveFactory _moveFactory;
         private ISearchService _search;
         private IEvaluator _evaluator;
-        private Board _board;
+        private IBoard _board;
         private IMoveOrder _moveOrder;
 
         public MantaEngine(EngineType engineType)
@@ -70,14 +71,19 @@ namespace MantaChessEngine
             _board.SetPosition(position);
         }
 
+        public string SetFenPosition(string fen)
+        {
+            return _board.SetFenPosition(fen);
+        }
+
         public string GetString()
         {
-            return _board.GetString;
+            return _board.GetPositionString;
         }
 
         public string GetPrintString()
         {
-            return _board.GetPrintString2;
+            return _board.GetPrintString;
         }
 
         public bool MoveUci(string moveStringUci)
@@ -120,12 +126,12 @@ namespace MantaChessEngine
             return true;
         }
 
-        public bool IsWinner(Definitions.ChessColor color)
+        public bool IsWinner(ChessColor color)
         {
             return _board.IsWinner(color);
         }
 
-        public MoveRating DoBestMove(Definitions.ChessColor color)
+        public MoveRating DoBestMove(ChessColor color)
         {
             MoveRating nextMove = _search.Search(_board, color);
             _board.Move(nextMove.Move);
@@ -133,8 +139,17 @@ namespace MantaChessEngine
 
             return nextMove;
         }
-        
-        public Definitions.ChessColor SideToMove()
+
+        public MoveRating DoBestMove()
+        {
+            MoveRating nextMove = _search.Search(_board, _board.SideToMove);
+            _board.Move(nextMove.Move);
+            _log.Debug("Score: " + nextMove.Score);
+
+            return nextMove;
+        }
+
+        public ChessColor SideToMove()
         {
             return _board.SideToMove;
         }

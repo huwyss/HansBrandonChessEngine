@@ -180,7 +180,7 @@ namespace MantaChessEngineTest
                               ".p......" +
                               "........" +
                               "...K....";
-            Assert.AreEqual(expPosit, board.GetString, "En passant capture not correct move.");
+            Assert.AreEqual(expPosit, board.GetPositionString, "En passant capture not correct move.");
             Assert.AreEqual(board.History.Moves[1], new EnPassantCaptureMove(Piece.MakePiece('p'), 'a', 4, 'b', 3, Piece.MakePiece('P')));
         }
 
@@ -210,7 +210,7 @@ namespace MantaChessEngineTest
                               "........" +
                               "........" +
                               "...K....";
-            Assert.AreEqual(expPosit, board.GetString, "En passant capture not correct move.");
+            Assert.AreEqual(expPosit, board.GetPositionString, "En passant capture not correct move.");
             Assert.AreEqual(board.History.Moves[1], new EnPassantCaptureMove(Piece.MakePiece('P'), 'a', 5, 'b', 6, Piece.MakePiece('p')));
         }
 
@@ -231,7 +231,7 @@ namespace MantaChessEngineTest
             var target = new Board();
             target.SetInitialPosition();
 
-            string boardString = target.GetString;
+            string boardString = target.GetPositionString;
             string expectedString = "rnbqkbnr" +
                                     "pppppppp" +
                                     "........" +
@@ -251,16 +251,26 @@ namespace MantaChessEngineTest
             target.SetInitialPosition();
 
             string boardString = target.GetPrintString;
-            string expectedString = "8   r n b q k b n r \n" +
-                                    "7   p p p p p p p p \n" +
-                                    "6   . . . . . . . . \n" +
-                                    "5   . . . . . . . . \n" +
-                                    "4   . . . . . . . . \n" +
-                                    "3   . . . . . . . . \n" +
-                                    "2   P P P P P P P P \n" +
-                                    "1   R N B Q K B N R \n" +
-                                    "\n" +
-                                    "    a b c d e f g h \n";
+            string expectedString =
+                "    a  b  c  d  e  f  g  h\n" +
+                "  +------------------------+\n" +
+                "8 | r  n  b  q  k  b  n  r | 8\n" +
+                "  |                        |\n" +
+                "7 | p  p  p  p  p  p  p  p | 7\n" +
+                "  |                        |\n" +
+                "6 | .  .  .  .  .  .  .  . | 6\n" +
+                "  |                        |\n" +
+                "5 | .  .  .  .  .  .  .  . | 5\n" +
+                "  |                        |\n" +
+                "4 | .  .  .  .  .  .  .  . | 4\n" +
+                "  |                        |\n" +
+                "3 | .  .  .  .  .  .  .  . | 3\n" +
+                "  |                        |\n" +
+                "2 | P  P  P  P  P  P  P  P | 2\n" +
+                "  |                        |\n" +
+                "1 | R  N  B  Q  K  B  N  R | 1\n" +
+                "  +------------------------+\n" +
+                "    a  b  c  d  e  f  g  h\n";
 
             Assert.AreEqual(expectedString, boardString);
         }
@@ -374,7 +384,7 @@ namespace MantaChessEngineTest
                                     "........" +
                                     "PPPP.PPP" +
                                     "RNBQKBNR";
-            Assert.AreEqual(expectedString, target.GetString);
+            Assert.AreEqual(expectedString, target.GetPositionString);
             Assert.AreEqual(Definitions.ChessColor.Black, target.SideToMove);
             Assert.AreEqual(Helper.FileCharToFile('e'), target.EnPassantFile, "en passant file wrong after 1st back");
             Assert.AreEqual(3, target.EnPassantRank, "en passant rank wrong after 1st back");
@@ -388,7 +398,7 @@ namespace MantaChessEngineTest
                              "........" +
                              "PPPPPPPP" +
                              "RNBQKBNR";
-            Assert.AreEqual(expectedString, target.GetString);
+            Assert.AreEqual(expectedString, target.GetPositionString);
             Assert.AreEqual(Definitions.ChessColor.White, target.SideToMove);
             Assert.AreEqual(0, target.EnPassantFile, "en passant file wrong after 2dn back");
             Assert.AreEqual(0, target.EnPassantRank, "en passant rank wrong after 2dn back");
@@ -420,7 +430,7 @@ namespace MantaChessEngineTest
                               ".p......" +
                               "........" +
                               "...K....";
-            Assert.AreEqual(expPosit, board.GetString, "En passant capture not correct move.");
+            Assert.AreEqual(expPosit, board.GetPositionString, "En passant capture not correct move.");
 
             // en passant back
             board.Back();
@@ -432,12 +442,12 @@ namespace MantaChessEngineTest
                        "........" +
                        "........" +
                        "...K....";
-            Assert.AreEqual(expPosit, board.GetString, "Back after en passant capture not correct.");
+            Assert.AreEqual(expPosit, board.GetPositionString, "Back after en passant capture not correct.");
             Assert.AreEqual(Helper.FileCharToFile('b'), board.EnPassantFile, "En passant file wrong after 1st back.");
             Assert.AreEqual(3, board.EnPassantRank, "En passant rank wrong after 1st back.");
 
             board.Back();
-            Assert.AreEqual(position, board.GetString, "2nd back after en passant capture not correct.");
+            Assert.AreEqual(position, board.GetPositionString, "2nd back after en passant capture not correct.");
             Assert.AreEqual(0, board.EnPassantFile, "En passant file wrong after 2nd back.");
             Assert.AreEqual(0, board.EnPassantRank, "En passant rank wrong after 2nd back.");
         }
@@ -463,7 +473,7 @@ namespace MantaChessEngineTest
                                     "........" +
                                     "PPPP.PPP" +
                                     "RNBQKBNR";
-            Assert.AreEqual(expectedString, target.GetString);
+            Assert.AreEqual(expectedString, target.GetPositionString);
             Assert.AreEqual(Definitions.ChessColor.Black, target.SideToMove);
             Assert.AreEqual(Helper.FileCharToFile('e'), target.EnPassantFile, "en passant file wrong after back and redomove");
             Assert.AreEqual(3, target.EnPassantRank, "en passant rank wrong after back and redomove");
@@ -533,11 +543,11 @@ namespace MantaChessEngineTest
                               "........" +
                               "P......." +
                               "R....RK.";
-            Assert.AreEqual(expecPos, board.GetString, "White King Side Castling not correct.");
+            Assert.AreEqual(expecPos, board.GetPositionString, "White King Side Castling not correct.");
 
             board.Back();
 
-            Assert.AreEqual(position, board.GetString, "White King Side Castling: back not correct.");
+            Assert.AreEqual(position, board.GetPositionString, "White King Side Castling: back not correct.");
             Assert.AreEqual(true, board.CastlingRightWhiteKingSide, "castling right must be true after back.");
             Assert.AreEqual(true, board.CastlingRightWhiteQueenSide, "castling right must be true after back.");
         }
@@ -567,11 +577,11 @@ namespace MantaChessEngineTest
                               "........" +
                               "P......." +
                               "..KR...R";
-            Assert.AreEqual(expecPos, board.GetString, "White Queen Side Castling not correct.");
+            Assert.AreEqual(expecPos, board.GetPositionString, "White Queen Side Castling not correct.");
 
             board.Back();
 
-            Assert.AreEqual(position, board.GetString, "White Queen Side Castling: back not correct.");
+            Assert.AreEqual(position, board.GetPositionString, "White Queen Side Castling: back not correct.");
             Assert.AreEqual(true, board.CastlingRightWhiteKingSide, "castling right must be true after back.");
             Assert.AreEqual(true, board.CastlingRightWhiteQueenSide, "castling right must be true after back.");
         }
@@ -601,11 +611,11 @@ namespace MantaChessEngineTest
                               "........" +
                               "P......." +
                               "R...K..R";
-            Assert.AreEqual(expecPos, board.GetString, "Black King Side Castling not correct.");
+            Assert.AreEqual(expecPos, board.GetPositionString, "Black King Side Castling not correct.");
 
             board.Back();
 
-            Assert.AreEqual(position, board.GetString, "Black King Side Castling: back not correct.");
+            Assert.AreEqual(position, board.GetPositionString, "Black King Side Castling: back not correct.");
             Assert.AreEqual(true, board.CastlingRightBlackKingSide, "castling right must be true after back.");
             Assert.AreEqual(true, board.CastlingRightBlackQueenSide, "castling right must be true after back.");
         }
@@ -635,11 +645,11 @@ namespace MantaChessEngineTest
                               "........" +
                               "P......." +
                               "R...K..R";
-            Assert.AreEqual(expecPos, board.GetString, "Black Queen Side Castling not correct.");
+            Assert.AreEqual(expecPos, board.GetPositionString, "Black Queen Side Castling not correct.");
 
             board.Back();
 
-            Assert.AreEqual(position, board.GetString, "Black Queen Side Castling: back not correct.");
+            Assert.AreEqual(position, board.GetPositionString, "Black Queen Side Castling: back not correct.");
             Assert.AreEqual(true, board.CastlingRightBlackKingSide, "castling right must be true after back.");
             Assert.AreEqual(true, board.CastlingRightBlackQueenSide, "castling right must be true after back.");
         }
@@ -673,11 +683,11 @@ namespace MantaChessEngineTest
                               "........" +
                               "........" +
                               "....K...";
-            Assert.AreEqual(expecPos, board.GetString, "White straight promotion not correct.");
+            Assert.AreEqual(expecPos, board.GetPositionString, "White straight promotion not correct.");
 
             board.Back();
 
-            Assert.AreEqual(position, board.GetString, "White straight promotion: back not correct.");
+            Assert.AreEqual(position, board.GetPositionString, "White straight promotion: back not correct.");
         }
 
         [TestMethod]
@@ -705,11 +715,11 @@ namespace MantaChessEngineTest
                               "........" +
                               "........" +
                               "....K...";
-            Assert.AreEqual(expecPos, board.GetString, "White straight minor (rook) promotion not correct.");
+            Assert.AreEqual(expecPos, board.GetPositionString, "White straight minor (rook) promotion not correct.");
 
             board.Back();
 
-            Assert.AreEqual(position, board.GetString, "White straight minor (rook) promotion: back not correct.");
+            Assert.AreEqual(position, board.GetPositionString, "White straight minor (rook) promotion: back not correct.");
         }
 
         [TestMethod]
@@ -737,11 +747,11 @@ namespace MantaChessEngineTest
                               "........" +
                               "........" +
                               "....K...";
-            Assert.AreEqual(expecPos, board.GetString, "White promotion with capture not correct.");
+            Assert.AreEqual(expecPos, board.GetPositionString, "White promotion with capture not correct.");
 
             board.Back();
 
-            Assert.AreEqual(position, board.GetString, "White promotion with capture: back not correct.");
+            Assert.AreEqual(position, board.GetPositionString, "White promotion with capture: back not correct.");
         }
 
         [TestMethod]
@@ -769,11 +779,11 @@ namespace MantaChessEngineTest
                               "........" +
                               "........" +
                               "q...K...";
-            Assert.AreEqual(expecPos, board.GetString, "Black straight promotion not correct.");
+            Assert.AreEqual(expecPos, board.GetPositionString, "Black straight promotion not correct.");
 
             board.Back();
 
-            Assert.AreEqual(position, board.GetString, "Black straight promotion: back not correct.");
+            Assert.AreEqual(position, board.GetPositionString, "Black straight promotion: back not correct.");
         }
 
         [TestMethod]
@@ -801,11 +811,11 @@ namespace MantaChessEngineTest
                               "........" +
                               "........" +
                               ".q..K...";
-            Assert.AreEqual(expecPos, board.GetString, "Black promotion with capture not correct.");
+            Assert.AreEqual(expecPos, board.GetPositionString, "Black promotion with capture not correct.");
 
             board.Back();
 
-            Assert.AreEqual(position, board.GetString, "Black promotion with capture: back not correct.");
+            Assert.AreEqual(position, board.GetPositionString, "Black promotion with capture: back not correct.");
         }
         
     }

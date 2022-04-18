@@ -1,8 +1,11 @@
-﻿namespace MantaChessEngine
+﻿using static MantaChessEngine.Definitions;
+
+namespace MantaChessEngine
 {
     public interface IBoard
     {
-        Definitions.ChessColor SideToMove { get; set; }
+        ChessColor SideToMove { get; set; }
+        int MoveCountSincePawnOrCapture { get; set; } // todo implement this rule...
         History History { get; set; }
         IMove LastMove { get; }
         int EnPassantFile { get; }
@@ -13,9 +16,13 @@
         bool CastlingRightBlackKingSide { get; }
         bool WhiteDidCastling { get; set; }
         bool BlackDidCastling { get; set; }
-        string GetString { get; }
+        string GetPositionString { get; }
         string GetPrintString { get; }
 
+        string SetFenPosition(string fen);
+
+        string GetFenString();
+        
         /// <summary>
         /// Sets the initial chess position.
         /// </summary>
@@ -68,9 +75,9 @@
         /// </summary>
         void RedoMove();
 
-        Definitions.ChessColor GetColor(int file, int rank);
-        bool IsWinner(Definitions.ChessColor color);
+        ChessColor GetColor(int file, int rank);
+        bool IsWinner(ChessColor color);
 
-        Position GetKing(Definitions.ChessColor color);
+        Position GetKing(ChessColor color);
     }
 }

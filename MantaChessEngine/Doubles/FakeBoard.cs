@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using static MantaChessEngine.Definitions;
 
 namespace MantaChessEngine.Doubles
 {
     public class FakeBoard : IBoard
     {
-        public Definitions.ChessColor SideToMove { get; set; }
+        public ChessColor SideToMove { get; set; }
+        public int MoveCountSincePawnOrCapture { get; set; }
         public History History { get; set; }
         public IMove LastMove { get; }
         public int EnPassantFile { get; }
@@ -19,15 +16,16 @@ namespace MantaChessEngine.Doubles
         public bool CastlingRightBlackKingSide { get; }
         public bool WhiteDidCastling { get; set; }
         public bool BlackDidCastling { get; set; }
-        public string GetString { get; }
+        public string GetPositionString { get; }
         public string GetPrintString { get; }
-        public void SetInitialPosition()
-        {
-        }
+        
 
-        public void SetPosition(string position)
-        {
-        }
+        public void SetInitialPosition() { }
+
+        public void SetPosition(string position) { }
+        public string SetFenPosition(string fen) { return string.Empty; }
+
+        public string GetFenString() { return string.Empty; }
 
         public Piece GetPiece(int file, int rank)
         {
@@ -59,17 +57,17 @@ namespace MantaChessEngine.Doubles
         {
         }
 
-        public Definitions.ChessColor GetColor(int file, int rank)
+        public ChessColor GetColor(int file, int rank)
         {
-            return Definitions.ChessColor.White;
+            return ChessColor.White;
         }
 
-        public bool IsWinner(Definitions.ChessColor color)
+        public bool IsWinner(ChessColor color)
         {
             return false;
         }
 
-        public Position GetKing(Definitions.ChessColor color)
+        public Position GetKing(ChessColor color)
         {
             return null;
         }

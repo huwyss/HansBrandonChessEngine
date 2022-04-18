@@ -12,7 +12,6 @@ Manta Chess Engine is reasonably playing. It beats Nelson from chess.com.
 - Evaluation of the current position via points for each piece. Additionally pawn and knight get points for position on board and doulbe bishop gives extra points.
 
 ### Missing features:
-- Minor promotion
 - draw after 50 moves without capture of pawn move
 - draw after position repetition
 

@@ -10,6 +10,7 @@ Manta Chess Engine is reasonably playing. It beats Nelson from chess.com.
 - Limited implementation of UCI. 
 - Minimax search performance allows for 3 or 4 half moves (4 takes about 20 seconds thinking time, 3 takes less than a second)
 - Evaluation of the current position via points for each piece. Additionally pawn and knight get points for position on board and doulbe bishop gives extra points.
+- Alpha Beta Pruning
 
 ### Missing features:
 - draw after 50 moves without capture of pawn move
@@ -23,5 +24,6 @@ Manta Chess Engine is reasonably playing. It beats Nelson from chess.com.
 - How to improve endgame?
 
 ### Next Tasks
-- Alpha beta pruning
+- Improve search
+- UCI asynchronous
 

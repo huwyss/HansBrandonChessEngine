@@ -19,7 +19,7 @@ namespace PerformanceMeter
             var depth = 4;
 
             ////ExecutePerft("Initial Position", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", depth);
-            ExecutePerft("Position 2", "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 0", depth);
+            ExecuteDivide("Position 2", "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 0", depth);
             ////ExecutePerft("Position 3", "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - ", depth);
             ////ExecutePerft("Position 4", "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1", depth);
             ////ExecutePerft("Position 5", "rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8  ", depth);
@@ -28,7 +28,7 @@ namespace PerformanceMeter
             Console.WriteLine("\nTests done. Hit enter to quit.");
             Console.ReadLine();
         }
-
+        
         private static void ExecutePerft(string title, string fen, int depth)
         {
             Console.WriteLine(title);
@@ -36,11 +36,34 @@ namespace PerformanceMeter
             {
                 _engine.SetFenPosition(fen);
                 _stopwatch.Restart();
-                var nodes = _engine.Perft(n, null);
+                var nodes = _engine.Perft(n);
                 _stopwatch.Stop();
                 var timeMs = _stopwatch.ElapsedMilliseconds != 0 ? _stopwatch.ElapsedMilliseconds : 1;
                 Console.WriteLine($"Perft ({n}): Nodes: {nodes}, time: {timeMs}ms, nps: {(int)nodes / timeMs}k");
             }
+
+            Console.WriteLine();
+        }
+
+        // and move d5 x e6     d7-d5
+        //          e6 x d7 ep
+
+        private static void ExecuteDivide(string title, string fen, int depth)
+        {
+            depth = 1;
+
+            Console.WriteLine(title);
+            _engine.SetFenPosition(fen);
+
+            _engine.MoveUci("d5e6");
+            _engine.MoveUci("e7c5");
+            _engine.MoveUci("e6e7");
+
+            _stopwatch.Restart();
+            _engine.Divide(depth);
+            _stopwatch.Stop();
+            var timeMs = _stopwatch.ElapsedMilliseconds != 0 ? _stopwatch.ElapsedMilliseconds : 1;
+            // Console.WriteLine($"Perft ({depth}): Nodes: {nodes}, time: {timeMs}ms, nps: {(int)nodes / timeMs}k");
 
             Console.WriteLine();
         }

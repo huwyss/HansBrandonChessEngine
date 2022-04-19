@@ -1135,6 +1135,76 @@ namespace MantaChessEngineTest
             Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(CastlingType.BlackQueenSide, new King(ChessColor.Black))), "e8c8. 0-0-0 castling missing");
         }
 
+        [TestMethod]
+        public void GetMovesTest_WhenEnPassantCaptureAndKingInCheck_ThenNoCastlingPossible()
+        {
+            // Kiwipete position
+            // Position is after "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 0"
+            // and move d5 x e6     d7-d5
+            //          e6 x d7 ep
+
+            MoveGenerator generator = new MoveGenerator(new MoveFactory());
+            Board board = new Board();
+            string position = "r...k..r" +
+                              "p.ppqpb." +
+                              "bn..pnp." +
+                              "...PN..." +
+                              ".p..P..." +
+                              "..N..Q.p" +
+                              "PPPBBPPP" +
+                              "R...K..R";
+            board.SetPosition(position);
+
+            // White pawn captures d5 x e6
+            board.SideToMove = ChessColor.White;
+            var pawnW = new Pawn(ChessColor.White);
+            var pawnWMove = new NormalMove(pawnW, 'd', 5, 'e', 6, new Pawn(ChessColor.Black));
+            board.Move(pawnWMove);
+
+            // Black pawn move d7-d5
+            var pawnB = new Pawn(ChessColor.Black);
+            var pawnBMove = new NormalMove(pawnB, 'd', 7, 'd', 5, null);
+            board.Move(pawnBMove);
+
+            // white pawn (en passant) move e6 X d7 ep (results black king is in check)
+            var pawnWMoveEnCap = new EnPassantCaptureMove(pawnW, 'e', 6, 'd', 7, pawnB);
+            board.Move(pawnWMoveEnCap);
+
+            // get legal moves of king. should not include castling.
+            var king = new King(ChessColor.Black);
+            var kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 8, true);
+
+            Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(CastlingType.BlackKingSide, new King(ChessColor.Black))), "e8g8. 0-0 castling missing");
+            Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(CastlingType.BlackQueenSide, new King(ChessColor.Black))), "e8c8. 0-0-0 castling missing");
+        }
+
+        [TestMethod]
+        public void GetMovesTest_KiwipetePosition_PawnAttacksFieldsNextToBlackKing_ThenNoCastlingPossible()
+        {
+            // Kiwipete position
+            // position fen r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 0 moves d5e6 e7c5 e6e7
+            
+            MoveGenerator generator = new MoveGenerator(new MoveFactory());
+            Board board = new Board();
+            string position = "r...k..r" +
+                              "p.ppP.b." +
+                              "bn...np." +
+                              "..q.N..." +
+                              ".p..P..." +
+                              "..N..Q.p" +
+                              "PPPBBPPP" +
+                              "R...K..R";
+            board.SetPosition(position);
+
+            board.SideToMove = ChessColor.Black;
+
+            // get legal moves of king. should not include castling.
+            var king = new King(ChessColor.Black);
+            var kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 8, true);
+
+            Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(CastlingType.BlackKingSide, new King(ChessColor.Black))), "e8g8. 0-0 castling missing");
+            Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(CastlingType.BlackQueenSide, new King(ChessColor.Black))), "e8c8. 0-0-0 castling missing");
+        }
 
         // ----------------------------------------------------------------
         // IsCheck Test
@@ -1178,6 +1248,57 @@ namespace MantaChessEngineTest
             Assert.AreEqual(false, engine.IsCheck(ChessColor.White), "king is not attacked! IsCheck shoult return false.");
         }
 
+        [TestMethod]
+        public void IsCheckTest_WhenPawnInRank7CanPromote_ThenKingNotInCheck()
+        {
+            MantaEngine engine = new MantaEngine(EngineType.MinimaxPosition);
+            Board board = new Board();
+            string position = "r...k..." +
+                              "pppp...P" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "....K...";
+            board.SetPosition(position);
+            engine.SetBoard(board);
 
+            Assert.AreEqual(false, engine.IsCheck(ChessColor.Black), "king is not attacked! Promotion move does not count.");
+        }
+
+        // ----------------------------------------------------------------
+        // IsAttacked Test
+        // ----------------------------------------------------------------
+
+        [TestMethod]
+        public void IsAttackedTest_FieldDiagonalOfPawnIsAttacked()
+        {
+            MoveGenerator generator = new MoveGenerator(new MoveFactory());
+            Board board = new Board();
+            string position = "r...k..." +
+                              "pppp...." +
+                              "........" +
+                              ".......r" +
+                              "........" +
+                              "........" +
+                              "....P..." +
+                              "....K..R";
+            board.SetPosition(position);
+           
+            // field in front of pawn
+            Assert.AreEqual(false, generator.IsAttacked(board, ChessColor.Black, 5, 5), "Field in front of pawn is not attacked");
+            // field diagonal in front of pawn
+            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 4, 5), "Field diagonal in front of pawn is attacked");
+            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 6, 5), "Field diagonal in front of pawn is attacked");
+
+            // black rook is attacked
+            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 8, 5), "Black rook is attacked");
+            // fields between the rooks is attacked by white rook
+            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 6, 5), "Fields between the rooks is attacked by the white rook");
+            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 6, 4), "Fields between the rooks is attacked by the white rook");
+            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 6, 3), "Fields between the rooks is attacked by the white rook");
+            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 6, 2), "Fields between the rooks is attacked by the white rook");
+        }
     }
 }

@@ -179,7 +179,27 @@ namespace MantaChessEngine
             }
         }
 
-        public UInt64 Perft(int depth, IMove moveParam)
+        public UInt64 Perft(int depth)
+        {
+            if (depth == 0)
+            {
+                return 1;
+            }
+
+            UInt64 nodes = 0;
+
+            var moves = _moveGenerator.GetLegalMoves(_board, SideToMove());
+            foreach (var move in moves)
+            {
+                Move(move);
+                nodes += Perft(depth - 1);
+                UndoMove();
+            }
+
+            return nodes;
+        }
+
+        public UInt64 PerftCastling(int depth, IMove moveParam)
         {
             if (depth == 0)
             {
@@ -192,11 +212,26 @@ namespace MantaChessEngine
             foreach (var move in moves)
             {
                 Move(move);
-                nodes += Perft(depth - 1, move);
+                nodes += PerftCastling(depth - 1, move);
                 UndoMove();
             }
 
             return nodes;
+        }
+
+        public void Divide(int depth)
+        {
+            Console.WriteLine($"Divide depth {depth}");
+
+            var moves = _moveGenerator.GetLegalMoves(_board, SideToMove());
+            foreach (var move in moves)
+            {
+                Move(move);
+                var nodes = Perft(depth - 1);
+                UndoMove();
+                
+                Console.WriteLine($"Move {move.ToUciString()} : {nodes}");
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ namespace MantaChessEngine
     {
         public List<IMove> ReturnsWhiteGetAllMoves { get; set; }
         public List<IMove> ReturnsBlackGetAllMoves { get; set; }
-        public List<IMove> GetAllMoves(IBoard board, Definitions.ChessColor color, bool includeCastling = true)
+        public List<IMove> GetAllMoves(IBoard board, Definitions.ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
         {
             return color == Definitions.ChessColor.White ? ReturnsWhiteGetAllMoves : ReturnsBlackGetAllMoves;
         }

@@ -38,16 +38,13 @@ namespace MantaChessEngine
             return legalMoves;
         }
 
-        // Note: Manta is a king capture engine. 
-        // This means even if we are in check then also moves that do not remove the check are returned here.
-        // However if there is no king then no moves are returned. (Empty list)
-        public List<IMove> GetAllMoves(IBoard board, ChessColor color, bool includeCastling = true)
+        public List<IMove> GetAllMoves(IBoard board, ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
         {
-            var allMovesUnchecked = GetAllMovesUnchecked(board, color, includeCastling);
+            var allMovesUnchecked = GetAllMovesUnchecked(board, color, includeCastling, includePawnMoves);
             return allMovesUnchecked;
         }
 
-        private List<IMove> GetAllMovesUnchecked(IBoard board, ChessColor color, bool includeCastling = true)
+        private List<IMove> GetAllMovesUnchecked(IBoard board, ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
         {
             bool kingFound = false;
             List<IMove> allMoves = new List<IMove>();
@@ -63,6 +60,11 @@ namespace MantaChessEngine
                         if (piece is King)
                         {
                             kingFound = true;
+                        }
+
+                        if (piece is Pawn && !includePawnMoves)
+                        {
+                            continue;
                         }
 
                         allMoves.AddRange(piece.GetMoves(this, board, file, rank, includeCastling));
@@ -140,8 +142,8 @@ namespace MantaChessEngine
         /// </summary>
         public bool IsAttacked(IBoard board, ChessColor color, int file, int rank)
         {
-            // find all oponent moves
-            var moves = GetAllMoves(board, Helper.GetOppositeColor(color), false);
+            // find all oponent moves, without pawn moves
+            var moves = GetAllMoves(board, Helper.GetOppositeColor(color), false, false);
 
             foreach (IMove move in moves)
             {
@@ -149,6 +151,28 @@ namespace MantaChessEngine
                 {
                     return true;
                 }
+            }
+
+            // check if there is an attacking pawn diagonal to the position
+            if (color == ChessColor.White)
+            {
+                var piece = file - 1 >= 1 && rank + 1 <= 8 ? board.GetPiece(file - 1, rank + 1) : null;
+                if (piece is Pawn && piece.Color == ChessColor.Black)
+                    return true;
+
+                piece = file + 1 <= 8 && rank + 1 <= 8 ? board.GetPiece(file + 1, rank + 1) : null;
+                if (piece is Pawn && piece.Color == ChessColor.Black)
+                    return true;
+            }
+            else
+            {
+                var piece = file - 1 >= 1 && rank - 1 >= 1 ? board.GetPiece(file - 1, rank - 1) : null;
+                if (piece is Pawn && piece.Color == ChessColor.White)
+                    return true;
+
+                piece = file + 1 <= 8 && rank - 1 >= 1 ? board.GetPiece(file + 1, rank - 1) : null;
+                if (piece is Pawn && piece.Color == ChessColor.White)
+                    return true;
             }
 
             return false;

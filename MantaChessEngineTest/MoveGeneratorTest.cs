@@ -1277,7 +1277,7 @@ namespace MantaChessEngineTest
             MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = "r...k..." +
-                              "pppp...." +
+                              "...p...." +
                               "........" +
                               ".......r" +
                               "........" +
@@ -1287,18 +1287,18 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
            
             // field in front of pawn
-            Assert.AreEqual(false, generator.IsAttacked(board, ChessColor.Black, 5, 5), "Field in front of pawn is not attacked");
+            Assert.AreEqual(false, generator.IsAttacked(board, ChessColor.Black, 5, 3), "Field in front of pawn is not attacked");
             // field diagonal in front of pawn
-            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 4, 5), "Field diagonal in front of pawn is attacked");
-            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 6, 5), "Field diagonal in front of pawn is attacked");
+            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 4, 3), "Field diagonal in front of pawn is attacked");
+            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 6, 3), "Field diagonal in front of pawn is attacked");
 
             // black rook is attacked
             Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 8, 5), "Black rook is attacked");
             // fields between the rooks is attacked by white rook
-            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 6, 5), "Fields between the rooks is attacked by the white rook");
-            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 6, 4), "Fields between the rooks is attacked by the white rook");
-            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 6, 3), "Fields between the rooks is attacked by the white rook");
-            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 6, 2), "Fields between the rooks is attacked by the white rook");
+            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 8, 5), "Fields between the rooks is attacked by the white rook");
+            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 8, 4), "Fields between the rooks is attacked by the white rook");
+            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 8, 3), "Fields between the rooks is attacked by the white rook");
+            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 8, 2), "Fields between the rooks is attacked by the white rook");
         }
     }
 }

@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using static MantaChessEngine.Definitions;
 
 namespace MantaChessEngine
 {
     public class Pawn : Piece
     {
-        public Pawn(Definitions.ChessColor color) : base(color)
+        public Pawn(ChessColor color) : base(color)
         {
         }
 
@@ -16,7 +13,7 @@ namespace MantaChessEngine
         {
             get
             {
-                return Color == Definitions.ChessColor.White ? 'P' : 'p';
+                return Color == ChessColor.White ? 'P' : 'p';
             }
         }
 
@@ -36,7 +33,7 @@ namespace MantaChessEngine
             foreach (string sequence in directionSequences)
             {
                 string currentSequence = sequence;
-                if (Color == Definitions.ChessColor.Black)
+                if (Color == ChessColor.Black)
                 {
                     currentSequence = sequence.Replace('u', 'd');
                     twoFieldMoveInitRank = 7;
@@ -45,7 +42,7 @@ namespace MantaChessEngine
                 GetEndPosition(file, rank, currentSequence, out targetFile, out targetRank, out valid);
                 if (currentSequence == "u" || currentSequence == "d") // walk straight one field
                 {
-                    if (valid && board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty) // empty field
+                    if (valid && board.GetColor(targetFile, targetRank) == ChessColor.Empty) // empty field
                     {
                         if ((currentSequence == "u" && targetRank < 8) ||  // white normal pawn move straight
                             (currentSequence == "d" && targetRank > 1))    // black normal pawn move straight
@@ -68,8 +65,8 @@ namespace MantaChessEngine
                     bool valid2 = false;
                     string currentSequence2 = currentSequence == "uu" ? "u" : "d";
                     GetEndPosition(file, rank, currentSequence2, out targetFile2, out targetRank2, out valid2);
-                    if ((valid && board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty) && // end field is empty
-                        (valid2 && board.GetColor(targetFile2, targetRank2) == Definitions.ChessColor.Empty)) // field between current and end field is also empty
+                    if ((valid && board.GetColor(targetFile, targetRank) == ChessColor.Empty) && // end field is empty
+                        (valid2 && board.GetColor(targetFile2, targetRank2) == ChessColor.Empty)) // field between current and end field is also empty
                     {
                         moves.Add(MoveFactory.MakeNormalMove(this, file, rank, targetFile, targetRank, null));
                     }
@@ -96,12 +93,11 @@ namespace MantaChessEngine
                     // en passant capture
                     else if (valid && targetFile == board.History.LastEnPassantFile && targetRank == board.History.LastEnPassantRank)
                     {
-                        Piece capturedPawn = Color == Definitions.ChessColor.White // moving pawn is white
+                        Piece capturedPawn = Color == ChessColor.White // moving pawn is white
                             ? board.GetPiece(targetFile, targetRank - 1)  
                             : board.GetPiece(targetFile, targetRank + 1); 
                         moves.Add(MoveFactory.MakeEnPassantCaptureMove(this, file, rank, targetFile, targetRank, capturedPawn));
                     }
-
                 }
             }
 

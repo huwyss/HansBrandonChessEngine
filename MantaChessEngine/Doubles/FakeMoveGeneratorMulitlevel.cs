@@ -29,7 +29,7 @@ namespace MantaChessEngine.Doubles
             _iteratorIsChecks = isChecksToReturn.GetEnumerator();
         }
 
-        public List<IMove> GetAllMoves(IBoard board, Definitions.ChessColor color, bool includeCastling = true)
+        public List<IMove> GetAllMoves(IBoard board, Definitions.ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
         {
             _iteratorMoves.MoveNext();
 

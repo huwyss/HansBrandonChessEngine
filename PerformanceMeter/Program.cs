@@ -84,40 +84,45 @@ namespace PerformanceMeter
 Perft tests, see https://www.chessprogramming.org/Perft_Results
 
 Initial Position
-Perft (1): Nodes: 20, time: 10ms, nps: 2k
-Perft (2): Nodes: 400, time: 4ms, nps: 100k
-Perft (3): Nodes: 8902, time: 94ms, nps: 94k
-Perft (4): Nodes: 197281, time: 1899ms, nps: 103k
+Perft (1): Nodes: 20, time: 15ms, nps: 1k
+Perft (2): Nodes: 400, time: 5ms, nps: 80k
+Perft (3): Nodes: 8902, time: 74ms, nps: 120k
+Perft (4): Nodes: 197281, time: 1566ms, nps: 125k
+Perft (5): Nodes: 4865609, time: 25902ms, nps: 187k
 
 Position 2
-Perft (1): Nodes: 48, time: 2ms, nps: 24k
-Perft (2): Nodes: 2039, time: 26ms, nps: 78k
-Perft (3): Nodes: 97862, time: 1257ms, nps: 77k
-Perft (4): Nodes: 4085603, time: 49308ms, nps: 82k   // The problem is fixed
+Perft (1): Nodes: 48, time: 11ms, nps: 4k
+Perft (2): Nodes: 2039, time: 21ms, nps: 97k
+Perft (3): Nodes: 97862, time: 739ms, nps: 132k
+Perft (4): Nodes: 4085603, time: 35962ms, nps: 113k
+Perft (5): Nodes: 193690690, time: 1466263ms, nps: 132k
 
 Position 3
-Perft (1): Nodes: 14, time: 1ms, nps: 14k
+Perft (1): Nodes: 14, time: 11ms, nps: 1k
 Perft (2): Nodes: 191, time: 1ms, nps: 191k
-Perft (3): Nodes: 2812, time: 17ms, nps: 165k
-Perft (4): Nodes: 43238, time: 236ms, nps: 183k
+Perft (3): Nodes: 2812, time: 13ms, nps: 216k
+Perft (4): Nodes: 43238, time: 167ms, nps: 258k
+Perft (5): Nodes: 674624, time: 2473ms, nps: 272k
+Perft (6): Nodes: 11030083, time: 39957ms, nps: 276k
 
 Position 4
-Perft (1): Nodes: 6, time: 1ms, nps: 6k
-Perft (2): Nodes: 264, time: 4ms, nps: 66k
-Perft (3): Nodes: 9467, time: 128ms, nps: 73k
-Perft (4): Nodes: 422333, time: 5972ms, nps: 70k
+Perft (1): Nodes: 6, time: 14ms, nps: 0k
+Perft (2): Nodes: 264, time: 7ms, nps: 37k
+Perft (3): Nodes: 9467, time: 140ms, nps: 67k
+Perft (4): Nodes: 422333, time: 3479ms, nps: 121k
+Perft (5): Nodes: 15833292, time: 124080ms, nps: 127k
 
 Position 5
-Perft (1): Nodes: 44, time: 1ms, nps: 44k
-Perft (2): Nodes: 1486, time: 17ms, nps: 87k
-Perft (3): Nodes: 62379, time: 745ms, nps: 83k
-Perft (4): Nodes: 2103487, time: 24058ms, nps: 87k
+Perft (1): Nodes: 44, time: 32ms, nps: 1k
+Perft (2): Nodes: 1486, time: 28ms, nps: 53k
+Perft (3): Nodes: 62379, time: 1099ms, nps: 56k
+Perft (4): Nodes: 2103487, time: 17530ms, nps: 119k
 
 Position 6
-Perft (1): Nodes: 46, time: 1ms, nps: 46k
-Perft (2): Nodes: 2079, time: 24ms, nps: 86k
-Perft (3): Nodes: 89890, time: 1082ms, nps: 83k
-Perft (4): Nodes: 3894594, time: 42945ms, nps: 90k
+Perft (1): Nodes: 46, time: 11ms, nps: 4k
+Perft (2): Nodes: 2079, time: 18ms, nps: 115k
+Perft (3): Nodes: 89890, time: 663ms, nps: 135k
+Perft (4): Nodes: 3894594, time: 29254ms, nps: 133k
 
 
 Tests done. Hit enter to quit.

@@ -21,9 +21,10 @@ Manta Chess Engine is reasonably playing. It beats Nelson from chess.com.
 - Keep searching after max depth for selected moves
 - Move ordering for alpha beta pruning
 - Faster move generator with better board representation
-- How to improve endgame?
+- Endgame tables
+- PVS search
 
 ### Next Tasks
-- Improve search
+- Bitboard
 - UCI asynchronous
 

@@ -21,85 +21,102 @@ namespace MantaUCI
             while (_running)
             {
                 var input = Console.ReadLine().Trim();
+                var inputWords = input.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
-                if (input.Equals("uci"))
+                if (inputWords.Length <= 0)
+                    continue;
+
+                var command = inputWords[0];
+
+                if (command.Equals("uci"))
                 {
                     Console.WriteLine("id name Manta Chess Engine");
                     Console.WriteLine("id author Hans Ulrich Wyss");
                     Console.WriteLine("uciok");
                 }
-                else if (input.Equals("isready"))
+                else if (command.Equals("isready"))
                 {
                     Console.WriteLine("readyok");
                 }
-                else if (input.Equals("ucinewgame"))
+                else if (command.Equals("ucinewgame"))
                 {
                     if (_engine == null)
                     {
                         CreateEngine();
                     }
                 }
-                // position startpos moves e2e4
-                else if (input.StartsWith("position startpos moves"))
+                else if (command.Equals("position"))
                 {
-                    _fenString = "";
-                    _movesFromInitPosition = input.Substring(24).Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-                }
-                else if (input.StartsWith("position fen"))
-                {
-                    var indexOfMoves = input.IndexOf("moves");
-                    if (indexOfMoves < 0)
+                    if (inputWords.Length >= 2 && inputWords[1].Equals("startpos")) // position startpos ...
                     {
-                        _fenString = input.Substring(13);
-                        var error = _engine.SetFenPosition(_fenString);
-                        if (string.IsNullOrEmpty(error))
+                        if (inputWords.Length >= 3 && inputWords[2].Equals("moves")) // position startpos moves ...
                         {
-                            Console.WriteLine(error);
+                            _fenString = "";
+                            _movesFromInitPosition = input.Substring(input.IndexOf("moves") + "moves".Length + 1).Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                         }
-                        else
+                        else // position startpos
                         {
+                            _fenString = "";
                             _movesFromInitPosition = new string[0];
                         }
                     }
-                    else
+                    else if (inputWords.Length >= 2 && inputWords[1].Equals("fen")) // position fen
                     {
-                        // example: position fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 moves e2e4 e7e5
-                        var lengthOfFen = indexOfMoves - 14;
-                        var lengthOfMoves = input.Length - indexOfMoves - 6;
-                        _fenString = input.Substring(13, lengthOfFen);
-                        var movesString = input.Substring(indexOfMoves + 6, lengthOfMoves);
-                        
-                        var error = _engine.SetFenPosition(_fenString);
-                        if (string.IsNullOrEmpty(error))
+                        var indexOfMoves = input.IndexOf("moves");
+                        if (indexOfMoves < 0)
                         {
-                            _movesFromInitPosition = movesString.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-                            DoMoves();
+                            // example: position fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+                            _fenString = input.Substring(13);
+                            var error = _engine.SetFenPosition(_fenString);
+                            if (string.IsNullOrEmpty(error))
+                            {
+                                Console.WriteLine(error);
+                            }
+                            else
+                            {
+                                _movesFromInitPosition = new string[0];
+                            }
                         }
                         else
                         {
-                            Console.WriteLine(error);
+                            // example: position fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 moves e2e4 e7e5
+                            var lengthOfFen = indexOfMoves - 14;
+                            var lengthOfMoves = input.Length - indexOfMoves - 6;
+                            _fenString = input.Substring(13, lengthOfFen);
+                            var movesString = input.Substring(indexOfMoves + 6, lengthOfMoves);
+
+                            var error = _engine.SetFenPosition(_fenString);
+                            if (string.IsNullOrEmpty(error))
+                            {
+                                _movesFromInitPosition = movesString.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                                DoMoves();
+                            }
+                            else
+                            {
+                                Console.WriteLine(error);
+                            }
                         }
                     }
                 }
-                else if (input.Equals("position startpos"))
+                else if (command.Equals("go"))
                 {
-                    _fenString = "";
-                    _movesFromInitPosition = new string[0];
+                    if (inputWords.Length >= 2 && inputWords[1].Equals("depth")) // go depth x
+                    {
+                        var depth = int.Parse(input.Substring(input.IndexOf("depth") + "depth".Length + 1));
+                        AnswerBestMove(depth);
+                    }
+                    else
+                    {
+                        // could be:
+                        //   go
+                        //   go movetime 1000 [ms]
+                        //   go wtime w btime x winc y binc z (w, x, y, z in ms)
+                        //   go wtime w btime x winc 0 binc movestogo y (w, x in ms, y number of moves ==> moves to do in time w)
+
+                        AnswerBestMove(4);
+                    }
                 }
-                else if (input.StartsWith("go depth"))
-                {
-                    var depth = int.Parse(input.Substring(8));
-                    AnswerBestMove(depth);
-                }
-                // could be:
-                //   go movetime 1000 [ms]
-                //   go wtime w btime x winc y binc z (w, x, y, z in ms)
-                //   go wtime w btime x winc 0 binc movestogo y (w, x in ms, y number of moves ==> moves to do in time w)
-                else if (input.StartsWith("go"))
-                {
-                    AnswerBestMove(4);
-                }
-                else if (input.Equals("quit"))
+                else if (command.Equals("quit"))
                 {
                     _running = false;
                 }

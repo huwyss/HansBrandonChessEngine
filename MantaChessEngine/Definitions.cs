@@ -31,7 +31,15 @@ namespace MantaChessEngine
 
         public const int DEFAULT_MAXLEVEL = 3;
 
-        public const float ScoreWhiteWins = 10000;
-        public const float ScoreBlackWins = -10000;
+        public const int ScoreWhiteWins = 1000000;
+        public const int ScoreBlackWins = -1000000;
+
+        public const int SignificantFactor = 8; // fast multiplier
+
+        public const int ValuePawn = 100;
+        public const int ValueKnight = 300;
+        public const int ValueBishop = 300;
+        public const int ValueRook = 500;
+        public const int ValueQueen = 900;
     }
 }

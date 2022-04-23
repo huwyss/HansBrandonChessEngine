@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MantaChessEngine
+﻿namespace MantaChessEngine
 {
     public class EvaluatorPosition : IEvaluator
     {
-        public static readonly float ValuePawn = 1f;
-        public static readonly float ValueKnight = 3f;
-        public static readonly float ValueBishop = 3f;
-        public static readonly float ValueRook = 5f;
-        public static readonly float ValueQueen = 9f;
-        public readonly float ValueKing = 10000f;
+        private static readonly int ValuePawn = Definitions.ValuePawn / 100;
+        private static readonly int ValueKnight = Definitions.ValueKnight / 100;
+        private static readonly int ValueBishop = Definitions.ValueBishop;
+        private static readonly int ValueRook = Definitions.ValueRook;
+        private static readonly int ValueQueen = Definitions.ValueQueen;
 
-        private readonly float AdvantageDoubleBishop = 0.5f;
-        private readonly float CastlingScore = 1f;
+        private readonly int AdvantageDoubleBishop = 50;
+        private readonly int CastlingScore = 100;
 
         private int numberWhiteBishop = 0;
         private int numberBlackBishop = 0;
@@ -24,10 +17,10 @@ namespace MantaChessEngine
         /// <summary>
         /// Calculates the score from white's point. + --> white is better, - --> black is better.
         /// </summary>
-        public float Evaluate(IBoard board)
+        public int Evaluate(IBoard board)
         {
-            float scoreWhite = 0;
-            float scoreBlack = 0;
+            int scoreWhite = 0;
+            int scoreBlack = 0;
 
             numberWhiteBishop = 0;
             numberBlackBishop = 0;
@@ -37,7 +30,7 @@ namespace MantaChessEngine
                 for (int rank = 1; rank <= 8; rank++)
                 {
                     Piece piece = board.GetPiece(file, rank);
-                    float pieceScore = GetPieceScore(piece, file, rank);
+                    int pieceScore = GetPieceScore(piece, file, rank);
                     if (board.GetColor(file, rank) == Definitions.ChessColor.White)
                     {
                         scoreWhite += pieceScore;
@@ -69,14 +62,12 @@ namespace MantaChessEngine
                 scoreBlack += CastlingScore;
             }
 
-            float score = scoreWhite - scoreBlack;
-            score = score < -1000 ? Definitions.ScoreBlackWins : score;
-            score = score > 1000 ? Definitions.ScoreWhiteWins : score;
+            int score = scoreWhite - scoreBlack;
 
             return score;
         }
 
-        private float GetPieceScore(Piece piece, int file, int rank)
+        private int GetPieceScore(Piece piece, int file, int rank)
         {
             int index = 8 * (rank - 1) + file - 1;
 
@@ -100,34 +91,32 @@ namespace MantaChessEngine
                 return ValueRook;
             else if (piece is Queen)
                 return ValueQueen;
-            else if (piece is King)
-                return ValueKing;
             else
                 return 0;
         }
     
-        private readonly float[] PawnPositionValue = new float[64] // pawn in center are more valuable (at least in opening)
+        private readonly int[] PawnPositionValue = new int[64] // pawn in center are more valuable (at least in opening)
         {
-            1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 
-            1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f,
-            1.00f, 1.00f, 1.05f, 1.10f, 1.10f, 1.05f, 1.00f, 1.00f,
-            1.00f, 1.00f, 1.10f, 1.20f, 1.20f, 1.10f, 1.00f, 1.00f,
-            1.00f, 1.00f, 1.10f, 1.20f, 1.20f, 1.10f, 1.00f, 1.00f,
-            1.00f, 1.00f, 1.05f, 1.10f, 1.10f, 1.05f, 1.00f, 1.00f,
-            1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f,
-            1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f,
+            100, 100, 100, 100, 100, 100, 100, 100,
+            100, 100, 100, 100, 100, 100, 100, 100,
+            100, 100, 105, 110, 110, 105, 100, 100,
+            100, 100, 110, 120, 120, 110, 100, 100,
+            100, 100, 110, 120, 120, 110, 100, 100,
+            100, 100, 105, 110, 110, 105, 100, 100,
+            100, 100, 100, 100, 100, 100, 100, 100,
+            100, 100, 100, 100, 100, 100, 100, 100,
         };
 
-        private readonly float[] KnightPositionValue = new float[64] // Der Springer am Rande ist eine Schande
+        private readonly int[] KnightPositionValue = new int[64] // Der Springer am Rande ist eine Schande
         {
-            0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f,
-            0.95f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 0.95f,
-            0.95f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 0.95f,
-            0.95f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 0.95f,
-            0.95f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 0.95f,
-            0.95f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 0.95f,
-            0.95f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 0.95f,
-            0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f,
+            95,  95,  95,  95,  95,  95,  95,  95,
+            95, 100, 100, 100, 100, 100, 100,  95,
+            95, 100, 100, 100, 100, 100, 100,  95,
+            95, 100, 100, 100, 100, 100, 100,  95,
+            95, 100, 100, 100, 100, 100, 100,  95,
+            95, 100, 100, 100, 100, 100, 100,  95,
+            95, 100, 100, 100, 100, 100, 100,  95,
+            95,  95,  95,  95,  95,  95,  95,  95,
         };
     }
 }

@@ -6,7 +6,7 @@ namespace MantaChessEngine
 {
     public class MoveRating
     {
-        private const float Tolerance = 0.05f;
+        private const int Tolerance = 5;
 
         /// <summary>
         /// Move that is being rated.

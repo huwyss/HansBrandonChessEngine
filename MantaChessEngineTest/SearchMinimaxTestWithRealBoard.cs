@@ -39,7 +39,7 @@ namespace MantaChessEngineTest
             IMove goodMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
 
             Assert.AreEqual(goodMove, bestRatingActual.Move, "White bishop should capture pawn. We are on level 1");
-            Assert.AreEqual(2, bestRatingActual.Score);
+            Assert.AreEqual(200, bestRatingActual.Score);
         }
 
         [TestMethod]
@@ -63,7 +63,7 @@ namespace MantaChessEngineTest
             IMove badMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
 
             Assert.AreNotEqual(badMove, bestRatingActual.Move, "White bishop should not capture pawn.");
-            Assert.AreEqual(1, bestRatingActual.Score);
+            Assert.AreEqual(100, bestRatingActual.Score);
         }
 
         [TestMethod]
@@ -126,7 +126,7 @@ namespace MantaChessEngineTest
 
             Assert.AreNotEqual(badMove, bestRatingActual.Move, "White bishop or knight should not capture black pawn.");
             Assert.AreNotEqual(badMove2, bestRatingActual.Move, "White bishop or knight should not capture black pawn.");
-            Assert.AreEqual(-1, bestRatingActual.Score);
+            Assert.AreEqual(-100, bestRatingActual.Score);
         }
 
         [TestMethod]
@@ -202,7 +202,7 @@ namespace MantaChessEngineTest
             IMove goodMove = new NormalMove(Piece.MakePiece('b'), 'f', 6, 'e', 5, Piece.MakePiece('P'));
 
             Assert.AreEqual(goodMove, bestRatingActual.Move, "Black bishop should capture pawn. We are on level 1");
-            Assert.AreEqual(-2, bestRatingActual.Score);
+            Assert.AreEqual(-200, bestRatingActual.Score);
         }
 
         [TestMethod]
@@ -226,7 +226,7 @@ namespace MantaChessEngineTest
             IMove badMove = new NormalMove(Piece.MakePiece('b'), 'f', 6, 'e', 5, Piece.MakePiece('P'));
 
             Assert.AreNotEqual(badMove, bestRatingActual.Move, "Black bishop should not capture pawn.");
-            Assert.AreEqual(-1, bestRatingActual.Score);
+            Assert.AreEqual(-100, bestRatingActual.Score);
         }
 
         [TestMethod]
@@ -289,7 +289,7 @@ namespace MantaChessEngineTest
 
             Assert.AreNotEqual(badMove, bestRatingActual.Move, "Black bishop or knight should not capture white pawn.");
             Assert.AreNotEqual(badMove2, bestRatingActual.Move, "Black bishop or knight should not capture white pawn.");
-            Assert.AreEqual(1, bestRatingActual.Score);
+            Assert.AreEqual(100, bestRatingActual.Score);
         }
 
         // ---------------------------------------------------------------------------------------------

@@ -12,6 +12,6 @@ namespace MantaChessEngine
         /// <summary>
         /// Returns the score for white and black.
         /// </summary>
-        float Evaluate(IBoard board);
+        int Evaluate(IBoard board);
     }
 }

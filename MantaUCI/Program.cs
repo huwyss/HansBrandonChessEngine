@@ -143,8 +143,8 @@ namespace MantaUCI
                 bestMove = _engine.DoBestMove();
                 _stopwatch.Stop();
                 var scoreFromEngine = bestMove.Move.Color == Definitions.ChessColor.White
-                    ? (int)(100 * bestMove.Score)
-                    : -(int)(100 * bestMove.Score);
+                    ? bestMove.Score
+                    : - bestMove.Score;
 
                 string principalVariation = string.Empty;
                 foreach (var move in bestMove.PrincipalVariation)

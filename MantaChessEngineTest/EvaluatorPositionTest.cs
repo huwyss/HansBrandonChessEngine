@@ -24,7 +24,7 @@ namespace MantaChessEngineTest
             var target = new EvaluatorPosition();
             var score = target.Evaluate(board);
 
-            Assert.AreEqual(1.2f, score);
+            Assert.AreEqual(120, score);
         }
 
         [TestMethod]
@@ -44,14 +44,14 @@ namespace MantaChessEngineTest
             var target = new EvaluatorPosition();
             var score = target.Evaluate(board);
 
-            Assert.AreEqual(1.1f, score);
+            Assert.AreEqual(110, score);
         }
 
         [TestMethod]
         public void EvaluateTest_WhenKnightIsAtBorder_ThenItsAShame()
         {
             Board board = new Board();
-            string position = "........" +
+            string position = "..k..K.." +
                               "........" +
                               "........" +
                               "........" +
@@ -64,7 +64,7 @@ namespace MantaChessEngineTest
             var target = new EvaluatorPosition();
             var score = target.Evaluate(board);
 
-            Assert.AreEqual(0.95f * 3f, score);
+            Assert.AreEqual(95 * 3, score);
         }
         
         [TestMethod]
@@ -84,7 +84,7 @@ namespace MantaChessEngineTest
             var target = new EvaluatorPosition();
             var score = target.Evaluate(board);
 
-            Assert.AreEqual(3f, score);
+            Assert.AreEqual(300, score);
         }
 
         [TestMethod]

@@ -1,34 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MantaChessEngine
+﻿namespace MantaChessEngine
 {
     public class EvaluatorSimple : IEvaluator
     {
-        public float ValuePawn = 1f;
-        public float ValueKnight = 3f;
-        public float ValueBishop = 3f;
-        public float ValueRook = 5f;
-        public float ValueQueen = 9f;
-        public float ValueKing = 10000f;
+        private static readonly int ValuePawn = Definitions.ValuePawn;
+        private static readonly int ValueKnight = Definitions.ValueKnight;
+        private static readonly int ValueBishop = Definitions.ValueBishop;
+        private static readonly int ValueRook = Definitions.ValueRook;
+        private static readonly int ValueQueen = Definitions.ValueQueen;
 
         /// <summary>
         /// Calculates the score from white's point. + --> white is better, - --> black is better.
         /// </summary>
-        public float Evaluate(IBoard board)
+        public int Evaluate(IBoard board)
         {
-            float scoreWhite = 0;
-            float scoreBlack = 0;
+            var scoreWhite = 0;
+            var scoreBlack = 0;
 
             for (int file = 1; file <= 8; file++)
             {
                 for (int rank = 1; rank <= 8; rank++)
                 {
                     Piece piece = board.GetPiece(file, rank);
-                    float pieceScore = GetPieceScore(piece);
+                    int pieceScore = GetPieceScore(piece);
                     if (board.GetColor(file, rank) == Definitions.ChessColor.White)
                     {
                         scoreWhite += pieceScore;
@@ -40,14 +33,12 @@ namespace MantaChessEngine
                 }
             }
 
-            float score = scoreWhite - scoreBlack;
-            score = score < -1000 ? Definitions.ScoreBlackWins : score;
-            score = score > 1000 ? Definitions.ScoreWhiteWins : score;
+            int score = scoreWhite - scoreBlack;
 
             return score;
         }
 
-        private float GetPieceScore(Piece piece)
+        private int GetPieceScore(Piece piece)
         {
             if (piece is Pawn)
                 return ValuePawn;
@@ -59,8 +50,6 @@ namespace MantaChessEngine
                 return ValueRook;
             else if (piece is Queen)
                 return ValueQueen;
-            else if (piece is King)
-                return ValueKing;
             else
                 return 0;
         }

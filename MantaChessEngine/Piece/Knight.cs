@@ -37,7 +37,7 @@ namespace MantaChessEngine
 
         public override int GetPlainPieceValue()
         {
-            return (int)EvaluatorPosition.ValueKnight;
+            return Definitions.ValueKnight;
         }
     }
 }

@@ -9,10 +9,13 @@ namespace MantaChessEngineTest
     /// <summary>
     /// Tests for SearchAlphaBeta with real board.
     /// </summary>
-    
+
     [TestClass]
     public class SearchAlphaBetaTestWithRealBoard
     {
+        const int AlphaStart = int.MinValue;
+        const int BetaStart = int.MaxValue;
+
         // ---------------------------------------------------------------------------------------------
         // White is first mover
         // ---------------------------------------------------------------------------------------------
@@ -35,11 +38,11 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1, -100000, 100000); // level 1
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1, AlphaStart, BetaStart); // level 1
             IMove goodMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
 
             Assert.AreEqual(goodMove, bestRatingActual.Move, "White bishop should capture pawn. We are on level 1");
-            Assert.AreEqual(2, bestRatingActual.Score);
+            Assert.AreEqual(200, bestRatingActual.Score);
         }
 
         [TestMethod]
@@ -59,11 +62,11 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1, -100000, 100000); // level 2
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1, AlphaStart, BetaStart); // level 2
             IMove badMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
 
             Assert.AreNotEqual(badMove, bestRatingActual.Move, "White bishop should not capture pawn.");
-            Assert.AreEqual(1, bestRatingActual.Score);
+            Assert.AreEqual(100, bestRatingActual.Score);
         }
 
         [TestMethod]
@@ -92,7 +95,7 @@ namespace MantaChessEngineTest
                                  //"........" +
                                  //"K.......";
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1, -100000, 100000); // level 3
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1, AlphaStart, BetaStart); // level 3
             IMove expectedMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
             IMove expectedMove2 = new NormalMove(Piece.MakePiece('N'), 'f', 3, 'e', 5, Piece.MakePiece('p'));
 
@@ -120,13 +123,13 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1, -100000, 100000); // level 4
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1, AlphaStart, BetaStart); // level 4
             IMove badMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
             IMove badMove2 = new NormalMove(Piece.MakePiece('N'), 'f', 3, 'e', 5, Piece.MakePiece('p'));
 
             Assert.AreNotEqual(badMove, bestRatingActual.Move, "White bishop or knight should not capture black pawn.");
             Assert.AreNotEqual(badMove2, bestRatingActual.Move, "White bishop or knight should not capture black pawn.");
-            Assert.AreEqual(-1, bestRatingActual.Score);
+            Assert.AreEqual(-100, bestRatingActual.Score);
         }
 
         [TestMethod]
@@ -146,7 +149,7 @@ namespace MantaChessEngineTest
                                  "........";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1, -100000, 100000); // level 3
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1, AlphaStart, BetaStart); // level 3
             IMove wrongMove = new NormalMove(Piece.MakePiece('R'), 'h', 8, 'e', 8, Piece.MakePiece('q'));
             IMove wrongMove2 = new NormalMove(Piece.MakePiece('K'), 'e', 4, 'd', 5, Piece.MakePiece('b'));
 
@@ -171,7 +174,7 @@ namespace MantaChessEngineTest
                                  "...K....";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1, -100000, 100000); // level 3
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1, AlphaStart, BetaStart); // level 3
             IMove expectedMove = new NoLegalMove();
 
             Assert.AreEqual(expectedMove, bestRatingActual.Move, "White is check mate. no legal move possible.");
@@ -198,11 +201,11 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1, -100000, 100000); // level 1
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1, AlphaStart, BetaStart); // level 1
             IMove goodMove = new NormalMove(Piece.MakePiece('b'), 'f', 6, 'e', 5, Piece.MakePiece('P'));
 
             Assert.AreEqual(goodMove, bestRatingActual.Move, "Black bishop should capture pawn. We are on level 1");
-            Assert.AreEqual(-2, bestRatingActual.Score);
+            Assert.AreEqual(-200, bestRatingActual.Score);
         }
 
         [TestMethod]
@@ -222,11 +225,11 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1, -100000, 100000); // level 2
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1, AlphaStart, BetaStart); // level 2
             IMove badMove = new NormalMove(Piece.MakePiece('b'), 'f', 6, 'e', 5, Piece.MakePiece('P'));
 
             Assert.AreNotEqual(badMove, bestRatingActual.Move, "Black bishop should not capture pawn.");
-            Assert.AreEqual(-1, bestRatingActual.Score);
+            Assert.AreEqual(-100, bestRatingActual.Score);
         }
 
         [TestMethod]
@@ -255,7 +258,7 @@ namespace MantaChessEngineTest
             //"........" +
             //"K.......";
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1, -100000, 100000); // level 3
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1, AlphaStart, BetaStart); // level 3
             IMove expectedMove = new NormalMove(Piece.MakePiece('b'), 'd', 6, 'e', 5, Piece.MakePiece('P'));
             IMove expectedMove2 = new NormalMove(Piece.MakePiece('n'), 'd', 7, 'e', 5, Piece.MakePiece('P'));
 
@@ -283,13 +286,13 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1, -100000, 100000); // level 4
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1, AlphaStart, BetaStart); // level 4
             IMove badMove = new NormalMove(Piece.MakePiece('b'), 'd', 6, 'e', 5, Piece.MakePiece('P'));
             IMove badMove2 = new NormalMove(Piece.MakePiece('n'), 'd', 7, 'e', 5, Piece.MakePiece('P'));
 
             Assert.AreNotEqual(badMove, bestRatingActual.Move, "Black bishop or knight should not capture white pawn.");
             Assert.AreNotEqual(badMove2, bestRatingActual.Move, "Black bishop or knight should not capture white pawn.");
-            Assert.AreEqual(1, bestRatingActual.Score);
+            Assert.AreEqual(100, bestRatingActual.Score);
         }
 
         // ---------------------------------------------------------------------------------------------
@@ -313,7 +316,7 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1, -100000, 100000);
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1, AlphaStart, BetaStart);
 
             AssertHelper.StallMate(bestRatingActual);
             Assert.AreEqual(new NoLegalMove(), bestRatingActual.Move, "Should be NoLegalMove, white is stalemate");
@@ -336,7 +339,7 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1, -100000, 100000);
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1, AlphaStart, BetaStart);
 
             Assert.AreEqual(new NoLegalMove(), bestRatingActual.Move, "Should be NoLegalMove, white is checkmate");
             AssertHelper.BlackWins(bestRatingActual);
@@ -359,7 +362,7 @@ namespace MantaChessEngineTest
                                  "R.BnK..R";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1, -100000, 100000);
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1, AlphaStart, BetaStart);
 
             Assert.AreEqual(new NoLegalMove(), bestRatingActual.Move, "Should be NoLegalMove, Black is checkmate");
             AssertHelper.WhiteWins(bestRatingActual);
@@ -385,7 +388,7 @@ namespace MantaChessEngineTest
 
             IMove expectedMove = new NormalMove(Piece.MakePiece('q'), 'h', 2, 'b', 2, null);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1, -100000, 100000);
+            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1, AlphaStart, BetaStart);
 
             Assert.AreEqual(expectedMove, bestRatingActual.Move, "Should be find checkmate for black: ... Qh2b2 #");
             AssertHelper.BlackWins(bestRatingActual);

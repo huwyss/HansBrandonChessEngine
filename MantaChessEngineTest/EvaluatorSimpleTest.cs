@@ -24,7 +24,7 @@ namespace MantaChessEngineTest
             var target = new EvaluatorSimple();
             var score = target.Evaluate(board);
 
-            Assert.AreEqual(1, score);
+            Assert.AreEqual(100, score);
         }
 
         [TestMethod]
@@ -64,32 +64,11 @@ namespace MantaChessEngineTest
             var target = new EvaluatorSimple();
             var score = target.Evaluate(board);
 
-            var expectedScore = 8 * target.ValuePawn +
-                                       2 * target.ValueKnight +
-                                       2 * target.ValueBishop +
-                                       2 * target.ValueRook +
-                                       target.ValueQueen;
-            Assert.AreEqual(expectedScore, score);
-        }
-
-        [TestMethod]
-        public void EvaluateTest_WhenKingMissing_ThenScoreBlackWins()
-        {
-            Board board = new Board();
-            string position = "....k..." + // black a8-h8
-                              "........" +
-                              "........" +
-                              "........" +
-                              "........" +
-                              "........" +
-                              "........" +
-                              "........"; // white a1-h1
-            board.SetPosition(position);
-
-            var target = new EvaluatorSimple();
-            var score = target.Evaluate(board);
-
-            var expectedScore = Definitions.ScoreBlackWins;
+            var expectedScore = 8 * Definitions.ValuePawn +
+                                2 * Definitions.ValueKnight +
+                                2 * Definitions.ValueBishop +
+                                2 * Definitions.ValueRook +
+                                Definitions.ValueQueen;
             Assert.AreEqual(expectedScore, score);
         }
     }

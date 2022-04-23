@@ -7,14 +7,14 @@ namespace MantaChessEngineTest
     [TestClass]
     public class MoveRatingTest
     {
-        private float _smallDifference = 0.01f;
+        private int _smallDifference = 1;
 
         //// White, Test for IsBetter
 
         [TestMethod]
         public void RatingWithHigherScoreIsBetterForWhiteTest()
         {
-            var badRatingForWhite = new MoveRating() { Score = -1 };
+            var badRatingForWhite = new MoveRating() { Score = -10 };
             var goodRatingForWhite = new MoveRating() { Score = 10 };
 
             var isBetterActual = badRatingForWhite.IsBetter(ChessColor.White, goodRatingForWhite);
@@ -25,7 +25,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void RatingWithHigherScoreIsBetterForWhiteTest_mirror()
         {
-            var badRatingForWhite = new MoveRating() { Score = -1 };
+            var badRatingForWhite = new MoveRating() { Score = -10 };
             var goodRatingForWhite = new MoveRating() { Score = 10 };
 
             var isBetterActual = goodRatingForWhite.IsBetter(ChessColor.White, badRatingForWhite);
@@ -36,8 +36,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void RatingWithEarlierCheckmateIsBetterForWhiteTest()
         {
-            var checkmateIn1 = new MoveRating() { Score = ScoreWhiteWins - 1 }; // checkmate in 1 move
-            var checkmateIn3 = new MoveRating() { Score = ScoreWhiteWins - 3 }; // checkmate in 3 moves
+            var checkmateIn1 = new MoveRating() { Score = ScoreWhiteWins - 10 }; // checkmate in 1 move
+            var checkmateIn3 = new MoveRating() { Score = ScoreWhiteWins - 30 }; // checkmate in 3 moves
 
             var isBetterActual = checkmateIn1.IsBetter(ChessColor.White, checkmateIn3);
 
@@ -47,8 +47,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void RatingWithEarlierCheckmateIsBetterForWhiteTest_mirror()
         {
-            var checkmateIn1 = new MoveRating() { Score = ScoreWhiteWins - 1 }; // checkmate in 1 move
-            var checkmateIn3 = new MoveRating() { Score = ScoreWhiteWins - 3 }; // checkmate in 3 moves
+            var checkmateIn1 = new MoveRating() { Score = ScoreWhiteWins - 10 }; // checkmate in 1 move
+            var checkmateIn3 = new MoveRating() { Score = ScoreWhiteWins - 30 }; // checkmate in 3 moves
 
             var isBetterActual = checkmateIn3.IsBetter(ChessColor.White, checkmateIn1);
 
@@ -58,8 +58,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void RatingWithLaterLoosingIsBetterForWhiteTest()
         {
-            var checkmateIn1 = new MoveRating() { Score = ScoreBlackWins + 1 }; // checkmate in 1 move
-            var checkmateIn3 = new MoveRating() { Score = ScoreBlackWins + 3 }; // checkmate in 3 moves
+            var checkmateIn1 = new MoveRating() { Score = ScoreBlackWins + 10 }; // checkmate in 1 move
+            var checkmateIn3 = new MoveRating() { Score = ScoreBlackWins + 30 }; // checkmate in 3 moves
 
             var isBetterActual = checkmateIn1.IsBetter(ChessColor.White, checkmateIn3);
 
@@ -69,8 +69,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void RatingWithLaterLoosingIsBetterForWhiteTest_mirror()
         {
-            var checkmateIn1 = new MoveRating() { Score = ScoreBlackWins + 1 }; // checkmate in 1 move
-            var checkmateIn3 = new MoveRating() { Score = ScoreBlackWins + 3 }; // checkmate in 3 moves
+            var checkmateIn1 = new MoveRating() { Score = ScoreBlackWins + 10 }; // checkmate in 1 move
+            var checkmateIn3 = new MoveRating() { Score = ScoreBlackWins + 30 }; // checkmate in 3 moves
 
             var isBetterActual = checkmateIn3.IsBetter(ChessColor.White, checkmateIn1);
 
@@ -82,8 +82,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void RatingWithLowerScoreIsBetterForBlaclTest()
         {
-            var badRatingForBlack = new MoveRating() { Score = 1 };
-            var goodRatingForBlack = new MoveRating() { Score = -10 };
+            var badRatingForBlack = new MoveRating() { Score = 100 };
+            var goodRatingForBlack = new MoveRating() { Score = -100 };
 
             var isBetterActual = badRatingForBlack.IsBetter(ChessColor.Black, goodRatingForBlack);
 
@@ -93,7 +93,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void RatingWithLowerScoreIsBetterForBlaclTest_mirror()
         {
-            var badRatingForBlack = new MoveRating() { Score = 1 };
+            var badRatingForBlack = new MoveRating() { Score = 100 };
             var goodRatingForBlack = new MoveRating() { Score = -10 };
 
             var isBetterActual = goodRatingForBlack.IsBetter(ChessColor.Black, badRatingForBlack);
@@ -104,8 +104,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void RatingWithEarlierCheckmateIsBetterForBlackTest()
         {
-            var checkmateIn1 = new MoveRating() { Score = ScoreBlackWins + 1 }; // checkmate in 1 move
-            var checkmateIn3 = new MoveRating() { Score = ScoreBlackWins + 3 }; // checkmate in 3 moves
+            var checkmateIn1 = new MoveRating() { Score = ScoreBlackWins + 10 }; // checkmate in 1 move
+            var checkmateIn3 = new MoveRating() { Score = ScoreBlackWins + 30 }; // checkmate in 3 moves
 
             var isBetterActual = checkmateIn1.IsBetter(ChessColor.Black, checkmateIn3);
 
@@ -115,8 +115,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void RatingWithEarlierCheckmateIsBetterForBlackTest_mirror()
         {
-            var checkmateIn1 = new MoveRating() { Score = ScoreBlackWins + 1 }; // checkmate in 1 move
-            var checkmateIn3 = new MoveRating() { Score = ScoreBlackWins + 3 }; // checkmate in 3 moves
+            var checkmateIn1 = new MoveRating() { Score = ScoreBlackWins + 10 }; // checkmate in 1 move
+            var checkmateIn3 = new MoveRating() { Score = ScoreBlackWins + 30 }; // checkmate in 3 moves
 
             var isBetterActual = checkmateIn3.IsBetter(ChessColor.Black, checkmateIn1);
 
@@ -126,8 +126,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void RatingWithLaterLoosingIsBetterForBlackTest()
         {
-            var checkmateIn1 = new MoveRating() { Score = ScoreWhiteWins - 1 }; // checkmate in 1 move
-            var checkmateIn3 = new MoveRating() { Score = ScoreWhiteWins - 3 }; // checkmate in 3 moves
+            var checkmateIn1 = new MoveRating() { Score = ScoreWhiteWins - 10 }; // checkmate in 1 move
+            var checkmateIn3 = new MoveRating() { Score = ScoreWhiteWins - 30 }; // checkmate in 3 moves
 
             var isBetterActual = checkmateIn1.IsBetter(ChessColor.Black, checkmateIn3);
 
@@ -137,8 +137,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void RatingWithLaterLoosingIsBetterForBlackTest_mirror()
         {
-            var checkmateIn1 = new MoveRating() { Score = ScoreWhiteWins - 1 }; // checkmate in 1 move
-            var checkmateIn3 = new MoveRating() { Score = ScoreWhiteWins - 3 }; // checkmate in 3 moves
+            var checkmateIn1 = new MoveRating() { Score = ScoreWhiteWins - 10 }; // checkmate in 1 move
+            var checkmateIn3 = new MoveRating() { Score = ScoreWhiteWins - 30 }; // checkmate in 3 moves
 
             var isBetterActual = checkmateIn3.IsBetter(ChessColor.Black, checkmateIn1);
 
@@ -150,8 +150,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void RatingWithSameScoreIsEqualTest()
         {
-            var rating = new MoveRating() { Score = 1 };
-            var littleBetterRating = new MoveRating() { Score = 1 + _smallDifference };
+            var rating = new MoveRating() { Score = 100 };
+            var littleBetterRating = new MoveRating() { Score = 100 + _smallDifference };
 
             var isEquallyGood = rating.IsEquallyGood(littleBetterRating);
 
@@ -161,8 +161,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void RatingWithSameScoreIsEqualTest_mirror()
         {
-            var rating = new MoveRating() { Score = 1 };
-            var littleBetterRating = new MoveRating() { Score = 1 + _smallDifference };
+            var rating = new MoveRating() { Score = 100 };
+            var littleBetterRating = new MoveRating() { Score = 100 + _smallDifference };
 
             var isEquallyGood = littleBetterRating.IsEquallyGood(rating);
 
@@ -172,8 +172,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void RatingWithdifferentScoreIsNotEqualTest()
         {
-            var rating = new MoveRating() { Score = 1 };
-            var betterRating = new MoveRating() { Score = 2 };
+            var rating = new MoveRating() { Score = 100 };
+            var betterRating = new MoveRating() { Score = 200 };
 
             var isEquallyGood = rating.IsEquallyGood(betterRating);
 
@@ -183,8 +183,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void RatingWithdifferentScoreIsNotEqualTest_mirror()
         {
-            var rating = new MoveRating() { Score = 1 };
-            var betterRating = new MoveRating() { Score = 2 };
+            var rating = new MoveRating() { Score = 100 };
+            var betterRating = new MoveRating() { Score = 200 };
 
             var isEquallyGood = betterRating.IsEquallyGood(rating);
 
@@ -194,8 +194,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void RatingWithEarlierCheckmateDifferentTest()
         {
-            var checkmateIn1 = new MoveRating() { Score = ScoreWhiteWins - 1 }; // checkmate in 1 move
-            var checkmateIn3 = new MoveRating() { Score = ScoreWhiteWins - 3 }; // checkmate in 3 moves
+            var checkmateIn1 = new MoveRating() { Score = ScoreWhiteWins - 10 }; // checkmate in 1 move
+            var checkmateIn3 = new MoveRating() { Score = ScoreWhiteWins - 30 }; // checkmate in 3 moves
 
             var isEquallyGood = checkmateIn1.IsEquallyGood(checkmateIn3);
 
@@ -205,8 +205,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void RatingWithSameCheckmateLevelTest()
         {
-            var checkmateIn1 = new MoveRating() { Score = ScoreWhiteWins - 1 }; // checkmate in 1 move
-            var checkmateIn3 = new MoveRating() { Score = ScoreWhiteWins - 1 }; // checkmate in 1 move
+            var checkmateIn1 = new MoveRating() { Score = ScoreWhiteWins - 10 }; // checkmate in 1 move
+            var checkmateIn3 = new MoveRating() { Score = ScoreWhiteWins - 10 }; // checkmate in 1 move
 
             var isEquallyGood = checkmateIn1.IsEquallyGood(checkmateIn3);
 

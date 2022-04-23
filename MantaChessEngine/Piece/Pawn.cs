@@ -116,7 +116,7 @@ namespace MantaChessEngine
 
         public override int GetPlainPieceValue()
         {
-            return (int)EvaluatorPosition.ValuePawn;
+            return Definitions.ValuePawn;
         }
     }
 }

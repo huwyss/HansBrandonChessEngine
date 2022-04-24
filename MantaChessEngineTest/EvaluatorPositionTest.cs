@@ -24,7 +24,7 @@ namespace MantaChessEngineTest
             var target = new EvaluatorPosition();
             var score = target.Evaluate(board);
 
-            Assert.AreEqual(120, score);
+            Assert.AreEqual(115, score);
         }
 
         [TestMethod]
@@ -64,7 +64,7 @@ namespace MantaChessEngineTest
             var target = new EvaluatorPosition();
             var score = target.Evaluate(board);
 
-            Assert.AreEqual(95 * 3, score);
+            Assert.AreEqual(300 - 5, score);
         }
         
         [TestMethod]

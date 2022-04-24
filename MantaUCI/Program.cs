@@ -120,6 +120,10 @@ namespace MantaUCI
                 {
                     _running = false;
                 }
+                else
+                {
+                    Console.WriteLine("Unknown command");
+                }
             }
         }
 
@@ -150,6 +154,8 @@ namespace MantaUCI
         private static void AnswerBestMove(int depth)
         {
             MoveRating bestMove = null;
+            _engine.ClearPreviousPV();
+            _engine.SetAdditionalSelectiveDepth(1);
 
             for (int currentDepth = 1; currentDepth <= depth; currentDepth++)
             {
@@ -172,7 +178,7 @@ namespace MantaUCI
                 var duration = _stopwatch.ElapsedMilliseconds;
                 var nps = duration != 0 ? (int)(1000 * bestMove.EvaluatedPositions / duration) : 0;
 
-                Console.WriteLine("info depth " + bestMove.Depth + " seldepth " + bestMove.PruningCount + " score cp " + scoreFromEngine + " nodes " + bestMove.EvaluatedPositions + " nps " + nps + " time " + duration + " pv " + principalVariation );
+                Console.WriteLine("info depth " + bestMove.Depth + " seldepth " + bestMove.SelectiveDepth + " score cp " + scoreFromEngine + " nodes " + bestMove.EvaluatedPositions + " nps " + nps + " time " + duration + " pv " + principalVariation );
             }
             
             Console.WriteLine("bestmove " + bestMove.Move.ToUciString());

@@ -212,9 +212,18 @@ namespace MantaChessEngine
 
         public virtual int GetMoveImportance()
         {
-            return CapturedPiece != null
-                ? CapturedPiece.GetPlainPieceValue() - MovingPiece.GetPlainPieceValue() + 9
-                : 0;
+            int importance = 0;
+            if (CapturedPiece != null)
+            {
+                importance += CapturedPiece.GetPlainPieceValue() - MovingPiece.GetPlainPieceValue() + ImportanceCapture;
+            }
+            
+            if (MovingPiece is Pawn)
+            {
+                importance += ImportancePawnMove;
+            }
+
+            return importance;
         }
     }
 }

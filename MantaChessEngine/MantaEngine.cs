@@ -20,7 +20,6 @@ namespace MantaChessEngine
         private ISearchService _search;
         private IEvaluator _evaluator;
         private IBoard _board;
-        private IMoveOrder _moveOrder;
 
         public MantaEngine(EngineType engineType)
         {
@@ -46,8 +45,9 @@ namespace MantaChessEngine
                 // strongest --------------------------------
                 case EngineType.AlphaBeta:
                     _evaluator = new EvaluatorPosition();
-                    _moveOrder = new MoveOrderPV();
-                    _search = new SearchAlphaBeta(_evaluator, _moveGenerator, 4, _moveOrder);
+                    var moveOrder = new OrderPvAndImportance();
+                    var captureOnly = new FilterCapturesOnly();
+                    _search = new SearchAlphaBeta(_evaluator, _moveGenerator, 4, moveOrder, captureOnly);
                     break;
                 // -------------------------------------------
 
@@ -171,12 +171,25 @@ namespace MantaChessEngine
             _board.Back();
         }
 
-        public void SetMaxSearchDepth(int depth)
+        public void SetMaxSearchDepth(int maxDepth)
         {
             if (_search != null)
             {
-                _search.SetMaxDepth(depth);
+                _search.SetMaxDepth(maxDepth);
             }
+        }
+
+        public void SetAdditionalSelectiveDepth(int additionalSelectiveDepth)
+        {
+            if (_search != null)
+            {
+                _search.SetAdditionalSelectiveDepth(additionalSelectiveDepth);
+            }
+        }
+
+        public void ClearPreviousPV()
+        {
+            _search.ClearPreviousPV();
         }
 
         public UInt64 Perft(int depth)

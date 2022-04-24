@@ -11,5 +11,9 @@ namespace MantaChessEngine
         MoveRating Search(IBoard board, Definitions.ChessColor color);
 
         void SetMaxDepth(int maxDepth);
+
+        void SetAdditionalSelectiveDepth(int additionalDepth);
+
+        void ClearPreviousPV();
     }
 }

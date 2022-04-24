@@ -26,7 +26,7 @@ namespace MantaChessEngineTest
             IEvaluator evaluator = new EvaluatorSimple();
             
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchAlphaBeta(evaluator, gen, 1, null);
+            var target = new SearchAlphaBeta(evaluator, gen, 1, null, null);
             var board = new Board();
             string boardString = "k......." +
                                  "........" +
@@ -50,7 +50,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchAlphaBeta(evaluator, gen, 2, null);
+            var target = new SearchAlphaBeta(evaluator, gen, 2, null, null);
             var board = new Board();
             string boardString = "k......." +
                                  "........" +
@@ -74,7 +74,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchAlphaBeta(evaluator, gen, 3, null);
+            var target = new SearchAlphaBeta(evaluator, gen, 3, null, null);
             var board = new Board();
             string boardString = "k......." +
                                  "...n...." +
@@ -111,7 +111,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchAlphaBeta(evaluator, gen, 4, null);
+            var target = new SearchAlphaBeta(evaluator, gen, 4, null, null);
             var board = new Board();
             string boardString = "k......." +
                                  "...n...." +
@@ -137,7 +137,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchAlphaBeta(evaluator, gen, 3, null);
+            var target = new SearchAlphaBeta(evaluator, gen, 3, null, null);
             var board = new Board();
             string boardString = "....q..R" +
                                  "........" +
@@ -162,7 +162,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchAlphaBeta(evaluator, gen, 3, null);
+            var target = new SearchAlphaBeta(evaluator, gen, 3, null, null);
             var board = new Board();
             string boardString = "........" +
                                  "........" +
@@ -189,7 +189,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchAlphaBeta(evaluator, gen, 1, null);
+            var target = new SearchAlphaBeta(evaluator, gen, 1, null, null);
             var board = new Board();
             string boardString = "k......." +
                                  "........" +
@@ -213,7 +213,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchAlphaBeta(evaluator, gen, 2, null);
+            var target = new SearchAlphaBeta(evaluator, gen, 2, null, null);
             var board = new Board();
             string boardString = "k......." +
                                  "........" +
@@ -237,7 +237,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchAlphaBeta(evaluator, gen, 3, null);
+            var target = new SearchAlphaBeta(evaluator, gen, 3, null, null);
             var board = new Board();
             string boardString = "k......." +
                                  "...n...." +
@@ -274,7 +274,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchAlphaBeta(evaluator, gen, 4, null);
+            var target = new SearchAlphaBeta(evaluator, gen, 4, null, null);
             var board = new Board();
             string boardString = "k......." +
                                  "...n...." +
@@ -304,7 +304,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchAlphaBeta(evaluator, gen, 2, null);
+            var target = new SearchAlphaBeta(evaluator, gen, 2, null, null);
             var board = new Board();
             string boardString = "........" +
                                  "........" +
@@ -327,7 +327,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchAlphaBeta(evaluator, gen, 2, null);
+            var target = new SearchAlphaBeta(evaluator, gen, 2, null, null);
             var board = new Board();
             string boardString = "........" +
                                  "........" +
@@ -350,7 +350,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchAlphaBeta(evaluator, gen, 2, null);
+            var target = new SearchAlphaBeta(evaluator, gen, 2, null, null);
             var board = new Board();
             string boardString = ".rbqkb.r" +
                                  "pppppBpp" +
@@ -373,7 +373,7 @@ namespace MantaChessEngineTest
         {
             IEvaluator evaluator = new EvaluatorSimple();
             MoveGenerator gen = new MoveGenerator(new MoveFactory());
-            var target = new SearchAlphaBeta(evaluator, gen, 4, null);
+            var target = new SearchAlphaBeta(evaluator, gen, 4, null, null);
             target.SetMaxDepth(4);
             var board = new Board();
             string boardString = "........" +

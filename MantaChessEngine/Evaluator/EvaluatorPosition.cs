@@ -2,8 +2,8 @@
 {
     public class EvaluatorPosition : IEvaluator
     {
-        private static readonly int ValuePawn = Definitions.ValuePawn / 100;
-        private static readonly int ValueKnight = Definitions.ValueKnight / 100;
+        private static readonly int ValuePawn = Definitions.ValuePawn;
+        private static readonly int ValueKnight = Definitions.ValueKnight;
         private static readonly int ValueBishop = Definitions.ValueBishop;
         private static readonly int ValueRook = Definitions.ValueRook;
         private static readonly int ValueQueen = Definitions.ValueQueen;
@@ -72,9 +72,9 @@
             int index = 8 * (rank - 1) + file - 1;
 
             if (piece is Pawn)
-                return ValuePawn * PawnPositionValue[index];
+                return ValuePawn + PawnPositionBonus[index];
             else if (piece is Knight)
-                return ValueKnight * KnightPositionValue[index];
+                return ValueKnight + KnightPositionBonus[index];
             else if (piece is Bishop)
             {
                 if (piece.Color == Definitions.ChessColor.Black)
@@ -85,7 +85,8 @@
                 {
                     numberWhiteBishop++;
                 }
-                return ValueBishop;
+
+                return ValueBishop + BishopPositionBonus[index];
             }
             else if (piece is Rook)
                 return ValueRook;
@@ -95,28 +96,73 @@
                 return 0;
         }
     
-        private readonly int[] PawnPositionValue = new int[64] // pawn in center are more valuable (at least in opening)
+        private readonly int[] PawnPositionBonus = new int[64] // pawn in center are more valuable (at least in opening)
         {
-            100, 100, 100, 100, 100, 100, 100, 100,
-            100, 100, 100, 100, 100, 100, 100, 100,
-            100, 100, 105, 110, 110, 105, 100, 100,
-            100, 100, 110, 120, 120, 110, 100, 100,
-            100, 100, 110, 120, 120, 110, 100, 100,
-            100, 100, 105, 110, 110, 105, 100, 100,
-            100, 100, 100, 100, 100, 100, 100, 100,
-            100, 100, 100, 100, 100, 100, 100, 100,
+            0,  0,  0,  0,  0,  0,  0,  0,
+            0,  0,  0,  0,  0,  0,  0,  0,
+            0,  0,  5, 10, 10,  5,  0,  0,
+            0,  0, 10, 15, 15, 10,  0,  0,
+            0,  0, 10, 15, 15, 10,  0,  0,
+            0,  0,  5, 10, 10,  5,  0,  0,
+            0,  0,  0,  0,  0,  0,  0,  0,
+            0,  0,  0,  0,  0,  0,  0,  0,
+
+        //// 0,  0,  0,  0,  0,  0,  0,  0,
+        ////24, 28, 32, 35, 35, 32, 28, 24,
+        //// 5, 10, 16, 25, 25, 16, 10,  5,
+        //// 4,  8, 14, 19, 19, 14,  8,  4,
+        //// 3,  5,  6, 12, 12,  6,  5,  3,
+        //// 2,  4,  3,  7,  7,  3,  4,  2,
+        //// 1,  2,  3, -8, -9,  3,  2,  1,
+        //// 0,  0,  0,  0,  0,  0,  0,  0
         };
 
-        private readonly int[] KnightPositionValue = new int[64] // Der Springer am Rande ist eine Schande
+        private readonly int[] KnightPositionBonus = new int[64] // Der Springer am Rande ist eine Schande
         {
-            95,  95,  95,  95,  95,  95,  95,  95,
-            95, 100, 100, 100, 100, 100, 100,  95,
-            95, 100, 100, 100, 100, 100, 100,  95,
-            95, 100, 100, 100, 100, 100, 100,  95,
-            95, 100, 100, 100, 100, 100, 100,  95,
-            95, 100, 100, 100, 100, 100, 100,  95,
-            95, 100, 100, 100, 100, 100, 100,  95,
-            95,  95,  95,  95,  95,  95,  95,  95,
+            -10, -5, -5, -5, -5, -5, -5, -10,
+             -5,  0,  0,  0,  0,  0,  0,  -5,
+             -5,  0,  5,  5,  5,  5,  0,  -5,
+             -5,  0,  5,  5,  5,  5,  0,  -5,
+             -5,  0,  5,  5,  5,  5,  0,  -5,
+             -5,  0,  5,  5,  5,  5,  0,  -5,
+             -5,  0,  0,  0,  0,  0,  0,  -5,
+            -10, -5, -5, -5, -5, -5, -5, -10
         };
+
+        private readonly int[] BishopPositionBonus = new int[64]
+        {
+           -8, -8, -6, -6, -6, -6, -8, -8,
+            0,  6,  5,  5,  5,  5,  6,  0,
+            0,  4,  5,  6,  6,  5,  4,  0,
+            4,  6,  8,  8,  8,  8,  6,  4,
+            4,  6,  8,  8,  8,  8,  6,  4,
+            0,  4,  5,  6,  6,  5,  4,  0,
+            0,  6,  5,  5,  5,  5,  6,  0,
+           -8, -8, -6, -6, -6, -6, -8, -8
+        };
+
+        ////private readonly int[] RookPositionBonus = new int[64]
+        ////{
+        ////    0,  1,  2,  4,  4,  2,  1,  0,
+        ////    3,  5,  7,  7,  7,  7,  5,  3,
+        ////    3,  4,  5,  6,  6,  5,  4,  3,
+        ////   -2,  0,  4,  5,  5,  4,  0, -2,
+        ////   -4, -2,  3,  4,  4,  3, -2, -4,
+        ////   -6, -2,  3,  4,  4,  3, -2, -6,
+        ////   -6, -2,  4,  4,  4,  4, -2, -6,
+        ////   -4, -2,  2,  4,  4,  2, -2, -4
+        ////};
+
+        ////private readonly int[] QueenPositionBonus = new int[64]
+        ////{
+        ////    0,  0,  0,  0,  0,  0,  0,  0,
+        ////    0,  2,  3,  4,  4,  3,  2,  0,
+        ////    0,  2,  4,  5,  5,  3,  2,  0,
+        ////    0,  2,  4,  8,  8,  4,  2,  0,
+        ////   -1,  0,  3,  6,  6,  3,  0, -1,
+        ////   -1,  0,  2,  3,  3,  2,  0, -1,
+        ////   -2, -1,  0,  0,  0,  0, -1, -2,
+        ////   -3, -2, -1,  0,  0, -1, -2, -3
+        ////};
     }
 }

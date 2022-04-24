@@ -15,10 +15,13 @@ namespace MantaChessEngine
 
         public IList<IMove> PrincipalVariation { get; set; }
 
+        public int Alpha { get; set; }
+        public int Beta { get; set; }
+
         /// <summary>
         /// Score of the move. Positive means good for white, negative means good for black.
         /// </summary>
-        public float Score { get; set; }
+        public int Score { get; set; }
 
         public bool WhiteWins { get; set; }
 
@@ -34,6 +37,9 @@ namespace MantaChessEngine
             Stallmate = false;
             Move = null;
             PrincipalVariation = new List<IMove>();
+            Alpha = 0;
+            Beta = 0;
+            SelectiveDepth = 0;
         }
 
         public MoveRating Clone()
@@ -46,6 +52,9 @@ namespace MantaChessEngine
                 Stallmate = this.Stallmate,
                 Move = this.Move,
                 PrincipalVariation = this.PrincipalVariation,
+                Alpha = this.Alpha,
+                Beta = this.Beta,
+                SelectiveDepth = this.SelectiveDepth,
             };
         }
 
@@ -53,6 +62,8 @@ namespace MantaChessEngine
         public int EvaluatedPositions { get; set; }
 
         public int Depth { get; set; }
+
+        public int SelectiveDepth { get; set; }
 
         public int PruningCount { get; set; }
 

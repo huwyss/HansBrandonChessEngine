@@ -11,7 +11,9 @@ namespace MantaChessEngine
         private Random _rand;
         private IMoveGenerator _moveGenerator;
 
-        public void SetMaxDepth(int level) { }
+        public void SetMaxDepth(int maxLevel) { }
+
+        public void SetAdditionalSelectiveDepth(int additionalDepth) {  }
 
         public void SetPreviousPV(MoveRating previousPV) { }
 
@@ -34,6 +36,10 @@ namespace MantaChessEngine
             }
 
             return new MoveRating() { Move = nextMove };
+        }
+
+        public void ClearPreviousPV()
+        {
         }
     }
 }

@@ -25,9 +25,13 @@ namespace MantaChessEngine
         /// <summary>
         /// Set the search depth in plys (half moves).
         /// </summary>
-        public void SetMaxDepth(int ply)
+        public void SetMaxDepth(int maxDepth)
         {
-            _maxDepth = ply > 0 ? _maxDepth = ply : 1;
+            _maxDepth = maxDepth > 0 ? _maxDepth = maxDepth : 1;
+        }
+
+        public void SetAdditionalSelectiveDepth(int additionalDepth)
+        {
         }
 
         public SearchMinimax(IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth = Definitions.DEFAULT_MAXLEVEL)
@@ -120,21 +124,21 @@ namespace MantaChessEngine
         }
 
         // Must return a worse score than the score for a lost game so that losing is better than the initialized best score.
-        private float InitWithWorstScorePossible(ChessColor color)
+        private int InitWithWorstScorePossible(ChessColor color)
         {
             if (color == ChessColor.White)
             {
-                return float.MinValue;
+                return int.MinValue;
             }
             else
             {
-                return float.MaxValue;
+                return int.MaxValue;
             }
         }
 
         private IEnumerable<MoveRating> MakeMoveRatingForGameEnd(IBoard board, ChessColor color, int curentLevel)
         {
-            float score;
+            int score;
             bool whiteWins = false;
             bool blackWins = false;
             bool stallmate = false;
@@ -171,6 +175,9 @@ namespace MantaChessEngine
                 };
         }
 
+        public void ClearPreviousPV()
+        {
+        }
     }
 }
 

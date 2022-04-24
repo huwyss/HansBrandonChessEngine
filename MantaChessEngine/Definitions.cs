@@ -41,5 +41,10 @@ namespace MantaChessEngine
         public const int ValueBishop = 300;
         public const int ValueRook = 500;
         public const int ValueQueen = 900;
+
+        // values for move ordering
+        public const int ImportanceCapture = 100;
+        public const int ImportancePromotion = 90;
+        public const int ImportancePawnMove = 80;
     }
 }

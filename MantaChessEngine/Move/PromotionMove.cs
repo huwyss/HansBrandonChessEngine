@@ -46,7 +46,7 @@ namespace MantaChessEngine
 
         public override int GetMoveImportance()
         {
-            return base.GetMoveImportance() + 9; //// _promotionPiece.GetPlainPieceValue();
+            return base.GetMoveImportance() + Definitions.ImportancePromotion;
         }
 
         public override string ToString()

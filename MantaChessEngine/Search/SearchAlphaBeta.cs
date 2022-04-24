@@ -9,13 +9,17 @@ namespace MantaChessEngine
 {
     public class SearchAlphaBeta : ISearchService
     {
+        private const int AspirationWindowHalfSizeInitial = 100;
+
         private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         
         private readonly IMoveGenerator _moveGenerator;
         private readonly IEvaluator _evaluator;
         private readonly IMoveOrder _moveOrder;
+        private readonly IMoveFilter _moveFilter;
         private int _maxDepth;
-        private int _selectedDepth;
+        private int _additionalSelectiveDepth;
+        private int _selectiveDepth;
 
         private MoveRating _previousPV;
 
@@ -25,18 +29,42 @@ namespace MantaChessEngine
         /// <summary>
         /// Set the search depth in plys (half moves).
         /// </summary>
-        public void SetMaxDepth(int ply)
+        public void SetMaxDepth(int maxDepth)
         {
-            _maxDepth = ply > 0 ? _maxDepth = ply : 1;
-            _selectedDepth = ply > 0 ? _maxDepth + 1 : 2;
+            _maxDepth = maxDepth > 0 ? maxDepth : 1;
+            UpdateSelectiveDepth();
         }
 
-        public SearchAlphaBeta(IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth, IMoveOrder moveOrder)
+        public void SetAdditionalSelectiveDepth(int additionalDepth)
         {
+            _additionalSelectiveDepth = additionalDepth;
+            UpdateSelectiveDepth();
+        }
+
+        private void UpdateSelectiveDepth()
+        {
+            _selectiveDepth = _additionalSelectiveDepth <= 0
+                ? _maxDepth
+                : (_maxDepth + _additionalSelectiveDepth) % 2 == 0
+                    ? _maxDepth + _additionalSelectiveDepth
+                    : _maxDepth + _additionalSelectiveDepth + 1;
+        }
+       
+        public void ClearPreviousPV()
+        {
+            _previousPV = null;
+        }
+
+        public SearchAlphaBeta(IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth, IMoveOrder moveOrder, IMoveFilter moveFilter)
+        {
+            _additionalSelectiveDepth = 0;
             _evaluator = evaluator;
             _moveGenerator = moveGenerator;
             _maxDepth = maxDepth;
             _moveOrder = moveOrder;
+            _moveFilter = moveFilter;
+
+            UpdateSelectiveDepth();
         }
 
         /// <summary>
@@ -51,18 +79,47 @@ namespace MantaChessEngine
             _pruningCount = 0;
             evaluatedPositions = 0;
 
-            (_moveOrder as MoveOrderPV)?.SetMoveRatingPV(_previousPV);
+            (_moveOrder as OrderPvAndImportance)?.SetMoveRatingPV(_previousPV);
             _pruningCount = 0;
             evaluatedPositions = 0;
 
-            var moveRating = SearchLevel(board, color, 1, float.MinValue, float.MaxValue);
+            var succeed = false;
 
-            _log.Debug("evaluated positons: " + evaluatedPositions);
-            moveRating.EvaluatedPositions = evaluatedPositions;
-            moveRating.Depth = _maxDepth;
-            moveRating.PruningCount = _pruningCount;
+            MoveRating moveRating = null;
 
-            _previousPV = moveRating;
+            var windowHalfSize = AspirationWindowHalfSizeInitial;
+
+            var alphaStart = _previousPV != null ? _previousPV.Score - windowHalfSize : int.MinValue;
+            var betaStart = _previousPV != null ? _previousPV.Score + windowHalfSize : int.MaxValue;
+
+            while (!succeed)
+            {
+                moveRating = SearchLevel(board, color, 1, alphaStart, betaStart);
+
+                _log.Debug("evaluated positons: " + evaluatedPositions);
+                moveRating.EvaluatedPositions = evaluatedPositions;
+                moveRating.Depth = _maxDepth;
+                moveRating.PruningCount = _pruningCount;
+
+                _previousPV = moveRating;
+
+                if (moveRating.Score >= betaStart)
+                {
+                    Console.WriteLine($"info Search failed high. Score >= BetaStart. Score: {moveRating.Score}, Alpha: {alphaStart}, Beta: {betaStart}");
+                    windowHalfSize *= 2;
+                    betaStart += windowHalfSize;
+                }
+                else if (moveRating.Score <= alphaStart)
+                {
+                    Console.WriteLine($"info Search failed low. Score <= AlphaStart. Score: {moveRating.Score}, Alpha: {alphaStart}, Beta: {betaStart}");
+                    windowHalfSize *= 2;
+                    alphaStart -= windowHalfSize;
+                }
+                else
+                {
+                    succeed = true;
+                }
+            }
 
             return moveRating;
         }
@@ -76,32 +133,48 @@ namespace MantaChessEngine
         /// <param name="board">Board to be searched in</param>
         /// <param name="color">Color of next move</param>
         /// <param name="level">Start level of search </param>
-        internal virtual MoveRating SearchLevel(IBoard board, ChessColor color, int level, float alpha, float beta)
+        internal virtual MoveRating SearchLevel(IBoard board, ChessColor color, int level, int alpha, int beta)
         {
             var bestRating = new MoveRating() { Score = InitWithWorstScorePossible(color) };
             MoveRating currentRating = new MoveRating();
 
-            var possibleMovesUnsorted = _moveGenerator.GetLegalMoves(board, color);
-
-            var possibleMoves = _moveOrder != null
-                ? _moveOrder.OrderMoves(possibleMovesUnsorted, color, level)
-                : possibleMovesUnsorted;
+            var allLegalMovesUnsortedUnfiltered = _moveGenerator.GetLegalMoves(board, color);
 
             // no legal moves means the game is over. It is either stall mate or check mate.
-            if (possibleMoves.Count() == 0)
+            if (allLegalMovesUnsortedUnfiltered.Count() == 0)
             {
                 return MakeMoveRatingForGameEnd(board, color, level);
+            }
+
+            var allLegalMovesUnsorted = _moveFilter != null && level > _maxDepth
+                ? _moveFilter.Filter(allLegalMovesUnsortedUnfiltered)
+                : allLegalMovesUnsortedUnfiltered;
+
+            var possibleMoves = _moveOrder != null
+                ? _moveOrder.OrderMoves(allLegalMovesUnsorted, color, level)
+                : allLegalMovesUnsorted;
+
+            if (possibleMoves.Count() == 0)
+            {
+                return null;
             }
 
             foreach (IMove currentMove in possibleMoves)
             {
                 board.Move(currentMove);
 
-                ////if ((level < _maxDepth || level >= _maxDepth && currentMove.CapturedPiece != null) && level < _selectedDepth) // we need to do more move levels...
-                if (level < _maxDepth) 
+                if (level < _maxDepth || (level < _selectiveDepth && currentMove.CapturedPiece != null)) // we need to do more move levels...
+                //// if (level < _maxDepth)
                 {
                     // we are only interested in the first score. all scores are the same.
                     currentRating = SearchLevel(board, Helper.GetOppositeColor(color), level + 1, alpha, beta); // recursive...
+
+                    if (currentRating == null) // we tried to find a capture move but could not find any.
+                    {
+                        currentRating = new MoveRating() { Score = _evaluator.Evaluate(board) };
+                        evaluatedPositions++;
+                    }
+
                     board.Back();
                 }
                 else // we reached the bottom of the tree and evaluate the position
@@ -138,27 +211,30 @@ namespace MantaChessEngine
                     }
                 }
             }
-
+            
+            bestRating.Alpha = alpha;
+            bestRating.Beta = beta;
             bestRating.PrincipalVariation.Insert(0, bestRating.Move);
+            bestRating.SelectiveDepth++;
             return bestRating;
         }
 
         // Must return a worse score than the score for a lost game so that losing is better than the initialized best score.
-        private float InitWithWorstScorePossible(ChessColor color)
+        private int InitWithWorstScorePossible(ChessColor color)
         {
             if (color == ChessColor.White)
             {
-                return float.MinValue;
+                return int.MinValue;
             }
             else
             {
-                return float.MaxValue;
+                return int.MaxValue;
             }
         }
 
         private MoveRating MakeMoveRatingForGameEnd(IBoard board, ChessColor color, int curentLevel)
         {
-            float score;
+            int score;
             bool whiteWins = false;
             bool blackWins = false;
             bool stallmate = false;

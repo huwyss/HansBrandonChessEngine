@@ -31,8 +31,8 @@ namespace MantaChessEngine
 
         public const int DEFAULT_MAXLEVEL = 3;
 
-        public const int ScoreWhiteWins = 1000000;
-        public const int ScoreBlackWins = -1000000;
+        public const int ScoreWhiteWins = 10000;
+        public const int ScoreBlackWins = -10000;
 
         public const int SignificantFactor = 8; // fast multiplier
 

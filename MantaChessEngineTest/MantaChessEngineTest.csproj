@@ -52,6 +52,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="SelectiveDepthSearchTest.cs" />
     <Compile Include="AlphaBetaPruningTest.cs" />
     <Compile Include="FenParserTest.cs" />
     <Compile Include="MantaEngineTest.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="SearchAlphaBetaTestWithRealBoard.cs" />
     <Compile Include="CastlingMoveTest.cs" />
     <Compile Include="TestHelper\AssertHelper.cs" />
+    <Compile Include="TestHelper\MoveMaker.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MantaChessEngine\MantaChessEngine.csproj">

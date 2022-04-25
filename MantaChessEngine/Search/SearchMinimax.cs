@@ -147,12 +147,12 @@ namespace MantaChessEngine
             {
                 if (color == ChessColor.White)
                 {
-                    score = ScoreBlackWins + curentLevel * Definitions.SignificantFactor;
+                    score = ScoreBlackWins + curentLevel * SignificantFactor;
                     blackWins = true;
                 }
                 else
                 {
-                    score = ScoreWhiteWins - curentLevel * Definitions.SignificantFactor;
+                    score = ScoreWhiteWins - curentLevel * SignificantFactor;
                     whiteWins = true;
                 }
             }

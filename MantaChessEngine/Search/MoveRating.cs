@@ -23,6 +23,8 @@ namespace MantaChessEngine
         /// </summary>
         public int Score { get; set; }
 
+        public int EvaluationLevel { get; set; }
+
         public bool WhiteWins { get; set; }
 
         public bool BlackWins { get; set; }
@@ -40,6 +42,7 @@ namespace MantaChessEngine
             Alpha = 0;
             Beta = 0;
             SelectiveDepth = 0;
+            EvaluationLevel = 0;
         }
 
         public MoveRating Clone()
@@ -55,6 +58,7 @@ namespace MantaChessEngine
                 Alpha = this.Alpha,
                 Beta = this.Beta,
                 SelectiveDepth = this.SelectiveDepth,
+                EvaluationLevel = this.EvaluationLevel,
             };
         }
 

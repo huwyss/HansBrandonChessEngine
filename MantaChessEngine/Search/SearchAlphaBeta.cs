@@ -9,7 +9,7 @@ namespace MantaChessEngine
 {
     public class SearchAlphaBeta : ISearchService
     {
-        private const int AspirationWindowHalfSizeInitial = 100;
+        private const int AspirationWindowHalfSizeInitial = 50;
 
         private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         
@@ -106,13 +106,13 @@ namespace MantaChessEngine
                 if (moveRating.Score >= betaStart)
                 {
                     Console.WriteLine($"info Search failed high. Score >= BetaStart. Score: {moveRating.Score}, Alpha: {alphaStart}, Beta: {betaStart}");
-                    windowHalfSize *= 2;
+                    windowHalfSize *= windowHalfSize / 5; // 50 -> 500 -> 50'000
                     betaStart += windowHalfSize;
                 }
                 else if (moveRating.Score <= alphaStart)
                 {
                     Console.WriteLine($"info Search failed low. Score <= AlphaStart. Score: {moveRating.Score}, Alpha: {alphaStart}, Beta: {betaStart}");
-                    windowHalfSize *= 2;
+                    windowHalfSize *= windowHalfSize / 5; // 50 -> 500 -> 50'000
                     alphaStart -= windowHalfSize;
                 }
                 else
@@ -121,6 +121,7 @@ namespace MantaChessEngine
                 }
             }
 
+            moveRating.SelectiveDepth = moveRating.PrincipalVariation.Count();
             return moveRating;
         }
 
@@ -166,12 +167,11 @@ namespace MantaChessEngine
                 if (level < _maxDepth || (level < _selectiveDepth && currentMove.CapturedPiece != null)) // we need to do more move levels...
                 //// if (level < _maxDepth)
                 {
-                    // we are only interested in the first score. all scores are the same.
                     currentRating = SearchLevel(board, Helper.GetOppositeColor(color), level + 1, alpha, beta); // recursive...
 
-                    if (currentRating == null) // we tried to find a capture move but could not find any.
+                    if (currentRating == null) // we are in a level > maxdepth and tried to find a capture move but there was no capture move.
                     {
-                        currentRating = new MoveRating() { Score = _evaluator.Evaluate(board) };
+                        currentRating = new MoveRating() { Score = _evaluator.Evaluate(board), EvaluationLevel = level };
                         evaluatedPositions++;
                     }
 
@@ -180,6 +180,7 @@ namespace MantaChessEngine
                 else // we reached the bottom of the tree and evaluate the position
                 {
                     currentRating.Score = _evaluator.Evaluate(board);
+                    currentRating.EvaluationLevel = level;
                     evaluatedPositions++;
                     board.Back();
                 }
@@ -187,6 +188,10 @@ namespace MantaChessEngine
                 // update the best move in the current level
                 if (currentRating.IsBetter(color, bestRating))
                 {
+                    if (level == _maxDepth && currentRating.EvaluationLevel < bestRating.EvaluationLevel)
+                    {
+                        currentRating.PrincipalVariation.Clear(); // wir löschen zu oft. Warum werden meistens (?) alle auf depth > maxDepth gelöscht ?
+                    }
                     currentRating.Move = currentMove;
                     bestRating = currentRating.Clone();
                 }
@@ -211,11 +216,10 @@ namespace MantaChessEngine
                     }
                 }
             }
-            
+
             bestRating.Alpha = alpha;
             bestRating.Beta = beta;
             bestRating.PrincipalVariation.Insert(0, bestRating.Move);
-            bestRating.SelectiveDepth++;
             return bestRating;
         }
 
@@ -243,12 +247,12 @@ namespace MantaChessEngine
             {
                 if (color == ChessColor.White)
                 {
-                    score = ScoreBlackWins + curentLevel * Definitions.SignificantFactor;
+                    score = ScoreBlackWins + curentLevel * SignificantFactor;
                     blackWins = true;
                 }
                 else
                 {
-                    score = ScoreWhiteWins - curentLevel * Definitions.SignificantFactor;
+                    score = ScoreWhiteWins - curentLevel * SignificantFactor;
                     whiteWins = true;
                 }
             }

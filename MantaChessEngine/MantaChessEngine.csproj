@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bitboard\Bitboards.cs" />
     <Compile Include="Doubles\FakeBoard.cs" />
     <Compile Include="Doubles\FakeEvaluator.cs" />
     <Compile Include="Doubles\FakeMoveGenerator.cs" />

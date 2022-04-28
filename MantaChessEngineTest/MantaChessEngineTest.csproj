@@ -52,6 +52,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="BitboardTest\BitboardTest.cs" />
     <Compile Include="SelectiveDepthSearchTest.cs" />
     <Compile Include="AlphaBetaPruningTest.cs" />
     <Compile Include="FenParserTest.cs" />

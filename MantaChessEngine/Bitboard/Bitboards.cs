@@ -89,12 +89,14 @@ namespace MantaChessEngine
         public const int Queen = 3;
         public const int King = 5;
 
-        public const int White = 0;
-        public const int Black = 1;
+        public const int White = 1;
+        public const int Black = -1;
     }
 
-    public class Bitboards
+    public class Bitboards : IBoard
     {
+        private FenParser _fenParser;
+
         // todo these are Pieces[2][7]
         public Bitboard Bitboard_WhitePawn { get; set; }
         public Bitboard Bitboard_WhiteRook { get; set; }
@@ -116,158 +118,40 @@ namespace MantaChessEngine
         public int[] Col { get; set; }
         public int[] DiagNO { get; set; }
         public int[] DiagNW { get; set; }
+        public Definitions.ChessColor SideToMove { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int MoveCountSincePawnOrCapture { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public History History { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public IMove LastMove => throw new NotImplementedException();
+
+        public int EnPassantFile => throw new NotImplementedException();
+
+        public int EnPassantRank => throw new NotImplementedException();
+
+        public bool CastlingRightWhiteQueenSide => throw new NotImplementedException();
+
+        public bool CastlingRightWhiteKingSide => throw new NotImplementedException();
+
+        public bool CastlingRightBlackQueenSide => throw new NotImplementedException();
+
+        public bool CastlingRightBlackKingSide => throw new NotImplementedException();
+
+        public bool WhiteDidCastling { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool BlackDidCastling { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public string GetPositionString => throw new NotImplementedException();
+
+        public string GetPrintString => throw new NotImplementedException();
 
         public Bitboards()
         {
+            _fenParser = new FenParser();
             InitBitboard();
-            SetBetweenCube();
+            SetBetweenMatrix();
         }        
 
         private void InitBitboard()
         {
-            Bitboard_WhitePawn = ConvertToUInt64(new byte[64]
-            {// a1
-                0, 0, 0, 0, 0, 0, 0, 0,
-                1, 1, 1, 1, 1, 1, 1, 1,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0
-            });                   // h8
-
-            Bitboard_WhiteRook = ConvertToUInt64(new byte[64]
-            {
-                1, 0, 0, 0, 0, 0, 0, 1,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0
-            });
-
-            Bitboard_WhiteKnight = ConvertToUInt64(new byte[64]
-            {
-                0, 1, 0, 0, 0, 0, 1, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-            });
-
-            Bitboard_WhiteBishop = ConvertToUInt64(new byte[64]
-            {
-                0, 0, 1, 0, 0, 1, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0
-            });
-
-            Bitboard_WhiteQueen = ConvertToUInt64(new byte[64]
-            {
-                0, 0, 0, 1, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0
-            });
-
-            Bitboard_WhiteKing = ConvertToUInt64(new byte[64]
-            {
-                0, 0, 0, 0, 1, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0
-            });
-
-            Bitboard_BlackPawn = ConvertToUInt64(new byte[64]
-            {
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                1, 1, 1, 1, 1, 1, 1, 1,
-                0, 0, 0, 0, 0, 0, 0, 0
-            });
-
-            Bitboard_BlackRook = ConvertToUInt64(new byte[64]
-            {
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                1, 0, 0, 0, 0, 0, 0, 1
-            });
-
-            Bitboard_BlackKnight = ConvertToUInt64(new byte[64]
-            {
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 1, 0, 0, 0, 0, 1, 0
-            });
-
-            Bitboard_BlackBishop = ConvertToUInt64(new byte[64]
-            {
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 1, 0, 0, 1, 0, 0
-            });
-
-            Bitboard_BlackQueen = ConvertToUInt64(new byte[64]
-            {
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 1, 0, 0, 0, 0
-            });
-
-            Bitboard_BlackKing = ConvertToUInt64(new byte[64]
-            {
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 1, 0, 0, 0
-            });
 
             Row = new int[64]
             {
@@ -318,7 +202,7 @@ namespace MantaChessEngine
             };
         }
 
-        private void SetBetweenCube()
+        private void SetBetweenMatrix()
         {
             BetweenMatrix = new Bitboard[64, 64];
             for (int y = 0; y < 64; y++)
@@ -394,8 +278,6 @@ namespace MantaChessEngine
                         }
                     }
                 }
-
-
             }
         }
 
@@ -421,6 +303,143 @@ namespace MantaChessEngine
             }
 
             return result;
+        }
+
+        public string SetFenPosition(string fen)
+        {
+            PositionInfo positionInfo;
+            try
+            {
+                positionInfo = _fenParser.ToPositionInfo(fen);
+            }
+            catch (Exception ex)
+            {
+                return "FEN error: " + ex.StackTrace;
+            }
+
+            SetPosition(positionInfo.PositionString);
+            History.Add(
+                null,
+                positionInfo.EnPassantFile - '0',
+                positionInfo.EnPassantRank,
+                positionInfo.CastlingRightWhiteQueenSide,
+                positionInfo.CastlingRightWhiteKingSide,
+                positionInfo.CastlingRightBlackQueenSide,
+                positionInfo.CastlingRightBlackKingSide);
+            SideToMove = positionInfo.SideToMove;
+
+            return string.Empty;
+        }
+
+        public string GetFenString()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetInitialPosition()
+        {
+            string initPosition = "rnbqkbnr" + // black a8-h8
+                                  "pppppppp" +
+                                  "........" +
+                                  "........" +
+                                  "........" +
+                                  "........" +
+                                  "PPPPPPPP" +
+                                  "RNBQKBNR"; // white a1-h1
+
+            SetPosition(initPosition);
+        }
+
+        public void SetPosition(string position)
+        {
+            Bitboard_WhitePawn = GetBitboard(position, 'P');
+            Bitboard_WhiteKnight = GetBitboard(position, 'N');
+            Bitboard_WhiteBishop = GetBitboard(position, 'B');
+            Bitboard_WhiteRook = GetBitboard(position, 'R');
+            Bitboard_WhiteQueen = GetBitboard(position, 'Q');
+            Bitboard_WhiteKing = GetBitboard(position, 'K');
+
+            Bitboard_BlackPawn = GetBitboard(position, 'p');
+            Bitboard_BlackKnight = GetBitboard(position, 'n');
+            Bitboard_BlackBishop = GetBitboard(position, 'b');
+            Bitboard_BlackRook = GetBitboard(position, 'r');
+            Bitboard_BlackQueen = GetBitboard(position, 'q');
+            Bitboard_BlackKing = GetBitboard(position, 'k');
+        }
+
+        private Bitboard GetBitboard(string position, char piece)
+        {
+            if (position.Length != 64)
+            {
+                throw new Exception("position string must be of length 64!");
+            }
+
+            Bitboard bitboard = 0;
+            int i = 0;
+            for (int row = 7; row >= 0; row--)
+            {
+                for (int col = 0; col <= 7; col++)
+                {
+                    if (position[row * 8 + col].Equals(piece))
+                    {
+                        SetBit(ref bitboard, i);
+                    }
+
+                    i++;
+                }
+            }
+
+            return bitboard;
+        }
+
+        public Piece GetPiece(int file, int rank)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Piece GetPiece(char fileChar, int rank)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetPiece(Piece piece, int file, int rank)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetPiece(Piece piece, char fileChar, int rank)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Move(IMove nextMove)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Back()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RedoMove()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Definitions.ChessColor GetColor(int file, int rank)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsWinner(Definitions.ChessColor color)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Position GetKing(Definitions.ChessColor color)
+        {
+            throw new NotImplementedException();
         }
     }
 }

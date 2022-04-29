@@ -11,9 +11,151 @@ namespace MantaChessEngineTest
         public void PiecesBitboardTest()
         {
             var target = new Bitboards();
+            target.SetInitialPosition();
 
-            Assert.AreEqual((UInt64)0xff00, target.Bitboard_WhitePawn);
-            Assert.AreEqual((UInt64)0xff000000000000, target.Bitboard_BlackPawn);
+            Assert.AreEqual(target.Bitboard_WhitePawn, Bitboards.ConvertToUInt64(new byte[64]
+            {// a1
+                0, 0, 0, 0, 0, 0, 0, 0,
+                1, 1, 1, 1, 1, 1, 1, 1,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0
+            }));                  // h8
+
+            Assert.AreEqual(target.Bitboard_WhiteRook, Bitboards.ConvertToUInt64(new byte[64]
+            {
+                1, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0
+            }));
+
+            Assert.AreEqual(target.Bitboard_WhiteKnight, Bitboards.ConvertToUInt64(new byte[64]
+            {
+                0, 1, 0, 0, 0, 0, 1, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+            }));
+
+            Assert.AreEqual(target.Bitboard_WhiteBishop, Bitboards.ConvertToUInt64(new byte[64]
+            {
+                0, 0, 1, 0, 0, 1, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0
+            }));
+
+            Assert.AreEqual(target.Bitboard_WhiteQueen, Bitboards.ConvertToUInt64(new byte[64]
+            {
+                0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0
+            }));
+
+            Assert.AreEqual(target.Bitboard_WhiteKing, Bitboards.ConvertToUInt64(new byte[64]
+            {
+                0, 0, 0, 0, 1, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0
+            }));
+
+            Assert.AreEqual(target.Bitboard_BlackPawn, Bitboards.ConvertToUInt64(new byte[64]
+            {
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                1, 1, 1, 1, 1, 1, 1, 1,
+                0, 0, 0, 0, 0, 0, 0, 0
+            }));
+
+            Assert.AreEqual(target.Bitboard_BlackRook, Bitboards.ConvertToUInt64(new byte[64]
+            {
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 1
+            }));
+
+            Assert.AreEqual(target.Bitboard_BlackKnight, Bitboards.ConvertToUInt64(new byte[64]
+            {
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 1, 0, 0, 0, 0, 1, 0
+            }));
+
+            Assert.AreEqual(target.Bitboard_BlackBishop, Bitboards.ConvertToUInt64(new byte[64]
+            {
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 1, 0, 0, 1, 0, 0
+            }));
+
+            Assert.AreEqual(target.Bitboard_BlackQueen, Bitboards.ConvertToUInt64(new byte[64]
+            {
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0
+            }));
+
+            Assert.AreEqual(target.Bitboard_BlackKing, Bitboards.ConvertToUInt64(new byte[64]
+            {
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 1, 0, 0, 0
+            }));
         }
 
         [TestMethod]
@@ -24,6 +166,8 @@ namespace MantaChessEngineTest
             Assert.AreEqual((UInt64)0x00, target.BetweenMatrix[0, 1]);
             Assert.AreEqual((UInt64)0x00, target.BetweenMatrix[27, 28]);
             Assert.AreEqual((UInt64)0x00, target.BetweenMatrix[14, 1]);
+            Assert.AreEqual((UInt64)0x00, target.BetweenMatrix[0, 8]);
+
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)     (D1)
                 0, 0, 0, 0, 0, 0, 0, 0,

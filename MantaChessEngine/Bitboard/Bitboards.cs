@@ -113,6 +113,7 @@ namespace MantaChessEngine
         public Bitboard Bitboard_BlackKing { get; set; }
 
         public Bitboard[,] BetweenMatrix { get; set; }
+        public Bitboard[,] RayAfterMatrix { get; set; }
 
         public int[] Row { get; set; }
         public int[] Col { get; set; }
@@ -148,6 +149,7 @@ namespace MantaChessEngine
             _fenParser = new FenParser();
             InitBitboard();
             SetBetweenMatrix();
+            SetRayAfterMatrix();
         }        
 
         private void InitBitboard()
@@ -205,6 +207,7 @@ namespace MantaChessEngine
         private void SetBetweenMatrix()
         {
             BetweenMatrix = new Bitboard[64, 64];
+
             for (int y = 0; y < 64; y++)
             {
                 for (int x = 0; x < 64; x++)
@@ -279,6 +282,104 @@ namespace MantaChessEngine
                     }
                 }
             }
+        }
+
+        private void SetRayAfterMatrix()
+        {
+            RayAfterMatrix = new Bitboard[64, 64];
+
+            for (int y = 0; y < 64; y++)
+            {
+                for (int x = 0; x < 64; x++)
+                {
+                    if (Col[x] == Col[y])
+                    {
+                        if (y > x)
+                        {
+                            var edge = GetEdge(y, 8);
+                            for (int i = y; i <= edge; i += 8)
+                            {
+                                SetBit(ref RayAfterMatrix[x, y], i);
+                            }
+                        }
+                        else
+                        {
+                            var edge = GetEdge(y, -8);
+                            for (int i = y; i >= edge; i -= 8)
+                            {
+                                SetBit(ref RayAfterMatrix[x, y], i);
+                            }
+                        }
+                    }
+                    else if (Row[x] == Row[y])
+                    {
+                        if (y > x)
+                        {
+                            var edge = GetEdge(y, 1);
+                            for (int i = y; i <= edge; i++)
+                            {
+                                SetBit(ref RayAfterMatrix[x, y], i);
+                            }
+                        }
+                        else
+                        {
+                            var edge = GetEdge(y, -1);
+                            for (int i = y; i >= edge; i--)
+                            {
+                                SetBit(ref RayAfterMatrix[x, y], i);
+                            }
+                        }
+                    }
+                    else if (DiagNW[x] == DiagNW[y])
+                    {
+                        if (y > x)
+                        {
+                            var edge = GetEdge(y, 7);
+                            for (int i = y; i <= edge; i += 7)
+                            {
+                                SetBit(ref RayAfterMatrix[x, y], i);
+                            }
+                        }
+                        else
+                        {
+                            var edge = GetEdge(y, -7);
+                            for (int i = y; i >= edge; i -= 7)
+                            {
+                                SetBit(ref RayAfterMatrix[x, y], i);
+                            }
+                        }
+                    }
+                    else if (DiagNO[x] == DiagNO[y])
+                    {
+                        if (y > x)
+                        {
+                            var edge = GetEdge(y, 9);
+                            for (int i = y; i <= edge; i += 9)
+                            {
+                                SetBit(ref RayAfterMatrix[x, y], i);
+                            }
+                        }
+                        else
+                        {
+                            var edge = GetEdge(y, -9);
+                            for (int i = y; i >= edge; i -= 9)
+                            {
+                                SetBit(ref RayAfterMatrix[x, y], i);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private int GetEdge(int square, int direction)
+        {
+            while (square >= 0 && Col[square] < 7 && Col[square] > 0 && Row[square] < 7 && Row[square] > 0)
+            {
+                square += direction;
+            }
+            
+            return square;
         }
 
         private static void SetBit(ref UInt64 bitboard, int index)

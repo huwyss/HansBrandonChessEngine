@@ -115,6 +115,10 @@ namespace MantaChessEngine
         public Bitboard[,] BetweenMatrix { get; set; }
         public Bitboard[,] RayAfterMatrix { get; set; }
 
+        public Bitboard QueenSideMask { get; set; }
+        public Bitboard KingSideMask { get; set; }
+
+
         public int[] Row { get; set; }
         public int[] Col { get; set; }
         public int[] DiagNO { get; set; }
@@ -150,7 +154,10 @@ namespace MantaChessEngine
             InitBitboard();
             SetBetweenMatrix();
             SetRayAfterMatrix();
-        }        
+            SetKingAndQueenSideMask();
+        }
+
+        
 
         private void InitBitboard()
         {
@@ -380,6 +387,27 @@ namespace MantaChessEngine
             }
             
             return square;
+        }
+
+        private void SetKingAndQueenSideMask()
+        {
+            Bitboard queenSideMask = 0;
+            Bitboard kingSideMask = 0;
+            for (int x = 0; x < 64; x++)
+            {
+                if (Col[x] < 2)
+                {
+                    SetBit(ref queenSideMask, x);
+                }
+
+                if (Col[x] > 5)
+                {
+                    SetBit(ref kingSideMask, x);
+                }
+            }
+
+            QueenSideMask = queenSideMask;
+            KingSideMask = kingSideMask;
         }
 
         private static void SetBit(ref UInt64 bitboard, int index)

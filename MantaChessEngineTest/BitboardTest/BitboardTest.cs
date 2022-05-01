@@ -11,6 +11,7 @@ namespace MantaChessEngineTest
         public void PiecesBitboardTest()
         {
             var target = new Bitboards();
+            target.Initialize();
             target.SetInitialPosition();
 
             Assert.AreEqual(target.Bitboard_WhitePawn, Bitboards.ConvertToUInt64(new byte[64]
@@ -162,6 +163,7 @@ namespace MantaChessEngineTest
         public void BetweenMatrixTest()
         {
             var target = new Bitboards();
+            target.Initialize();
 
             Assert.AreEqual((UInt64)0x00, target.BetweenMatrix[0, 1]);
             Assert.AreEqual((UInt64)0x00, target.BetweenMatrix[27, 28]);
@@ -179,7 +181,7 @@ namespace MantaChessEngineTest
                 0, 0, 0, 1, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //     (D8)         (H8)
-            }), target.BetweenMatrix[Chess.D1, Chess.D8]);
+            }), target.BetweenMatrix[Const.D1, Const.D8]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)     (D1)
@@ -192,7 +194,7 @@ namespace MantaChessEngineTest
                 0, 0, 0, 1, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //     (D8)         (H8)
-            }), target.BetweenMatrix[Chess.D8, Chess.D1]);
+            }), target.BetweenMatrix[Const.D8, Const.D1]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)   
@@ -205,7 +207,7 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //                  (H8)
-            }), target.BetweenMatrix[Chess.B3, Chess.H3]);
+            }), target.BetweenMatrix[Const.B3, Const.H3]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)   
@@ -218,7 +220,7 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //     (D8)         (H8)
-            }), target.BetweenMatrix[Chess.H3, Chess.B3]);
+            }), target.BetweenMatrix[Const.H3, Const.B3]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)   
@@ -231,7 +233,7 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                //       d7         (H8)
-            }), target.BetweenMatrix[Chess.H3, Chess.D7]);
+            }), target.BetweenMatrix[Const.H3, Const.D7]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)   
@@ -244,7 +246,7 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                //       d7         (H8)
-            }), target.BetweenMatrix[Chess.D7, Chess.H3]);
+            }), target.BetweenMatrix[Const.D7, Const.H3]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//    b1 
@@ -257,7 +259,7 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0, // h7
                 0, 0, 0, 0, 0, 0, 0, 0
                //       d7         (H8)
-            }), target.BetweenMatrix[Chess.B1, Chess.H7]);
+            }), target.BetweenMatrix[Const.B1, Const.H7]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//    b1 
@@ -270,13 +272,37 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0, // h7
                 0, 0, 0, 0, 0, 0, 0, 0
                //       d7         (H8)
-            }), target.BetweenMatrix[Chess.H7, Chess.B1]);
+            }), target.BetweenMatrix[Const.H7, Const.B1]);
+        }
+
+        [TestMethod]
+        public void GetEdgeTest()
+        {
+            var target = new Bitboards();
+
+            Assert.AreEqual(Const.A1, target.GetEdge(Const.A1, -1));
+            Assert.AreEqual(Const.H1, target.GetEdge(Const.H1, 1));
+            Assert.AreEqual(Const.A1, target.GetEdge(Const.A1, -8));
+            Assert.AreEqual(Const.A8, target.GetEdge(Const.A8, 8));
+
+            Assert.AreEqual(Const.H1, target.GetEdge(Const.C1, 1));
+            Assert.AreEqual(Const.A1, target.GetEdge(Const.F1, -1));
+            Assert.AreEqual(Const.G1, target.GetEdge(Const.G5, -8));
+            Assert.AreEqual(Const.H8, target.GetEdge(Const.H5, 8));
+
+            Assert.AreEqual(Const.A4, target.GetEdge(Const.D1, 7));
+            Assert.AreEqual(Const.H5, target.GetEdge(Const.D1, 9));
+            Assert.AreEqual(Const.H4, target.GetEdge(Const.D8, -7));
+            Assert.AreEqual(Const.A5, target.GetEdge(Const.D8, -9));
+
+            Assert.AreEqual(Const.H8, target.GetEdge(Const.E5, 9));
         }
 
         [TestMethod]
         public void RayAfterMatrixTest()
         {
             var target = new Bitboards();
+            target.Initialize();
 
             Assert.AreEqual((UInt64)0x00, target.RayAfterMatrix[14, 1]);
 
@@ -291,7 +317,7 @@ namespace MantaChessEngineTest
                 0, 0, 0, 1, 0, 0, 0, 0,
                 0, 0, 0, 1, 0, 0, 0, 0
                 //     (D8)         (H8)
-            }), target.RayAfterMatrix[Chess.D1, Chess.D6]);
+            }), target.RayAfterMatrix[Const.D1, Const.D6]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)     (D1)
@@ -304,7 +330,35 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //     (D8)         (H8)
-            }), target.RayAfterMatrix[Chess.D6, Chess.D2]);
+            }), target.RayAfterMatrix[Const.D6, Const.D2]);
+
+            var t1 = Bitboards.PrintBitboard(target.RayAfterMatrix[Const.A1, Const.A8]);
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)     (D1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0
+                //                  (H8)
+            }), target.RayAfterMatrix[Const.A1, Const.A8]);
+
+            var t2 = Bitboards.PrintBitboard(target.RayAfterMatrix[Const.A1, Const.A2]);
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)     (D1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0
+                //                  (H8)
+            }), target.RayAfterMatrix[Const.A1, Const.A2]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)     (D1)
@@ -317,7 +371,7 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //     (D8)         (H8)
-            }), target.RayAfterMatrix[Chess.B2, Chess.E2]);
+            }), target.RayAfterMatrix[Const.B2, Const.E2]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)     (D1)
@@ -330,7 +384,7 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //     (D8)         (H8)
-            }), target.RayAfterMatrix[Chess.E2, Chess.B2]);
+            }), target.RayAfterMatrix[Const.E2, Const.B2]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)          
@@ -343,7 +397,7 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 1,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //     (D8)         (H8)
-            }), target.RayAfterMatrix[Chess.B1, Chess.C2]);
+            }), target.RayAfterMatrix[Const.B1, Const.C2]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)     (D1)
@@ -356,7 +410,7 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //     (D8)         (H8)
-            }), target.RayAfterMatrix[Chess.C3, Chess.B2]);
+            }), target.RayAfterMatrix[Const.C3, Const.B2]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
            {//    b1 
@@ -369,7 +423,7 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0, // h7
                 0, 0, 0, 0, 0, 0, 0, 0
                //       d7         (H8)
-           }), target.RayAfterMatrix[Chess.B4, Chess.C3]);
+           }), target.RayAfterMatrix[Const.B4, Const.C3]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//    b1 
@@ -382,17 +436,18 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0, // h7
                 0, 0, 0, 0, 0, 0, 0, 0
                //       d7         (H8)
-            }), target.RayAfterMatrix[Chess.C3, Chess.B4]);
+            }), target.RayAfterMatrix[Const.C3, Const.B4]);
         }
 
         [TestMethod]
         public void MovesKnightTest()
         {
             var target = new Bitboards();
+            target.Initialize();
 
-            var boardE5 = Bitboards.PrintBitboard(target.MovesKnight[Chess.E5]);
-            var boardD1 = Bitboards.PrintBitboard(target.MovesKnight[Chess.D1]);
-            var boardD2 = Bitboards.PrintBitboard(target.MovesKnight[Chess.D2]);
+            var boardE5 = Bitboards.PrintBitboard(target.MovesKnight[Const.E5]);
+            var boardD1 = Bitboards.PrintBitboard(target.MovesKnight[Const.D1]);
+            var boardD2 = Bitboards.PrintBitboard(target.MovesKnight[Const.D2]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)     (D1)
@@ -405,7 +460,7 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //                  (H8)
-            }), target.MovesKnight[Chess.D1]);
+            }), target.MovesKnight[Const.D1]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)     (D2)
@@ -418,7 +473,7 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 //                  (H8)
-            }), target.MovesKnight[Chess.D2]);
+            }), target.MovesKnight[Const.D2]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)         
@@ -431,17 +486,18 @@ namespace MantaChessEngineTest
                 0, 0, 0, 1, 0, 1, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //                  (H8)
-            }), target.MovesKnight[Chess.E5]);
+            }), target.MovesKnight[Const.E5]);
         }
 
         [TestMethod]
         public void MovesKingTest()
         {
             var target = new Bitboards();
+            target.Initialize();
 
-            var boardE5 = Bitboards.PrintBitboard(target.MovesKing[Chess.E5]);
-            var boardD1 = Bitboards.PrintBitboard(target.MovesKing[Chess.D1]);
-            var boardH1 = Bitboards.PrintBitboard(target.MovesKing[Chess.H1]);
+            var boardE5 = Bitboards.PrintBitboard(target.MovesKing[Const.E5]);
+            var boardD1 = Bitboards.PrintBitboard(target.MovesKing[Const.D1]);
+            var boardH1 = Bitboards.PrintBitboard(target.MovesKing[Const.H1]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)     (D1)
@@ -454,7 +510,7 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //                  (H8)
-            }), target.MovesKing[Chess.D1]);
+            }), target.MovesKing[Const.D1]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
            {//(A1)         
@@ -467,7 +523,7 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                //                  (H8)
-           }), target.MovesKing[Chess.H1]);
+           }), target.MovesKing[Const.H1]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)         
@@ -480,9 +536,157 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //                  (H8)
-            }), target.MovesKing[Chess.E5]);
+            }), target.MovesKing[Const.E5]);
+        }
 
-            
+        [TestMethod]
+        public void MovesRookTest()
+        {
+            var target = new Bitboards();
+            target.Initialize();
+
+            var boardE5 = Bitboards.PrintBitboard(target.MovesRook[Const.E5]);
+            var boardD1 = Bitboards.PrintBitboard(target.MovesRook[Const.D1]);
+            var boardH1 = Bitboards.PrintBitboard(target.MovesRook[Const.H1]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)     (D1)
+                1, 1, 1, 0, 1, 1, 1, 1,
+                0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0
+                //                  (H8)
+            }), target.MovesRook[Const.D1]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+           {//(A1)         
+                1, 1, 1, 1, 1, 1, 1, 0,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1
+               //                  (H8)
+           }), target.MovesRook[Const.H1]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)         
+                0, 0, 0, 0, 1, 0, 0, 0,
+                0, 0, 0, 0, 1, 0, 0, 0,
+                0, 0, 0, 0, 1, 0, 0, 0,
+                0, 0, 0, 0, 1, 0, 0, 0,
+                1, 1, 1, 1, 0, 1, 1, 1,
+                0, 0, 0, 0, 1, 0, 0, 0,
+                0, 0, 0, 0, 1, 0, 0, 0,
+                0, 0, 0, 0, 1, 0, 0, 0
+                //                  (H8)
+            }), target.MovesRook[Const.E5]);
+        }
+
+        [TestMethod]
+        public void MovesBishopTest()
+        {
+            var target = new Bitboards();
+            target.Initialize();
+
+            var boardE5 = Bitboards.PrintBitboard(target.MovesBishop[Const.E5]);
+            var boardD1 = Bitboards.PrintBitboard(target.MovesBishop[Const.D1]);
+            var boardH1 = Bitboards.PrintBitboard(target.MovesBishop[Const.H1]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)     (D1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 1, 0, 1, 0, 0, 0,
+                0, 1, 0, 0, 0, 1, 0, 0,
+                1, 0, 0, 0, 0, 0, 1, 0,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0
+                //                  (H8)
+            }), target.MovesBishop[Const.D1]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+           {//(A1)         
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 1, 0,
+                0, 0, 0, 0, 0, 1, 0, 0,
+                0, 0, 0, 0, 1, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 1, 0, 0, 0, 0, 0,
+                0, 1, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0
+               //                  (H8)
+           }), target.MovesBishop[Const.H1]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)         
+                1, 0, 0, 0, 0, 0, 0, 0,
+                0, 1, 0, 0, 0, 0, 0, 1,
+                0, 0, 1, 0, 0, 0, 1, 0,
+                0, 0, 0, 1, 0, 1, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 1, 0, 0,
+                0, 0, 1, 0, 0, 0, 1, 0,
+                0, 1, 0, 0, 0, 0, 0, 1
+                //                  (H8)
+            }), target.MovesBishop[Const.E5]);
+        }
+
+        [TestMethod]
+        public void MovesQueenTest()
+        {
+            var target = new Bitboards();
+            target.Initialize();
+
+            var boardE5 = Bitboards.PrintBitboard(target.MovesQueen[Const.E5]);
+            var boardD1 = Bitboards.PrintBitboard(target.MovesQueen[Const.D1]);
+            var boardH1 = Bitboards.PrintBitboard(target.MovesQueen[Const.H1]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)     (D1)
+                1, 1, 1, 0, 1, 1, 1, 1,
+                0, 0, 1, 1, 1, 0, 0, 0,
+                0, 1, 0, 1, 0, 1, 0, 0,
+                1, 0, 0, 1, 0, 0, 1, 0,
+                0, 0, 0, 1, 0, 0, 0, 1,
+                0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0
+                //                  (H8)
+            }), target.MovesQueen[Const.D1]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+           {//(A1)         
+                1, 1, 1, 1, 1, 1, 1, 0,
+                0, 0, 0, 0, 0, 0, 1, 1,
+                0, 0, 0, 0, 0, 1, 0, 1,
+                0, 0, 0, 0, 1, 0, 0, 1,
+                0, 0, 0, 1, 0, 0, 0, 1,
+                0, 0, 1, 0, 0, 0, 0, 1,
+                0, 1, 0, 0, 0, 0, 0, 1,
+                1, 0, 0, 0, 0, 0, 0, 1
+               //                  (H8)
+           }), target.MovesQueen[Const.H1]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)         
+                1, 0, 0, 0, 1, 0, 0, 0,
+                0, 1, 0, 0, 1, 0, 0, 1,
+                0, 0, 1, 0, 1, 0, 1, 0,
+                0, 0, 0, 1, 1, 1, 0, 0,
+                1, 1, 1, 1, 0, 1, 1, 1,
+                0, 0, 0, 1, 1, 1, 0, 0,
+                0, 0, 1, 0, 1, 0, 1, 0,
+                0, 1, 0, 0, 1, 0, 0, 1
+                //                  (H8)
+            }), target.MovesQueen[Const.E5]);
         }
     }
 }

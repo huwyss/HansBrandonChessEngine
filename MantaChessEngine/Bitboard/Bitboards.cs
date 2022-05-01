@@ -1,98 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Bitboard = System.UInt64;
-
 
 namespace MantaChessEngine
 {
-    public class Chess
-    {
-        public const int A1 = 0;
-        public const int B1 = 1;
-        public const int C1 = 2;
-        public const int D1 = 3;
-        public const int E1 = 4;
-        public const int F1 = 5;
-        public const int G1 = 6;
-        public const int H1 = 7;
-
-        public const int A2 = 8;
-        public const int B2 = 9;
-        public const int C2 = 10;
-        public const int D2 = 11;
-        public const int E2 = 12;
-        public const int F2 = 13;
-        public const int G2 = 14;
-        public const int H2 = 15;
-
-        public const int A3 = 16;
-        public const int B3 = 17;
-        public const int C3 = 18;
-        public const int D3 = 19;
-        public const int E3 = 20;
-        public const int F3 = 21;
-        public const int G3 = 22;
-        public const int H3 = 23;
-
-        public const int A4 = 24;
-        public const int B4 = 25;
-        public const int C4 = 26;
-        public const int D4 = 27;
-        public const int E4 = 28;
-        public const int F4 = 29;
-        public const int G4 = 30;
-        public const int H4 = 31;
-
-        public const int A5 = 32;
-        public const int B5 = 33;
-        public const int C5 = 34;
-        public const int D5 = 35;
-        public const int E5 = 36;
-        public const int F5 = 37;
-        public const int G5 = 38;
-        public const int H5 = 39;
-
-        public const int A6 = 40;
-        public const int B6 = 41;
-        public const int C6 = 42;
-        public const int D6 = 43;
-        public const int E6 = 44;
-        public const int F6 = 45;
-        public const int G6 = 46;
-        public const int H6 = 47;
-
-        public const int A7 = 48;
-        public const int B7 = 49;
-        public const int C7 = 50;
-        public const int D7 = 51;
-        public const int E7 = 52;
-        public const int F7 = 53;
-        public const int G7 = 54;
-        public const int H7 = 55;
-
-        public const int A8 = 56;
-        public const int B8 = 57;
-        public const int C8 = 58;
-        public const int D8 = 59;
-        public const int E8 = 60;
-        public const int F8 = 61;
-        public const int G8 = 62;
-        public const int H8 = 63;
-
-        public const int Pawn = 0;
-        public const int Knight = 1;
-        public const int Bishop = 2;
-        public const int Rook = 3;
-        public const int Queen = 3;
-        public const int King = 5;
-
-        public const int White = 0;
-        public const int Black = 1;
-    }
-
     public class Bitboards : IBoard
     {
         private FenParser _fenParser;
@@ -162,14 +73,17 @@ namespace MantaChessEngine
         {
             _fenParser = new FenParser();
             InitBitboard();
+        }
+
+        public void Initialize()
+        {
             SetBetweenMatrix();
             SetRayAfterMatrix();
             SetKingAndQueenSideMask();
             SetKnightMoves();
             SetKingMoves();
+            SetQueenRookBishopMoves();
         }
-
-        
 
         private void InitBitboard()
         {
@@ -391,9 +305,20 @@ namespace MantaChessEngine
             }
         }
 
-        private int GetEdge(int square, int direction)
+        public int GetEdge(int square, int direction)
         {
-            while (square >= 0 && Col[square] < 7 && Col[square] > 0 && Row[square] < 7 && Row[square] > 0)
+            while (square >= 0 && 
+                (
+                direction == 1 && Col[square] < 7 ||
+                direction == -1 && Col[square] > 0 ||
+                direction == 8 && Row[square] < 7 ||
+                direction == -8 && Row[square] > 0 ||
+
+                direction == 7 && Col[square] > 0 && Row[square] < 7 ||
+                direction == 9 && Col[square] < 7 && Row[square] < 7 ||
+                direction == -7 && Col[square] < 7 && Row[square] > 0 ||
+                direction == -9 && Col[square] > 0 && Row[square] > 0
+                ))
             {
                 square += direction;
             }
@@ -405,16 +330,16 @@ namespace MantaChessEngine
         {
             Bitboard queenSideMask = 0;
             Bitboard kingSideMask = 0;
-            for (int x = 0; x < 64; x++)
+            for (int i = 0; i < 64; i++)
             {
-                if (Col[x] < 2)
+                if (Col[i] < 2)
                 {
-                    SetBit(ref queenSideMask, x);
+                    SetBit(ref queenSideMask, i);
                 }
 
-                if (Col[x] > 5)
+                if (Col[i] > 5)
                 {
-                    SetBit(ref kingSideMask, x);
+                    SetBit(ref kingSideMask, i);
                 }
             }
 
@@ -426,53 +351,52 @@ namespace MantaChessEngine
         {
             MovesKnight = new Bitboard[64];
 
-            //
             //      -17   -15
             //    -10        -6
             //          N
             //    +6         +10
             //      +15   +17
 
-            for (int x = 0; x < 64; x++)
+            for (int i = 0; i < 64; i++)
             {
-                if (Col[x] < 7 && Row[x] < 7)
+                if (Col[i] < 7 && Row[i] < 7)
                 {
-                    SetBit(ref MovesKnight[x], x + 10);
+                    SetBit(ref MovesKnight[i], i + 10);
                 }
 
-                if (Col[x] < 6 && Row[x] < 6)
+                if (Col[i] < 6 && Row[i] < 6)
                 {
-                    SetBit(ref MovesKnight[x], x + 17);
+                    SetBit(ref MovesKnight[i], i + 17);
                 }
 
-                if (Col[x] > 1 && Row[x] < 6)
+                if (Col[i] > 1 && Row[i] < 6)
                 {
-                    SetBit(ref MovesKnight[x], x + 15);
+                    SetBit(ref MovesKnight[i], i + 15);
                 }
 
-                if (Col[x] > 0 && Row[x] < 7)
+                if (Col[i] > 0 && Row[i] < 7)
                 {
-                    SetBit(ref MovesKnight[x], x + 6);
+                    SetBit(ref MovesKnight[i], i + 6);
                 }
 
-                if (Col[x] > 1 && Row[x] > 1)
+                if (Col[i] > 1 && Row[i] > 1)
                 {
-                    SetBit(ref MovesKnight[x], x - 17);
+                    SetBit(ref MovesKnight[i], i - 17);
                 }
 
-                if (Col[x] > 0 && Row[x] > 0)
+                if (Col[i] > 0 && Row[i] > 0)
                 {
-                    SetBit(ref MovesKnight[x], x - 10);
+                    SetBit(ref MovesKnight[i], i - 10);
                 }
 
-                if (Col[x] < 6 && Row[x] > 1)
+                if (Col[i] < 6 && Row[i] > 1)
                 {
-                    SetBit(ref MovesKnight[x], x - 15);
+                    SetBit(ref MovesKnight[i], i - 15);
                 }
 
-                if (Col[x] < 7 && Row[x] > 0)
+                if (Col[i] < 7 && Row[i] > 0)
                 {
-                    SetBit(ref MovesKnight[x], x - 6);
+                    SetBit(ref MovesKnight[i], i - 6);
                 }
             }
         }
@@ -485,34 +409,128 @@ namespace MantaChessEngine
             //       -1   K  +1
             //       +7  +8  +9 
 
-            for (int x = 0; x < 64; x++)
+            for (int i = 0; i < 64; i++)
             {
-                if (Col[x] > 1 && Row[x] > 1)
+                if (Col[i] > 1 && Row[i] > 1)
                 {
-                    SetBit(ref MovesKing[x], x - 1);
-                    SetBit(ref MovesKing[x], x - 8);
-                    SetBit(ref MovesKing[x], x - 9);
+                    SetBit(ref MovesKing[i], i - 1);
+                    SetBit(ref MovesKing[i], i - 8);
+                    SetBit(ref MovesKing[i], i - 9);
                 }
 
-                if (Col[x] < 7 && Row[x] > 1)
+                if (Col[i] < 7 && Row[i] > 1)
                 {
-                    SetBit(ref MovesKing[x], x - 7);
-                    SetBit(ref MovesKing[x], x - 8);
-                    SetBit(ref MovesKing[x], x + 1);
+                    SetBit(ref MovesKing[i], i - 7);
+                    SetBit(ref MovesKing[i], i - 8);
+                    SetBit(ref MovesKing[i], i + 1);
                 }
 
-                if (Col[x] > 1 && Row[x] < 7)
+                if (Col[i] > 1 && Row[i] < 7)
                 {
-                    SetBit(ref MovesKing[x], x - 1);
-                    SetBit(ref MovesKing[x], x + 7);
-                    SetBit(ref MovesKing[x], x + 8);
+                    SetBit(ref MovesKing[i], i - 1);
+                    SetBit(ref MovesKing[i], i + 7);
+                    SetBit(ref MovesKing[i], i + 8);
                 }
 
-                if (Col[x] < 7 && Row[x] < 7)
+                if (Col[i] < 7 && Row[i] < 7)
                 {
-                    SetBit(ref MovesKing[x], x + 1);
-                    SetBit(ref MovesKing[x], x + 8);
-                    SetBit(ref MovesKing[x], x + 9);
+                    SetBit(ref MovesKing[i], i + 1);
+                    SetBit(ref MovesKing[i], i + 8);
+                    SetBit(ref MovesKing[i], i + 9);
+                }
+            }
+        }
+
+        private void SetQueenRookBishopMoves()
+        {
+            MovesQueen = new Bitboard[64];
+            MovesRook = new Bitboard[64];
+            MovesBishop = new Bitboard[64];
+
+            //       -9  -8  -7
+            //       -1   K  +1
+            //       +7  +8  +9 
+
+            for (int i = 0; i < 64; i++)
+            {
+                if (Row[i] < 7)
+                {
+                    var edge = GetEdge(i, 8);
+                    for (int z = i+8; z <= edge; z += 8)
+                    {
+                        SetBit(ref MovesRook[i], z);
+                        SetBit(ref MovesQueen[i], z);
+                    }
+                }
+
+                if (Row[i] > 1)
+                {
+                    var edge = GetEdge(i, -8);
+                    for (int z = i - 8; z >= edge; z -= 8)
+                    {
+                        SetBit(ref MovesRook[i], z);
+                        SetBit(ref MovesQueen[i], z);
+                    }
+                }
+
+                if (Col[i] < 7)
+                {
+                    var edge = GetEdge(i, 1);
+                    for (int z = i + 1; z <= edge; z++)
+                    {
+                        SetBit(ref MovesRook[i], z);
+                        SetBit(ref MovesQueen[i], z);
+                    }
+                }
+
+                if (Col[i] > 1)
+                {
+                    var edge = GetEdge(i, -1);
+                    for (int z = i - 1; z >= edge; z--)
+                    {
+                        SetBit(ref MovesRook[i], z);
+                        SetBit(ref MovesQueen[i], z);
+                    }
+                }
+
+                if (Col[i] > 0 && Row[i] < 7)
+                {
+                    var edge = GetEdge(i, 7);
+                    for (int z=i + 7; z <= edge; z +=7)
+                    {
+                        SetBit(ref MovesBishop[i], z);
+                        SetBit(ref MovesQueen[i], z);
+                    }
+                }
+
+                if (Col[i] < 7 && Row[i] < 7)
+                {
+                    var edge = GetEdge(i, 9);
+                    for (int z = i + 9; z <= edge; z += 9)
+                    {
+                        SetBit(ref MovesBishop[i], z);
+                        SetBit(ref MovesQueen[i], z);
+                    }
+                }
+
+                if (Col[i] < 7 && Row[i] > 0)
+                {
+                    var edge = GetEdge(i, -7);
+                    for (int z = i - 7; z >= edge; z -= 7)
+                    {
+                        SetBit(ref MovesBishop[i], z);
+                        SetBit(ref MovesQueen[i], z);
+                    }
+                }
+
+                if (Col[i] > 0 && Row[i] > 0)
+                {
+                    var edge = GetEdge(i, -9);
+                    for (int z = i - 9; z >= edge; z -= 9)
+                    {
+                        SetBit(ref MovesBishop[i], z); 
+                        SetBit(ref MovesQueen[i], z);
+                    }
                 }
             }
         }

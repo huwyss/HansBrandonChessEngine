@@ -89,8 +89,8 @@ namespace MantaChessEngine
         public const int Queen = 3;
         public const int King = 5;
 
-        public const int White = 1;
-        public const int Black = -1;
+        public const int White = 0;
+        public const int Black = 1;
     }
 
     public class Bitboards : IBoard
@@ -117,6 +117,16 @@ namespace MantaChessEngine
 
         public Bitboard QueenSideMask { get; set; }
         public Bitboard KingSideMask { get; set; }
+
+        public Bitboard[] MovesPawnLeft { get; set; }
+        public Bitboard[] MovesPawnRight { get; set; }
+        public Bitboard[] MovesPawnWalk { get; set; }
+        public Bitboard[] MovesKnight { get; set; }
+        public Bitboard[] MovesBishop { get; set; }
+        public Bitboard[] MovesRook { get; set; }
+        public Bitboard[] MovesQueen { get; set; }
+        public Bitboard[] MovesKing { get; set; }
+
 
 
         public int[] Row { get; set; }
@@ -155,6 +165,8 @@ namespace MantaChessEngine
             SetBetweenMatrix();
             SetRayAfterMatrix();
             SetKingAndQueenSideMask();
+            SetKnightMoves();
+            SetKingMoves();
         }
 
         
@@ -176,14 +188,14 @@ namespace MantaChessEngine
 
             Col = new int[64]
             {
-                7, 6, 5, 4, 3, 2, 1, 0,
-                7, 6, 5, 4, 3, 2, 1, 0,
-                7, 6, 5, 4, 3, 2, 1, 0,
-                7, 6, 5, 4, 3, 2, 1, 0,
-                7, 6, 5, 4, 3, 2, 1, 0,
-                7, 6, 5, 4, 3, 2, 1, 0,
-                7, 6, 5, 4, 3, 2, 1, 0,
-                7, 6, 5, 4, 3, 2, 1, 0,
+                 0, 1, 2, 3, 4, 5, 6, 7,
+                 0, 1, 2, 3, 4, 5, 6, 7,
+                 0, 1, 2, 3, 4, 5, 6, 7,
+                 0, 1, 2, 3, 4, 5, 6, 7,
+                 0, 1, 2, 3, 4, 5, 6, 7,
+                 0, 1, 2, 3, 4, 5, 6, 7,
+                 0, 1, 2, 3, 4, 5, 6, 7,
+                 0, 1, 2, 3, 4, 5, 6, 7,
             };
 
             DiagNO = new int[64]
@@ -410,6 +422,117 @@ namespace MantaChessEngine
             KingSideMask = kingSideMask;
         }
 
+        private void SetKnightMoves()
+        {
+            MovesKnight = new Bitboard[64];
+
+            //
+            //      -17   -15
+            //    -10        -6
+            //          N
+            //    +6         +10
+            //      +15   +17
+
+            for (int x = 0; x < 64; x++)
+            {
+                if (Col[x] < 7 && Row[x] < 7)
+                {
+                    SetBit(ref MovesKnight[x], x + 10);
+                }
+
+                if (Col[x] < 6 && Row[x] < 6)
+                {
+                    SetBit(ref MovesKnight[x], x + 17);
+                }
+
+                if (Col[x] > 1 && Row[x] < 6)
+                {
+                    SetBit(ref MovesKnight[x], x + 15);
+                }
+
+                if (Col[x] > 0 && Row[x] < 7)
+                {
+                    SetBit(ref MovesKnight[x], x + 6);
+                }
+
+                if (Col[x] > 1 && Row[x] > 1)
+                {
+                    SetBit(ref MovesKnight[x], x - 17);
+                }
+
+                if (Col[x] > 0 && Row[x] > 0)
+                {
+                    SetBit(ref MovesKnight[x], x - 10);
+                }
+
+                if (Col[x] < 6 && Row[x] > 1)
+                {
+                    SetBit(ref MovesKnight[x], x - 15);
+                }
+
+                if (Col[x] < 7 && Row[x] > 0)
+                {
+                    SetBit(ref MovesKnight[x], x - 6);
+                }
+            }
+        }
+
+        private void SetKingMoves()
+        {
+            MovesKing = new Bitboard[64];
+
+            //       -9  -8  -7
+            //       -1   K  +1
+            //       +7  +8  +9 
+
+            for (int x = 0; x < 64; x++)
+            {
+                if (Col[x] > 1 && Row[x] > 1)
+                {
+                    SetBit(ref MovesKing[x], x - 1);
+                    SetBit(ref MovesKing[x], x - 8);
+                    SetBit(ref MovesKing[x], x - 9);
+                }
+
+                if (Col[x] < 7 && Row[x] > 1)
+                {
+                    SetBit(ref MovesKing[x], x - 7);
+                    SetBit(ref MovesKing[x], x - 8);
+                    SetBit(ref MovesKing[x], x + 1);
+                }
+
+                if (Col[x] > 1 && Row[x] < 7)
+                {
+                    SetBit(ref MovesKing[x], x - 1);
+                    SetBit(ref MovesKing[x], x + 7);
+                    SetBit(ref MovesKing[x], x + 8);
+                }
+
+                if (Col[x] < 7 && Row[x] < 7)
+                {
+                    SetBit(ref MovesKing[x], x + 1);
+                    SetBit(ref MovesKing[x], x + 8);
+                    SetBit(ref MovesKing[x], x + 9);
+                }
+            }
+        }
+
+        public static string PrintBitboard(Bitboard bitboard)
+        {
+            var board = new StringBuilder();
+            for (int y = 7; y >=0; y--)
+            {
+                for (int x = 0; x<= 7; x++)
+                {
+                    board.Append(GetBit(bitboard, x + 8 * y) ? " 1" : " .");
+                }
+
+                board.Append("\n");
+            }
+
+            return board.ToString();
+        }
+
         private static void SetBit(ref UInt64 bitboard, int index)
         {
             bitboard |= ((UInt64)0x01 << index);
@@ -418,6 +541,10 @@ namespace MantaChessEngine
         private static void ClearBit(ref UInt64 bitboard, int index)
         {
             bitboard &= (~((UInt64)0x01 << index));
+        }
+        private static bool GetBit(UInt64 bitboard, int index)
+        {
+            return (bitboard & ((UInt64)0x01 << index)) != (UInt64)0x00;
         }
 
         public static UInt64 ConvertToUInt64(byte[] input)

@@ -30,6 +30,7 @@ namespace MantaChessEngine
         public Bitboard KingSideMask { get; set; }
 
         public Bitboard[] WhitePawnCaptures { get; set; }
+        public Bitboard[] WhitePawnDefends { get; set; }
         public Bitboard[] WhiteMovesPawn { get; set; }
         public Bitboard[] WhitePawnStep { get; set; }
         public Bitboard[] WhitePawnDoubleStep { get; set; }
@@ -37,6 +38,7 @@ namespace MantaChessEngine
         public Bitboard[] WhitePawnRight { get; set; }
 
         public Bitboard[] BlackPawnCaptures { get; set; }
+        public Bitboard[] BlackPawnDefends { get; set; }
         public Bitboard[] BlackMovesPawn { get; set; }
         public Bitboard[] BlackPawnStep { get; set; }
         public Bitboard[] BlackPawnDoubleStep { get; set; }
@@ -58,7 +60,13 @@ namespace MantaChessEngine
 
         public Bitboard[] IndexMask { get; set; }
         public Bitboard[] NotIndexMask { get; set; }
-        
+        public Bitboard[] MaskIsolatedPawns { get; set; }
+        public Bitboard[] MaskWhitePassedPawns { get; set; }
+        public Bitboard[] MaskWhitePawnsPath { get; set; }
+        public Bitboard[] MaskBlackPassedPawns { get; set; }
+        public Bitboard[] MaskBlackPawnsPath { get; set; }
+
+
         public Definitions.ChessColor SideToMove { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int MoveCountSincePawnOrCapture { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public History History { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -99,7 +107,7 @@ namespace MantaChessEngine
             SetKingMoves();
             SetQueenRookBishopMoves();
             SetIndexMask();
-            SetPawnMoves();
+            SetPawnBitboards();
         }
 
         private void InitBitboard()
@@ -564,10 +572,11 @@ namespace MantaChessEngine
             }
         }
 
-        private void SetPawnMoves()
+        private void SetPawnBitboards()
         {
             SetPawnCaptures();
             SetPawnStraightMoves();
+            SetPawnMasks();
         }
 
         private void SetPawnCaptures()
@@ -575,10 +584,12 @@ namespace MantaChessEngine
             WhitePawnCaptures = new Bitboard[64];
             WhitePawnLeft = new Bitboard[64];
             WhitePawnRight = new Bitboard[64];
+            WhitePawnDefends = new Bitboard[64];
 
             BlackPawnCaptures = new Bitboard[64];
             BlackPawnLeft = new Bitboard[64];
             BlackPawnRight = new Bitboard[64];
+            BlackPawnDefends = new Bitboard[64];
 
             for (int i = 0; i < 64; i++)
             {
@@ -619,6 +630,9 @@ namespace MantaChessEngine
                         SetBit(ref BlackPawnRight[i], stepRightBlack);
                     }
                 }
+
+                WhitePawnDefends[i] = BlackPawnCaptures[i];
+                BlackPawnDefends[i] = WhitePawnCaptures[i];
             }
         }
 
@@ -660,6 +674,54 @@ namespace MantaChessEngine
                     // step black
                     SetBit(ref BlackMovesPawn[i], i - 16);
                     SetBit(ref BlackPawnDoubleStep[i], i - 16);
+                }
+            }
+        }
+
+        private void SetPawnMasks()
+        {
+            MaskIsolatedPawns = new Bitboard[64];
+
+            MaskWhitePassedPawns = new Bitboard[64];
+            MaskWhitePawnsPath = new Bitboard[64];
+            MaskBlackPassedPawns = new Bitboard[64];
+            MaskBlackPawnsPath = new Bitboard[64];
+
+            for (int x = 0; x < 64; x++)
+            {
+                for (int y = 0; y < 64; y++)
+                {
+                    if (Math.Abs(Col[x] - Col[y]) < 2)
+                    {
+                        if (Row[x] < Row[y] && Row[y] < 7)
+                        {
+                            SetBit(ref MaskWhitePassedPawns[x], y);
+                        }
+
+                        if (Row[x] > Row[y] && Row[y] > 0)
+                        {
+                            SetBit(ref MaskBlackPassedPawns[x], y);
+                        }
+                    }
+
+                    if (Math.Abs(Col[x] - Col[y]) == 1)
+                    {
+                        SetBit(ref MaskIsolatedPawns[x], y);
+                        SetBit(ref MaskIsolatedPawns[x], y);
+                    }
+
+                    if (Col[x] == Col[y])
+                    {
+                        if (Row[x] < Row[y])
+                        {
+                            SetBit(ref MaskWhitePawnsPath[x], y);
+                        }
+
+                        if (Row[x] > Row[y])
+                        {
+                            SetBit(ref MaskBlackPawnsPath[x], y);
+                        }
+                    }
                 }
             }
         }

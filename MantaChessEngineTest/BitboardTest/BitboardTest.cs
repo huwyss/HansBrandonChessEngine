@@ -846,8 +846,8 @@ namespace MantaChessEngineTest
             target.Initialize();
 
             var boardE5 = Bitboards.PrintBitboard(target.BlackMovesPawn[Const.E5]);
-            var boardA2 = Bitboards.PrintBitboard(target.BlackMovesPawn[Const.A7]);
-            var boardH2 = Bitboards.PrintBitboard(target.BlackMovesPawn[Const.H7]);
+            var boardA7 = Bitboards.PrintBitboard(target.BlackMovesPawn[Const.A7]);
+            var boardH7 = Bitboards.PrintBitboard(target.BlackMovesPawn[Const.H7]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)     (D1)
@@ -887,6 +887,256 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 //                  (H8)
             }), target.BlackMovesPawn[Const.E5]);
+        }
+
+        [TestMethod]
+        public void MaskWhitePassedPawnTest()
+        {
+            var target = new Bitboards();
+            target.Initialize();
+
+            var boardE5 = Bitboards.PrintBitboard(target.MaskWhitePassedPawns[Const.E5]);
+            var boardA2 = Bitboards.PrintBitboard(target.MaskWhitePassedPawns[Const.A2]);
+            var boardH2 = Bitboards.PrintBitboard(target.MaskWhitePassedPawns[Const.H2]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)     (D1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                1, 1, 0, 0, 0, 0, 0, 0,
+                1, 1, 0, 0, 0, 0, 0, 0,
+                1, 1, 0, 0, 0, 0, 0, 0,
+                1, 1, 0, 0, 0, 0, 0, 0,
+                1, 1, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.MaskWhitePassedPawns[Const.A2]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 1, 1,
+                0, 0, 0, 0, 0, 0, 1, 1,
+                0, 0, 0, 0, 0, 0, 1, 1,
+                0, 0, 0, 0, 0, 0, 1, 1,
+                0, 0, 0, 0, 0, 0, 1, 1,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.MaskWhitePassedPawns[Const.H2]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 1, 1, 1, 0, 0,
+                0, 0, 0, 1, 1, 1, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.MaskWhitePassedPawns[Const.E5]);
+        }
+
+        [TestMethod]
+        public void MaskBlackPassedPawnTest()
+        {
+            var target = new Bitboards();
+            target.Initialize();
+
+            var boardE5 = Bitboards.PrintBitboard(target.MaskBlackPassedPawns[Const.E5]);
+            var boardA7 = Bitboards.PrintBitboard(target.MaskBlackPassedPawns[Const.A7]);
+            var boardH7 = Bitboards.PrintBitboard(target.MaskBlackPassedPawns[Const.H7]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)     (D1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                1, 1, 0, 0, 0, 0, 0, 0,
+                1, 1, 0, 0, 0, 0, 0, 0,
+                1, 1, 0, 0, 0, 0, 0, 0,
+                1, 1, 0, 0, 0, 0, 0, 0,
+                1, 1, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.MaskBlackPassedPawns[Const.A7]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 1, 1,
+                0, 0, 0, 0, 0, 0, 1, 1,
+                0, 0, 0, 0, 0, 0, 1, 1,
+                0, 0, 0, 0, 0, 0, 1, 1,
+                0, 0, 0, 0, 0, 0, 1, 1,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.MaskBlackPassedPawns[Const.H7]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 1, 1, 1, 0, 0,
+                0, 0, 0, 1, 1, 1, 0, 0,
+                0, 0, 0, 1, 1, 1, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.MaskBlackPassedPawns[Const.E5]);
+        }
+
+        [TestMethod]
+        public void MaskIsolatedPawnTest()
+        {
+            var target = new Bitboards();
+            target.Initialize();
+
+            var boardE5 = Bitboards.PrintBitboard(target.MaskIsolatedPawns[Const.E5]);
+            var boardA2 = Bitboards.PrintBitboard(target.MaskIsolatedPawns[Const.A2]);
+            var boardH2 = Bitboards.PrintBitboard(target.MaskIsolatedPawns[Const.H2]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)     (D1)
+                0, 1, 0, 0, 0, 0, 0, 0,
+                0, 1, 0, 0, 0, 0, 0, 0,
+                0, 1, 0, 0, 0, 0, 0, 0,
+                0, 1, 0, 0, 0, 0, 0, 0,
+                0, 1, 0, 0, 0, 0, 0, 0,
+                0, 1, 0, 0, 0, 0, 0, 0,
+                0, 1, 0, 0, 0, 0, 0, 0,
+                0, 1, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.MaskIsolatedPawns[Const.A2]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)
+                0, 0, 0, 0, 0, 0, 1, 0,
+                0, 0, 0, 0, 0, 0, 1, 0,
+                0, 0, 0, 0, 0, 0, 1, 0,
+                0, 0, 0, 0, 0, 0, 1, 0,
+                0, 0, 0, 0, 0, 0, 1, 0,
+                0, 0, 0, 0, 0, 0, 1, 0,
+                0, 0, 0, 0, 0, 0, 1, 0,
+                0, 0, 0, 0, 0, 0, 1, 0,
+                //                  (H8)
+            }), target.MaskIsolatedPawns[Const.H2]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)
+                0, 0, 0, 1, 0, 1, 0, 0,
+                0, 0, 0, 1, 0, 1, 0, 0,
+                0, 0, 0, 1, 0, 1, 0, 0,
+                0, 0, 0, 1, 0, 1, 0, 0,
+                0, 0, 0, 1, 0, 1, 0, 0,
+                0, 0, 0, 1, 0, 1, 0, 0,
+                0, 0, 0, 1, 0, 1, 0, 0,
+                0, 0, 0, 1, 0, 1, 0, 0,
+                //                  (H8)
+            }), target.MaskIsolatedPawns[Const.E5]);
+        }
+
+        [TestMethod]
+        public void MaskWhitePawnPathTest()
+        {
+            var target = new Bitboards();
+            target.Initialize();
+
+            var boardE5 = Bitboards.PrintBitboard(target.MaskWhitePawnsPath[Const.E5]);
+            var boardA2 = Bitboards.PrintBitboard(target.MaskWhitePawnsPath[Const.A2]);
+            var boardH2 = Bitboards.PrintBitboard(target.MaskWhitePawnsPath[Const.H2]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)     (D1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.MaskWhitePawnsPath[Const.A2]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                //                  (H8)
+            }), target.MaskWhitePawnsPath[Const.H2]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 1, 0, 0, 0,
+                0, 0, 0, 0, 1, 0, 0, 0,
+                0, 0, 0, 0, 1, 0, 0, 0,
+                //                  (H8)
+            }), target.MaskWhitePawnsPath[Const.E5]);
+        }
+
+        [TestMethod]
+        public void MaskBlackPawnPathTest()
+        {
+            var target = new Bitboards();
+            target.Initialize();
+
+            var boardE5 = Bitboards.PrintBitboard(target.MaskBlackPawnsPath[Const.E5]);
+            var boardA7 = Bitboards.PrintBitboard(target.MaskBlackPawnsPath[Const.A7]);
+            var boardH7 = Bitboards.PrintBitboard(target.MaskBlackPawnsPath[Const.H7]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)     (D1)
+                1, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.MaskBlackPawnsPath[Const.A7]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.MaskBlackPawnsPath[Const.H7]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)
+                0, 0, 0, 0, 1, 0, 0, 0,
+                0, 0, 0, 0, 1, 0, 0, 0,
+                0, 0, 0, 0, 1, 0, 0, 0,
+                0, 0, 0, 0, 1, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.MaskBlackPawnsPath[Const.E5]);
         }
     }
 }

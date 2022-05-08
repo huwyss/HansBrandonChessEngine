@@ -688,5 +688,105 @@ namespace MantaChessEngineTest
                 //                  (H8)
             }), target.MovesQueen[Const.E5]);
         }
+
+        [TestMethod]
+        public void WhitePawnCaptuesTest()
+        {
+            var target = new Bitboards();
+            target.Initialize();
+
+            var boardE5 = Bitboards.PrintBitboard(target.WhitePawnCaptures[Const.E5]);
+            var boardA2 = Bitboards.PrintBitboard(target.WhitePawnCaptures[Const.A2]);
+            var boardH2 = Bitboards.PrintBitboard(target.WhitePawnCaptures[Const.H2]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)     (D1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 1, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.WhitePawnCaptures[Const.A2]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 1, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.WhitePawnCaptures[Const.H2]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 1, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.WhitePawnCaptures[Const.E5]);
+        }
+
+        [TestMethod]
+        public void BlackPawnCaptuesTest()
+        {
+            var target = new Bitboards();
+            target.Initialize();
+
+            var boardE5 = Bitboards.PrintBitboard(target.BlackPawnCaptures[Const.E5]);
+            var boardA7 = Bitboards.PrintBitboard(target.BlackPawnCaptures[Const.A7]);
+            var boardH7 = Bitboards.PrintBitboard(target.BlackPawnCaptures[Const.H7]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)     (D1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 1, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.BlackPawnCaptures[Const.A7]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 1, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.BlackPawnCaptures[Const.H7]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 1, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.BlackPawnCaptures[Const.E5]);
+        }
     }
 }

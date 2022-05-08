@@ -29,9 +29,16 @@ namespace MantaChessEngine
         public Bitboard QueenSideMask { get; set; }
         public Bitboard KingSideMask { get; set; }
 
-        public Bitboard[] MovesPawnLeft { get; set; }
-        public Bitboard[] MovesPawnRight { get; set; }
-        public Bitboard[] MovesPawnWalk { get; set; }
+        public Bitboard[] WhitePawnCaptures { get; set; }
+        public Bitboard[] WhiteMovesPawn { get; set; }
+        public Bitboard[] WhitePawnLeft { get; set; }
+        public Bitboard[] WhitePawnRight { get; set; }
+
+        public Bitboard[] BlackPawnCaptures { get; set; }
+        public Bitboard[] BlackMovesPawn { get; set; }
+        public Bitboard[] BlackPawnLeft { get; set; }
+        public Bitboard[] BlackPawnRight { get; set; }
+        
         public Bitboard[] MovesKnight { get; set; }
         public Bitboard[] MovesBishop { get; set; }
         public Bitboard[] MovesRook { get; set; }
@@ -44,6 +51,10 @@ namespace MantaChessEngine
         public int[] Col { get; set; }
         public int[] DiagNO { get; set; }
         public int[] DiagNW { get; set; }
+
+        public Bitboard[] IndexMask { get; set; }
+        public Bitboard[] NotIndexMask { get; set; }
+        
         public Definitions.ChessColor SideToMove { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int MoveCountSincePawnOrCapture { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public History History { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -83,6 +94,65 @@ namespace MantaChessEngine
             SetKnightMoves();
             SetKingMoves();
             SetQueenRookBishopMoves();
+            SetIndexMask();
+            SetPawnMoves();
+        }
+
+        private void SetPawnMoves()
+        {
+            SetPawnCaptures();
+        }
+
+        private void SetPawnCaptures()
+        {
+            WhitePawnCaptures = new Bitboard[64];
+            WhitePawnLeft = new Bitboard[64];
+            WhitePawnRight = new Bitboard[64];
+
+            BlackPawnCaptures = new Bitboard[64];
+            BlackPawnLeft = new Bitboard[64];
+            BlackPawnRight = new Bitboard[64];
+
+            for (int i = 0; i < 64; i++)
+            {
+                if (Col[i] > 0)
+                {
+                    if (Row[i] < 7)
+                    {
+                        // white captures left
+                        var stepLeftWhite = i + 7;
+                        SetBit(ref WhitePawnCaptures[i], stepLeftWhite);
+                        SetBit(ref WhitePawnLeft[i], stepLeftWhite);
+                    }
+
+                    if (Row[i] > 0)
+                    {
+                        // black captures left
+                        var stepLeftBlack = i - 9;
+                        SetBit(ref BlackPawnCaptures[i], stepLeftBlack);
+                        SetBit(ref BlackPawnLeft[i], stepLeftBlack);
+                    }
+                }
+
+                if (Col[i] < 7)
+                {
+                    if (Row[i] < 7)
+                    {
+                        // black captures right
+                        var stepRightWhite = i + 9;
+                        SetBit(ref WhitePawnCaptures[i], stepRightWhite);
+                        SetBit(ref WhitePawnRight[i], stepRightWhite);
+                    }
+
+                    if (Row[i] > 0)
+                    {
+                        // black captures right
+                        var stepRightBlack = i - 7;
+                        SetBit(ref BlackPawnCaptures[i], stepRightBlack);
+                        SetBit(ref BlackPawnRight[i], stepRightBlack);
+                    }
+                }
+            }
         }
 
         private void InitBitboard()
@@ -532,6 +602,18 @@ namespace MantaChessEngine
                         SetBit(ref MovesQueen[i], z);
                     }
                 }
+            }
+        }
+
+        private void SetIndexMask()
+        {
+            IndexMask = new Bitboard[64];
+            NotIndexMask = new Bitboard[64];
+
+            for (int i = 0; i < 64; i++)
+            {
+                SetBit(ref IndexMask[i], i);
+                NotIndexMask[i] = ~IndexMask[i];
             }
         }
 

@@ -31,11 +31,15 @@ namespace MantaChessEngine
 
         public Bitboard[] WhitePawnCaptures { get; set; }
         public Bitboard[] WhiteMovesPawn { get; set; }
+        public Bitboard[] WhitePawnStep { get; set; }
+        public Bitboard[] WhitePawnDoubleStep { get; set; }
         public Bitboard[] WhitePawnLeft { get; set; }
         public Bitboard[] WhitePawnRight { get; set; }
 
         public Bitboard[] BlackPawnCaptures { get; set; }
         public Bitboard[] BlackMovesPawn { get; set; }
+        public Bitboard[] BlackPawnStep { get; set; }
+        public Bitboard[] BlackPawnDoubleStep { get; set; }
         public Bitboard[] BlackPawnLeft { get; set; }
         public Bitboard[] BlackPawnRight { get; set; }
         
@@ -96,63 +100,6 @@ namespace MantaChessEngine
             SetQueenRookBishopMoves();
             SetIndexMask();
             SetPawnMoves();
-        }
-
-        private void SetPawnMoves()
-        {
-            SetPawnCaptures();
-        }
-
-        private void SetPawnCaptures()
-        {
-            WhitePawnCaptures = new Bitboard[64];
-            WhitePawnLeft = new Bitboard[64];
-            WhitePawnRight = new Bitboard[64];
-
-            BlackPawnCaptures = new Bitboard[64];
-            BlackPawnLeft = new Bitboard[64];
-            BlackPawnRight = new Bitboard[64];
-
-            for (int i = 0; i < 64; i++)
-            {
-                if (Col[i] > 0)
-                {
-                    if (Row[i] < 7)
-                    {
-                        // white captures left
-                        var stepLeftWhite = i + 7;
-                        SetBit(ref WhitePawnCaptures[i], stepLeftWhite);
-                        SetBit(ref WhitePawnLeft[i], stepLeftWhite);
-                    }
-
-                    if (Row[i] > 0)
-                    {
-                        // black captures left
-                        var stepLeftBlack = i - 9;
-                        SetBit(ref BlackPawnCaptures[i], stepLeftBlack);
-                        SetBit(ref BlackPawnLeft[i], stepLeftBlack);
-                    }
-                }
-
-                if (Col[i] < 7)
-                {
-                    if (Row[i] < 7)
-                    {
-                        // black captures right
-                        var stepRightWhite = i + 9;
-                        SetBit(ref WhitePawnCaptures[i], stepRightWhite);
-                        SetBit(ref WhitePawnRight[i], stepRightWhite);
-                    }
-
-                    if (Row[i] > 0)
-                    {
-                        // black captures right
-                        var stepRightBlack = i - 7;
-                        SetBit(ref BlackPawnCaptures[i], stepRightBlack);
-                        SetBit(ref BlackPawnRight[i], stepRightBlack);
-                    }
-                }
-            }
         }
 
         private void InitBitboard()
@@ -614,6 +561,106 @@ namespace MantaChessEngine
             {
                 SetBit(ref IndexMask[i], i);
                 NotIndexMask[i] = ~IndexMask[i];
+            }
+        }
+
+        private void SetPawnMoves()
+        {
+            SetPawnCaptures();
+            SetPawnStraightMoves();
+        }
+
+        private void SetPawnCaptures()
+        {
+            WhitePawnCaptures = new Bitboard[64];
+            WhitePawnLeft = new Bitboard[64];
+            WhitePawnRight = new Bitboard[64];
+
+            BlackPawnCaptures = new Bitboard[64];
+            BlackPawnLeft = new Bitboard[64];
+            BlackPawnRight = new Bitboard[64];
+
+            for (int i = 0; i < 64; i++)
+            {
+                if (Col[i] > 0)
+                {
+                    if (Row[i] < 7)
+                    {
+                        // white captures left
+                        var stepLeftWhite = i + 7;
+                        SetBit(ref WhitePawnCaptures[i], stepLeftWhite);
+                        SetBit(ref WhitePawnLeft[i], stepLeftWhite);
+                    }
+
+                    if (Row[i] > 0)
+                    {
+                        // black captures left
+                        var stepLeftBlack = i - 9;
+                        SetBit(ref BlackPawnCaptures[i], stepLeftBlack);
+                        SetBit(ref BlackPawnLeft[i], stepLeftBlack);
+                    }
+                }
+
+                if (Col[i] < 7)
+                {
+                    if (Row[i] < 7)
+                    {
+                        // white captures right
+                        var stepRightWhite = i + 9;
+                        SetBit(ref WhitePawnCaptures[i], stepRightWhite);
+                        SetBit(ref WhitePawnRight[i], stepRightWhite);
+                    }
+
+                    if (Row[i] > 0)
+                    {
+                        // black captures right
+                        var stepRightBlack = i - 7;
+                        SetBit(ref BlackPawnCaptures[i], stepRightBlack);
+                        SetBit(ref BlackPawnRight[i], stepRightBlack);
+                    }
+                }
+            }
+        }
+
+        private void SetPawnStraightMoves()
+        {
+            WhiteMovesPawn = new Bitboard[64];
+            WhitePawnStep = new Bitboard[64];
+            WhitePawnDoubleStep = new Bitboard[64];
+
+            BlackMovesPawn = new Bitboard[64];
+            BlackPawnStep = new Bitboard[64];
+            BlackPawnDoubleStep = new Bitboard[64];
+
+            for (int i = 0; i < 64; i++)
+            {
+                if (Row[i] < 7 )
+                {
+                    // step white
+                    SetBit(ref WhiteMovesPawn[i], i + 8);
+                    SetBit(ref WhitePawnStep[i], i + 8);
+                }
+
+                if (Row[i] == 1)
+                {
+                    // double step white
+                    SetBit(ref WhiteMovesPawn[i], i + 16);
+                    SetBit(ref WhitePawnDoubleStep[i], i + 16);
+                }
+
+                if (Row[i] > 0)
+                {
+                    // step black
+                    SetBit(ref BlackMovesPawn[i], i - 8);
+                    SetBit(ref BlackPawnStep[i], i - 8);
+                }
+
+                if (Row[i] == 6)
+                {
+                    // step black
+                    SetBit(ref BlackMovesPawn[i], i - 16);
+                    SetBit(ref BlackPawnDoubleStep[i], i - 16);
+                }
             }
         }
 

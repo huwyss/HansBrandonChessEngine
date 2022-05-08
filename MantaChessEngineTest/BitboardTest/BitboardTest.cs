@@ -788,5 +788,105 @@ namespace MantaChessEngineTest
                 //                  (H8)
             }), target.BlackPawnCaptures[Const.E5]);
         }
+
+        [TestMethod]
+        public void WhitePawnStraightMovesTest()
+        {
+            var target = new Bitboards();
+            target.Initialize();
+
+            var boardE5 = Bitboards.PrintBitboard(target.WhiteMovesPawn[Const.E5]);
+            var boardA2 = Bitboards.PrintBitboard(target.WhiteMovesPawn[Const.A2]);
+            var boardH2 = Bitboards.PrintBitboard(target.WhiteMovesPawn[Const.H2]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)     (D1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.WhiteMovesPawn[Const.A2]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.WhiteMovesPawn[Const.H2]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 1, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.WhiteMovesPawn[Const.E5]);
+        }
+
+        [TestMethod]
+        public void BlackPawnStraightMovesTest()
+        {
+            var target = new Bitboards();
+            target.Initialize();
+
+            var boardE5 = Bitboards.PrintBitboard(target.BlackMovesPawn[Const.E5]);
+            var boardA2 = Bitboards.PrintBitboard(target.BlackMovesPawn[Const.A7]);
+            var boardH2 = Bitboards.PrintBitboard(target.BlackMovesPawn[Const.H7]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)     (D1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.BlackMovesPawn[Const.A7]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.BlackMovesPawn[Const.H7]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 1, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.BlackMovesPawn[Const.E5]);
+        }
     }
 }

@@ -68,6 +68,10 @@ namespace MantaChessEngine
         public Bitboard[] MaskBlackPassedPawns { get; set; }
         public Bitboard[] MaskBlackPawnsPath { get; set; }
 
+        public Bitboard[] MaskCols { get; set; }
+        public Bitboard Not_A_file { get; set; }
+        public Bitboard Not_H_file { get; set; }
+
 
         public Definitions.ChessColor SideToMove { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int MoveCountSincePawnOrCapture { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -111,6 +115,7 @@ namespace MantaChessEngine
             SetIndexMask();
             SetPawnBitboards();
             SetRanks();
+            SetMaskCols();
         }
 
         private void InitBitboard()
@@ -807,6 +812,25 @@ namespace MantaChessEngine
                 Rank[1, i] = 7 - Row[i];
 
             }
+        }
+
+        private void SetMaskCols()
+        {
+            MaskCols = new Bitboard[64];
+
+            for (int x = 0; x < 64; x++)
+            {
+                for (int y = 0; y < 64; y++)
+                {
+                    if (Col[x] == Col[y])
+                    {
+                        SetBit(ref MaskCols[x], y);
+                    }
+                }
+            }
+
+            Not_A_file = ~MaskCols[0];
+            Not_H_file = ~MaskCols[7];
         }
 
         public string SetFenPosition(string fen)

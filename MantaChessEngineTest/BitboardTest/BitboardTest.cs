@@ -1159,17 +1159,82 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void RanksTest()
         {
-            // white
             var target = new Bitboards();
             target.Initialize();
 
+            // white
             Assert.AreEqual(0, target.Rank[0, 1]);
             Assert.AreEqual(4, target.Rank[0, 35]);
             Assert.AreEqual(7, target.Rank[0, 62]);
 
+            // black
             Assert.AreEqual(7, target.Rank[1, 1]);
             Assert.AreEqual(3, target.Rank[1, 35]);
             Assert.AreEqual(0, target.Rank[1, 62]);
+        }
+
+        [TestMethod]
+        public void MaskColsTest()
+        {
+            var target = new Bitboards();
+            target.Initialize();
+
+            var boardH7 = Bitboards.PrintBitboard(target.MaskCols[Const.H7]);
+            var boardD4 = Bitboards.PrintBitboard(target.MaskCols[Const.D4]);
+            var boardNotA = Bitboards.PrintBitboard(target.Not_A_file);
+            var boardNotH = Bitboards.PrintBitboard(target.Not_H_file);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)     (D1)
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 1,
+                //                  (H8)
+            }), target.MaskCols[Const.H7]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)     (D1)
+                0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0,
+                //                  (H8)
+            }), target.MaskCols[Const.D4]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)     (D1)
+                0, 1, 1, 1, 1, 1, 1, 1,
+                0, 1, 1, 1, 1, 1, 1, 1,
+                0, 1, 1, 1, 1, 1, 1, 1,
+                0, 1, 1, 1, 1, 1, 1, 1,
+                0, 1, 1, 1, 1, 1, 1, 1,
+                0, 1, 1, 1, 1, 1, 1, 1,
+                0, 1, 1, 1, 1, 1, 1, 1,
+                0, 1, 1, 1, 1, 1, 1, 1,
+                //                  (H8)
+            }), target.Not_A_file);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)     (D1)
+                1, 1, 1, 1, 1, 1, 1, 0,
+                1, 1, 1, 1, 1, 1, 1, 0,
+                1, 1, 1, 1, 1, 1, 1, 0,
+                1, 1, 1, 1, 1, 1, 1, 0,
+                1, 1, 1, 1, 1, 1, 1, 0,
+                1, 1, 1, 1, 1, 1, 1, 0,
+                1, 1, 1, 1, 1, 1, 1, 0,
+                1, 1, 1, 1, 1, 1, 1, 0,
+                //                  (H8)
+            }), target.Not_H_file);
         }
     }
 }

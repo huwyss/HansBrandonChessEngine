@@ -1138,5 +1138,22 @@ namespace MantaChessEngineTest
                 //                  (H8)
             }), target.MaskBlackPawnsPath[Const.E5]);
         }
+
+        [TestMethod]
+        public void BitScanForwardTest_FindingTheLSB()
+        {
+            var target = new Bitboards();
+            var result = target.BitScanForward(0x000001);
+            Assert.AreEqual(0, result);
+
+            result = target.BitScanForward(0x00000100);
+            Assert.AreEqual(8, result);
+
+            result = target.BitScanForward(0x20000000000);
+            Assert.AreEqual(41, result);
+
+            result = target.BitScanForward(0x800000000000000);
+            Assert.AreEqual(59, result);
+        }
     }
 }

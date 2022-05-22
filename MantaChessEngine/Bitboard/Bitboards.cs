@@ -58,6 +58,8 @@ namespace MantaChessEngine
         public int[] DiagNO { get; set; }
         public int[] DiagNW { get; set; }
 
+        public int[,] Rank { get; set; }
+
         public Bitboard[] IndexMask { get; set; }
         public Bitboard[] NotIndexMask { get; set; }
         public Bitboard[] MaskIsolatedPawns { get; set; }
@@ -108,6 +110,7 @@ namespace MantaChessEngine
             SetQueenRookBishopMoves();
             SetIndexMask();
             SetPawnBitboards();
+            SetRanks();
         }
 
         private void InitBitboard()
@@ -793,6 +796,17 @@ namespace MantaChessEngine
         public int BitScanForward(ulong b)
         {
             return MultiplyDeBruijnBitPosition[((ulong)((long)b & -(long)b) * DeBruijnSequence) >> 58];
+        }
+
+        private void SetRanks()
+        {
+            Rank = new int[2, 64];
+            for (int i=0; i<64; i++)
+            {
+                Rank[0, i] = Row[i];
+                Rank[1, i] = 7 - Row[i];
+
+            }
         }
 
         public string SetFenPosition(string fen)

@@ -1155,5 +1155,21 @@ namespace MantaChessEngineTest
             result = target.BitScanForward(0x800000000000000);
             Assert.AreEqual(59, result);
         }
+
+        [TestMethod]
+        public void RanksTest()
+        {
+            // white
+            var target = new Bitboards();
+            target.Initialize();
+
+            Assert.AreEqual(0, target.Rank[0, 1]);
+            Assert.AreEqual(4, target.Rank[0, 35]);
+            Assert.AreEqual(7, target.Rank[0, 62]);
+
+            Assert.AreEqual(7, target.Rank[1, 1]);
+            Assert.AreEqual(3, target.Rank[1, 35]);
+            Assert.AreEqual(0, target.Rank[1, 62]);
+        }
     }
 }

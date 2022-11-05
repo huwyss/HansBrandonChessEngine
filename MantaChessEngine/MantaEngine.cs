@@ -132,11 +132,6 @@ namespace MantaChessEngine
             return true;
         }
 
-        public bool IsWinner(ChessColor color)
-        {
-            return _board.IsWinner(color);
-        }
-
         public MoveRating DoBestMove(ChessColor color)
         {
             MoveRating nextMove = _search.Search(_board, color);

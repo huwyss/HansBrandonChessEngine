@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Bitboard\Bitboards.cs" />
     <Compile Include="Bitboard\BitMove.cs" />
+    <Compile Include="Bitboard\BitMoveExecutor.cs" />
     <Compile Include="Bitboard\Const.cs" />
     <Compile Include="Doubles\FakeBoard.cs" />
     <Compile Include="Doubles\FakeEvaluator.cs" />

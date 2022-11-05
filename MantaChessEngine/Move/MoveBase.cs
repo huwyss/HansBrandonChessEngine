@@ -39,7 +39,7 @@ namespace MantaChessEngine
             InitializeMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
         }
 
-        public void InitializeMove(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, Piece capturedPiece)
+        private void InitializeMove(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, Piece capturedPiece)
         {
             MovingPiece = movingPiece;
             SourceFile = sourceFile;

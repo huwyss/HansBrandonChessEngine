@@ -173,57 +173,18 @@ namespace MantaChessEngine
         /// </summary>
         public void Move(IMove nextMove)
         {
-            IMove move = nextMove as IMove;
-            if (move == null)
+            if (nextMove == null)
             {
                 return;
             }
 
-            move.ExecuteMove(this);
+            nextMove.ExecuteMove(this);
         }
 
         public ChessColor GetColor(int file, int rank)
         {
             Piece piece = GetPiece(file, rank);
             return piece != null ? piece.Color : ChessColor.Empty;
-        }
-
-        public bool IsWinner(ChessColor color)
-        {
-            // todo das stimmt nicht. Winner ist schon vorher, wenn noch König vorhanden aber im Schachmatt!
-
-            bool hasWhiteKing = false;
-            bool hasBlackKing = false;
-
-            for (int rank = 1; rank <= 8; rank++)
-            {
-                for (int file = 1; file <= 8; file++)
-                {
-                    Piece piece = GetPiece(file, rank);
-                    if (piece is King && piece.Color == ChessColor.White)
-                    {
-                        hasWhiteKing = true;
-                    }
-
-                    if (piece is King && piece.Color == ChessColor.Black)
-                    {
-                        hasBlackKing = true;
-                    }
-                }
-
-            }
-
-            if (color == ChessColor.White)
-            {
-                return !hasBlackKing;
-            }
-
-            if (color == ChessColor.Black)
-            {
-                return !hasWhiteKing;
-            }
-
-            return false;
         }
 
         public string GetPositionString

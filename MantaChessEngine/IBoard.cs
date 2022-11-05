@@ -76,7 +76,6 @@ namespace MantaChessEngine
         void RedoMove();
 
         ChessColor GetColor(int file, int rank);
-        bool IsWinner(ChessColor color);
 
         Position GetKing(ChessColor color);
     }

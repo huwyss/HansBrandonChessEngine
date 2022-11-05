@@ -7,6 +7,7 @@ namespace MantaChessEngine
     public class Bitboards : IBoard
     {
         private FenParser _fenParser;
+        private BitMoveExecutor _moveExecutor;
 
         // todo these are Pieces[2][7]
         public Bitboard Bitboard_WhitePawn { get; set; }
@@ -72,6 +73,23 @@ namespace MantaChessEngine
         public Bitboard Not_A_file { get; set; }
         public Bitboard Not_H_file { get; set; }
 
+        /// <summary>
+        /// Side to move.
+        /// true = white, false = black.
+        /// </summary>
+        public bool Side { get; private set; }
+
+        /// <summary>
+        /// Other side.
+        /// </summary>
+        public bool XSide => !Side;
+
+        /// <summary>
+        /// Counts plys since last capture or pawn move.
+        /// </summary>
+        public int FiftyCounter { get; private set; }
+
+        // ---- from IBoard ----
 
         public Definitions.ChessColor SideToMove { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int MoveCountSincePawnOrCapture { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -101,6 +119,7 @@ namespace MantaChessEngine
         public Bitboards()
         {
             _fenParser = new FenParser();
+            _moveExecutor = new BitMoveExecutor();
             InitBitboard();
         }
 
@@ -956,11 +975,6 @@ namespace MantaChessEngine
         }
 
         public Definitions.ChessColor GetColor(int file, int rank)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsWinner(Definitions.ChessColor color)
         {
             throw new NotImplementedException();
         }

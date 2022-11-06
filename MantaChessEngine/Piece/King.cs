@@ -36,7 +36,7 @@ namespace MantaChessEngine
             {
                 // check for king side castling (0-0)
                 Piece maybeWhiteKingRook = board.GetPiece(Helper.FileCharToFile('h'), 1);
-                if (board.CastlingRightWhiteKingSide && // castling right
+                if (board.BoardState.LastCastlingRightWhiteKingSide && // castling right
                     file == Helper.FileCharToFile('e') && rank == 1 && // king initial position
                     maybeWhiteKingRook is Rook && maybeWhiteKingRook.Color == Definitions.ChessColor.White && // rook init position
                     IsFieldsEmpty(board, Helper.FileCharToFile('f'), 1, Helper.FileCharToFile('g')) && // fields between king and rook empty
@@ -50,7 +50,7 @@ namespace MantaChessEngine
 
                 // check for queen side castling (0-0-0)
                 Piece maybeWhiteQueenRook = board.GetPiece(Helper.FileCharToFile('a'), 1);
-                if (board.CastlingRightWhiteQueenSide && // castling right
+                if (board.BoardState.LastCastlingRightWhiteQueenSide && // castling right
                     file == Helper.FileCharToFile('e') && rank == 1 && // king initial position
                     maybeWhiteQueenRook is Rook && maybeWhiteQueenRook.Color == Definitions.ChessColor.White && // rook init position
                     IsFieldsEmpty(board, Helper.FileCharToFile('b'), 1, Helper.FileCharToFile('d')) &&// fields between king and rook empty
@@ -67,7 +67,7 @@ namespace MantaChessEngine
             {
                 // check for king side castling (0-0)
                 Piece maybeBlackKingRook = board.GetPiece(Helper.FileCharToFile('h'), 8);
-                if (board.CastlingRightBlackKingSide && // castling right
+                if (board.BoardState.LastCastlingRightBlackKingSide && // castling right
                     file == Helper.FileCharToFile('e') && rank == 8 && // king initial position
                     maybeBlackKingRook is Rook && maybeBlackKingRook.Color == Definitions.ChessColor.Black && // rook init position
                     IsFieldsEmpty(board, Helper.FileCharToFile('f'), 8, Helper.FileCharToFile('g')) && // fields between king and rook empty
@@ -81,7 +81,7 @@ namespace MantaChessEngine
 
                 // check for queen side castling (0-0-0)
                 Piece maybeBlackQueenRook = board.GetPiece(Helper.FileCharToFile('a'), 8);
-                if (board.CastlingRightBlackQueenSide && // castling right
+                if (board.BoardState.LastCastlingRightBlackQueenSide && // castling right
                     file == Helper.FileCharToFile('e') && rank == 8 && // king initial position
                     maybeBlackQueenRook is Rook && maybeBlackQueenRook.Color == Definitions.ChessColor.Black && // rook init position
                     IsFieldsEmpty(board, Helper.FileCharToFile('b'), 8, Helper.FileCharToFile('d')) && // fields between king and rook empty

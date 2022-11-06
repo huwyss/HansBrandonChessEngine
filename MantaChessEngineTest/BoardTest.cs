@@ -12,7 +12,7 @@ namespace MantaChessEngineTest
         {
             var target = new Board();
             target.SetPiece(Piece.MakePiece('R'), 4, 8);
-            char piece = target.GetPiece('d', 8).Symbol;
+            char piece = target.GetPiece(Helper.FileCharToFile('d'), 8).Symbol;
             Assert.AreEqual('R', piece);
         }
 
@@ -29,7 +29,7 @@ namespace MantaChessEngineTest
         public void GetPiece_WhenNewBoard_ThenAllPositionsEmpty()
         {
             var target = new Board();
-            Piece piece = target.GetPiece('d', 8);
+            Piece piece = target.GetPiece(Helper.FileCharToFile('d'), 8);
             Assert.AreEqual(null, piece);
         }
 
@@ -39,37 +39,37 @@ namespace MantaChessEngineTest
             var target = new Board();
             target.SetInitialPosition();
 
-            Assert.AreEqual(new Rook(Definitions.ChessColor.White), target.GetPiece('a', 1));
-            Assert.AreEqual(new Knight(Definitions.ChessColor.White), target.GetPiece('b', 1));
-            Assert.AreEqual(new Bishop(Definitions.ChessColor.White), target.GetPiece('c', 1));
-            Assert.AreEqual(new Queen(Definitions.ChessColor.White), target.GetPiece('d', 1));
-            Assert.AreEqual(new King(Definitions.ChessColor.White), target.GetPiece('e', 1));
-            Assert.AreEqual(new Bishop(Definitions.ChessColor.White), target.GetPiece('f', 1));
-            Assert.AreEqual(new Knight(Definitions.ChessColor.White), target.GetPiece('g', 1));
-            Assert.AreEqual(new Rook(Definitions.ChessColor.White), target.GetPiece('h', 1));
+            Assert.AreEqual(new Rook(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('a'), 1));
+            Assert.AreEqual(new Knight(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('b'), 1));
+            Assert.AreEqual(new Bishop(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('c'), 1));
+            Assert.AreEqual(new Queen(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('d'), 1));
+            Assert.AreEqual(new King(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('e'), 1));
+            Assert.AreEqual(new Bishop(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('f'), 1));
+            Assert.AreEqual(new Knight(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('g'), 1));
+            Assert.AreEqual(new Rook(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('h'), 1));
 
-            Assert.AreEqual(new Pawn(Definitions.ChessColor.White), target.GetPiece('b', 2)); // white pawn
-            Assert.AreEqual(null, target.GetPiece('c', 3)); // empty
-            Assert.AreEqual(null, target.GetPiece('d', 4)); // empty
-            Assert.AreEqual(null, target.GetPiece('e', 5)); // empty
-            Assert.AreEqual(null, target.GetPiece('f', 6)); // empty
-            Assert.AreEqual(new Pawn(Definitions.ChessColor.Black), target.GetPiece('g', 7)); // black pawn
+            Assert.AreEqual(new Pawn(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('b'), 2)); // white pawn
+            Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('c'), 3)); // empty
+            Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('d'), 4)); // empty
+            Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('e'), 5)); // empty
+            Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('f'), 6)); // empty
+            Assert.AreEqual(new Pawn(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('g'), 7)); // black pawn
 
-            Assert.AreEqual(new Rook(Definitions.ChessColor.Black), target.GetPiece('a', 8));
-            Assert.AreEqual(new Knight(Definitions.ChessColor.Black), target.GetPiece('b', 8));
-            Assert.AreEqual(new Bishop(Definitions.ChessColor.Black), target.GetPiece('c', 8));
-            Assert.AreEqual(new Queen(Definitions.ChessColor.Black), target.GetPiece('d', 8));
-            Assert.AreEqual(new King(Definitions.ChessColor.Black), target.GetPiece('e', 8));
-            Assert.AreEqual(new Bishop(Definitions.ChessColor.Black), target.GetPiece('f', 8));
-            Assert.AreEqual(new Knight(Definitions.ChessColor.Black), target.GetPiece('g', 8));
-            Assert.AreEqual(new Rook(Definitions.ChessColor.Black), target.GetPiece('h', 8));
+            Assert.AreEqual(new Rook(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('a'), 8));
+            Assert.AreEqual(new Knight(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('b'), 8));
+            Assert.AreEqual(new Bishop(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('c'), 8));
+            Assert.AreEqual(new Queen(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('d'), 8));
+            Assert.AreEqual(new King(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('e'), 8));
+            Assert.AreEqual(new Bishop(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('f'), 8));
+            Assert.AreEqual(new Knight(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('g'), 8));
+            Assert.AreEqual(new Rook(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('h'), 8));
 
-            Assert.AreEqual(0, target.History.LastEnPassantFile);
-            Assert.AreEqual(0, target.History.LastEnPassantRank);
-            Assert.AreEqual(true, target.CastlingRightWhiteKingSide);  // Castling white  
-            Assert.AreEqual(true, target.CastlingRightWhiteQueenSide); // 
-            Assert.AreEqual(true, target.CastlingRightBlackKingSide);  // castling black
-            Assert.AreEqual(true, target.CastlingRightBlackQueenSide); // 
+            Assert.AreEqual(0, target.BoardState.LastEnPassantFile);
+            Assert.AreEqual(0, target.BoardState.LastEnPassantRank);
+            Assert.AreEqual(true, target.BoardState.LastCastlingRightWhiteKingSide);  // Castling white  
+            Assert.AreEqual(true, target.BoardState.LastCastlingRightWhiteQueenSide); // 
+            Assert.AreEqual(true, target.BoardState.LastCastlingRightBlackKingSide);  // castling black
+            Assert.AreEqual(true, target.BoardState.LastCastlingRightBlackQueenSide); // 
         }
 
         [TestMethod]
@@ -80,9 +80,9 @@ namespace MantaChessEngineTest
             target.SetInitialPosition();
 
             target.Move(new NormalMove(Piece.MakePiece('P'),'e',2,'e',4,null));
-            Assert.AreEqual(null, target.GetPiece('e', 2));
-            Assert.AreEqual(new Pawn(Definitions.ChessColor.White), target.GetPiece('e', 4));
-            Assert.AreEqual(Definitions.ChessColor.Black, target.SideToMove);
+            Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('e'), 2));
+            Assert.AreEqual(new Pawn(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('e'), 4));
+            Assert.AreEqual(Definitions.ChessColor.Black, target.BoardState.SideToMove);
         }
 
         [TestMethod]
@@ -93,9 +93,9 @@ namespace MantaChessEngineTest
             target.SetInitialPosition();
             target.Move(new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 4, null));
 
-            Assert.AreEqual(null, target.GetPiece('e', 2));
-            Assert.AreEqual(new Pawn(Definitions.ChessColor.White), target.GetPiece('e', 4));
-            Assert.AreEqual(Definitions.ChessColor.Black, target.SideToMove);
+            Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('e'), 2));
+            Assert.AreEqual(new Pawn(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('e'), 4));
+            Assert.AreEqual(Definitions.ChessColor.Black, target.BoardState.SideToMove);
         }
 
         [TestMethod]
@@ -104,16 +104,16 @@ namespace MantaChessEngineTest
             MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board target = new Board();
             target.SetInitialPosition();
-            target.SetPiece(null, 'd', 2);
+            target.SetPiece(null, Helper.FileCharToFile('d'), 2);
 
             target.Move(new NormalMove(new Queen(Definitions.ChessColor.White),'d',1,'d',7,Piece.MakePiece('p')));
-            Assert.AreEqual(null, target.GetPiece('d', 1));
-            Assert.AreEqual(new Queen(Definitions.ChessColor.White), target.GetPiece('d', 7));
-            Assert.AreEqual(Definitions.ChessColor.Black, target.SideToMove);
+            Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('d'), 1));
+            Assert.AreEqual(new Queen(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('d'), 7));
+            Assert.AreEqual(Definitions.ChessColor.Black, target.BoardState.SideToMove);
 
-            var moveList = target.History.Moves;
-            Assert.AreEqual(1, target.History.Moves.Count);
-            Assert.AreEqual(new NormalMove(new Queen(Definitions.ChessColor.White), 4, 1, 4, 7, Piece.MakePiece('p')), target.History.Moves[0]);
+            var moveList = target.BoardState.Moves;
+            Assert.AreEqual(1, target.BoardState.Moves.Count);
+            Assert.AreEqual(new NormalMove(new Queen(Definitions.ChessColor.White), 4, 1, 4, 7, Piece.MakePiece('p')), target.BoardState.Moves[0]);
         }
 
         [TestMethod]
@@ -131,8 +131,8 @@ namespace MantaChessEngineTest
                               "...K....";
             board.SetPosition(position);
             board.Move(new NormalMove(Piece.MakePiece('p'),'a',7,'a',5,null));
-            Assert.AreEqual(Helper.FileCharToFile('a'), board.History.LastEnPassantFile);
-            Assert.AreEqual(6, board.History.LastEnPassantRank);
+            Assert.AreEqual(Helper.FileCharToFile('a'), board.BoardState.LastEnPassantFile);
+            Assert.AreEqual(6, board.BoardState.LastEnPassantRank);
         }
 
         [TestMethod]
@@ -150,8 +150,8 @@ namespace MantaChessEngineTest
                               "...K....";
             board.SetPosition(position);
             board.Move(new NormalMove(Piece.MakePiece('P'),'b',2,'b',4,null));
-            Assert.AreEqual(Helper.FileCharToFile('b'), board.History.LastEnPassantFile);
-            Assert.AreEqual(3, board.History.LastEnPassantRank);
+            Assert.AreEqual(Helper.FileCharToFile('b'), board.BoardState.LastEnPassantFile);
+            Assert.AreEqual(3, board.BoardState.LastEnPassantRank);
         }
 
         [TestMethod]
@@ -181,7 +181,7 @@ namespace MantaChessEngineTest
                               "........" +
                               "...K....";
             Assert.AreEqual(expPosit, board.GetPositionString, "En passant capture not correct move.");
-            Assert.AreEqual(board.History.Moves[1], new EnPassantCaptureMove(Piece.MakePiece('p'), 'a', 4, 'b', 3, Piece.MakePiece('P')));
+            Assert.AreEqual(board.BoardState.Moves[1], new EnPassantCaptureMove(Piece.MakePiece('p'), 'a', 4, 'b', 3, Piece.MakePiece('P')));
         }
 
         [TestMethod]
@@ -211,7 +211,7 @@ namespace MantaChessEngineTest
                               "........" +
                               "...K....";
             Assert.AreEqual(expPosit, board.GetPositionString, "En passant capture not correct move.");
-            Assert.AreEqual(board.History.Moves[1], new EnPassantCaptureMove(Piece.MakePiece('P'), 'a', 5, 'b', 6, Piece.MakePiece('p')));
+            Assert.AreEqual(board.BoardState.Moves[1], new EnPassantCaptureMove(Piece.MakePiece('P'), 'a', 5, 'b', 6, Piece.MakePiece('p')));
         }
 
         [TestMethod]
@@ -298,9 +298,9 @@ namespace MantaChessEngineTest
                                     "PPPP.PPP" +
                                     "RNBQKBNR";
             Assert.AreEqual(expectedString, target.GetPositionString);
-            Assert.AreEqual(Definitions.ChessColor.Black, target.SideToMove);
-            Assert.AreEqual(Helper.FileCharToFile('e'), target.EnPassantFile, "en passant file wrong after 1st back");
-            Assert.AreEqual(3, target.EnPassantRank, "en passant rank wrong after 1st back");
+            Assert.AreEqual(Definitions.ChessColor.Black, target.BoardState.SideToMove);
+            Assert.AreEqual(Helper.FileCharToFile('e'), target.BoardState.LastEnPassantFile, "en passant file wrong after 1st back");
+            Assert.AreEqual(3, target.BoardState.LastEnPassantRank, "en passant rank wrong after 1st back");
 
             target.Back();
             expectedString = "rnbqkbnr" +
@@ -312,9 +312,9 @@ namespace MantaChessEngineTest
                              "PPPPPPPP" +
                              "RNBQKBNR";
             Assert.AreEqual(expectedString, target.GetPositionString);
-            Assert.AreEqual(Definitions.ChessColor.White, target.SideToMove);
-            Assert.AreEqual(0, target.EnPassantFile, "en passant file wrong after 2dn back");
-            Assert.AreEqual(0, target.EnPassantRank, "en passant rank wrong after 2dn back");
+            Assert.AreEqual(Definitions.ChessColor.White, target.BoardState.SideToMove);
+            Assert.AreEqual(0, target.BoardState.LastEnPassantFile, "en passant file wrong after 2dn back");
+            Assert.AreEqual(0, target.BoardState.LastEnPassantRank, "en passant rank wrong after 2dn back");
         }
 
         [TestMethod]
@@ -356,40 +356,13 @@ namespace MantaChessEngineTest
                        "........" +
                        "...K....";
             Assert.AreEqual(expPosit, board.GetPositionString, "Back after en passant capture not correct.");
-            Assert.AreEqual(Helper.FileCharToFile('b'), board.EnPassantFile, "En passant file wrong after 1st back.");
-            Assert.AreEqual(3, board.EnPassantRank, "En passant rank wrong after 1st back.");
+            Assert.AreEqual(Helper.FileCharToFile('b'), board.BoardState.LastEnPassantFile, "En passant file wrong after 1st back.");
+            Assert.AreEqual(3, board.BoardState.LastEnPassantRank, "En passant rank wrong after 1st back.");
 
             board.Back();
             Assert.AreEqual(position, board.GetPositionString, "2nd back after en passant capture not correct.");
-            Assert.AreEqual(0, board.EnPassantFile, "En passant file wrong after 2nd back.");
-            Assert.AreEqual(0, board.EnPassantRank, "En passant rank wrong after 2nd back.");
-        }
-
-        // -------------------------------------------------------------------
-        //  RedoMove tests
-        // -------------------------------------------------------------------
-
-        [TestMethod]
-        public void RedoMoveTest_WhenBackAndRedo_ThenSamePosition()
-        {
-            Board target = new Board();
-            target.SetInitialPosition();
-            target.Move(new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 4, null));
-
-            target.Back();
-            target.RedoMove();
-            string expectedString = "rnbqkbnr" +
-                                    "pppppppp" +
-                                    "........" +
-                                    "........" +
-                                    "....P..." +
-                                    "........" +
-                                    "PPPP.PPP" +
-                                    "RNBQKBNR";
-            Assert.AreEqual(expectedString, target.GetPositionString);
-            Assert.AreEqual(Definitions.ChessColor.Black, target.SideToMove);
-            Assert.AreEqual(Helper.FileCharToFile('e'), target.EnPassantFile, "en passant file wrong after back and redomove");
-            Assert.AreEqual(3, target.EnPassantRank, "en passant rank wrong after back and redomove");
+            Assert.AreEqual(0, board.BoardState.LastEnPassantFile, "En passant file wrong after 2nd back.");
+            Assert.AreEqual(0, board.BoardState.LastEnPassantRank, "En passant rank wrong after 2nd back.");
         }
 
         // -------------------------------------------------------------------
@@ -411,24 +384,24 @@ namespace MantaChessEngineTest
                               "R...K..R";
             board.SetPosition(position);
 
-            Assert.AreEqual(true, board.CastlingRightWhiteQueenSide);
-            Assert.AreEqual(true, board.CastlingRightWhiteKingSide);
-            Assert.AreEqual(true, board.CastlingRightBlackQueenSide);
-            Assert.AreEqual(true, board.CastlingRightBlackKingSide);
+            Assert.AreEqual(true, board.BoardState.LastCastlingRightWhiteQueenSide);
+            Assert.AreEqual(true, board.BoardState.LastCastlingRightWhiteKingSide);
+            Assert.AreEqual(true, board.BoardState.LastCastlingRightBlackQueenSide);
+            Assert.AreEqual(true, board.BoardState.LastCastlingRightBlackKingSide);
 
             board.Move(new NormalMove(Piece.MakePiece('R'),'h',1,'g',1,null));
-            Assert.AreEqual(true, board.CastlingRightWhiteQueenSide);
-            Assert.AreEqual(false, board.CastlingRightWhiteKingSide);
+            Assert.AreEqual(true, board.BoardState.LastCastlingRightWhiteQueenSide);
+            Assert.AreEqual(false, board.BoardState.LastCastlingRightWhiteKingSide);
 
             board.Move(new NormalMove(Piece.MakePiece('R'),'a',1,'c',1,null));
-            Assert.AreEqual(false, board.CastlingRightWhiteQueenSide);
-            Assert.AreEqual(false, board.CastlingRightWhiteKingSide);
+            Assert.AreEqual(false, board.BoardState.LastCastlingRightWhiteQueenSide);
+            Assert.AreEqual(false, board.BoardState.LastCastlingRightWhiteKingSide);
 
             board.Move(new NormalMove(Piece.MakePiece('k'),'e',8,'f',8,null));
-            Assert.AreEqual(false, board.CastlingRightWhiteQueenSide);
-            Assert.AreEqual(false, board.CastlingRightWhiteKingSide);
-            Assert.AreEqual(false, board.CastlingRightBlackQueenSide);
-            Assert.AreEqual(false, board.CastlingRightBlackKingSide);
+            Assert.AreEqual(false, board.BoardState.LastCastlingRightWhiteQueenSide);
+            Assert.AreEqual(false, board.BoardState.LastCastlingRightWhiteKingSide);
+            Assert.AreEqual(false, board.BoardState.LastCastlingRightBlackQueenSide);
+            Assert.AreEqual(false, board.BoardState.LastCastlingRightBlackKingSide);
         }
 
         [TestMethod]
@@ -461,8 +434,8 @@ namespace MantaChessEngineTest
             board.Back();
 
             Assert.AreEqual(position, board.GetPositionString, "White King Side Castling: back not correct.");
-            Assert.AreEqual(true, board.CastlingRightWhiteKingSide, "castling right must be true after back.");
-            Assert.AreEqual(true, board.CastlingRightWhiteQueenSide, "castling right must be true after back.");
+            Assert.AreEqual(true, board.BoardState.LastCastlingRightWhiteKingSide, "castling right must be true after back.");
+            Assert.AreEqual(true, board.BoardState.LastCastlingRightWhiteQueenSide, "castling right must be true after back.");
         }
 
         [TestMethod]
@@ -495,8 +468,8 @@ namespace MantaChessEngineTest
             board.Back();
 
             Assert.AreEqual(position, board.GetPositionString, "White Queen Side Castling: back not correct.");
-            Assert.AreEqual(true, board.CastlingRightWhiteKingSide, "castling right must be true after back.");
-            Assert.AreEqual(true, board.CastlingRightWhiteQueenSide, "castling right must be true after back.");
+            Assert.AreEqual(true, board.BoardState.LastCastlingRightWhiteKingSide, "castling right must be true after back.");
+            Assert.AreEqual(true, board.BoardState.LastCastlingRightWhiteQueenSide, "castling right must be true after back.");
         }
 
         [TestMethod]
@@ -529,8 +502,8 @@ namespace MantaChessEngineTest
             board.Back();
 
             Assert.AreEqual(position, board.GetPositionString, "Black King Side Castling: back not correct.");
-            Assert.AreEqual(true, board.CastlingRightBlackKingSide, "castling right must be true after back.");
-            Assert.AreEqual(true, board.CastlingRightBlackQueenSide, "castling right must be true after back.");
+            Assert.AreEqual(true, board.BoardState.LastCastlingRightBlackKingSide, "castling right must be true after back.");
+            Assert.AreEqual(true, board.BoardState.LastCastlingRightBlackQueenSide, "castling right must be true after back.");
         }
 
         [TestMethod]
@@ -563,8 +536,8 @@ namespace MantaChessEngineTest
             board.Back();
 
             Assert.AreEqual(position, board.GetPositionString, "Black Queen Side Castling: back not correct.");
-            Assert.AreEqual(true, board.CastlingRightBlackKingSide, "castling right must be true after back.");
-            Assert.AreEqual(true, board.CastlingRightBlackQueenSide, "castling right must be true after back.");
+            Assert.AreEqual(true, board.BoardState.LastCastlingRightBlackKingSide, "castling right must be true after back.");
+            Assert.AreEqual(true, board.BoardState.LastCastlingRightBlackQueenSide, "castling right must be true after back.");
         }
 
         // -------------------------------------------------------------------

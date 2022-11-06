@@ -6,7 +6,7 @@ namespace MantaChessEngine.Doubles
     {
         public ChessColor SideToMove { get; set; }
         public int MoveCountSincePawnOrCapture { get; set; }
-        public History History { get; set; }
+        public BoardState BoardState { get; set; }
         public IMove LastMove { get; }
         public int EnPassantFile { get; }
         public int EnPassantRank { get; }

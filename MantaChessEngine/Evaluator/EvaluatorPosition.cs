@@ -52,12 +52,12 @@
                 scoreBlack += AdvantageDoubleBishop;
             }
 
-            if (board.WhiteDidCastling)
+            if (board.BoardState.WhiteDidCastling)
             {
                 scoreWhite += CastlingScore;
             }
 
-            if (board.BlackDidCastling)
+            if (board.BoardState.BlackDidCastling)
             {
                 scoreBlack += CastlingScore;
             }

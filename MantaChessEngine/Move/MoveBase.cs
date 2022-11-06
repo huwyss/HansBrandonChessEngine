@@ -160,14 +160,20 @@ namespace MantaChessEngine
             bool whiteRookKingSideMoved = MovingPiece is Rook && MovingPiece.Color == ChessColor.White && SourceFile == 8;
             bool blackRookQueenSideMoved = MovingPiece is Rook && MovingPiece.Color == ChessColor.Black && SourceFile == 1;
             bool whiteRookQueenSideMoved = MovingPiece is Rook && MovingPiece.Color == ChessColor.White && SourceFile == 1;
-            bool castlingRightWhiteQueenSide = board.History.LastCastlingRightWhiteQueenSide & !whiteKingMoved & !whiteRookQueenSideMoved;
-            bool castlingRightWhiteKingSide = board.History.LastCastlingRightWhiteKingSide & !whiteKingMoved & !whiteRookKingSideMoved;
-            bool castlingRightBlackQueenSide = board.History.LastCastlingRightBlackQueenSide & !blackKingMoved & !blackRookQueenSideMoved;
-            bool castlingRightBlackKingSide = board.History.LastCastlingRightBlackKingSide & !blackKingMoved & !blackRookKingSideMoved;
+            bool castlingRightWhiteQueenSide = board.BoardState.LastCastlingRightWhiteQueenSide & !whiteKingMoved & !whiteRookQueenSideMoved;
+            bool castlingRightWhiteKingSide = board.BoardState.LastCastlingRightWhiteKingSide & !whiteKingMoved & !whiteRookKingSideMoved;
+            bool castlingRightBlackQueenSide = board.BoardState.LastCastlingRightBlackQueenSide & !blackKingMoved & !blackRookQueenSideMoved;
+            bool castlingRightBlackKingSide = board.BoardState.LastCastlingRightBlackKingSide & !blackKingMoved & !blackRookKingSideMoved;
 
-            board.History.Add(this, enPassantFile, enPassantRank, castlingRightWhiteQueenSide, castlingRightWhiteKingSide,
-                castlingRightBlackQueenSide, castlingRightBlackKingSide);
-            board.SideToMove = Helper.GetOppositeColor(board.SideToMove);
+            board.BoardState.Add(
+                this,
+                enPassantFile,
+                enPassantRank,
+                castlingRightWhiteQueenSide,
+                castlingRightWhiteKingSide,
+                castlingRightBlackQueenSide,
+                castlingRightBlackKingSide,
+                Helper.GetOppositeColor(board.BoardState.SideToMove));
         }
 
         public virtual void UndoMove(IBoard board)
@@ -176,8 +182,8 @@ namespace MantaChessEngine
             board.SetPiece(null, /*Definitions.EmptyField,*/ TargetFile, TargetRank);     // TargetFile is equal to CapturedFile
             board.SetPiece(CapturedPiece, CapturedFile, CapturedRank); // TargetRank differs from TargetRank for en passant capture
 
-            board.History.Back();
-            board.SideToMove = Helper.GetOppositeColor(board.SideToMove);
+            board.BoardState.Back();
+            board.BoardState.SideToMove = Helper.GetOppositeColor(board.BoardState.SideToMove);
         }
 
         private void SetEnPassantFields(MoveBase move, out int enPassantFile, out int enPassantRank)

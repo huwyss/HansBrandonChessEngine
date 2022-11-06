@@ -143,7 +143,7 @@ namespace MantaChessEngine
 
         public MoveRating DoBestMove()
         {
-            MoveRating nextMove = _search.Search(_board, _board.SideToMove);
+            MoveRating nextMove = _search.Search(_board, _board.BoardState.SideToMove);
             _board.Move(nextMove.Move);
             _log.Debug("Score: " + nextMove.Score);
 
@@ -152,7 +152,7 @@ namespace MantaChessEngine
 
         public ChessColor SideToMove()
         {
-            return _board.SideToMove;
+            return _board.BoardState.SideToMove;
         }
 
         public bool IsCheck(Definitions.ChessColor color)

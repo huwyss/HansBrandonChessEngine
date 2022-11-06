@@ -66,19 +66,19 @@ namespace MantaChessEngine
             {
                 case CastlingType.WhiteKingSide:
                     SetWhiteKingSideRook();
-                    board.WhiteDidCastling = true;
+                    board.BoardState.WhiteDidCastling = true;
                     break;
                 case CastlingType.WhiteQueenSide:
                     SetWhiteQueenSideRook();
-                    board.WhiteDidCastling = true;
+                    board.BoardState.WhiteDidCastling = true;
                     break;
                 case CastlingType.BlackKingSide:
                     SetBlackKingSideRook();
-                    board.BlackDidCastling = true;
+                    board.BoardState.BlackDidCastling = true;
                     break;
                 case CastlingType.BlackQueenSide:
                     SetBlackQueenSideRook();
-                    board.BlackDidCastling = true;
+                    board.BoardState.BlackDidCastling = true;
                     break;
             }
 
@@ -95,19 +95,19 @@ namespace MantaChessEngine
             {
                 case CastlingType.WhiteKingSide:
                     SetWhiteKingSideRook();
-                    board.WhiteDidCastling = false;
+                    board.BoardState.WhiteDidCastling = false;
                     break;
                 case CastlingType.WhiteQueenSide:
                     SetWhiteQueenSideRook();
-                    board.WhiteDidCastling = false;
+                    board.BoardState.WhiteDidCastling = false;
                     break;
                 case CastlingType.BlackKingSide:
                     SetBlackKingSideRook();
-                    board.BlackDidCastling = false;
+                    board.BoardState.BlackDidCastling = false;
                     break;
                 case CastlingType.BlackQueenSide:
                     SetBlackQueenSideRook();
-                    board.BlackDidCastling = false;
+                    board.BoardState.BlackDidCastling = false;
                     break;
             }
 

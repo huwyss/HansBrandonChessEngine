@@ -63,7 +63,7 @@
     <Compile Include="Evaluator\EvaluatorSimple.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Evaluator\IEvaluator.cs" />
-    <Compile Include="History.cs" />
+    <Compile Include="BoardState.cs" />
     <Compile Include="MoveOrder\IMoveFilter.cs" />
     <Compile Include="MoveOrder\IMoveOrder.cs" />
     <Compile Include="MoveOrder\FilterCapturesOnly.cs" />

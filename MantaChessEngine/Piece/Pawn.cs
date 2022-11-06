@@ -91,7 +91,7 @@ namespace MantaChessEngine
                         }
                     }
                     // en passant capture
-                    else if (valid && targetFile == board.History.LastEnPassantFile && targetRank == board.History.LastEnPassantRank)
+                    else if (valid && targetFile == board.BoardState.LastEnPassantFile && targetRank == board.BoardState.LastEnPassantRank)
                     {
                         Piece capturedPawn = Color == ChessColor.White // moving pawn is white
                             ? board.GetPiece(targetFile, targetRank - 1)  

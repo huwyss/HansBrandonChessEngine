@@ -89,7 +89,7 @@ namespace MantaChessEngine
 
         private bool HasCorrectColorMoved(IBoard board, IMove move)
         {
-            return (move.MovingPiece.Color == board.SideToMove);
+            return (move.MovingPiece.Color == board.BoardState.SideToMove);
         }
 
         // unit tests need access.

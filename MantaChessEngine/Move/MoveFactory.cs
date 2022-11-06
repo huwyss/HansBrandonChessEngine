@@ -119,8 +119,8 @@ namespace MantaChessEngine
         {
             return movingPiece is Pawn &&
                    board.GetColor(targetFile, targetRank) == Definitions.ChessColor.Empty &&
-                   board.History.LastEnPassantFile == targetFile && 
-                   board.History.LastEnPassantRank == targetRank;
+                   board.BoardState.LastEnPassantFile == targetFile && 
+                   board.BoardState.LastEnPassantRank == targetRank;
         }
 
         public void GetPositions(string moveString, out int sourceFile, out int sourceRank, out int targetFile, out int targetRank)

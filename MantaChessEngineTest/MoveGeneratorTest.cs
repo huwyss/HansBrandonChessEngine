@@ -241,8 +241,8 @@ namespace MantaChessEngineTest
                               "...K....";
             board.SetPosition(position);
             board.Move(new NormalMove(new Pawn(ChessColor.Black),'a',7,'a',5,null));
-            Assert.AreEqual(Helper.FileCharToFile('a'), board.History.LastEnPassantFile);
-            Assert.AreEqual(6, board.History.LastEnPassantRank);
+            Assert.AreEqual(Helper.FileCharToFile('a'), board.BoardState.LastEnPassantFile);
+            Assert.AreEqual(6, board.BoardState.LastEnPassantRank);
 
             var pawn = new Pawn(ChessColor.White);
             var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('b'), 5, true); // white pawn
@@ -499,7 +499,7 @@ namespace MantaChessEngineTest
                               "........" +
                               ".......K";
             board.SetPosition(position);
-            board.SideToMove = ChessColor.Black;
+            board.BoardState.SideToMove = ChessColor.Black;
             
             bool valid = target.IsMoveValid(board, new NormalMove(Piece.MakePiece('p'), 'c', 7, 'c', 5, null)); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
@@ -817,7 +817,7 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             // white king moves -> loses castling right
-            board.SideToMove = ChessColor.White;
+            board.BoardState.SideToMove = ChessColor.White;
             var king = new King(ChessColor.White);
             var kingMove = new NormalMove(king, 'e', 2, 'e', 1, null);
             board.Move(kingMove);
@@ -850,7 +850,7 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             // white king side rook moves -> loses castling right
-            board.SideToMove = ChessColor.White;
+            board.BoardState.SideToMove = ChessColor.White;
             var rook = new Rook(ChessColor.White);
             var rookMove = new NormalMove(rook, 'h', 2, 'h', 1, null);
             board.Move(rookMove);
@@ -884,7 +884,7 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             // white king side rook moves -> loses castling right
-            board.SideToMove = ChessColor.White;
+            board.BoardState.SideToMove = ChessColor.White;
             var rook = new Rook(ChessColor.White);
             var rookMove = new NormalMove(rook, 'a', 2, 'a', 1, null);
             board.Move(rookMove);
@@ -1050,7 +1050,7 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             // Black king moves -> loses castling right
-            board.SideToMove = ChessColor.Black;
+            board.BoardState.SideToMove = ChessColor.Black;
             var king = new King(ChessColor.Black);
             var kingMove = new NormalMove(king, 'e', 7, 'e', 8, null);
             board.Move(kingMove);
@@ -1083,7 +1083,7 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             // black king side rook moves -> loses castling right
-            board.SideToMove = ChessColor.Black;
+            board.BoardState.SideToMove = ChessColor.Black;
             var rook = new Rook(ChessColor.Black);
             var rookMove = new NormalMove(rook, 'h', 7, 'h', 8, null);
             board.Move(rookMove);
@@ -1117,7 +1117,7 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             // Black king side rook moves -> loses castling right
-            board.SideToMove = ChessColor.Black;
+            board.BoardState.SideToMove = ChessColor.Black;
             var rook = new Rook(ChessColor.Black);
             var rookMove = new NormalMove(rook, 'a', 7, 'a', 8, null);
             board.Move(rookMove);
@@ -1156,7 +1156,7 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             // White pawn captures d5 x e6
-            board.SideToMove = ChessColor.White;
+            board.BoardState.SideToMove = ChessColor.White;
             var pawnW = new Pawn(ChessColor.White);
             var pawnWMove = new NormalMove(pawnW, 'd', 5, 'e', 6, new Pawn(ChessColor.Black));
             board.Move(pawnWMove);
@@ -1196,7 +1196,7 @@ namespace MantaChessEngineTest
                               "R...K..R";
             board.SetPosition(position);
 
-            board.SideToMove = ChessColor.Black;
+            board.BoardState.SideToMove = ChessColor.Black;
 
             // get legal moves of king. should not include castling.
             var king = new King(ChessColor.Black);

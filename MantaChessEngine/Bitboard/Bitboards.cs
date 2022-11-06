@@ -52,8 +52,6 @@ namespace MantaChessEngine
         public Bitboard[] MovesQueen { get; set; }
         public Bitboard[] MovesKing { get; set; }
 
-
-
         public int[] Row { get; set; }
         public int[] Col { get; set; }
         public int[] DiagNO { get; set; }
@@ -91,27 +89,10 @@ namespace MantaChessEngine
 
         // ---- from IBoard ----
 
-        public Definitions.ChessColor SideToMove { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int MoveCountSincePawnOrCapture { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public History History { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public IMove LastMove => throw new NotImplementedException();
-
-        public int EnPassantFile => throw new NotImplementedException();
-
-        public int EnPassantRank => throw new NotImplementedException();
-
-        public bool CastlingRightWhiteQueenSide => throw new NotImplementedException();
-
-        public bool CastlingRightWhiteKingSide => throw new NotImplementedException();
-
-        public bool CastlingRightBlackQueenSide => throw new NotImplementedException();
-
-        public bool CastlingRightBlackKingSide => throw new NotImplementedException();
-
-        public bool WhiteDidCastling { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool BlackDidCastling { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
+       
+        public BoardState BoardState { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+       
         public string GetPositionString => throw new NotImplementedException();
 
         public string GetPrintString => throw new NotImplementedException();
@@ -865,15 +846,15 @@ namespace MantaChessEngine
             }
 
             SetPosition(positionInfo.PositionString);
-            History.Add(
+            BoardState.Add(
                 null,
                 positionInfo.EnPassantFile - '0',
                 positionInfo.EnPassantRank,
                 positionInfo.CastlingRightWhiteQueenSide,
                 positionInfo.CastlingRightWhiteKingSide,
                 positionInfo.CastlingRightBlackQueenSide,
-                positionInfo.CastlingRightBlackKingSide);
-            SideToMove = positionInfo.SideToMove;
+                positionInfo.CastlingRightBlackKingSide,
+                positionInfo.SideToMove);
 
             return string.Empty;
         }
@@ -944,17 +925,7 @@ namespace MantaChessEngine
             throw new NotImplementedException();
         }
 
-        public Piece GetPiece(char fileChar, int rank)
-        {
-            throw new NotImplementedException();
-        }
-
         public void SetPiece(Piece piece, int file, int rank)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetPiece(Piece piece, char fileChar, int rank)
         {
             throw new NotImplementedException();
         }
@@ -964,12 +935,12 @@ namespace MantaChessEngine
             throw new NotImplementedException();
         }
 
-        public void Back()
+        public void Move(BitMove nextMove)
         {
-            throw new NotImplementedException();
+            _moveExecutor.DoMove(nextMove, this);
         }
 
-        public void RedoMove()
+        public void Back()
         {
             throw new NotImplementedException();
         }

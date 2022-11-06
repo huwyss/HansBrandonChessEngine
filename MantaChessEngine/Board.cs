@@ -8,23 +8,9 @@ namespace MantaChessEngine
         private FenParser _fenParser;
         private IMove _undoneMove = null;
 
-        public ChessColor SideToMove { get; set; }
-
         public int MoveCountSincePawnOrCapture { get; set; } // todo implement this rule...
 
-        public History History { get; set; }
-        public IMove LastMove { get { return History.LastMove; } }
-
-        public int EnPassantFile { get { return History.LastEnPassantFile ; } }
-        public int EnPassantRank { get { return History.LastEnPassantRank ; } }
-
-        public bool CastlingRightWhiteQueenSide { get { return History.LastCastlingRightWhiteQueenSide; } }
-        public bool CastlingRightWhiteKingSide { get { return History.LastCastlingRightWhiteKingSide; } } 
-        public bool CastlingRightBlackQueenSide { get { return History.LastCastlingRightBlackQueenSide; } }
-        public bool CastlingRightBlackKingSide { get { return History.LastCastlingRightBlackKingSide; } } 
-
-        public bool WhiteDidCastling { get; set; }
-        public bool BlackDidCastling { get; set; }
+        public BoardState BoardState { get; }
 
         private Piece[] _board;
 
@@ -49,6 +35,7 @@ namespace MantaChessEngine
                 _board[i] = null; // Definitions.EmptyField;
             }
 
+            BoardState = new BoardState();
             InitVariables();
 
             _fenParser = new FenParser();
@@ -65,10 +52,7 @@ namespace MantaChessEngine
 
         private void InitVariables()
         {
-            SideToMove = ChessColor.White;
-            History = new History();
-            WhiteDidCastling = false;
-            BlackDidCastling = false;
+            BoardState.Clear();
         }
 
         public void SetPosition(string position)
@@ -100,15 +84,15 @@ namespace MantaChessEngine
             }
 
             SetPosition(positionInfo.PositionString);
-            History.Add(
+            BoardState.Add(
                 null,
                 positionInfo.EnPassantFile - '0',
                 positionInfo.EnPassantRank,
                 positionInfo.CastlingRightWhiteQueenSide,
                 positionInfo.CastlingRightWhiteKingSide,
                 positionInfo.CastlingRightBlackQueenSide,
-                positionInfo.CastlingRightBlackKingSide);
-            SideToMove = positionInfo.SideToMove;
+                positionInfo.CastlingRightBlackKingSide,
+                positionInfo.SideToMove);
 
             return string.Empty;
         }
@@ -136,17 +120,6 @@ namespace MantaChessEngine
         }
 
         /// <summary>
-        /// Returns the chess piece.
-        /// </summary>
-        /// <param name="fileChar">'a' to 'h'</param>
-        /// <param name="rank">1 to 8</param>
-        /// <returns></returns>
-        public Piece GetPiece(char fileChar, int rank)
-        {
-            return GetPiece(Helper.FileCharToFile(fileChar), rank);
-        }
-
-        /// <summary>
         /// Sets a chess piece to the field.
         /// </summary>
         /// <param name="piece">chess piece: p-pawn, k-king, q-queen, r-rook, n-knight, b-bishop, r-rook, ' '-empty. small=black, capital=white</param>
@@ -155,17 +128,6 @@ namespace MantaChessEngine
         public void SetPiece(Piece piece, int file, int rank)
         {
             _board[8*(rank - 1) + file - 1] = piece;
-        }
-
-        /// <summary>
-        /// Sets a chess piece to the field.
-        /// </summary>
-        /// <param name="piece">chess piece: p-pawn, k-king, q-queen, r-rook, n-knight, b-bishop, r-rook, ' '-empty. small=black, capital=white</param>
-        /// <param name="fileChar">'a' to 'h'</param>
-        /// <param name="rank">1 to 8</param>
-        public void SetPiece(Piece piece, char fileChar, int rank)
-        {
-            SetPiece(piece, Helper.FileCharToFile(fileChar), rank);
         }
 
         /// <summary>
@@ -244,24 +206,11 @@ namespace MantaChessEngine
 
         public void Back()
         {
-            if (History.Count >= 1)
+            if (BoardState.Count >= 1)
             {
-                _undoneMove = LastMove;
-                LastMove.UndoMove(this);
+                _undoneMove = BoardState.LastMove;
+                _undoneMove.UndoMove(this);
             }
-        }
-
-        /// <summary>
-        /// can redo 1 move that was previously undone
-        /// </summary>
-        public void RedoMove() 
-        {
-            if (_undoneMove != null)
-            {
-                _undoneMove.ExecuteMove(this);
-            }
-
-            _undoneMove = null;
         }
 
         public Position GetKing(ChessColor color)

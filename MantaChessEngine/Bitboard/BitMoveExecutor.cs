@@ -8,5 +8,8 @@ namespace MantaChessEngine
 {
     public class BitMoveExecutor
     {
+        public void DoMove(BitMove bitMove, IBoard bitBoards)
+        {
+        }
     }
 }

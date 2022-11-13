@@ -18,7 +18,7 @@ namespace MantaChessEngine
         /// <summary>
         /// Manta has grown up and now is able to return the legal moves only
         /// </summary>
-        public List<IMove> GetLegalMoves(IBoard board, ChessColor color)
+        public IEnumerable<IMove> GetLegalMoves(IBoard board, ChessColor color)
         {
             var pseudolegalMoves = GetAllMoves(board, color);
             var legalMoves = new List<IMove>();
@@ -38,13 +38,13 @@ namespace MantaChessEngine
             return legalMoves;
         }
 
-        public List<IMove> GetAllMoves(IBoard board, ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
+        public IEnumerable<IMove> GetAllMoves(IBoard board, ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
         {
             var allMovesUnchecked = GetAllMovesUnchecked(board, color, includeCastling, includePawnMoves);
             return allMovesUnchecked;
         }
 
-        private List<IMove> GetAllMovesUnchecked(IBoard board, ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
+        private IEnumerable<IMove> GetAllMovesUnchecked(IBoard board, ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
         {
             bool kingFound = false;
             List<IMove> allMoves = new List<IMove>();

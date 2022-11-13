@@ -4,21 +4,9 @@ namespace MantaChessEngine.Doubles
 {
     public class FakeBoard : IBoard
     {
-        public ChessColor SideToMove { get; set; }
-        public int MoveCountSincePawnOrCapture { get; set; }
         public BoardState BoardState { get; set; }
-        public IMove LastMove { get; }
-        public int EnPassantFile { get; }
-        public int EnPassantRank { get; }
-        public bool CastlingRightWhiteQueenSide { get; }
-        public bool CastlingRightWhiteKingSide { get; }
-        public bool CastlingRightBlackQueenSide { get; }
-        public bool CastlingRightBlackKingSide { get; }
-        public bool WhiteDidCastling { get; set; }
-        public bool BlackDidCastling { get; set; }
         public string GetPositionString { get; }
         public string GetPrintString { get; }
-        
 
         public void SetInitialPosition() { }
 
@@ -32,16 +20,7 @@ namespace MantaChessEngine.Doubles
             return null;
         }
 
-        public Piece GetPiece(char fileChar, int rank)
-        {
-            return null;
-        }
-
         public void SetPiece(Piece piece, int file, int rank)
-        {
-        }
-
-        public void SetPiece(Piece piece, char fileChar, int rank)
         {
         }
 

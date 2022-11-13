@@ -929,7 +929,7 @@ namespace MantaChessEngine
         {
             throw new NotImplementedException();
         }
-
+       
         public void Move(IMove nextMove)
         {
             throw new NotImplementedException();

@@ -11,15 +11,10 @@
         int SourceRank { get; }
         int TargetFile { get; }
         int TargetRank { get; }
-
         int GetMoveImportance();
-
         string ToPrintString();
-
         string ToUciString();
-
         void ExecuteMove(IBoard board);
-
         void UndoMove(IBoard board);
     }
 }

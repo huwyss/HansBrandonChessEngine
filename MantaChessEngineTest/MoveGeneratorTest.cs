@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MantaChessEngine;
 using static MantaChessEngine.Definitions;
+using System.Linq;
 
 namespace MantaChessEngineTest
 {
@@ -412,7 +413,7 @@ namespace MantaChessEngineTest
                               "....K...";
             board.SetPosition(position);
            
-            var moves = target.GetAllMoves(board, Definitions.ChessColor.White);
+            var moves = target.GetAllMoves(board, Definitions.ChessColor.White).ToList<IMove>();
 
             Assert.AreEqual(6, moves.Count);
             Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 3, null)), "e2e3. missing");
@@ -438,7 +439,7 @@ namespace MantaChessEngineTest
                               ".......R"; // No white King
             board.SetPosition(position);
 
-            var moves = target.GetAllMoves(board, ChessColor.White);
+            var moves = target.GetAllMoves(board, ChessColor.White).ToList<IMove>();
 
             Assert.AreEqual(0, moves.Count, "white has no king. so no white moves possible.");
         }

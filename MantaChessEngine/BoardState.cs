@@ -21,7 +21,7 @@ namespace MantaChessEngine
         public bool BlackDidCastling { get; set; }
         public ChessColor SideToMove { get; set; }
 
-        public int MoveCountSincePawnOrCapture { get; set; } // todo implement this rule...
+        public int MoveCountSincePawnOrCapture { get; private set; } // todo implement this rule...
 
         public BoardState()
         {
@@ -51,6 +51,8 @@ namespace MantaChessEngine
             SideToMove = ChessColor.White;
             WhiteDidCastling = false;
             BlackDidCastling = false;
+
+            MoveCountSincePawnOrCapture = 0;
         }
 
         public void Add(IMove move, int enPassantFile, int enPassantRank, bool castlingRightWhiteQueenSide, bool castlingRightWhiteKingSide, bool castlingRightBlackQueenSide, bool castlingRightBlackKingSide, ChessColor sideToMove)

@@ -79,7 +79,7 @@ namespace MantaChessEngine
             MoveRating currentRating = new MoveRating();
             List<MoveRating> bestMoveRatings = new List<MoveRating>();
 
-            var possibleMoves = _moveGenerator.GetLegalMoves(board, color);
+            var possibleMoves = _moveGenerator.GetLegalMoves(board, color).ToList<IMove>();
 
             // no legal moves means the game is over. It is either stall mate or check mate.
             if (possibleMoves.Count == 0)

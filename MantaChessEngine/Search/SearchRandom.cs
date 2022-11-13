@@ -26,7 +26,7 @@ namespace MantaChessEngine
         public MoveRating Search(IBoard board, Definitions.ChessColor color)
         {
             IMove nextMove = null;
-            var possibleMovesComputer = _moveGenerator.GetLegalMoves(board, color);
+            var possibleMovesComputer = _moveGenerator.GetLegalMoves(board, color).ToList<IMove>();
             int numberPossibleMoves = possibleMovesComputer.Count;
 
             if (numberPossibleMoves > 0)

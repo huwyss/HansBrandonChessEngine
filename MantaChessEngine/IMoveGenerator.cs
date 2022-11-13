@@ -5,13 +5,13 @@ namespace MantaChessEngine
 {
     public interface IMoveGenerator
     {
-        List<IMove> GetLegalMoves(IBoard board, ChessColor color);
+        IEnumerable<IMove> GetLegalMoves(IBoard board, ChessColor color);
 
         /// <summary>
         /// Returns all pseudo legal moves of that piece. Pseudo means the king is allowed to be under attack but
         /// otherwise the move must be legal.
         /// </summary>
-        List<IMove> GetAllMoves(IBoard board, ChessColor color, bool includeCastling = true, bool includePawnMoves = true);
+        IEnumerable<IMove> GetAllMoves(IBoard board, ChessColor color, bool includeCastling = true, bool includePawnMoves = true);
         
         bool IsMoveValid(IBoard board, IMove move);
 

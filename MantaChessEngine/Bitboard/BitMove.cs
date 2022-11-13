@@ -8,7 +8,7 @@
             byte toSquare,
             byte capturedPiece,
             byte capturedSquare,
-            byte promotion,
+            byte promotionPiece,
             byte value)
         {
             FromSquare = fromSquare;
@@ -16,7 +16,7 @@
             MovingPiece = movingPiece;
             CapturedPiece = capturedPiece;
             CapturedSquare = capturedSquare;
-            PromotionPiece = promotion;
+            PromotionPiece = promotionPiece;
             Value = value;
         }
 

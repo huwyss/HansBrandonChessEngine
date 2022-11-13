@@ -16,6 +16,13 @@ namespace MantaChessEngine
         public Bitboard Bitboard_WhiteBishop { get; set; }
         public Bitboard Bitboard_WhiteQueen { get; set; }
         public Bitboard Bitboard_WhiteKing { get; set; }
+        public Bitboard Bitboard_WhiteAllPieces =>
+            Bitboard_WhitePawn |
+            Bitboard_WhiteRook |
+            Bitboard_WhiteKnight |
+            Bitboard_WhiteBishop |
+            Bitboard_WhiteQueen |
+            Bitboard_WhiteKing;
 
         public Bitboard Bitboard_BlackPawn { get; set; }
         public Bitboard Bitboard_BlackRook { get; set; }
@@ -23,6 +30,15 @@ namespace MantaChessEngine
         public Bitboard Bitboard_BlackBishop { get; set; }
         public Bitboard Bitboard_BlackQueen { get; set; }
         public Bitboard Bitboard_BlackKing { get; set; }
+        public Bitboard Bitboard_BlackAllPieces =>
+            Bitboard_BlackPawn |
+            Bitboard_BlackRook |
+            Bitboard_BlackKnight |
+            Bitboard_BlackBishop |
+            Bitboard_BlackQueen |
+            Bitboard_BlackKing;
+
+        public Bitboard Bitboard_AllPieces => Bitboard_WhiteAllPieces | Bitboard_BlackAllPieces;
 
         public Bitboard[,] BetweenMatrix { get; set; }
         public Bitboard[,] RayAfterMatrix { get; set; }
@@ -35,16 +51,16 @@ namespace MantaChessEngine
         public Bitboard[] WhiteMovesPawn { get; set; }
         public Bitboard[] WhitePawnStep { get; set; }
         public Bitboard[] WhitePawnDoubleStep { get; set; }
-        public Bitboard[] WhitePawnLeft { get; set; }
-        public Bitboard[] WhitePawnRight { get; set; }
+        public int[] WhitePawnLeft { get; set; }
+        public int[] WhitePawnRight { get; set; }
 
         public Bitboard[] BlackPawnCaptures { get; set; }
         public Bitboard[] BlackPawnDefends { get; set; }
         public Bitboard[] BlackMovesPawn { get; set; }
         public Bitboard[] BlackPawnStep { get; set; }
         public Bitboard[] BlackPawnDoubleStep { get; set; }
-        public Bitboard[] BlackPawnLeft { get; set; }
-        public Bitboard[] BlackPawnRight { get; set; }
+        public int[] BlackPawnLeft { get; set; }
+        public int[] BlackPawnRight { get; set; }
         
         public Bitboard[] MovesKnight { get; set; }
         public Bitboard[] MovesBishop { get; set; }
@@ -590,13 +606,13 @@ namespace MantaChessEngine
         private void SetPawnCaptures()
         {
             WhitePawnCaptures = new Bitboard[64];
-            WhitePawnLeft = new Bitboard[64];
-            WhitePawnRight = new Bitboard[64];
+            WhitePawnLeft = new int[64];
+            WhitePawnRight = new int[64];
             WhitePawnDefends = new Bitboard[64];
 
             BlackPawnCaptures = new Bitboard[64];
-            BlackPawnLeft = new Bitboard[64];
-            BlackPawnRight = new Bitboard[64];
+            BlackPawnLeft = new int[64];
+            BlackPawnRight = new int[64];
             BlackPawnDefends = new Bitboard[64];
 
             for (int i = 0; i < 64; i++)
@@ -608,7 +624,7 @@ namespace MantaChessEngine
                         // white captures left
                         var stepLeftWhite = i + 7;
                         SetBit(ref WhitePawnCaptures[i], stepLeftWhite);
-                        SetBit(ref WhitePawnLeft[i], stepLeftWhite);
+                        WhitePawnLeft[i] = stepLeftWhite;
                     }
 
                     if (Row[i] > 0)
@@ -616,7 +632,7 @@ namespace MantaChessEngine
                         // black captures left
                         var stepLeftBlack = i - 9;
                         SetBit(ref BlackPawnCaptures[i], stepLeftBlack);
-                        SetBit(ref BlackPawnLeft[i], stepLeftBlack);
+                        BlackPawnLeft[i] = stepLeftBlack;
                     }
                 }
 
@@ -627,7 +643,7 @@ namespace MantaChessEngine
                         // white captures right
                         var stepRightWhite = i + 9;
                         SetBit(ref WhitePawnCaptures[i], stepRightWhite);
-                        SetBit(ref WhitePawnRight[i], stepRightWhite);
+                        WhitePawnRight[i] = stepRightWhite;
                     }
 
                     if (Row[i] > 0)
@@ -635,7 +651,7 @@ namespace MantaChessEngine
                         // black captures right
                         var stepRightBlack = i - 7;
                         SetBit(ref BlackPawnCaptures[i], stepRightBlack);
-                        SetBit(ref BlackPawnRight[i], stepRightBlack);
+                        BlackPawnRight[i] = stepRightBlack;
                     }
                 }
 

@@ -711,6 +711,8 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 //                  (H8)
             }), target.WhitePawnCaptures[Const.A2]);
+            ////Assert.AreEqual(Const.B3, target.WhitePawnLeft[Const.A2]);
+            Assert.AreEqual(Const.B3, target.WhitePawnRight[Const.A2]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)
@@ -724,6 +726,7 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 //                  (H8)
             }), target.WhitePawnCaptures[Const.H2]);
+            Assert.AreEqual(Const.G3, target.WhitePawnLeft[Const.H2]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)
@@ -737,6 +740,8 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 //                  (H8)
             }), target.WhitePawnCaptures[Const.E5]);
+            Assert.AreEqual(Const.F6, target.WhitePawnRight[Const.E5]);
+            Assert.AreEqual(Const.D6, target.WhitePawnLeft[Const.E5]);
         }
 
         [TestMethod]
@@ -761,6 +766,7 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 //                  (H8)
             }), target.BlackPawnCaptures[Const.A7]);
+            Assert.AreEqual(Const.B6, target.BlackPawnRight[Const.A7]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)
@@ -774,6 +780,7 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 //                  (H8)
             }), target.BlackPawnCaptures[Const.H7]);
+            Assert.AreEqual(Const.G6, target.BlackPawnLeft[Const.H7]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)
@@ -787,6 +794,8 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 //                  (H8)
             }), target.BlackPawnCaptures[Const.E5]);
+            Assert.AreEqual(Const.F4, target.BlackPawnRight[Const.E5]);
+            Assert.AreEqual(Const.D4, target.BlackPawnLeft[Const.E5]);
         }
 
         [TestMethod]
@@ -1154,6 +1163,9 @@ namespace MantaChessEngineTest
 
             result = target.BitScanForward(0x800000000000000);
             Assert.AreEqual(59, result);
+
+            result = target.BitScanForward(0x0018); // binary: 11000
+            Assert.AreEqual(3, result); // 3 zeros at the end
         }
 
         [TestMethod]

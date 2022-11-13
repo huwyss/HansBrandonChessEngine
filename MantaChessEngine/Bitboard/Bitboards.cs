@@ -51,17 +51,17 @@ namespace MantaChessEngine
         public Bitboard[] WhiteMovesPawn { get; set; }
         public Bitboard[] WhitePawnStep { get; set; }
         public Bitboard[] WhitePawnDoubleStep { get; set; }
-        public int[] WhitePawnLeft { get; set; }
-        public int[] WhitePawnRight { get; set; }
+        public int[] WhitePawnLeft { get; set; } // todo: muss das mit illegal initialisiert werden?
+        public int[] WhitePawnRight { get; set; } // todo: muss das mit illegal initialisiert werden?
 
         public Bitboard[] BlackPawnCaptures { get; set; }
         public Bitboard[] BlackPawnDefends { get; set; }
         public Bitboard[] BlackMovesPawn { get; set; }
         public Bitboard[] BlackPawnStep { get; set; }
         public Bitboard[] BlackPawnDoubleStep { get; set; }
-        public int[] BlackPawnLeft { get; set; }
-        public int[] BlackPawnRight { get; set; }
-        
+        public int[] BlackPawnLeft { get; set; } // todo: muss das mit illegal initialisiert werden?
+        public int[] BlackPawnRight { get; set; } // todo: muss das mit illegal initialisiert werden?
+
         public Bitboard[] MovesKnight { get; set; }
         public Bitboard[] MovesBishop { get; set; }
         public Bitboard[] MovesRook { get; set; }

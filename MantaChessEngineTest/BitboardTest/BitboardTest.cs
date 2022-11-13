@@ -711,7 +711,6 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 //                  (H8)
             }), target.WhitePawnCaptures[Const.A2]);
-            ////Assert.AreEqual(Const.B3, target.WhitePawnLeft[Const.A2]);
             Assert.AreEqual(Const.B3, target.WhitePawnRight[Const.A2]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]

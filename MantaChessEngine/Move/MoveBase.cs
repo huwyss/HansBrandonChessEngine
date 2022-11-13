@@ -145,9 +145,7 @@ namespace MantaChessEngine
             board.SetPiece(MovingPiece, TargetFile, TargetRank); // set MovingPiece to new position (and overwrite captured piece)
             board.SetPiece(null, SourceFile, SourceRank); // empty MovingPiece's old position
 
-            int enPassantFile = 0;
-            int enPassantRank = 0;
-            SetEnPassantFields(this, out enPassantFile, out enPassantRank);
+            SetEnPassantFields(this, out int enPassantFile, out int enPassantRank);
 
             // Set Castling rights
             // if white king moved --> castling right white both sides = false

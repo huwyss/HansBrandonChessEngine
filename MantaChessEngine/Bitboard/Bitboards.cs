@@ -6,8 +6,8 @@ namespace MantaChessEngine
 {
     public class Bitboards : IBoard
     {
-        private FenParser _fenParser;
-        private BitMoveExecutor _moveExecutor;
+        private readonly FenParser _fenParser;
+        private readonly BitMoveExecutor _moveExecutor;
 
         // todo these are Pieces[2][7]
         public Bitboard Bitboard_WhitePawn { get; set; }

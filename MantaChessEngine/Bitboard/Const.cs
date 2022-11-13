@@ -74,12 +74,14 @@
         public const byte G8 = 62;
         public const byte H8 = 63;
 
-        public const byte Pawn = 0;
-        public const byte Knight = 1;
-        public const byte Bishop = 2;
-        public const byte Rook = 3;
-        public const byte Queen = 3;
-        public const byte King = 5;
+        public const byte Empty = 0;
+        public const byte Pawn = 1;
+        public const byte Knight = 2;
+        public const byte Bishop = 3;
+        public const byte Rook = 4;
+        public const byte Queen = 5;
+        public const byte King = 6;
+        
 
         public const byte White = 1;
         public const byte Black = 0;

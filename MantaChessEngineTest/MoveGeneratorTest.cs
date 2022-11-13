@@ -528,12 +528,9 @@ namespace MantaChessEngineTest
         public void GetEndPosition_WhenKnightSequence_ThenCorrectEndRankFile()
         {
             string knightSequence = "uul";
-            int targetRank;
-            int targetFile;
-            bool valid;
 
             var target = new MoveGenerator(new MoveFactory());
-            target.GetEndPosition(Helper.FileCharToFile('b'), 1, knightSequence, out targetFile, out targetRank, out valid);
+            target.GetEndPosition(Helper.FileCharToFile('b'), 1, knightSequence, out int targetFile, out int targetRank, out bool valid);
 
             Assert.AreEqual(Helper.FileCharToFile('a'), targetFile);
             Assert.AreEqual(3, targetRank);
@@ -544,12 +541,9 @@ namespace MantaChessEngineTest
         public void GetEndPosition_WhenOtherKnightSequence_ThenCorrectEndRankFile()
         {
             string knightSequence = "ddr";
-            int targetRank;
-            int targetFile;
-            bool valid;
 
             var target = new MoveGenerator(new MoveFactory());
-            target.GetEndPosition(Helper.FileCharToFile('c'), 3, knightSequence, out targetFile, out targetRank, out valid);
+            target.GetEndPosition(Helper.FileCharToFile('c'), 3, knightSequence, out int targetFile, out int targetRank, out bool valid);
 
             Assert.AreEqual(Helper.FileCharToFile('d'), targetFile);
             Assert.AreEqual(1, targetRank);
@@ -560,12 +554,9 @@ namespace MantaChessEngineTest
         public void GetEndPosition_WhenKnightSequenceInvalid_ThenMoveInvalid()
         {
             string knightSequence = "ddl";
-            int targetRank;
-            int targetFile;
-            bool valid;
 
             var target = new MoveGenerator(new MoveFactory());
-            target.GetEndPosition(Helper.FileCharToFile('a'), 1, knightSequence, out targetFile, out targetRank, out valid);
+            target.GetEndPosition(Helper.FileCharToFile('a'), 1, knightSequence, out int targetFile, out int targetRank, out bool valid);
 
             Assert.AreEqual(false, valid);
         }

@@ -75,7 +75,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenPawnMovesNormal_ThenNewPositionOk()
         {
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board target = new Board();
             target.SetInitialPosition();
 
@@ -88,7 +87,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenPawnMovesNormalAndMoveIsOfTypeMove_ThenNewPositionOk()
         {
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board target = new Board();
             target.SetInitialPosition();
             target.Move(new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 4, null));
@@ -101,7 +99,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenQueenCapturesPiece_ThenNewPositionOk()
         {
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board target = new Board();
             target.SetInitialPosition();
             target.SetPiece(null, Helper.FileCharToFile('d'), 2);
@@ -111,7 +108,6 @@ namespace MantaChessEngineTest
             Assert.AreEqual(new Queen(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('d'), 7));
             Assert.AreEqual(Definitions.ChessColor.Black, target.BoardState.SideToMove);
 
-            var moveList = target.BoardState.Moves;
             Assert.AreEqual(1, target.BoardState.Moves.Count);
             Assert.AreEqual(new NormalMove(new Queen(Definitions.ChessColor.White), 4, 1, 4, 7, Piece.MakePiece('p')), target.BoardState.Moves[0]);
         }
@@ -119,7 +115,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenPawnMovesTwoFields_ThenEnPassantFieldSet_Black()
         {
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = ".......k" +
                               "p......." +
@@ -138,7 +133,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenPawnMovesTwoFields_ThenEnPassantFieldSet_White()
         {
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = ".......k" +
                               "........" +
@@ -157,7 +151,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenBlackCapturesEnPassant_ThenMoveCorrect_BlackMoves()
         {
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = ".......k" +
                               "........" +
@@ -187,7 +180,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenWhiteCapturesEnPassant_ThenMoveCorrect_WhiteMoves()
         {
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = ".......k" +
                               ".p......" +
@@ -282,7 +274,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void BackTest_WhenWhiteAndBlackMovesDone_ThenGoBackToInitPosition()
         {
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board target = new Board();
             target.SetInitialPosition();
             target.Move(new NormalMove(Piece.MakePiece('P'),'e',2,'e',4,null));
@@ -321,7 +312,6 @@ namespace MantaChessEngineTest
         public void MoveTest_WhenBackAfterEnPassant_ThenMoveCorrect()
         {
             // init move: white pawn moves two fields and black captures en passant
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = ".......k" +
                               "........" +
@@ -372,7 +362,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void CastlingRightTest_WhenKingOrRookMoved_ThenRightFalse()
         {
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = "r...k..r" +
                               "p......." +
@@ -407,7 +396,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenKingSideCastling_ThenCorrectMove_White()
         {
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = "r...k..r" +
                               "p......." +
@@ -441,7 +429,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenQueenSideCastling_ThenCorrectMove_White()
         {
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = "r...k..r" +
                               "p......." +
@@ -475,7 +462,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenKingSideCastling_ThenCorrectMove_Black()
         {
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = "r...k..r" +
                               "p......." +
@@ -509,7 +495,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenQueenSideCastling_ThenCorrectMove_Black()
         {
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = "r...k..r" +
                               "p......." +
@@ -547,7 +532,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenWhitePromotion_ThenCorrectMove()
         {
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = "....k..." +
                               "P......." +
@@ -579,7 +563,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenMinorWhitePromotion_ThenCorrectMove()
         {
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = "....k..." +
                               "P......." +
@@ -611,7 +594,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenWhitePromotionWithCapture_ThenCorrectMove()
         {
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = ".r..k..." +
                               "P......." +
@@ -643,7 +625,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenBlackPromotion_ThenCorrectMove()
         {
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = "....k..." +
                               "........" +
@@ -675,7 +656,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenBlackPromotionWithCapture_ThenCorrectMove()
         {
-            MoveGenerator generator = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = "....k..." +
                               "........" +

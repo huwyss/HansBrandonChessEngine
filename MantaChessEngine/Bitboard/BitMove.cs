@@ -4,11 +4,11 @@
     {
         public BitMove(
             byte movingPiece,
-            byte fromSquare, 
+            byte fromSquare,
             byte toSquare,
-            byte capturedPiece, 
+            byte capturedPiece,
             byte capturedSquare,
-            byte promotion, 
+            byte promotion,
             byte value)
         {
             FromSquare = fromSquare;
@@ -16,7 +16,7 @@
             MovingPiece = movingPiece;
             CapturedPiece = capturedPiece;
             CapturedSquare = capturedSquare;
-            Promotion = promotion;
+            PromotionPiece = promotion;
             Value = value;
         }
 
@@ -25,7 +25,27 @@
         public byte ToSquare { get; }
         public byte CapturedPiece { get; }
         public byte CapturedSquare { get; }
-        public byte Promotion { get; }
+        public byte PromotionPiece { get; }
         public byte Value { get; }
+    }
+
+    public static class BitMoveExtension
+    {
+        public static bool IsCaptureMove(this BitMove move)
+        {
+            return move.CapturedPiece != Const.Empty;
+        }
+
+        public static bool IsPromotionMove(this BitMove move)
+        {
+            return move.PromotionPiece != Const.Empty; 
+        }
+
+        public static bool IsEnpassantMove(this BitMove move)
+        {
+            return move.MovingPiece == Const.Pawn &&
+                move.CapturedPiece != Const.Empty &&
+                move.CapturedSquare != move.ToSquare;
+        }
     }
 }

@@ -25,9 +25,6 @@ namespace MantaChessEngine
         public override List<IMove> GetMoves(MoveGenerator moveGen, IBoard board, int file, int rank, bool includeCastling = true)
         {
             var moves = new List<IMove>();
-            int targetRank;
-            int targetFile;
-            bool valid;
             var directionSequences = GetMoveDirectionSequences();
             int twoFieldMoveInitRank = 2;
             foreach (string sequence in directionSequences)
@@ -39,7 +36,7 @@ namespace MantaChessEngine
                     twoFieldMoveInitRank = 7;
                 }
 
-                GetEndPosition(file, rank, currentSequence, out targetFile, out targetRank, out valid);
+                GetEndPosition(file, rank, currentSequence, out int targetFile, out int targetRank, out bool valid);
                 if (currentSequence == "u" || currentSequence == "d") // walk straight one field
                 {
                     if (valid && board.GetColor(targetFile, targetRank) == ChessColor.Empty) // empty field
@@ -60,11 +57,8 @@ namespace MantaChessEngine
                 }
                 else if ((currentSequence == "uu" || currentSequence == "dd") && rank == twoFieldMoveInitRank) // walk straight two fields
                 {
-                    int targetFile2 = 0;
-                    int targetRank2 = 0;
-                    bool valid2 = false;
                     string currentSequence2 = currentSequence == "uu" ? "u" : "d";
-                    GetEndPosition(file, rank, currentSequence2, out targetFile2, out targetRank2, out valid2);
+                    GetEndPosition(file, rank, currentSequence2, out int targetFile2, out int targetRank2, out bool valid2);
                     if ((valid && board.GetColor(targetFile, targetRank) == ChessColor.Empty) && // end field is empty
                         (valid2 && board.GetColor(targetFile2, targetRank2) == ChessColor.Empty)) // field between current and end field is also empty
                     {

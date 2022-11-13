@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using MantaChessEngine;
-using MantaChessEngine.Doubles;
+using MantaChessEngineTest.Doubles;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace MantaChessEngineTest

@@ -60,13 +60,9 @@ namespace MantaChessEngine
         {
             Piece movingPiece;
             Piece capturedPiece;
-            int sourceFile = 0;
-            int sourceRank = 0;
-            int targetFile = 0;
-            int targetRank = 0;
             bool enPassant = false;
 
-            GetPositions(moveString, out sourceFile, out sourceRank, out targetFile, out targetRank);
+            GetPositions(moveString, out int sourceFile, out int sourceRank, out int targetFile, out int targetRank);
             movingPiece = board.GetPiece(sourceFile, sourceRank);
 
             // set captured Piece

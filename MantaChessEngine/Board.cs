@@ -5,14 +5,14 @@ namespace MantaChessEngine
 {
     public class Board : IBoard
     {
-        private FenParser _fenParser;
+        private readonly FenParser _fenParser;
         private IMove _undoneMove = null;
 
         public int MoveCountSincePawnOrCapture { get; set; } // todo implement this rule...
 
         public BoardState BoardState { get; }
 
-        private Piece[] _board;
+        private readonly Piece[] _board;
 
         string initPosition = "rnbqkbnr" + // black a8-h8
                               "pppppppp" +

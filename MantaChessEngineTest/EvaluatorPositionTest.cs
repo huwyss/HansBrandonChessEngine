@@ -130,7 +130,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenWhiteDidCastle_ThenWhiteBetter()
         {
-            var gen = new MoveGenerator(new MoveFactory());
             Board board = new Board();
             string position = "rnbqk..r" +
                               "ppppppbp" +

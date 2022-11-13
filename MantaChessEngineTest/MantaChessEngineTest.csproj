@@ -53,6 +53,11 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BitboardTest\BitboardTest.cs" />
+    <Compile Include="Doubles\FakeBoard.cs" />
+    <Compile Include="Doubles\FakeEvaluator.cs" />
+    <Compile Include="Doubles\FakeMoveGenerator.cs" />
+    <Compile Include="Doubles\FakeMoveGeneratorMulitlevel.cs" />
+    <Compile Include="Doubles\SearchMinimaxDouble_SearchLevelOverwritten.cs" />
     <Compile Include="SelectiveDepthSearchTest.cs" />
     <Compile Include="AlphaBetaPruningTest.cs" />
     <Compile Include="FenParserTest.cs" />

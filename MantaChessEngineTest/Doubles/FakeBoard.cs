@@ -1,6 +1,7 @@
-﻿using static MantaChessEngine.Definitions;
+﻿using MantaChessEngine;
+using static MantaChessEngine.Definitions;
 
-namespace MantaChessEngine.Doubles
+namespace MantaChessEngineTest.Doubles
 {
     public class FakeBoard : IBoard
     {

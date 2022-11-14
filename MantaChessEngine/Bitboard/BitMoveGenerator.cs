@@ -24,7 +24,11 @@ namespace MantaChessEngine
             _moves = new List<BitMove>();
             _captures = new List<BitMove>();
 
-            GeneratePawnMoves(_bitboards.Bitboard_WhitePawn, color);
+            if (color == ChessColor.White)
+            {
+                GeneratePawnMoves(_bitboards.Bitboard_WhitePawn, color);
+            }
+
             ////GenerateEnpassant();
             ////GenerateCastling();
             ////GenerateKnightMoves();
@@ -106,5 +110,23 @@ namespace MantaChessEngine
         {
             throw new NotImplementedException();
         }
+
+        //////////////////////////////////////////////////////
+        // Testing interface
+        //////////////////////////////////////////////////////
+
+        internal IEnumerable<BitMove> GetPawnMoves(Bitboards board, ChessColor color)
+        {
+            _moves = new List<BitMove>();
+            _captures = new List<BitMove>();
+
+            if (color == ChessColor.White)
+            {
+                GeneratePawnMoves(board.Bitboard_WhitePawn, color);
+            }
+
+            return _moves;
+        }
+
     }
 }

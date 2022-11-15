@@ -61,7 +61,8 @@ namespace MantaChessEngine
                 var fromSquareMovingPawn = _bitboards.BitScanForward(pawnCapturesToLeft);
                 pawnCapturesToLeft &= _bitboards.NotIndexMask[fromSquareMovingPawn];
                 var toSquare = _bitboards.WhitePawnLeft[fromSquareMovingPawn]; // todo not white but index
-                AddCapture(Const.Pawn, (byte)fromSquareMovingPawn, (byte)toSquare, Const.Empty, 0); // empty ?, value ?
+                var capturedPiece = Const.Rook; // todo: im buch: px[board[n]], n ist toSquare
+                AddCapture(Const.Pawn, (byte)fromSquareMovingPawn, (byte)toSquare, capturedPiece, (byte)toSquare, Const.Empty, 0); // empty ?, value ?
             }
         }
 
@@ -70,9 +71,10 @@ namespace MantaChessEngine
             _moves.Add(new BitMove(movingPiece, fromSquare, toSquare, Const.Empty, Const.Empty, promotionPiece, value));
         }
 
-        private void AddCapture(byte movingPiece, byte fromSquare, byte toSquare, byte capturedPiece, byte value)
+        private void AddCapture(byte movingPiece, byte fromSquare, byte toSquare, byte capturedPiece, byte capturedSquare, byte promotionPiece, byte value)
         {
-            _captures.Add(new BitMove(movingPiece, fromSquare, toSquare, capturedPiece, toSquare, Const.Empty, value));
+            _captures.Add(new BitMove(movingPiece, fromSquare, toSquare, capturedPiece, capturedSquare, promotionPiece, value));
+            _moves.Add(new BitMove(movingPiece, fromSquare, toSquare, capturedPiece, toSquare, Const.Empty, value));
         }
 
         private void AddEnpassant()

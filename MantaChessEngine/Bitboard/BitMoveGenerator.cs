@@ -61,20 +61,20 @@ namespace MantaChessEngine
                 var fromSquareMovingPawn = _bitboards.BitScanForward(pawnCapturesToLeft);
                 pawnCapturesToLeft &= _bitboards.NotIndexMask[fromSquareMovingPawn];
                 var toSquare = _bitboards.WhitePawnLeft[fromSquareMovingPawn]; // todo not white but index
-                var capturedPiece = Const.Rook; // todo: im buch: px[board[n]], n ist toSquare
-                AddCapture(Const.Pawn, (byte)fromSquareMovingPawn, (byte)toSquare, capturedPiece, (byte)toSquare, Const.Empty, 0); // empty ?, value ?
+                var capturedPiece = PieceType.Rook; // todo: im buch: px[board[n]], n ist toSquare
+                AddCapture(PieceType.Pawn, (Square)fromSquareMovingPawn, (Square)toSquare, capturedPiece, (Square)toSquare, PieceType.Empty, 0); // empty ?, value ?
             }
         }
 
-        private void AddMove(byte movingPiece, byte fromSquare, byte toSquare, byte promotionPiece, byte value)
+        private void AddMove(PieceType movingPiece, Square fromSquare, Square toSquare, PieceType promotionPiece, byte value)
         {
-            _moves.Add(new BitMove(movingPiece, fromSquare, toSquare, Const.Empty, Const.Empty, promotionPiece, value));
+            _moves.Add(new BitMove(movingPiece, fromSquare, toSquare, PieceType.Empty, Square.NoSquare, promotionPiece, value));
         }
 
-        private void AddCapture(byte movingPiece, byte fromSquare, byte toSquare, byte capturedPiece, byte capturedSquare, byte promotionPiece, byte value)
+        private void AddCapture(PieceType movingPiece, Square fromSquare, Square toSquare, PieceType capturedPiece, Square capturedSquare, PieceType promotionPiece, byte value)
         {
             _captures.Add(new BitMove(movingPiece, fromSquare, toSquare, capturedPiece, capturedSquare, promotionPiece, value));
-            _moves.Add(new BitMove(movingPiece, fromSquare, toSquare, capturedPiece, toSquare, Const.Empty, value));
+            _moves.Add(new BitMove(movingPiece, fromSquare, toSquare, capturedPiece, capturedSquare, promotionPiece, value));
         }
 
         private void AddEnpassant()

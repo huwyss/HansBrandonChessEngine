@@ -3,12 +3,12 @@
     public struct BitMove
     {
         public BitMove(
-            byte movingPiece,
-            byte fromSquare,
-            byte toSquare,
-            byte capturedPiece,
-            byte capturedSquare,
-            byte promotionPiece,
+            PieceType movingPiece,
+            Square fromSquare,
+            Square toSquare,
+            PieceType capturedPiece,
+            Square capturedSquare,
+            PieceType promotionPiece,
             byte value)
         {
             FromSquare = fromSquare;
@@ -20,12 +20,12 @@
             Value = value;
         }
 
-        public byte MovingPiece { get; }
-        public byte FromSquare { get; }
-        public byte ToSquare { get; }
-        public byte CapturedPiece { get; }
-        public byte CapturedSquare { get; }
-        public byte PromotionPiece { get; }
+        public PieceType MovingPiece { get; }
+        public Square FromSquare { get; }
+        public Square ToSquare { get; }
+        public PieceType CapturedPiece { get; }
+        public Square CapturedSquare { get; }
+        public PieceType PromotionPiece { get; }
         public byte Value { get; }
     }
 
@@ -33,18 +33,18 @@
     {
         public static bool IsCaptureMove(this BitMove move)
         {
-            return move.CapturedPiece != Const.Empty;
+            return move.CapturedPiece != PieceType.Empty;
         }
 
         public static bool IsPromotionMove(this BitMove move)
         {
-            return move.PromotionPiece != Const.Empty; 
+            return move.PromotionPiece != PieceType.Empty; 
         }
 
         public static bool IsEnpassantMove(this BitMove move)
         {
-            return move.MovingPiece == Const.Pawn &&
-                move.CapturedPiece != Const.Empty &&
+            return move.MovingPiece == PieceType.Pawn &&
+                move.CapturedPiece != PieceType.Empty &&
                 move.CapturedSquare != move.ToSquare;
         }
     }

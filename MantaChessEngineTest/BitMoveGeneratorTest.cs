@@ -169,10 +169,10 @@ namespace MantaChessEngineTest
             ////Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'c', 2, 'b', 3, Piece.MakePiece('r'))), "c2b3r missing");
             ////Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'c', 2, 'd', 3, Piece.MakePiece('b'))), "c2d3b missing");
 
-            Assert.IsTrue(moves.Contains(new BitMove(Const.Pawn, Const.C2, Const.C3, Const.Empty, Const.Empty, Const.Empty, 0)), "c2c3 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(Const.Pawn, Const.C2, Const.C4, Const.Empty, Const.Empty, Const.Empty, 0)), "c2c4. missing");
-            Assert.IsTrue(moves.Contains(new BitMove(Const.Pawn, Const.C2, Const.B3, Const.Rook, Const.B3, Const.Empty, 0)), "c2b3r missing");
-            Assert.IsTrue(moves.Contains(new BitMove(Const.Pawn, Const.C2, Const.D3, Const.Bishop, Const.D3, Const.Empty, 0)), "c2d3b missing");
+            Assert.IsTrue(moves.Contains(new BitMove(PieceType.Pawn, Square.C2, Square.C3, PieceType.Empty, Square.NoSquare, PieceType.Empty, 0)), "c2c3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(PieceType.Pawn, Square.C2, Square.C4, PieceType.Empty, Square.NoSquare, PieceType.Empty, 0)), "c2c4. missing");
+            Assert.IsTrue(moves.Contains(new BitMove(PieceType.Pawn, Square.C2, Square.B3, PieceType.Rook, Square.B3, PieceType.Empty, 0)), "c2b3r missing");
+            Assert.IsTrue(moves.Contains(new BitMove(PieceType.Pawn, Square.C2, Square.D3, PieceType.Bishop, Square.D3, PieceType.Empty, 0)), "c2d3b missing");
         }
 
         [TestMethod, Ignore]

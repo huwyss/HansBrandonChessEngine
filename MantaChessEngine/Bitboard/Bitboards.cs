@@ -8,8 +8,10 @@ namespace MantaChessEngine
     {
         private readonly FenParser _fenParser;
         private readonly BitMoveExecutor _moveExecutor;
+        public byte[] BoardAllPieces;
+        public byte[] BoardColor;
 
-        // todo these are Pieces[2][7]
+        public Bitboard[,] Bitboard_Pieces { get; set; } // Dimensions: color, piece
         public Bitboard Bitboard_WhitePawn { get; set; }
         public Bitboard Bitboard_WhiteRook { get; set; }
         public Bitboard Bitboard_WhiteKnight { get; set; }
@@ -132,6 +134,39 @@ namespace MantaChessEngine
             SetPawnBitboards();
             SetRanks();
             SetMaskCols();
+            SetBitboardPieces();
+            InitBoardAllPieces();
+        }
+
+        private void InitBoardAllPieces()
+        {
+            BoardAllPieces = new byte[64];
+            BoardColor = new byte[64];
+
+            for (int i=0; i<64; i++)
+            {
+                BoardAllPieces[i] = Const.Empty;
+                BoardColor[i] = Const.Empty;
+            }
+        }
+
+        private void SetBitboardPieces()
+        {
+            Bitboard_Pieces = new Bitboard[2, 7]; // todo: what is the 7th son of a seventh son?
+
+            Bitboard_Pieces[Const.White, Const.Pawn] = Bitboard_WhitePawn;
+            Bitboard_Pieces[Const.White, Const.Knight] = Bitboard_WhiteKnight;
+            Bitboard_Pieces[Const.White, Const.Bishop] = Bitboard_WhiteBishop;
+            Bitboard_Pieces[Const.White, Const.Rook] = Bitboard_WhiteRook;
+            Bitboard_Pieces[Const.White, Const.Queen] = Bitboard_WhiteQueen;
+            Bitboard_Pieces[Const.White, Const.King] = Bitboard_WhiteKing;
+
+            Bitboard_Pieces[Const.Black, Const.Pawn] = Bitboard_BlackPawn;
+            Bitboard_Pieces[Const.Black, Const.Knight] = Bitboard_BlackKnight;
+            Bitboard_Pieces[Const.Black, Const.Bishop] = Bitboard_BlackBishop;
+            Bitboard_Pieces[Const.Black, Const.Rook] = Bitboard_BlackRook;
+            Bitboard_Pieces[Const.Black, Const.Queen] = Bitboard_BlackQueen;
+            Bitboard_Pieces[Const.Black, Const.King] = Bitboard_BlackKing;
         }
 
         private void InitBitboard()
@@ -944,6 +979,18 @@ namespace MantaChessEngine
         public void SetPiece(Piece piece, int file, int rank)
         {
             throw new NotImplementedException();
+        }
+
+        public BitPiece GetPiece(byte square)
+        {
+            return new BitPiece(BoardColor[square], BoardAllPieces[square]);
+        }
+
+        public void SetPiece(byte color, byte piece, byte square)
+        {
+            BoardAllPieces[square] = piece;
+            BoardColor[square] = color;
+            SetBit(ref Bitboard_Pieces[color, piece], square); 
         }
        
         public void Move(IMove nextMove)

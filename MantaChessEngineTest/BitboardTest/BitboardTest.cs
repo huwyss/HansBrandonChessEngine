@@ -1247,5 +1247,65 @@ namespace MantaChessEngineTest
                 //                  (H8)
             }), target.Not_H_file);
         }
+
+        [TestMethod]
+        public void SetPieceQueenTest()
+        {
+            var target = new Bitboards();
+            target.Initialize();
+
+            target.SetPiece(Const.White, Const.Queen, Const.F5);
+
+            Assert.AreEqual(Const.Queen, target.BoardAllPieces[Const.F5]);
+            Assert.AreEqual(Const.White, target.BoardColor[Const.F5]);
+            Assert.AreEqual(Math.Pow(2, Const.F5), target.Bitboard_Pieces[Const.White, Const.Queen]);
+            Assert.AreEqual(Math.Pow(2, Const.F5), target.Bitboard_Pieces[Const.White, Const.Queen]);
+        }
+
+        [TestMethod]
+        public void SetPieceTwoQueensTest()
+        {
+            var target = new Bitboards();
+            target.Initialize();
+
+            target.SetPiece(Const.White, Const.Queen, Const.F5);
+            target.SetPiece(Const.White, Const.Queen, Const.A7);
+
+            Assert.AreEqual(Const.Queen, target.BoardAllPieces[Const.F5]);
+            Assert.AreEqual(Const.Queen, target.BoardAllPieces[Const.A7]);
+            Assert.AreEqual(Const.White, target.BoardColor[Const.F5]);
+            Assert.AreEqual(Const.White, target.BoardColor[Const.A7]);
+            Assert.AreEqual(Math.Pow(2, Const.F5) + Math.Pow(2, Const.A7), target.Bitboard_Pieces[Const.White, Const.Queen]);
+        }
+
+        [TestMethod]
+        public void GetPieceQueenTest()
+        {
+            var target = new Bitboards();
+            target.Initialize();
+            target.SetPiece(Const.White, Const.Queen, Const.F5);
+
+            var result = target.GetPiece(Const.F5);
+
+            Assert.AreEqual(Const.White, result.Color);
+            Assert.AreEqual(Const.Queen, result.Piece);
+        }
+
+        [TestMethod]
+        public void GetPieceTwoQueenTest()
+        {
+            var target = new Bitboards();
+            target.Initialize();
+            target.SetPiece(Const.White, Const.Queen, Const.F5);
+            target.SetPiece(Const.White, Const.Queen, Const.B3);
+
+            var result = target.GetPiece(Const.F5);
+            var result2 = target.GetPiece(Const.B3);
+
+            Assert.AreEqual(Const.White, result.Color);
+            Assert.AreEqual(Const.Queen, result.Piece);
+            Assert.AreEqual(Const.White, result2.Color);
+            Assert.AreEqual(Const.Queen, result2.Piece);
+        }
     }
 }

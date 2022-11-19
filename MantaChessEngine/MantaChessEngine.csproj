@@ -48,6 +48,7 @@
     <Compile Include="Bitboard\BitMove.cs" />
     <Compile Include="Bitboard\BitMoveExecutor.cs" />
     <Compile Include="Bitboard\BitMoveGenerator.cs" />
+    <Compile Include="Bitboard\BitPiece.cs" />
     <Compile Include="Bitboard\Const.cs" />
     <Compile Include="FenParser.cs" />
     <Compile Include="Interfaces\IBoard.cs" />

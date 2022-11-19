@@ -8,8 +8,6 @@ namespace MantaChessEngine
         private readonly FenParser _fenParser;
         private IMove _undoneMove = null;
 
-        public int MoveCountSincePawnOrCapture { get; set; } // todo implement this rule...
-
         public BoardState BoardState { get; }
 
         private readonly Piece[] _board;

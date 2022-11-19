@@ -82,7 +82,6 @@
         public const byte King = 5;
         public const byte Empty = 6;
 
-
         public const byte White = 1;
         public const byte Black = 0;
     }

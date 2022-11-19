@@ -63,6 +63,7 @@
     <Compile Include="BoardState.cs" />
     <Compile Include="Interfaces\IMoveFilter.cs" />
     <Compile Include="Interfaces\IMoveOrder.cs" />
+    <Compile Include="MantaEngineException.cs" />
     <Compile Include="MoveOrder\FilterCapturesOnly.cs" />
     <Compile Include="MoveOrder\OrderPvAndImportance.cs" />
     <Compile Include="Move\CastlingMove.cs" />

@@ -77,7 +77,7 @@
         NoSquare = 0xFF
     }
 
-    public enum PieceType : byte
+    public enum BitPieceType : byte
     {
         Pawn = 0,
         Knight = 1,
@@ -88,10 +88,10 @@
         Empty = 6,
     }
 
-    public enum ColorType : byte
+    public enum BitColor : byte
     { 
-        White = 1,
-        Black = 0,
+        White = 0,
+        Black = 1,
         Empty = 2
     }
 }

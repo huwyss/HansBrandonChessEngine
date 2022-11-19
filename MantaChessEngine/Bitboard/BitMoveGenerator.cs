@@ -19,15 +19,12 @@ namespace MantaChessEngine
             _bitboards = bitboards;
         }
 
-        public IEnumerable<BitMove> GetAllMoves(ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
+        public IEnumerable<BitMove> GetAllMoves(BitColor color, bool includeCastling = true, bool includePawnMoves = true)
         {
             _moves = new List<BitMove>();
             _captures = new List<BitMove>();
 
-            if (color == ChessColor.White)
-            {
-                GeneratePawnMoves(_bitboards.Bitboard_WhitePawn, color);
-            }
+            GeneratePawnMoves(_bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.Pawn], color);
 
             ////GenerateEnpassant();
             ////GenerateCastling();
@@ -37,41 +34,41 @@ namespace MantaChessEngine
             return _captures.Concat(_moves);
         }
 
-        private void GeneratePawnMoves(Bitboard pawnBitboard, ChessColor color)
+        private void GeneratePawnMoves(Bitboard pawnBitboard, BitColor color)
         {
             Bitboard pawnCapturesToLeft;
             Bitboard pawnCapturesToRight;
             Bitboard pawnMoveStraight;
 
-            if (color == ChessColor.White)
+            if (color == BitColor.White)
             {
-                pawnCapturesToLeft = _bitboards.Bitboard_WhitePawn & (_bitboards.Bitboard_BlackAllPieces & _bitboards.Not_H_file) >> 7;
-                pawnCapturesToRight = _bitboards.Bitboard_WhitePawn & (_bitboards.Bitboard_BlackAllPieces & _bitboards.Not_A_file) >> 9;
-                pawnMoveStraight = _bitboards.Bitboard_WhitePawn & (~_bitboards.Bitboard_AllPieces) >> 8;
+                pawnCapturesToLeft = pawnBitboard & (_bitboards.Bitboard_BlackAllPieces & _bitboards.Not_H_file) >> 7;
+                pawnCapturesToRight = pawnBitboard & (_bitboards.Bitboard_BlackAllPieces & _bitboards.Not_A_file) >> 9;
+                pawnMoveStraight = pawnBitboard & (~_bitboards.Bitboard_AllPieces) >> 8;
             }
             else
             {
-                pawnCapturesToLeft = _bitboards.Bitboard_BlackPawn & (_bitboards.Bitboard_WhiteAllPieces & _bitboards.Not_H_file) << 9;
-                pawnCapturesToRight = _bitboards.Bitboard_BlackPawn & (_bitboards.Bitboard_WhiteAllPieces & _bitboards.Not_A_file) << 7;
-                pawnMoveStraight = _bitboards.Bitboard_BlackPawn & (~_bitboards.Bitboard_AllPieces) << 8;
+                pawnCapturesToLeft = pawnBitboard & (_bitboards.Bitboard_WhiteAllPieces & _bitboards.Not_H_file) << 9;
+                pawnCapturesToRight = pawnBitboard & (_bitboards.Bitboard_WhiteAllPieces & _bitboards.Not_A_file) << 7;
+                pawnMoveStraight = pawnBitboard & (~_bitboards.Bitboard_AllPieces) << 8;
             }
 
-            while(color == ChessColor.White && pawnCapturesToLeft != 0)
+            while(color == BitColor.White && pawnCapturesToLeft != 0)
             {
                 var fromSquareMovingPawn = _bitboards.BitScanForward(pawnCapturesToLeft);
                 pawnCapturesToLeft &= _bitboards.NotIndexMask[fromSquareMovingPawn];
                 var toSquare = _bitboards.WhitePawnLeft[fromSquareMovingPawn]; // todo not white but index
-                var capturedPiece = PieceType.Rook; // todo: im buch: px[board[n]], n ist toSquare
-                AddCapture(PieceType.Pawn, (Square)fromSquareMovingPawn, (Square)toSquare, capturedPiece, (Square)toSquare, PieceType.Empty, 0); // empty ?, value ?
+                var capturedPiece = BitPieceType.Rook; // todo: im buch: px[board[n]], n ist toSquare
+                AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, (Square)toSquare, capturedPiece, (Square)toSquare, BitPieceType.Empty, 0); // empty ?, value ?
             }
         }
 
-        private void AddMove(PieceType movingPiece, Square fromSquare, Square toSquare, PieceType promotionPiece, byte value)
+        private void AddMove(BitPieceType movingPiece, Square fromSquare, Square toSquare, BitPieceType promotionPiece, byte value)
         {
-            _moves.Add(new BitMove(movingPiece, fromSquare, toSquare, PieceType.Empty, Square.NoSquare, promotionPiece, value));
+            _moves.Add(new BitMove(movingPiece, fromSquare, toSquare, BitPieceType.Empty, Square.NoSquare, promotionPiece, value));
         }
 
-        private void AddCapture(PieceType movingPiece, Square fromSquare, Square toSquare, PieceType capturedPiece, Square capturedSquare, PieceType promotionPiece, byte value)
+        private void AddCapture(BitPieceType movingPiece, Square fromSquare, Square toSquare, BitPieceType capturedPiece, Square capturedSquare, BitPieceType promotionPiece, byte value)
         {
             _captures.Add(new BitMove(movingPiece, fromSquare, toSquare, capturedPiece, capturedSquare, promotionPiece, value));
             _moves.Add(new BitMove(movingPiece, fromSquare, toSquare, capturedPiece, capturedSquare, promotionPiece, value));
@@ -88,22 +85,22 @@ namespace MantaChessEngine
         }
 
 
-        public IEnumerable<BitMove> GetAllCaptures(IBoard board, ChessColor color)
+        public IEnumerable<BitMove> GetAllCaptures(IBoard board, BitColor color)
         {
             return null;
         }
 
-        public IEnumerable<IMove> GetLegalMoves(IBoard board, ChessColor color)
+        public IEnumerable<IMove> GetLegalMoves(IBoard board, BitColor color)
         {
             throw new NotImplementedException();
         }
 
-        public bool IsAttacked(IBoard board, ChessColor color, int file, int rank)
+        public bool IsAttacked(IBoard board, BitColor color, int file, int rank)
         {
             throw new NotImplementedException();
         }
 
-        public bool IsCheck(IBoard board, ChessColor color)
+        public bool IsCheck(IBoard board, BitColor color)
         {
             throw new NotImplementedException();
         }
@@ -117,15 +114,12 @@ namespace MantaChessEngine
         // Testing interface
         //////////////////////////////////////////////////////
 
-        internal IEnumerable<BitMove> GetPawnMoves(Bitboards board, ChessColor color)
+        internal IEnumerable<BitMove> GetPawnMoves(BitColor color)
         {
             _moves = new List<BitMove>();
             _captures = new List<BitMove>();
 
-            if (color == ChessColor.White)
-            {
-                GeneratePawnMoves(board.Bitboard_WhitePawn, color);
-            }
+            GeneratePawnMoves(_bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.Pawn], color);
 
             return _moves;
         }

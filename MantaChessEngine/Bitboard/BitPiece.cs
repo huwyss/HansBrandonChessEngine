@@ -8,13 +8,13 @@ namespace MantaChessEngine
 {
     public struct BitPiece
     {
-        public BitPiece(ColorType color, PieceType piece)
+        public BitPiece(BitColor color, BitPieceType piece)
         {
             Color = color;
             Piece = piece;
         }
 
-        public ColorType Color { get; }
-        public PieceType Piece { get; }
+        public BitColor Color { get; }
+        public BitPieceType Piece { get; }
     }
 }

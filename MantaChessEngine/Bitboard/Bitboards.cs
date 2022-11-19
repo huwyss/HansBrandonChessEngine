@@ -8,37 +8,25 @@ namespace MantaChessEngine
     {
         private readonly FenParser _fenParser;
         private readonly BitMoveExecutor _moveExecutor;
-        public PieceType[] BoardAllPieces;
-        public ColorType[] BoardColor;
+        public BitPieceType[] BoardAllPieces;
+        public BitColor[] BoardColor;
 
         public Bitboard[,] Bitboard_Pieces { get; set; } // Dimensions: color, piece
-        public Bitboard Bitboard_WhitePawn { get; set; }
-        public Bitboard Bitboard_WhiteRook { get; set; }
-        public Bitboard Bitboard_WhiteKnight { get; set; }
-        public Bitboard Bitboard_WhiteBishop { get; set; }
-        public Bitboard Bitboard_WhiteQueen { get; set; }
-        public Bitboard Bitboard_WhiteKing { get; set; }
         public Bitboard Bitboard_WhiteAllPieces =>
-            Bitboard_WhitePawn |
-            Bitboard_WhiteRook |
-            Bitboard_WhiteKnight |
-            Bitboard_WhiteBishop |
-            Bitboard_WhiteQueen |
-            Bitboard_WhiteKing;
+            Bitboard_Pieces[(int)BitColor.White, (int)BitPieceType.Pawn] |
+            Bitboard_Pieces[(int)BitColor.White, (int)BitPieceType.Knight] |
+            Bitboard_Pieces[(int)BitColor.White, (int)BitPieceType.Bishop] |
+            Bitboard_Pieces[(int)BitColor.White, (int)BitPieceType.Rook] |
+            Bitboard_Pieces[(int)BitColor.White, (int)BitPieceType.Queen] |
+            Bitboard_Pieces[(int)BitColor.White, (int)BitPieceType.King];
 
-        public Bitboard Bitboard_BlackPawn { get; set; }
-        public Bitboard Bitboard_BlackRook { get; set; }
-        public Bitboard Bitboard_BlackKnight { get; set; }
-        public Bitboard Bitboard_BlackBishop { get; set; }
-        public Bitboard Bitboard_BlackQueen { get; set; }
-        public Bitboard Bitboard_BlackKing { get; set; }
         public Bitboard Bitboard_BlackAllPieces =>
-            Bitboard_BlackPawn |
-            Bitboard_BlackRook |
-            Bitboard_BlackKnight |
-            Bitboard_BlackBishop |
-            Bitboard_BlackQueen |
-            Bitboard_BlackKing;
+            Bitboard_Pieces[(int)BitColor.Black, (int)BitPieceType.Pawn] |
+            Bitboard_Pieces[(int)BitColor.Black, (int)BitPieceType.Knight] |
+            Bitboard_Pieces[(int)BitColor.Black, (int)BitPieceType.Bishop] |
+            Bitboard_Pieces[(int)BitColor.Black, (int)BitPieceType.Rook] |
+            Bitboard_Pieces[(int)BitColor.Black, (int)BitPieceType.Queen] |
+            Bitboard_Pieces[(int)BitColor.Black, (int)BitPieceType.King];
 
         public Bitboard Bitboard_AllPieces => Bitboard_WhiteAllPieces | Bitboard_BlackAllPieces;
 
@@ -119,6 +107,11 @@ namespace MantaChessEngine
         {
             _fenParser = new FenParser();
             _moveExecutor = new BitMoveExecutor();
+
+            Bitboard_Pieces = new Bitboard[2, 7]; // todo: what is the 7th son of a seventh son?
+            BoardAllPieces = new BitPieceType[64];
+            BoardColor = new BitColor[64];
+
             InitBitboard();
         }
 
@@ -134,39 +127,24 @@ namespace MantaChessEngine
             SetPawnBitboards();
             SetRanks();
             SetMaskCols();
-            SetBitboardPieces();
-            InitBoardAllPieces();
+            ClearAllPieces();
         }
 
-        private void InitBoardAllPieces()
+        private void ClearAllPieces()
         {
-            BoardAllPieces = new PieceType[64];
-            BoardColor = new ColorType[64];
-
-            for (int i=0; i<64; i++)
+            for (var i = 0; i < 64; i++)
             {
-                BoardAllPieces[i] = PieceType.Empty;
-                BoardColor[i] = ColorType.Empty;
+                BoardAllPieces[i] = BitPieceType.Empty;
+                BoardColor[i] = BitColor.Empty;
             }
-        }
 
-        private void SetBitboardPieces()
-        {
-            Bitboard_Pieces = new Bitboard[2, 7]; // todo: what is the 7th son of a seventh son?
-
-            Bitboard_Pieces[(int)ColorType.White, (int)PieceType.Pawn] = Bitboard_WhitePawn;
-            Bitboard_Pieces[(int)ColorType.White, (int)PieceType.Knight] = Bitboard_WhiteKnight;
-            Bitboard_Pieces[(int)ColorType.White, (int)PieceType.Bishop] = Bitboard_WhiteBishop;
-            Bitboard_Pieces[(int)ColorType.White, (int)PieceType.Rook] = Bitboard_WhiteRook;
-            Bitboard_Pieces[(int)ColorType.White, (int)PieceType.Queen] = Bitboard_WhiteQueen;
-            Bitboard_Pieces[(int)ColorType.White, (int)PieceType.King] = Bitboard_WhiteKing;
-
-            Bitboard_Pieces[(int)ColorType.Black, (int)PieceType.Pawn] = Bitboard_BlackPawn;
-            Bitboard_Pieces[(int)ColorType.Black, (int)PieceType.Knight] = Bitboard_BlackKnight;
-            Bitboard_Pieces[(int)ColorType.Black, (int)PieceType.Bishop] = Bitboard_BlackBishop;
-            Bitboard_Pieces[(int)ColorType.Black, (int)PieceType.Rook] = Bitboard_BlackRook;
-            Bitboard_Pieces[(int)ColorType.Black, (int)PieceType.Queen] = Bitboard_BlackQueen;
-            Bitboard_Pieces[(int)ColorType.Black, (int)PieceType.King] = Bitboard_BlackKing;
+            for (var color = 0; color < 2; color++)
+            {
+                for (var pieceType = 0; pieceType < 7; pieceType++)
+                {
+                    Bitboard_Pieces[color, pieceType] = 0;
+                }
+            }
         }
 
         private void InitBitboard()
@@ -931,44 +909,66 @@ namespace MantaChessEngine
 
         public void SetPosition(string position)
         {
-            Bitboard_WhitePawn = GetBitboard(position, 'P');
-            Bitboard_WhiteKnight = GetBitboard(position, 'N');
-            Bitboard_WhiteBishop = GetBitboard(position, 'B');
-            Bitboard_WhiteRook = GetBitboard(position, 'R');
-            Bitboard_WhiteQueen = GetBitboard(position, 'Q');
-            Bitboard_WhiteKing = GetBitboard(position, 'K');
+            ClearAllPieces();
+            var row = 7;
+            var col = 0;
 
-            Bitboard_BlackPawn = GetBitboard(position, 'p');
-            Bitboard_BlackKnight = GetBitboard(position, 'n');
-            Bitboard_BlackBishop = GetBitboard(position, 'b');
-            Bitboard_BlackRook = GetBitboard(position, 'r');
-            Bitboard_BlackQueen = GetBitboard(position, 'q');
-            Bitboard_BlackKing = GetBitboard(position, 'k');
-        }
-
-        private Bitboard GetBitboard(string position, char piece)
-        {
-            if (position.Length != 64)
+            for (int i = 0; i < 64; i++)
             {
-                throw new Exception("position string must be of length 64!");
-            }
-
-            Bitboard bitboard = 0;
-            int i = 0;
-            for (int row = 7; row >= 0; row--)
-            {
-                for (int col = 0; col <= 7; col++)
+                var square = (Square)(col + 8 * row);
+                
+                switch (position[i])
                 {
-                    if (position[row * 8 + col].Equals(piece))
-                    {
-                        SetBit(ref bitboard, i);
-                    }
+                    case 'P':
+                        SetPiece(BitColor.White, BitPieceType.Pawn, square);
+                        break;
+                    case 'N':
+                        SetPiece(BitColor.White, BitPieceType.Knight, square);
+                        break;
+                    case 'B':
+                        SetPiece(BitColor.White, BitPieceType.Bishop, square);
+                        break;
+                    case 'R':
+                        SetPiece(BitColor.White, BitPieceType.Rook, square);
+                        break;
+                    case 'Q':
+                        SetPiece(BitColor.White, BitPieceType.Queen, square);
+                        break;
+                    case 'K':
+                        SetPiece(BitColor.White, BitPieceType.King, square);
+                        break;
+                    case 'p':
+                        SetPiece(BitColor.Black, BitPieceType.Pawn, square);
+                        break;
+                    case 'n':
+                        SetPiece(BitColor.Black, BitPieceType.Knight, square);
+                        break;
+                    case 'b':
+                        SetPiece(BitColor.Black, BitPieceType.Bishop, square);
+                        break;
+                    case 'r':
+                        SetPiece(BitColor.Black, BitPieceType.Rook, square);
+                        break;
+                    case 'q':
+                        SetPiece(BitColor.Black, BitPieceType.Queen, square);
+                        break;
+                    case 'k':
+                        SetPiece(BitColor.Black, BitPieceType.King, square);
+                        break;
+                    case '.':
+                    case ' ':
+                        break;
+                    default:
+                        throw new MantaEngineException($"Piece character unknown: {position[i]}");
+                }
 
-                    i++;
+                col++;
+                if (col >= 8)
+                {
+                    row--;
+                    col = 0;
                 }
             }
-
-            return bitboard;
         }
 
         public Piece GetPiece(int file, int rank)
@@ -981,12 +981,12 @@ namespace MantaChessEngine
             throw new NotImplementedException();
         }
 
-        public BitPiece GetPiece(byte square)
+        public BitPiece GetPiece(Square square)
         {
-            return new BitPiece(BoardColor[square], BoardAllPieces[square]);
+            return new BitPiece(BoardColor[(int)square], BoardAllPieces[(int)square]);
         }
 
-        public void SetPiece(ColorType color, PieceType piece, Square square)
+        public void SetPiece(BitColor color, BitPieceType piece, Square square)
         {
             BoardAllPieces[(int)square] = piece;
             BoardColor[(int)square] = color;

@@ -24,7 +24,7 @@ namespace MantaChessEngine
             _moves = new List<BitMove>();
             _captures = new List<BitMove>();
 
-            GeneratePawnMoves(_bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.Pawn], color);
+            GeneratePawnMoves(color);
 
             ////GenerateEnpassant();
             ////GenerateCastling();
@@ -34,16 +34,18 @@ namespace MantaChessEngine
             return _captures.Concat(_moves);
         }
 
-        private void GeneratePawnMoves(Bitboard pawnBitboard, BitColor color)
+        private void GeneratePawnMoves(BitColor color)
         {
             Bitboard pawnCapturesToLeft;
             Bitboard pawnCapturesToRight;
             Bitboard pawnMoveStraight;
 
+            Bitboard pawnBitboard = _bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.Pawn];
+
             if (color == BitColor.White)
             {
-                pawnCapturesToLeft = pawnBitboard & (_bitboards.Bitboard_BlackAllPieces & _bitboards.Not_H_file) >> 7;
-                pawnCapturesToRight = pawnBitboard & (_bitboards.Bitboard_BlackAllPieces & _bitboards.Not_A_file) >> 9;
+                pawnCapturesToLeft = pawnBitboard & ((_bitboards.Bitboard_BlackAllPieces & _bitboards.Not_H_file) >> 7);
+                pawnCapturesToRight = pawnBitboard & ((_bitboards.Bitboard_BlackAllPieces & _bitboards.Not_A_file) >> 9);
                 pawnMoveStraight = pawnBitboard & (~_bitboards.Bitboard_AllPieces) >> 8;
             }
             else
@@ -58,6 +60,15 @@ namespace MantaChessEngine
                 var fromSquareMovingPawn = _bitboards.BitScanForward(pawnCapturesToLeft);
                 pawnCapturesToLeft &= _bitboards.NotIndexMask[fromSquareMovingPawn];
                 var toSquare = _bitboards.PawnLeft[(int)color, fromSquareMovingPawn];
+                var capturedPiece = _bitboards.BoardAllPieces[toSquare];
+                AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, (Square)toSquare, capturedPiece, (Square)toSquare, BitPieceType.Empty, 0); // empty ?, value ?
+            }
+
+            while (pawnCapturesToRight != 0)
+            {
+                var fromSquareMovingPawn = _bitboards.BitScanForward(pawnCapturesToRight);
+                pawnCapturesToRight &= _bitboards.NotIndexMask[fromSquareMovingPawn];
+                var toSquare = _bitboards.PawnRight[(int)color, fromSquareMovingPawn];
                 var capturedPiece = _bitboards.BoardAllPieces[toSquare];
                 AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, (Square)toSquare, capturedPiece, (Square)toSquare, BitPieceType.Empty, 0); // empty ?, value ?
             }
@@ -119,7 +130,7 @@ namespace MantaChessEngine
             _moves = new List<BitMove>();
             _captures = new List<BitMove>();
 
-            GeneratePawnMoves(_bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.Pawn], color);
+            GeneratePawnMoves(color);
 
             return _moves;
         }

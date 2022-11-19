@@ -146,20 +146,15 @@ namespace MantaChessEngineTest
         {
             Bitboards board = new Bitboards();
             board.Initialize();
-
-            string position = "........" +
+            board.SetPosition("........" +
                               "........" +
                               "........" +
                               "........" +
                               "........" +
                               ".r.b...." +
                               "..P....." +
-                              "........";
-            board.SetPosition(position);
+                              "........");
             var bitMoveGenerator = new BitMoveGenerator(board);
-
-            ////var pawn = new Pawn(ChessColor.White);
-            ////var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('c'), 2, true); // pawn
 
             var moves = bitMoveGenerator.GetPawnMoves(BitColor.White).ToList();
 
@@ -173,6 +168,72 @@ namespace MantaChessEngineTest
             Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.C2, Square.C4, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "c2c4. missing");
             Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.C2, Square.B3, BitPieceType.Rook, Square.B3, BitPieceType.Empty, 0)), "c2b3r missing");
             Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.C2, Square.D3, BitPieceType.Bishop, Square.D3, BitPieceType.Empty, 0)), "c2d3b missing");
+        }
+
+        [TestMethod]
+        public void GetMoves_WhenWhitePawnCaptureLeft_ThenAllMoves()
+        {
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "nb....rR" +
+                              "P.....PP" +
+                              "........");
+            var bitMoveGenerator = new BitMoveGenerator(board);
+
+            var moves = bitMoveGenerator.GetPawnMoves(BitColor.White).ToList();
+
+            Assert.AreEqual(2, moves.Count);
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.A2, Square.B3, BitPieceType.Bishop, Square.B3, BitPieceType.Empty, 0)), "A2xB3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.H2, Square.G3, BitPieceType.Rook, Square.G3, BitPieceType.Empty, 0)), "H2xG3 missing");
+        }
+
+        [TestMethod]
+        public void GetMoves_WhenWhitePawnCaptureRight_ThenAllMoves()
+        {
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "nb....Rr" +
+                              "P.....PP" +
+                              "........");
+            var bitMoveGenerator = new BitMoveGenerator(board);
+
+            var moves = bitMoveGenerator.GetPawnMoves(BitColor.White).ToList();
+
+            Assert.AreEqual(2, moves.Count);
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.A2, Square.B3, BitPieceType.Bishop, Square.B3, BitPieceType.Empty, 0)), "A2xB3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.G2, Square.H3, BitPieceType.Rook, Square.H3, BitPieceType.Empty, 0)), "G2xH3 missing");
+        }
+
+        [TestMethod]
+        public void GetMoves_WhenWhitePawnCaptureLeftAndRight_ThenAllMoves()
+        {
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "nb.....r" +
+                              "PP.....P" +
+                              "........");
+            var bitMoveGenerator = new BitMoveGenerator(board);
+
+            var moves = bitMoveGenerator.GetPawnMoves(BitColor.White).ToList();
+
+            Assert.AreEqual(2, moves.Count);
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.A2, Square.B3, BitPieceType.Bishop, Square.B3, BitPieceType.Empty, 0)), "a2xb3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.B2, Square.A3, BitPieceType.Knight, Square.A3, BitPieceType.Empty, 0)), "b2xa3 missing");
         }
 
         [TestMethod, Ignore]

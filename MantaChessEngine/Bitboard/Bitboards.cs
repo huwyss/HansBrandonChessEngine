@@ -36,21 +36,13 @@ namespace MantaChessEngine
         public Bitboard QueenSideMask { get; set; }
         public Bitboard KingSideMask { get; set; }
 
-        public Bitboard[] WhitePawnCaptures { get; set; }
-        public Bitboard[] WhitePawnDefends { get; set; }
-        public Bitboard[] WhiteMovesPawn { get; set; }
-        public Bitboard[] WhitePawnStep { get; set; }
-        public Bitboard[] WhitePawnDoubleStep { get; set; }
-        public int[] WhitePawnLeft { get; set; } // todo: muss das mit illegal initialisiert werden?
-        public int[] WhitePawnRight { get; set; } // todo: muss das mit illegal initialisiert werden?
-
-        public Bitboard[] BlackPawnCaptures { get; set; }
-        public Bitboard[] BlackPawnDefends { get; set; }
-        public Bitboard[] BlackMovesPawn { get; set; }
-        public Bitboard[] BlackPawnStep { get; set; }
-        public Bitboard[] BlackPawnDoubleStep { get; set; }
-        public int[] BlackPawnLeft { get; set; } // todo: muss das mit illegal initialisiert werden?
-        public int[] BlackPawnRight { get; set; } // todo: muss das mit illegal initialisiert werden?
+        public int[,] PawnLeft { get; set; }
+        public int[,] PawnRight { get; set; }
+        public Bitboard[,] PawnCaptures { get; set; }
+        public Bitboard[,] PawnDefends { get; set; }
+        public Bitboard[,] PawnMoves { get; set; }
+        public Bitboard[,] PawnStep { get; set; }
+        public Bitboard[,] PawnDoubleStep { get; set; }
 
         public Bitboard[] MovesKnight { get; set; }
         public Bitboard[] MovesBishop { get; set; }
@@ -618,15 +610,10 @@ namespace MantaChessEngine
 
         private void SetPawnCaptures()
         {
-            WhitePawnCaptures = new Bitboard[64];
-            WhitePawnLeft = new int[64];
-            WhitePawnRight = new int[64];
-            WhitePawnDefends = new Bitboard[64];
-
-            BlackPawnCaptures = new Bitboard[64];
-            BlackPawnLeft = new int[64];
-            BlackPawnRight = new int[64];
-            BlackPawnDefends = new Bitboard[64];
+            PawnCaptures = new Bitboard[2, 64];
+            PawnLeft = new int[2, 64];
+            PawnRight = new int[2, 64];
+            PawnDefends = new Bitboard[2, 64];
 
             for (int i = 0; i < 64; i++)
             {
@@ -636,16 +623,16 @@ namespace MantaChessEngine
                     {
                         // white captures left
                         var stepLeftWhite = i + 7;
-                        SetBit(ref WhitePawnCaptures[i], stepLeftWhite);
-                        WhitePawnLeft[i] = stepLeftWhite;
+                        SetBit(ref PawnCaptures[(int)BitColor.White, i], stepLeftWhite);
+                        PawnLeft[(int)BitColor.White, i] = stepLeftWhite;
                     }
 
                     if (Row[i] > 0)
                     {
                         // black captures left
                         var stepLeftBlack = i - 9;
-                        SetBit(ref BlackPawnCaptures[i], stepLeftBlack);
-                        BlackPawnLeft[i] = stepLeftBlack;
+                        SetBit(ref PawnCaptures[(int)BitColor.Black, i], stepLeftBlack);
+                        PawnLeft[(int)BitColor.Black, i] = stepLeftBlack;
                     }
                 }
 
@@ -655,62 +642,58 @@ namespace MantaChessEngine
                     {
                         // white captures right
                         var stepRightWhite = i + 9;
-                        SetBit(ref WhitePawnCaptures[i], stepRightWhite);
-                        WhitePawnRight[i] = stepRightWhite;
+                        SetBit(ref PawnCaptures[(int)BitColor.White, i], stepRightWhite);
+                        PawnRight[(int)BitColor.White, i] = stepRightWhite;
                     }
 
                     if (Row[i] > 0)
                     {
                         // black captures right
                         var stepRightBlack = i - 7;
-                        SetBit(ref BlackPawnCaptures[i], stepRightBlack);
-                        BlackPawnRight[i] = stepRightBlack;
+                        SetBit(ref PawnCaptures[(int)BitColor.Black, i], stepRightBlack);
+                        PawnRight[(int)BitColor.Black, i] = stepRightBlack;
                     }
                 }
 
-                WhitePawnDefends[i] = BlackPawnCaptures[i];
-                BlackPawnDefends[i] = WhitePawnCaptures[i];
+                PawnDefends[(int)BitColor.White, i] = PawnCaptures[(int)BitColor.Black, i];
+                PawnDefends[(int)BitColor.Black, i] = PawnCaptures[(int)BitColor.White, i];
             }
         }
 
         private void SetPawnStraightMoves()
         {
-            WhiteMovesPawn = new Bitboard[64];
-            WhitePawnStep = new Bitboard[64];
-            WhitePawnDoubleStep = new Bitboard[64];
-
-            BlackMovesPawn = new Bitboard[64];
-            BlackPawnStep = new Bitboard[64];
-            BlackPawnDoubleStep = new Bitboard[64];
+            PawnMoves = new Bitboard[2, 64];
+            PawnStep = new Bitboard[2, 64];
+            PawnDoubleStep = new Bitboard[2, 64];
 
             for (int i = 0; i < 64; i++)
             {
                 if (Row[i] < 7 )
                 {
                     // step white
-                    SetBit(ref WhiteMovesPawn[i], i + 8);
-                    SetBit(ref WhitePawnStep[i], i + 8);
+                    SetBit(ref PawnMoves[(int)BitColor.White, i], i + 8);
+                    SetBit(ref PawnStep[(int)BitColor.White, i], i + 8);
                 }
 
                 if (Row[i] == 1)
                 {
                     // double step white
-                    SetBit(ref WhiteMovesPawn[i], i + 16);
-                    SetBit(ref WhitePawnDoubleStep[i], i + 16);
+                    SetBit(ref PawnMoves[(int)BitColor.White, i], i + 16);
+                    SetBit(ref PawnDoubleStep[(int)BitColor.White, i], i + 16);
                 }
 
                 if (Row[i] > 0)
                 {
                     // step black
-                    SetBit(ref BlackMovesPawn[i], i - 8);
-                    SetBit(ref BlackPawnStep[i], i - 8);
+                    SetBit(ref PawnMoves[(int)BitColor.Black, i], i - 8);
+                    SetBit(ref PawnStep[(int)BitColor.Black, i], i - 8);
                 }
 
                 if (Row[i] == 6)
                 {
                     // step black
-                    SetBit(ref BlackMovesPawn[i], i - 16);
-                    SetBit(ref BlackPawnDoubleStep[i], i - 16);
+                    SetBit(ref PawnMoves[(int)BitColor.Black, i], i - 16);
+                    SetBit(ref PawnDoubleStep[(int)BitColor.Black, i], i - 16);
                 }
             }
         }

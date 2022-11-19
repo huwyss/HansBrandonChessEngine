@@ -53,12 +53,12 @@ namespace MantaChessEngine
                 pawnMoveStraight = pawnBitboard & (~_bitboards.Bitboard_AllPieces) << 8;
             }
 
-            while(color == BitColor.White && pawnCapturesToLeft != 0)
+            while(pawnCapturesToLeft != 0)
             {
                 var fromSquareMovingPawn = _bitboards.BitScanForward(pawnCapturesToLeft);
                 pawnCapturesToLeft &= _bitboards.NotIndexMask[fromSquareMovingPawn];
-                var toSquare = _bitboards.WhitePawnLeft[fromSquareMovingPawn]; // todo not white but index
-                var capturedPiece = BitPieceType.Rook; // todo: im buch: px[board[n]], n ist toSquare
+                var toSquare = _bitboards.PawnLeft[(int)color, fromSquareMovingPawn];
+                var capturedPiece = _bitboards.BoardAllPieces[toSquare];
                 AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, (Square)toSquare, capturedPiece, (Square)toSquare, BitPieceType.Empty, 0); // empty ?, value ?
             }
         }

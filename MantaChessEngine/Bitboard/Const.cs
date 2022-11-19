@@ -1,6 +1,6 @@
 ﻿namespace MantaChessEngine
 {
-    public enum Square
+    public enum Square : byte
     {
         A1 = 0,
         B1 = 1,

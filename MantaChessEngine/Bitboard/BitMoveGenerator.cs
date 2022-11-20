@@ -79,6 +79,12 @@ namespace MantaChessEngine
                 pawnMoveStraight &= _bitboards.NotIndexMask[fromSquareMovingPawn];
                 var toSquare = _bitboards.PawnStep[(int)color, fromSquareMovingPawn];
                 AddMove(BitPieceType.Pawn, (Square)fromSquareMovingPawn, (Square)toSquare, BitPieceType.Empty, 0); // value ?
+
+                if (_bitboards.Rank[(int)color, fromSquareMovingPawn] == 1 &&
+                    _bitboards.BoardAllPieces[_bitboards.PawnDoubleStep[(int)color, fromSquareMovingPawn]] == BitPieceType.Empty)
+                {
+                    AddMove(BitPieceType.Pawn, (Square)fromSquareMovingPawn, (Square)_bitboards.PawnDoubleStep[(int)color, fromSquareMovingPawn], BitPieceType.Empty, 0);
+                }
             }
         }
 

@@ -160,10 +160,10 @@ namespace MantaChessEngineTest
 
             Assert.AreEqual(4, moves.Count);
             
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.C2, Square.C3, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "c2c3 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.C2, Square.C4, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "c2c4. missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.C2, Square.B3, BitPieceType.Rook, Square.B3, BitPieceType.Empty, 0)), "c2b3r missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.C2, Square.D3, BitPieceType.Bishop, Square.D3, BitPieceType.Empty, 0)), "c2d3b missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.C2, Square.C3, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "c2-c3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.C2, Square.C4, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "c2-c4 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.C2, Square.B3, BitPieceType.Rook, Square.B3, BitPieceType.Empty, 0)), "c2xb3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.C2, Square.D3, BitPieceType.Bishop, Square.D3, BitPieceType.Empty, 0)), "c2xd3 missing");
         }
 
         [TestMethod]
@@ -232,65 +232,65 @@ namespace MantaChessEngineTest
             Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.B2, Square.A3, BitPieceType.Knight, Square.A3, BitPieceType.Empty, 0)), "b2xa3 missing");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMoves_WhenWhitePawnBlocked_ThenAllMoves() // en passant not included
         {
-            Board board = new Board();
-            string position = "........" +
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("........" +
                               "........" +
                               "........" +
                               "........" +
                               "..n....." +
                               ".r.b...." +
                               "..P....." +
-                              "........";
-            board.SetPosition(position);
+                              "........");
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var pawn = new Pawn(ChessColor.White);
-            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('c'), 2, true); // pawn
+            var moves = bitMoveGenerator.GetPawnMoves(BitColor.White).ToList();
 
             Assert.AreEqual(3, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'c', 2, 'c', 3, null)), "c2c3. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'c', 2, 'b', 3, Piece.MakePiece('r'))), "c2b3r missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'c', 2, 'd', 3, Piece.MakePiece('b'))), "c2d3b missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.C2, Square.C3, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "c2-c3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.C2, Square.B3, BitPieceType.Rook, Square.B3, BitPieceType.Empty, 0)), "C2xB3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.C2, Square.D3, BitPieceType.Bishop, Square.D3, BitPieceType.Empty, 0)), "C2xD3 missing");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMoves_WhenWhitePawnBlockedInMiddleOfBoard_ThenAllMoves()
         {
-            Board board = new Board();
-            string position = "........" +
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("........" +
                               "........" + 
                               "..p....." + // black pawn
                               "..P....." + // white pawn must not do c5-c7 !
                               "........" +
                               "........" +
                               "........" +
-                              "........";
-            board.SetPosition(position);
+                              "........");
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var pawn = new Pawn(ChessColor.White);
-            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('c'), 5, true); // white pawn
+            var moves = bitMoveGenerator.GetPawnMoves(BitColor.White).ToList();
 
             Assert.AreEqual(0, moves.Count);
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMoves_WhenWhitePawnAtA5_ThenAllMoves()
         {
-            Board board = new Board();
-            string position = "........" +
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("........" +
                               "........" + 
                               "........" + 
                               "........" +
                               "........" +
                               "..p....." + // black pawn
                               "..P....." + // white pawn must not do c2-c4 !
-                              "........";
-            board.SetPosition(position);
+                              "........");
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var pawn = new Pawn(ChessColor.White);
-            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('c'), 2, true); // white pawn
+            var moves = bitMoveGenerator.GetPawnMoves(BitColor.White).ToList();
 
             Assert.AreEqual(0, moves.Count);
         }
@@ -320,49 +320,49 @@ namespace MantaChessEngineTest
             Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'b', 5, 'b', 6, null)), "b5b6. missing");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMoves_WhenBlackPawn_ThenAllMoves()
         {
-            Board board = new Board();
-            string position = "........" +
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("........" +
                               "..p....." +
                               ".R.B...." +
                               "........" +
                               "........" +
                               "........" +
                               "........" +
-                              "........";
-            board.SetPosition(position);
+                              "........");
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var pawn = new Pawn(ChessColor.Black);
-            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('c'), 7, true); // black pawn
+            var moves = bitMoveGenerator.GetPawnMoves(BitColor.Black).ToList();
 
             Assert.AreEqual(4, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('p'), 'c', 7, 'c', 6, null)), "c7c6. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('p'), 'c', 7, 'c', 5, null)), "c7c5. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('p'), 'c', 7, 'b', 6, Piece.MakePiece('R'))), "c7b6R missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('p'), 'c', 7, 'd', 6, Piece.MakePiece('B'))), "c7d6B missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.C7, Square.C6, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "C7-C6 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.C7, Square.C5, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "C7-C5 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.C7, Square.B6, BitPieceType.Rook, Square.B6, BitPieceType.Empty, 0)), "C7xB6 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.C7, Square.D6, BitPieceType.Bishop, Square.D6, BitPieceType.Empty, 0)), "C7xD6 missing");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMoves_WhenBlackPawnAta4_ThenAllMoves()
         {
-            Board board = new Board();
-            string position = "........" +
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("........" +
                               "........" +
                               "........" +
                               ".p......" + // black pawn must not do b5-b3 !
                               "........" + 
                               "........" +
                               "........" +
-                              "........";
-            board.SetPosition(position);
+                              "........");
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var pawn = new Pawn(ChessColor.Black);
-            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('b'), 5, true); // black pawn
+            var moves = bitMoveGenerator.GetPawnMoves(BitColor.Black).ToList();
 
             Assert.AreEqual(1, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('p'), 'b', 5, 'b', 4 ,null)), "b3b4 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.B5, Square.B4, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "B5-B4 missing");
         }
 
         [TestMethod, Ignore]

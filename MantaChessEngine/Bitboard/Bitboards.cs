@@ -36,14 +36,14 @@ namespace MantaChessEngine
         public Bitboard QueenSideMask { get; set; }
         public Bitboard KingSideMask { get; set; }
 
-        public int[,] PawnLeft { get; set; }
+        public int[,] PawnLeft { get; set; } // dimensions: color, 
         public int[,] PawnRight { get; set; }
+        public int[,] PawnStep { get; set; }
+        public int[,] PawnDoubleStep { get; set; }
         public Bitboard[,] PawnCaptures { get; set; }
         public Bitboard[,] PawnDefends { get; set; }
         public Bitboard[,] PawnMoves { get; set; }
-        public Bitboard[,] PawnStep { get; set; }
-        public Bitboard[,] PawnDoubleStep { get; set; }
-
+        
         public Bitboard[] MovesKnight { get; set; }
         public Bitboard[] MovesBishop { get; set; }
         public Bitboard[] MovesRook { get; set; }
@@ -663,8 +663,8 @@ namespace MantaChessEngine
         private void SetPawnStraightMoves()
         {
             PawnMoves = new Bitboard[2, 64];
-            PawnStep = new Bitboard[2, 64];
-            PawnDoubleStep = new Bitboard[2, 64];
+            PawnStep = new int[2, 64];
+            PawnDoubleStep = new int[2, 64];
 
             for (int i = 0; i < 64; i++)
             {
@@ -672,28 +672,28 @@ namespace MantaChessEngine
                 {
                     // step white
                     SetBit(ref PawnMoves[(int)BitColor.White, i], i + 8);
-                    SetBit(ref PawnStep[(int)BitColor.White, i], i + 8);
+                    PawnStep[(int)BitColor.White, i] = i + 8;
                 }
 
                 if (Row[i] == 1)
                 {
                     // double step white
                     SetBit(ref PawnMoves[(int)BitColor.White, i], i + 16);
-                    SetBit(ref PawnDoubleStep[(int)BitColor.White, i], i + 16);
+                    PawnDoubleStep[(int)BitColor.White, i] = i + 16;
                 }
 
                 if (Row[i] > 0)
                 {
                     // step black
                     SetBit(ref PawnMoves[(int)BitColor.Black, i], i - 8);
-                    SetBit(ref PawnStep[(int)BitColor.Black, i], i - 8);
+                    PawnStep[(int)BitColor.Black, i] = i - 8;
                 }
 
                 if (Row[i] == 6)
                 {
                     // step black
                     SetBit(ref PawnMoves[(int)BitColor.Black, i], i - 16);
-                    SetBit(ref PawnDoubleStep[(int)BitColor.Black, i], i - 16);
+                    PawnDoubleStep[(int)BitColor.Black, i] = i - 16;
                 }
             }
         }

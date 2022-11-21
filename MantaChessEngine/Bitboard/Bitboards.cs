@@ -12,23 +12,8 @@ namespace MantaChessEngine
         public BitColor[] BoardColor;
 
         public Bitboard[,] Bitboard_Pieces { get; set; } // Dimensions: color, piece
-        public Bitboard Bitboard_WhiteAllPieces =>
-            Bitboard_Pieces[(int)BitColor.White, (int)BitPieceType.Pawn] |
-            Bitboard_Pieces[(int)BitColor.White, (int)BitPieceType.Knight] |
-            Bitboard_Pieces[(int)BitColor.White, (int)BitPieceType.Bishop] |
-            Bitboard_Pieces[(int)BitColor.White, (int)BitPieceType.Rook] |
-            Bitboard_Pieces[(int)BitColor.White, (int)BitPieceType.Queen] |
-            Bitboard_Pieces[(int)BitColor.White, (int)BitPieceType.King];
-
-        public Bitboard Bitboard_BlackAllPieces =>
-            Bitboard_Pieces[(int)BitColor.Black, (int)BitPieceType.Pawn] |
-            Bitboard_Pieces[(int)BitColor.Black, (int)BitPieceType.Knight] |
-            Bitboard_Pieces[(int)BitColor.Black, (int)BitPieceType.Bishop] |
-            Bitboard_Pieces[(int)BitColor.Black, (int)BitPieceType.Rook] |
-            Bitboard_Pieces[(int)BitColor.Black, (int)BitPieceType.Queen] |
-            Bitboard_Pieces[(int)BitColor.Black, (int)BitPieceType.King];
-
-        public Bitboard Bitboard_AllPieces => Bitboard_WhiteAllPieces | Bitboard_BlackAllPieces;
+        public Bitboard[] Bitboard_ColoredPieces { get; set; }
+        public Bitboard Bitboard_AllPieces;
 
         public Bitboard[,] BetweenMatrix { get; set; }
         public Bitboard[,] RayAfterMatrix { get; set; }
@@ -103,6 +88,7 @@ namespace MantaChessEngine
             Bitboard_Pieces = new Bitboard[2, 7]; // todo: what is the 7th son of a seventh son?
             BoardAllPieces = new BitPieceType[64];
             BoardColor = new BitColor[64];
+            Bitboard_ColoredPieces = new Bitboard[2];
 
             InitBitboard();
         }
@@ -120,7 +106,7 @@ namespace MantaChessEngine
             SetRanks();
             SetMaskCols();
             ClearAllPieces();
-        }
+    }
 
         private void ClearAllPieces()
         {
@@ -973,7 +959,9 @@ namespace MantaChessEngine
         {
             BoardAllPieces[(int)square] = piece;
             BoardColor[(int)square] = color;
-            SetBit(ref Bitboard_Pieces[(int)color, (int)piece], (int)square); 
+            SetBit(ref Bitboard_Pieces[(int)color, (int)piece], (int)square);
+            SetBit(ref Bitboard_AllPieces, (int)square); // todo test this
+            SetBit(ref Bitboard_ColoredPieces[(int) color], (int)square); // todo test this
         }
        
         public void Move(IMove nextMove)

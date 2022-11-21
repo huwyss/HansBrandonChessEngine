@@ -25,10 +25,11 @@ namespace MantaChessEngine
             _captures = new List<BitMove>();
 
             GeneratePawnMoves(color);
+            GenerateKnightMoves(color);
 
             ////GenerateEnpassant();
             ////GenerateCastling();
-            ////GenerateKnightMoves();
+
             ////GenerateSlidingMoves();
             ////GenerateKingMoves();
             return _captures.Concat(_moves);
@@ -44,14 +45,14 @@ namespace MantaChessEngine
 
             if (color == BitColor.White)
             {
-                pawnCapturingToLeft = pawnBitboard & ((_bitboards.Bitboard_BlackAllPieces & _bitboards.Not_H_file) >> 7);
-                pawnCapturingToRight = pawnBitboard & ((_bitboards.Bitboard_BlackAllPieces & _bitboards.Not_A_file) >> 9);
+                pawnCapturingToLeft = pawnBitboard & ((_bitboards.Bitboard_ColoredPieces[(int)BitColor.Black] & _bitboards.Not_H_file) >> 7);
+                pawnCapturingToRight = pawnBitboard & ((_bitboards.Bitboard_ColoredPieces[(int)BitColor.Black] & _bitboards.Not_A_file) >> 9);
                 pawnMoveStraight = pawnBitboard & ~(_bitboards.Bitboard_AllPieces >> 8);
             }
             else
             {
-                pawnCapturingToLeft = pawnBitboard & (_bitboards.Bitboard_WhiteAllPieces & _bitboards.Not_H_file) << 9;
-                pawnCapturingToRight = pawnBitboard & (_bitboards.Bitboard_WhiteAllPieces & _bitboards.Not_A_file) << 7;
+                pawnCapturingToLeft = pawnBitboard & (_bitboards.Bitboard_ColoredPieces[(int)BitColor.White] & _bitboards.Not_H_file) << 9;
+                pawnCapturingToRight = pawnBitboard & (_bitboards.Bitboard_ColoredPieces[(int)BitColor.White] & _bitboards.Not_A_file) << 7;
                 pawnMoveStraight = pawnBitboard & ~(_bitboards.Bitboard_AllPieces << 8);
             }
 
@@ -86,6 +87,23 @@ namespace MantaChessEngine
                     AddMove(BitPieceType.Pawn, (Square)fromSquareMovingPawn, (Square)_bitboards.PawnDoubleStep[(int)color, fromSquareMovingPawn], BitPieceType.Empty, 0);
                 }
             }
+        }
+
+        private void GenerateKnightMoves(BitColor color)
+        {
+            Bitboard knightBitboard = _bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.Knight];
+
+            while (knightBitboard != 0)
+            {
+                var fromSquareMovingKnight = _bitboards.BitScanForward(knightBitboard);
+                knightBitboard &= _bitboards.NotIndexMask[fromSquareMovingKnight];
+
+                var knightCaptures = _bitboards.MovesKnight[fromSquareMovingKnight] & _bitboards.Bitboard_ColoredPieces[(int)BitColor.Black];
+            }
+
+            // todo test this.
+
+            
         }
 
         private void AddMove(BitPieceType movingPiece, Square fromSquare, Square toSquare, BitPieceType promotionPiece, byte value)

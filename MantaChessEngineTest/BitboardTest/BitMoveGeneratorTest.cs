@@ -14,18 +14,22 @@ namespace MantaChessEngineTest
         // Get Moves Tests
         // ----------------------------------------------------------------------------------------------------
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMoves_WhenKnightB1_ThenTwoValidMoves()
         {
-            Board initBoard = new Board();
-            initBoard.SetInitialPosition();
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetInitialPosition();
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var knight = new Knight(ChessColor.White);
-            var moves = knight.GetMoves(null, initBoard, Helper.FileCharToFile('b'), 1, true); // get moves of knight
+            var moves = bitMoveGenerator.GetKnightMoves(BitColor.White).ToList();
 
-            Assert.AreEqual(2, moves.Count);
-            Assert.AreEqual("b1a3.", moves[0].ToString());
-            Assert.AreEqual("b1c3.", moves[1].ToString());
+            Assert.AreEqual(4, moves.Count);
+
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.B1, Square.A3, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "Nb1-a3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.B1, Square.C3, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "Nb1-c3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.G1, Square.F3, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "Ng1-f3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.G1, Square.H3, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "Ng1-h3 missing");
         }
 
         [TestMethod, Ignore]

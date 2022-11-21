@@ -449,6 +449,8 @@ namespace MantaChessEngineTest
             var boardE5 = Bitboards.PrintBitboard(target.MovesKnight[(int)Square.E5]);
             var boardD1 = Bitboards.PrintBitboard(target.MovesKnight[(int)Square.D1]);
             var boardD2 = Bitboards.PrintBitboard(target.MovesKnight[(int)Square.D2]);
+            var boardB1 = Bitboards.PrintBitboard(target.MovesKnight[(int)Square.B1]);
+            var boardG1 = Bitboards.PrintBitboard(target.MovesKnight[(int)Square.G1]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)     (D1)
@@ -488,6 +490,32 @@ namespace MantaChessEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0
                 //                  (H8)
             }), target.MovesKnight[(int)Square.E5]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)         
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0,
+                1, 0, 1, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0
+                //                  (H8)
+            }), target.MovesKnight[(int)Square.B1]);
+
+            Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
+            {//(A1)         
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 1, 0, 0, 0,
+                0, 0, 0, 0, 0, 1, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0
+                //                  (H8)
+            }), target.MovesKnight[(int)Square.G1]);
         }
 
         [TestMethod]

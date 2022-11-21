@@ -99,6 +99,24 @@ namespace MantaChessEngine
                 knightBitboard &= _bitboards.NotIndexMask[fromSquareMovingKnight];
 
                 var knightCaptures = _bitboards.MovesKnight[fromSquareMovingKnight] & _bitboards.Bitboard_ColoredPieces[(int)BitColor.Black];
+                ////while(knightCaptures != 0)
+                ////{
+
+                ////}
+
+                var knights = Bitboards.PrintBitboard(_bitboards.MovesKnight[fromSquareMovingKnight]);
+                var notAll = Bitboards.PrintBitboard(~_bitboards.Bitboard_AllPieces);
+
+                var knightMoves = _bitboards.MovesKnight[fromSquareMovingKnight] & ~_bitboards.Bitboard_AllPieces;
+                while(knightMoves != 0)
+                {
+                    var toSquare = _bitboards.BitScanForward(knightMoves);
+
+                    var notIndex = Bitboards.PrintBitboard(_bitboards.NotIndexMask[toSquare]);
+
+                    knightMoves &= _bitboards.NotIndexMask[toSquare];
+                    AddMove(BitPieceType.Knight, (Square)fromSquareMovingKnight, (Square)toSquare, BitPieceType.Empty, 0);
+                }
             }
 
             // todo test this.
@@ -163,6 +181,16 @@ namespace MantaChessEngine
             _captures = new List<BitMove>();
 
             GeneratePawnMoves(color);
+
+            return _moves;
+        }
+
+        internal IEnumerable<BitMove> GetKnightMoves(BitColor color)
+        {
+            _moves = new List<BitMove>();
+            _captures = new List<BitMove>();
+
+            GenerateKnightMoves(color);
 
             return _moves;
         }

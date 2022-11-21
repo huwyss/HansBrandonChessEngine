@@ -399,42 +399,42 @@ namespace MantaChessEngine
 
             for (int i = 0; i < 64; i++)
             {
-                if (Col[i] < 7 && Row[i] < 7)
+                if (Col[i] < 6 && Row[i] < 7)
                 {
                     SetBit(ref MovesKnight[i], i + 10);
                 }
 
-                if (Col[i] < 6 && Row[i] < 6)
+                if (Col[i] < 7 && Row[i] < 6)
                 {
                     SetBit(ref MovesKnight[i], i + 17);
                 }
 
-                if (Col[i] > 1 && Row[i] < 6)
+                if (Col[i] > 0 && Row[i] < 6)
                 {
                     SetBit(ref MovesKnight[i], i + 15);
                 }
 
-                if (Col[i] > 0 && Row[i] < 7)
+                if (Col[i] > 1 && Row[i] < 7)
                 {
                     SetBit(ref MovesKnight[i], i + 6);
                 }
 
-                if (Col[i] > 1 && Row[i] > 1)
+                if (Col[i] > 0 && Row[i] > 1)
                 {
                     SetBit(ref MovesKnight[i], i - 17);
                 }
 
-                if (Col[i] > 0 && Row[i] > 0)
+                if (Col[i] > 1 && Row[i] > 0)
                 {
                     SetBit(ref MovesKnight[i], i - 10);
                 }
 
-                if (Col[i] < 6 && Row[i] > 1)
+                if (Col[i] < 7 && Row[i] > 1)
                 {
                     SetBit(ref MovesKnight[i], i - 15);
                 }
 
-                if (Col[i] < 7 && Row[i] > 0)
+                if (Col[i] < 6 && Row[i] > 0)
                 {
                     SetBit(ref MovesKnight[i], i - 6);
                 }

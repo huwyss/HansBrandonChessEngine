@@ -15,7 +15,7 @@ namespace MantaChessEngineTest
         // ----------------------------------------------------------------------------------------------------
 
         [TestMethod]
-        public void GetMoves_WhenKnightB1_ThenTwoValidMoves()
+        public void GetMoves_WhenWhiteKnight_ThenValidMoves()
         {
             Bitboards board = new Bitboards();
             board.Initialize();
@@ -30,6 +30,55 @@ namespace MantaChessEngineTest
             Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.B1, Square.C3, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "Nb1-c3 missing");
             Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.G1, Square.F3, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "Ng1-f3 missing");
             Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.G1, Square.H3, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "Ng1-h3 missing");
+        }
+
+        [TestMethod]
+        public void GetMoves_WhenWhiteKnight_ThenValidCaptures()
+        {
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("rnbqkbnr" +
+                              "N......." +
+                              "......N." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........");
+            var bitMoveGenerator = new BitMoveGenerator(board);
+
+            var moves = bitMoveGenerator.GetKnightMoves(BitColor.White).ToList();
+
+            Assert.AreEqual(9, moves.Count);
+
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.A7, Square.C8, BitPieceType.Bishop, Square.C8, BitPieceType.Empty, 0)), "Nb1-a3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.A7, Square.C6, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "Nb1-c3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.A7, Square.B5, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "Ng1-f3 missing");
+
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.G6, Square.H8, BitPieceType.Rook, Square.H8, BitPieceType.Empty, 0)), "Ng1-h3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.G6, Square.F8, BitPieceType.Bishop, Square.F8, BitPieceType.Empty, 0)), "Ng1-h3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.G6, Square.E7, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "Ng1-h3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.G6, Square.E5, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "Ng1-h3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.G6, Square.F4, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "Ng1-h3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.G6, Square.H4, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "Ng1-h3 missing");
+        }
+
+        [TestMethod]
+        public void GetMoves_WhenBlackKnight_ThenValidMoves()
+        {
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetInitialPosition();
+            var bitMoveGenerator = new BitMoveGenerator(board);
+
+            var moves = bitMoveGenerator.GetKnightMoves(BitColor.Black).ToList();
+
+            Assert.AreEqual(4, moves.Count);
+
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.B8, Square.A6, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "Nb8-a6 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.B8, Square.C6, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "Nb8-c6 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.G8, Square.F6, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "Ng8-f6 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.G8, Square.H6, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, 0)), "Ng8-h6 missing");
         }
 
         [TestMethod, Ignore]

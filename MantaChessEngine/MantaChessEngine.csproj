@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bitboard\Bitboards.cs" />
+    <Compile Include="Bitboard\BitHelper.cs" />
     <Compile Include="Bitboard\BitMove.cs" />
     <Compile Include="Bitboard\BitMoveExecutor.cs" />
     <Compile Include="Bitboard\BitMoveGenerator.cs" />

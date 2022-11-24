@@ -82,8 +82,8 @@ namespace MantaChessEngineTest
 
             Assert.AreEqual(2, moves.Count);
 
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.H1, Square.G3, BitPieceType.Rook, Square.G3, BitPieceType.Empty, 0)), "Nh1xf2 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.H1, Square.F2, BitPieceType.Bishop, Square.F2, BitPieceType.Empty, 0)), "Nh1xf2 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.H1, Square.G3, BitPieceType.Rook, Square.G3, BitPieceType.Empty, 0)), "Nh1xg3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Knight, Square.H1, Square.F2, BitPieceType.Knight, Square.F2, BitPieceType.Empty, 0)), "Nh1xf2 missing");
         }
 
         [TestMethod]

@@ -98,13 +98,13 @@ namespace MantaChessEngine
                 var fromSquareMovingKnight = _bitboards.BitScanForward(knightBitboard);
                 knightBitboard &= _bitboards.NotIndexMask[fromSquareMovingKnight];
 
-                var knightCaptures = _bitboards.MovesKnight[fromSquareMovingKnight] & _bitboards.Bitboard_ColoredPieces[(int)BitColor.Black];
-                ////while(knightCaptures != 0)
-                ////{
-
-                // todo test knight captures
-
-                ////}
+                var knightCaptures = _bitboards.MovesKnight[fromSquareMovingKnight] & _bitboards.Bitboard_ColoredPieces[(int)BitHelper.OtherColor(color)];
+                while (knightCaptures != 0)
+                {
+                    var toSquare = _bitboards.BitScanForward(knightCaptures);
+                    knightCaptures &= _bitboards.NotIndexMask[toSquare];
+                    AddCapture(BitPieceType.Knight, (Square)fromSquareMovingKnight, (Square)toSquare, _bitboards.BoardAllPieces[(int)toSquare] , (Square)toSquare, BitPieceType.Empty, 0);
+                }
 
                 var knightMoves = _bitboards.MovesKnight[fromSquareMovingKnight] & ~_bitboards.Bitboard_AllPieces;
                 while(knightMoves != 0)

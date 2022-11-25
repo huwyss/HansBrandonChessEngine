@@ -20,6 +20,15 @@
             Value = value;
         }
 
+        public BitMove(
+            BitPieceType movingPiece,
+            Square fromSquare,
+            Square toSquare,
+            byte value)
+            : this (movingPiece, fromSquare, toSquare, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, value)
+        {           
+        }
+
         public BitPieceType MovingPiece { get; }
         public Square FromSquare { get; }
         public Square ToSquare { get; }

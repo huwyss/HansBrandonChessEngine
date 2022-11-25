@@ -116,6 +116,13 @@ namespace MantaChessEngine
             }
         }
 
+        private void GenerateRookMoves(BitColor color)
+        {
+            Bitboard rookBitboard = _bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.Rook];
+
+            // todo implement...
+        }
+
         private void AddMove(BitPieceType movingPiece, Square fromSquare, Square toSquare, BitPieceType promotionPiece, byte value)
         {
             _moves.Add(new BitMove(movingPiece, fromSquare, toSquare, BitPieceType.Empty, Square.NoSquare, promotionPiece, value));
@@ -183,6 +190,16 @@ namespace MantaChessEngine
             _captures = new List<BitMove>();
 
             GenerateKnightMoves(color);
+
+            return _moves;
+        }
+
+        internal IEnumerable<BitMove> GetRookMoves(BitColor color)
+        {
+            _moves = new List<BitMove>();
+            _captures = new List<BitMove>();
+
+            GenerateRookMoves(color);
 
             return _moves;
         }

@@ -157,8 +157,6 @@ namespace MantaChessEngine
                     var toSquare = _bitboards.BitScanForward(bishopMoves);
                     bishopMoves &= _bitboards.NotIndexMask[toSquare];
 
-                    Bitboards.PrintBitboard(_bitboards.BetweenMatrix[fromSquareMovingPiece, toSquare]);
-
                     if ((_bitboards.BetweenMatrix[fromSquareMovingPiece, toSquare] & _bitboards.Bitboard_AllPieces) == 0)
                     {
                         AddMove(piece, (Square)fromSquareMovingPiece, (Square)toSquare, BitPieceType.Empty, 0);

@@ -144,6 +144,13 @@ namespace MantaChessEngine
             // todo implement...
         }
 
+        private void GenerateKingMoves(BitColor color)
+        {
+            Bitboard kingBitboard = _bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.King];
+
+            // todo implement...
+        }
+
         private void AddMove(BitPieceType movingPiece, Square fromSquare, Square toSquare, BitPieceType promotionPiece, byte value)
         {
             _moves.Add(new BitMove(movingPiece, fromSquare, toSquare, BitPieceType.Empty, Square.NoSquare, promotionPiece, value));
@@ -198,47 +205,43 @@ namespace MantaChessEngine
         internal IEnumerable<BitMove> GetPawnMoves(BitColor color)
         {
             ClearLists();
-
             GeneratePawnMoves(color);
-
             return _moves;
         }
 
         internal IEnumerable<BitMove> GetKnightMoves(BitColor color)
         {
             ClearLists();
-
             GenerateKnightMoves(color);
-
             return _moves;
         }
 
         internal IEnumerable<BitMove> GetBishopMoves(BitColor color)
         {
             ClearLists();
-
             GenerateBishopMoves(color);
-
             return _moves;
         }
 
         internal IEnumerable<BitMove> GetRookMoves(BitColor color)
         {
             ClearLists();
-
             GenerateRookMoves(color);
-
             return _moves;
         }
 
         internal IEnumerable<BitMove> GetQueenMoves(BitColor color)
         {
             ClearLists();
-
             GenerateQueenMoves(color);
-
             return _moves;
         }
 
+        internal IEnumerable<BitMove> GetKingMoves(BitColor color)
+        {
+            ClearLists();
+            GenerateKingMoves(color);
+            return _moves;
+        }
     }
 }

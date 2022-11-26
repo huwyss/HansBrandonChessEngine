@@ -122,17 +122,17 @@ namespace MantaChessEngineTest
             var moves = bitMoveGenerator.GetRookMoves(BitColor.White).ToList();
 
             Assert.AreEqual(11, moves.Count);
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.E5, 0)), "e4e5. missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.E6, BitPieceType.Pawn, Square.NoSquare, BitPieceType.Empty, 0)), "e4xe6 missing"); // capture pawn
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.F4, 0)), "e4f4. missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.G4, 0)), "e4g4. missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.E3, 0)), "e4e3. missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.E2, 0)), "e4e2. missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.E1, 0)), "e4e1. missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.D4, 0)), "e4d4. missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.C4, 0)), "e4c4. missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.B4, 0)), "e4b4. missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.A4, 0)), "e4a4. missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.E5, 0)), "Re4-e5 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.E6, BitPieceType.Pawn, Square.NoSquare, BitPieceType.Empty, 0)), "Re4xe6 missing"); // capture pawn
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.F4, 0)), "Re4-f4 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.G4, 0)), "Re4-g4 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.E3, 0)), "Re4-e3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.E2, 0)), "Re4-e2 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.E1, 0)), "Re4-e1 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.D4, 0)), "Re4-d4 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.C4, 0)), "Re4-c4 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.B4, 0)), "Re4-b4 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.A4, 0)), "Re4-a4 missing");
         }
 
         [TestMethod]
@@ -153,15 +153,15 @@ namespace MantaChessEngineTest
             var moves = bitMoveGenerator.GetQueenMoves(BitColor.White).ToList();
 
             Assert.AreEqual(9, moves.Count);
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.B3, 0)), "b2-b3 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.B4, BitPieceType.Rook, Square.B4, BitPieceType.Empty, 0)), "b2xb4 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.C3, 0)), "b2-c3 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.C2, 0)), "b2-c2 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.C1, 0)), "b2-c1 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.B1, 0)), "b2-b1 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.A1, 0)), "b2-a1 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.A2, 0)), "b2-a2 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.A3, 0)), "b2-a3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.B3, 0)), "Qb2-b3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.B4, BitPieceType.Rook, Square.B4, BitPieceType.Empty, 0)), "Qb2xb4 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.C3, 0)), "Qb2-c3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.C2, 0)), "Qb2-c2 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.C1, 0)), "Qb2-c1 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.B1, 0)), "Qb2-b1 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.A1, 0)), "Qb2-a1 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.A2, 0)), "Qb2-a2 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.A3, 0)), "Qb2-a3 missing");
         }
 
         [TestMethod]
@@ -181,37 +181,35 @@ namespace MantaChessEngineTest
 
             var moves = bitMoveGenerator.GetBishopMoves(BitColor.White).ToList();
 
-
             Assert.AreEqual(5, moves.Count);
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Bishop, Square.C2, Square.D3, 0)), "c2-d3 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Bishop, Square.C2, Square.D1, 0)), "c2-d1 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Bishop, Square.C2, Square.B1, 0)), "c2-b1 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Bishop, Square.C2, Square.B3, 0)), "c2-b3 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Bishop, Square.C2, Square.A4, BitPieceType.Rook, Square.A4, BitPieceType.Empty, 0)), "c2xa4 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Bishop, Square.C2, Square.D3, 0)), "Bc2-d3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Bishop, Square.C2, Square.D1, 0)), "Bc2-d1 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Bishop, Square.C2, Square.B1, 0)), "Bc2-b1 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Bishop, Square.C2, Square.B3, 0)), "Bc2-b3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Bishop, Square.C2, Square.A4, BitPieceType.Rook, Square.A4, BitPieceType.Empty, 0)), "Bc2xa4 missing");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMoves_WhenKing_ThenAllMoves()
         {
-            MoveGenerator target = new MoveGenerator(new MoveFactory());
-            Board board = new Board();
-            string position = "........" +
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("........" +
                               "........" +
                               "........" +
                               "........" +
                               "........" +
                               "........" +
                               ".rB....." +
-                              ".KP.....";
-            board.SetPosition(position);
+                              ".KP.....");
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var king = new King(ChessColor.White);
-            var moves = king.GetMoves(target, board, Helper.FileCharToFile('b'), 1, true); // king
+            var moves = bitMoveGenerator.GetKingMoves(BitColor.White).ToList();
 
             Assert.AreEqual(3, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('K'), 'b', 1, 'b', 2, Piece.MakePiece('r'))), "b1b2r missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('K'), 'b', 1, 'a', 1, null)), "b1a1. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('K'), 'b', 1, 'a', 2, null)), "b1a2. missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.King, Square.B2, Square.B3, BitPieceType.Rook, Square.B3, BitPieceType.Empty, 0)), "Kb1xb2 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.King, Square.B2, Square.A1, 0)), "Kb1-a1 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.King, Square.B2, Square.A2, 0)), "Kb1-a2 missing");
         }
 
         //

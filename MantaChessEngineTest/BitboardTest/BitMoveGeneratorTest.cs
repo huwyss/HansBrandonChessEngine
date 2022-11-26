@@ -229,9 +229,9 @@ namespace MantaChessEngineTest
             var moves = bitMoveGenerator.GetKingMoves(BitColor.White).ToList();
 
             Assert.AreEqual(3, moves.Count);
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.King, Square.B2, Square.B3, BitPieceType.Rook, Square.B3, BitPieceType.Empty, 0)), "Kb1xb2 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.King, Square.B2, Square.A1, 0)), "Kb1-a1 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.King, Square.B2, Square.A2, 0)), "Kb1-a2 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.King, Square.B1, Square.B2, BitPieceType.Rook, Square.B2, BitPieceType.Empty, 0)), "Kb1xb2 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.King, Square.B1, Square.A1, 0)), "Kb1-a1 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.King, Square.B1, Square.A2, 0)), "Kb1-a2 missing");
         }
 
         //

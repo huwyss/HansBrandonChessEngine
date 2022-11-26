@@ -33,12 +33,12 @@ namespace MantaChessEngine
 
             GeneratePawnMoves(color);
             GenerateKnightMoves(color);
+            GenerateSlidingMoves(color);
+            GenerateKingMoves(color);
 
             ////GenerateEnpassant();
             ////GenerateCastling();
 
-            GenerateSlidingMoves(color);
-            ////GenerateKingMoves();
             return _captures.Concat(_moves);
         }
 
@@ -131,6 +131,7 @@ namespace MantaChessEngine
             }
         }
 
+        // todo: optimize sliding moves
         private void GenerateSlidingPieceMoves(BitColor color, BitPieceType piece)
         {
             Bitboard pieceBitboard = _bitboards.Bitboard_Pieces[(int)color, (int)piece];
@@ -168,8 +169,24 @@ namespace MantaChessEngine
         private void GenerateKingMoves(BitColor color)
         {
             Bitboard kingBitboard = _bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.King];
+            var fromSquareMovingKing = _bitboards.BitScanForward(kingBitboard);
 
-            // todo implement...
+            var kingCaptures = _bitboards.MovesPieces[(int)BitPieceType.King, fromSquareMovingKing] & _bitboards.Bitboard_ColoredPieces[(int)BitHelper.OtherColor(color)];
+            while (kingCaptures != 0)
+            {
+                var toSquare = _bitboards.BitScanForward(kingCaptures);
+                kingCaptures &= _bitboards.NotIndexMask[toSquare];
+                AddCapture(BitPieceType.King, (Square)fromSquareMovingKing, (Square)toSquare, _bitboards.BoardAllPieces[(int)toSquare], (Square)toSquare, BitPieceType.Empty, 0);
+            }
+
+            var kingMoves = _bitboards.MovesPieces[(int)BitPieceType.King, fromSquareMovingKing] & ~_bitboards.Bitboard_AllPieces;
+
+            while (kingMoves != 0)
+            {
+                var toSquare = _bitboards.BitScanForward(kingMoves);
+                kingMoves &= _bitboards.NotIndexMask[toSquare];
+                AddMove(BitPieceType.King, (Square)fromSquareMovingKing, (Square)toSquare, BitPieceType.Empty, 0);
+            }
         }
 
         private void AddMove(BitPieceType movingPiece, Square fromSquare, Square toSquare, BitPieceType promotionPiece, byte value)

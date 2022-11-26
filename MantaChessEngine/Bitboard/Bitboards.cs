@@ -445,21 +445,21 @@ namespace MantaChessEngine
 
             for (int i = 0; i < 64; i++)
             {
-                if (Col[i] > 1 && Row[i] > 1)
+                if (Col[i] > 0 && Row[i] > 0)
                 {
                     SetBit(ref MovesPieces[(int)BitPieceType.King, i], i - 1);
                     SetBit(ref MovesPieces[(int)BitPieceType.King, i], i - 8);
                     SetBit(ref MovesPieces[(int)BitPieceType.King, i], i - 9);
                 }
 
-                if (Col[i] < 7 && Row[i] > 1)
+                if (Col[i] < 7 && Row[i] > 0)
                 {
                     SetBit(ref MovesPieces[(int)BitPieceType.King, i], i - 7);
                     SetBit(ref MovesPieces[(int)BitPieceType.King, i], i - 8);
                     SetBit(ref MovesPieces[(int)BitPieceType.King, i], i + 1);
                 }
 
-                if (Col[i] > 1 && Row[i] < 7)
+                if (Col[i] > 0 && Row[i] < 7)
                 {
                     SetBit(ref MovesPieces[(int)BitPieceType.King, i], i - 1);
                     SetBit(ref MovesPieces[(int)BitPieceType.King, i], i + 7);

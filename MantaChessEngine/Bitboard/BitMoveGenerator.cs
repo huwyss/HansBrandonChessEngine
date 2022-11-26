@@ -127,7 +127,33 @@ namespace MantaChessEngine
         {
             Bitboard bishopBitboard = _bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.Bishop];
 
-            // todo implement...
+            while (bishopBitboard != 0)
+            {
+                var fromSquareMovingBishop = _bitboards.BitScanForward(bishopBitboard);
+                bishopBitboard &= _bitboards.NotIndexMask[fromSquareMovingBishop];
+
+                var bishopCaptures = _bitboards.MovesBishop[fromSquareMovingBishop] & _bitboards.Bitboard_ColoredPieces[(int)BitHelper.OtherColor(color)];
+                while (bishopCaptures != 0)
+                {
+                    var toSquare = _bitboards.BitScanForward(bishopCaptures);
+                    bishopCaptures &= _bitboards.NotIndexMask[toSquare];
+                    if ((_bitboards.BetweenMatrix[(int)fromSquareMovingBishop, (int)toSquare] & _bitboards.Bitboard_AllPieces) == 0)
+                    {
+                        AddCapture(BitPieceType.Bishop, (Square)fromSquareMovingBishop, (Square)toSquare, _bitboards.BoardAllPieces[(int)toSquare], (Square)toSquare, BitPieceType.Empty, 0);
+                    }
+                }
+
+                var bishopMoves = _bitboards.MovesBishop[fromSquareMovingBishop] & ~_bitboards.Bitboard_AllPieces;
+                while (bishopMoves != 0)
+                {
+                    var toSquare = _bitboards.BitScanForward(bishopMoves);
+                    bishopMoves &= _bitboards.NotIndexMask[toSquare];
+                    if ((_bitboards.BetweenMatrix[(int)fromSquareMovingBishop, (int)toSquare] & _bitboards.Bitboard_AllPieces) == 0)
+                    {
+                        AddMove(BitPieceType.Bishop, (Square)fromSquareMovingBishop, (Square)toSquare, BitPieceType.Empty, 0);
+                    }
+                }
+            }
         }
 
         private void GenerateRookMoves(BitColor color)

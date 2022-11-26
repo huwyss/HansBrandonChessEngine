@@ -493,7 +493,7 @@ namespace MantaChessEngine
                     }
                 }
 
-                if (Row[i] > 1)
+                if (Row[i] > 0)
                 {
                     var edge = GetEdge(i, -8);
                     for (int z = i - 8; z >= edge; z -= 8)
@@ -513,7 +513,7 @@ namespace MantaChessEngine
                     }
                 }
 
-                if (Col[i] > 1)
+                if (Col[i] > 0)
                 {
                     var edge = GetEdge(i, -1);
                     for (int z = i - 1; z >= edge; z--)

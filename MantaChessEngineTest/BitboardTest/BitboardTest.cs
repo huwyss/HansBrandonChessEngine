@@ -635,7 +635,7 @@ namespace MantaChessEngineTest
                 0, 1, 0, 0, 0, 0, 0, 0,
                 0, 1, 0, 0, 0, 0, 0, 0
                 //                  (H8)
-            }), target.MovesPieces[(int)BitPieceType.Rook, (int)Square.B7]);
+            }), target.MovesPieces[(int)BitPieceType.Rook, (int)Square.B2]);
 
             Assert.AreEqual(Bitboards.ConvertToUInt64(new byte[64]
             {//(A1)         
@@ -648,7 +648,7 @@ namespace MantaChessEngineTest
                 1, 0, 1, 1, 1, 1, 1, 1,
                 0, 1, 0, 0, 0, 0, 0, 0
                 //                  (H8)
-            }), target.MovesPieces[(int)BitPieceType.Rook, (int)Square.B2]);
+            }), target.MovesPieces[(int)BitPieceType.Rook, (int)Square.B7]);
         }
 
         [TestMethod]
@@ -760,8 +760,8 @@ namespace MantaChessEngineTest
                 0, 1, 0, 0, 1, 0, 0, 0,
                 0, 1, 0, 1, 0, 0, 0, 0,
                 1, 1, 1, 0, 0, 0, 0, 0,
-                1, 1, 1, 1, 1, 1, 1, 1,
-                1, 0, 1, 0, 0, 0, 0, 0
+                1, 0, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 0, 0, 0, 0, 0
                 //                  (H8)
             }), target.MovesPieces[(int)BitPieceType.Queen, (int)Square.B7]);
 

@@ -21,19 +21,15 @@ namespace MantaChessEngine
         public Bitboard QueenSideMask { get; set; }
         public Bitboard KingSideMask { get; set; }
 
-        public int[,] PawnLeft { get; set; } // dimensions: color, 
+        public int[,] PawnLeft { get; set; } // dimensions: color, square
         public int[,] PawnRight { get; set; }
         public int[,] PawnStep { get; set; }
         public int[,] PawnDoubleStep { get; set; }
         public Bitboard[,] PawnCaptures { get; set; }
         public Bitboard[,] PawnDefends { get; set; }
         public Bitboard[,] PawnMoves { get; set; }
-        
-        public Bitboard[] MovesKnight { get; set; }
-        public Bitboard[] MovesBishop { get; set; }
-        public Bitboard[] MovesRook { get; set; }
-        public Bitboard[] MovesQueen { get; set; }
-        public Bitboard[] MovesKing { get; set; }
+
+        public Bitboard[,] MovesPieces { get; set; } // dimensions: piece, square (only knight, bishop, rook, queen, king, not for pawn)
 
         public int[] Row { get; set; }
         public int[] Col { get; set; }
@@ -89,6 +85,8 @@ namespace MantaChessEngine
             BoardAllPieces = new BitPieceType[64];
             BoardColor = new BitColor[64];
             Bitboard_ColoredPieces = new Bitboard[2];
+
+            MovesPieces = new Bitboard[6, 64];
 
             InitBitboard();
         }
@@ -389,8 +387,6 @@ namespace MantaChessEngine
 
         private void SetKnightMoves()
         {
-            MovesKnight = new Bitboard[64];
-
             //      -17   -15
             //    -10        -6
             //          N
@@ -401,50 +397,48 @@ namespace MantaChessEngine
             {
                 if (Col[i] < 6 && Row[i] < 7)
                 {
-                    SetBit(ref MovesKnight[i], i + 10);
+                    SetBit(ref MovesPieces[(int)BitPieceType.Knight, i], i + 10);
                 }
 
                 if (Col[i] < 7 && Row[i] < 6)
                 {
-                    SetBit(ref MovesKnight[i], i + 17);
+                    SetBit(ref MovesPieces[(int)BitPieceType.Knight, i], i + 17);
                 }
 
                 if (Col[i] > 0 && Row[i] < 6)
                 {
-                    SetBit(ref MovesKnight[i], i + 15);
+                    SetBit(ref MovesPieces[(int)BitPieceType.Knight, i], i + 15);
                 }
 
                 if (Col[i] > 1 && Row[i] < 7)
                 {
-                    SetBit(ref MovesKnight[i], i + 6);
+                    SetBit(ref MovesPieces[(int)BitPieceType.Knight, i], i + 6);
                 }
 
                 if (Col[i] > 0 && Row[i] > 1)
                 {
-                    SetBit(ref MovesKnight[i], i - 17);
+                    SetBit(ref MovesPieces[(int)BitPieceType.Knight, i], i - 17);
                 }
 
                 if (Col[i] > 1 && Row[i] > 0)
                 {
-                    SetBit(ref MovesKnight[i], i - 10);
+                    SetBit(ref MovesPieces[(int)BitPieceType.Knight, i], i - 10);
                 }
 
                 if (Col[i] < 7 && Row[i] > 1)
                 {
-                    SetBit(ref MovesKnight[i], i - 15);
+                    SetBit(ref MovesPieces[(int)BitPieceType.Knight, i], i - 15);
                 }
 
                 if (Col[i] < 6 && Row[i] > 0)
                 {
-                    SetBit(ref MovesKnight[i], i - 6);
+                    SetBit(ref MovesPieces[(int)BitPieceType.Knight, i], i - 6);
                 }
             }
         }
 
         private void SetKingMoves()
         {
-            MovesKing = new Bitboard[64];
-
             //       -9  -8  -7
             //       -1   K  +1
             //       +7  +8  +9 
@@ -453,40 +447,36 @@ namespace MantaChessEngine
             {
                 if (Col[i] > 1 && Row[i] > 1)
                 {
-                    SetBit(ref MovesKing[i], i - 1);
-                    SetBit(ref MovesKing[i], i - 8);
-                    SetBit(ref MovesKing[i], i - 9);
+                    SetBit(ref MovesPieces[(int)BitPieceType.King, i], i - 1);
+                    SetBit(ref MovesPieces[(int)BitPieceType.King, i], i - 8);
+                    SetBit(ref MovesPieces[(int)BitPieceType.King, i], i - 9);
                 }
 
                 if (Col[i] < 7 && Row[i] > 1)
                 {
-                    SetBit(ref MovesKing[i], i - 7);
-                    SetBit(ref MovesKing[i], i - 8);
-                    SetBit(ref MovesKing[i], i + 1);
+                    SetBit(ref MovesPieces[(int)BitPieceType.King, i], i - 7);
+                    SetBit(ref MovesPieces[(int)BitPieceType.King, i], i - 8);
+                    SetBit(ref MovesPieces[(int)BitPieceType.King, i], i + 1);
                 }
 
                 if (Col[i] > 1 && Row[i] < 7)
                 {
-                    SetBit(ref MovesKing[i], i - 1);
-                    SetBit(ref MovesKing[i], i + 7);
-                    SetBit(ref MovesKing[i], i + 8);
+                    SetBit(ref MovesPieces[(int)BitPieceType.King, i], i - 1);
+                    SetBit(ref MovesPieces[(int)BitPieceType.King, i], i + 7);
+                    SetBit(ref MovesPieces[(int)BitPieceType.King, i], i + 8);
                 }
 
                 if (Col[i] < 7 && Row[i] < 7)
                 {
-                    SetBit(ref MovesKing[i], i + 1);
-                    SetBit(ref MovesKing[i], i + 8);
-                    SetBit(ref MovesKing[i], i + 9);
+                    SetBit(ref MovesPieces[(int)BitPieceType.King, i], i + 1);
+                    SetBit(ref MovesPieces[(int)BitPieceType.King, i], i + 8);
+                    SetBit(ref MovesPieces[(int)BitPieceType.King, i], i + 9);
                 }
             }
         }
 
         private void SetQueenRookBishopMoves()
         {
-            MovesQueen = new Bitboard[64];
-            MovesRook = new Bitboard[64];
-            MovesBishop = new Bitboard[64];
-
             //       -9  -8  -7
             //       -1   K  +1
             //       +7  +8  +9 
@@ -498,8 +488,8 @@ namespace MantaChessEngine
                     var edge = GetEdge(i, 8);
                     for (int z = i+8; z <= edge; z += 8)
                     {
-                        SetBit(ref MovesRook[i], z);
-                        SetBit(ref MovesQueen[i], z);
+                        SetBit(ref MovesPieces[(int)BitPieceType.Rook, i], z);
+                        SetBit(ref MovesPieces[(int)BitPieceType.Queen, i], z);
                     }
                 }
 
@@ -508,8 +498,8 @@ namespace MantaChessEngine
                     var edge = GetEdge(i, -8);
                     for (int z = i - 8; z >= edge; z -= 8)
                     {
-                        SetBit(ref MovesRook[i], z);
-                        SetBit(ref MovesQueen[i], z);
+                        SetBit(ref MovesPieces[(int)BitPieceType.Rook, i], z);
+                        SetBit(ref MovesPieces[(int)BitPieceType.Queen, i], z);
                     }
                 }
 
@@ -518,8 +508,8 @@ namespace MantaChessEngine
                     var edge = GetEdge(i, 1);
                     for (int z = i + 1; z <= edge; z++)
                     {
-                        SetBit(ref MovesRook[i], z);
-                        SetBit(ref MovesQueen[i], z);
+                        SetBit(ref MovesPieces[(int)BitPieceType.Rook, i], z);
+                        SetBit(ref MovesPieces[(int)BitPieceType.Queen, i], z);
                     }
                 }
 
@@ -528,8 +518,8 @@ namespace MantaChessEngine
                     var edge = GetEdge(i, -1);
                     for (int z = i - 1; z >= edge; z--)
                     {
-                        SetBit(ref MovesRook[i], z);
-                        SetBit(ref MovesQueen[i], z);
+                        SetBit(ref MovesPieces[(int)BitPieceType.Rook, i], z);
+                        SetBit(ref MovesPieces[(int)BitPieceType.Queen, i], z);
                     }
                 }
 
@@ -538,8 +528,8 @@ namespace MantaChessEngine
                     var edge = GetEdge(i, 7);
                     for (int z=i + 7; z <= edge; z +=7)
                     {
-                        SetBit(ref MovesBishop[i], z);
-                        SetBit(ref MovesQueen[i], z);
+                        SetBit(ref MovesPieces[(int)BitPieceType.Bishop, i], z);
+                        SetBit(ref MovesPieces[(int)BitPieceType.Queen, i], z);
                     }
                 }
 
@@ -548,8 +538,8 @@ namespace MantaChessEngine
                     var edge = GetEdge(i, 9);
                     for (int z = i + 9; z <= edge; z += 9)
                     {
-                        SetBit(ref MovesBishop[i], z);
-                        SetBit(ref MovesQueen[i], z);
+                        SetBit(ref MovesPieces[(int)BitPieceType.Bishop, i], z);
+                        SetBit(ref MovesPieces[(int)BitPieceType.Queen, i], z);
                     }
                 }
 
@@ -558,8 +548,8 @@ namespace MantaChessEngine
                     var edge = GetEdge(i, -7);
                     for (int z = i - 7; z >= edge; z -= 7)
                     {
-                        SetBit(ref MovesBishop[i], z);
-                        SetBit(ref MovesQueen[i], z);
+                        SetBit(ref MovesPieces[(int)BitPieceType.Bishop, i], z);
+                        SetBit(ref MovesPieces[(int)BitPieceType.Queen, i], z);
                     }
                 }
 
@@ -568,8 +558,8 @@ namespace MantaChessEngine
                     var edge = GetEdge(i, -9);
                     for (int z = i - 9; z >= edge; z -= 9)
                     {
-                        SetBit(ref MovesBishop[i], z); 
-                        SetBit(ref MovesQueen[i], z);
+                        SetBit(ref MovesPieces[(int)BitPieceType.Bishop, i], z); 
+                        SetBit(ref MovesPieces[(int)BitPieceType.Queen, i], z);
                     }
                 }
             }

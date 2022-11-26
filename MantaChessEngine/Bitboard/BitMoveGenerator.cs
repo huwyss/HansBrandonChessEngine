@@ -37,7 +37,7 @@ namespace MantaChessEngine
             ////GenerateEnpassant();
             ////GenerateCastling();
 
-            ////GenerateSlidingMoves();
+            GenerateSlidingMoves(color);
             ////GenerateKingMoves();
             return _captures.Concat(_moves);
         }
@@ -105,7 +105,7 @@ namespace MantaChessEngine
                 var fromSquareMovingKnight = _bitboards.BitScanForward(knightBitboard);
                 knightBitboard &= _bitboards.NotIndexMask[fromSquareMovingKnight];
 
-                var knightCaptures = _bitboards.MovesKnight[fromSquareMovingKnight] & _bitboards.Bitboard_ColoredPieces[(int)BitHelper.OtherColor(color)];
+                var knightCaptures = _bitboards.MovesPieces[(int)BitPieceType.Knight, fromSquareMovingKnight] & _bitboards.Bitboard_ColoredPieces[(int)BitHelper.OtherColor(color)];
                 while (knightCaptures != 0)
                 {
                     var toSquare = _bitboards.BitScanForward(knightCaptures);
@@ -113,7 +113,7 @@ namespace MantaChessEngine
                     AddCapture(BitPieceType.Knight, (Square)fromSquareMovingKnight, (Square)toSquare, _bitboards.BoardAllPieces[(int)toSquare] , (Square)toSquare, BitPieceType.Empty, 0);
                 }
 
-                var knightMoves = _bitboards.MovesKnight[fromSquareMovingKnight] & ~_bitboards.Bitboard_AllPieces;
+                var knightMoves = _bitboards.MovesPieces[(int)BitPieceType.Knight, fromSquareMovingKnight] & ~_bitboards.Bitboard_AllPieces;
                 while(knightMoves != 0)
                 {
                     var toSquare = _bitboards.BitScanForward(knightMoves);
@@ -123,51 +123,48 @@ namespace MantaChessEngine
             }
         }
 
-        private void GenerateBishopMoves(BitColor color)
+        private void GenerateSlidingMoves(BitColor color)
         {
-            Bitboard bishopBitboard = _bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.Bishop];
-
-            while (bishopBitboard != 0)
+            for (BitPieceType piece = BitPieceType.Bishop; piece <= BitPieceType.Queen; piece++)
             {
-                var fromSquareMovingBishop = _bitboards.BitScanForward(bishopBitboard);
-                bishopBitboard &= _bitboards.NotIndexMask[fromSquareMovingBishop];
+                GenerateSlidingPieceMoves(color, piece);
+            }
+        }
 
-                var bishopCaptures = _bitboards.MovesBishop[fromSquareMovingBishop] & _bitboards.Bitboard_ColoredPieces[(int)BitHelper.OtherColor(color)];
+        private void GenerateSlidingPieceMoves(BitColor color, BitPieceType piece)
+        {
+            Bitboard pieceBitboard = _bitboards.Bitboard_Pieces[(int)color, (int)piece];
+
+            while (pieceBitboard != 0)
+            {
+                var fromSquareMovingPiece = _bitboards.BitScanForward(pieceBitboard);
+                pieceBitboard &= _bitboards.NotIndexMask[fromSquareMovingPiece];
+
+                var bishopCaptures = _bitboards.MovesPieces[(int)piece, fromSquareMovingPiece] & _bitboards.Bitboard_ColoredPieces[(int)BitHelper.OtherColor(color)];
                 while (bishopCaptures != 0)
                 {
                     var toSquare = _bitboards.BitScanForward(bishopCaptures);
                     bishopCaptures &= _bitboards.NotIndexMask[toSquare];
-                    if ((_bitboards.BetweenMatrix[(int)fromSquareMovingBishop, (int)toSquare] & _bitboards.Bitboard_AllPieces) == 0)
+                    if ((_bitboards.BetweenMatrix[(int)fromSquareMovingPiece, (int)toSquare] & _bitboards.Bitboard_AllPieces) == 0)
                     {
-                        AddCapture(BitPieceType.Bishop, (Square)fromSquareMovingBishop, (Square)toSquare, _bitboards.BoardAllPieces[(int)toSquare], (Square)toSquare, BitPieceType.Empty, 0);
+                        AddCapture(piece, (Square)fromSquareMovingPiece, (Square)toSquare, _bitboards.BoardAllPieces[(int)toSquare], (Square)toSquare, BitPieceType.Empty, 0);
                     }
                 }
 
-                var bishopMoves = _bitboards.MovesBishop[fromSquareMovingBishop] & ~_bitboards.Bitboard_AllPieces;
+                var bishopMoves = _bitboards.MovesPieces[(int)piece, fromSquareMovingPiece] & ~_bitboards.Bitboard_AllPieces;
                 while (bishopMoves != 0)
                 {
                     var toSquare = _bitboards.BitScanForward(bishopMoves);
                     bishopMoves &= _bitboards.NotIndexMask[toSquare];
-                    if ((_bitboards.BetweenMatrix[(int)fromSquareMovingBishop, (int)toSquare] & _bitboards.Bitboard_AllPieces) == 0)
+
+                    Bitboards.PrintBitboard(_bitboards.BetweenMatrix[fromSquareMovingPiece, toSquare]);
+
+                    if ((_bitboards.BetweenMatrix[fromSquareMovingPiece, toSquare] & _bitboards.Bitboard_AllPieces) == 0)
                     {
-                        AddMove(BitPieceType.Bishop, (Square)fromSquareMovingBishop, (Square)toSquare, BitPieceType.Empty, 0);
+                        AddMove(piece, (Square)fromSquareMovingPiece, (Square)toSquare, BitPieceType.Empty, 0);
                     }
                 }
             }
-        }
-
-        private void GenerateRookMoves(BitColor color)
-        {
-            Bitboard rookBitboard = _bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.Rook];
-
-            // todo implement...
-        }
-
-        private void GenerateQueenMoves(BitColor color)
-        {
-            Bitboard queenBitboard = _bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.Queen];
-
-            // todo implement...
         }
 
         private void GenerateKingMoves(BitColor color)
@@ -245,21 +242,21 @@ namespace MantaChessEngine
         internal IEnumerable<BitMove> GetBishopMoves(BitColor color)
         {
             ClearLists();
-            GenerateBishopMoves(color);
+            GenerateSlidingPieceMoves(color, BitPieceType.Bishop);
             return _moves;
         }
 
         internal IEnumerable<BitMove> GetRookMoves(BitColor color)
         {
             ClearLists();
-            GenerateRookMoves(color);
+            GenerateSlidingPieceMoves(color, BitPieceType.Rook);
             return _moves;
         }
 
         internal IEnumerable<BitMove> GetQueenMoves(BitColor color)
         {
             ClearLists();
-            GenerateQueenMoves(color);
+            GenerateSlidingPieceMoves(color, BitPieceType.Queen);
             return _moves;
         }
 

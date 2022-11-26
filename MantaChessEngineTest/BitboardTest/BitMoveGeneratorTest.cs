@@ -123,7 +123,7 @@ namespace MantaChessEngineTest
 
             Assert.AreEqual(11, moves.Count);
             Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.E5, 0)), "Re4-e5 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.E6, BitPieceType.Pawn, Square.NoSquare, BitPieceType.Empty, 0)), "Re4xe6 missing"); // capture pawn
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.E6, BitPieceType.Pawn, Square.E6, BitPieceType.Empty, 0)), "Re4xe6 missing"); // capture pawn
             Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.F4, 0)), "Re4-f4 missing");
             Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.G4, 0)), "Re4-g4 missing");
             Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Rook, Square.E4, Square.E3, 0)), "Re4-e3 missing");
@@ -153,15 +153,37 @@ namespace MantaChessEngineTest
             var moves = bitMoveGenerator.GetQueenMoves(BitColor.White).ToList();
 
             Assert.AreEqual(9, moves.Count);
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.B3, 0)), "Qb2-b3 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.B4, BitPieceType.Rook, Square.B4, BitPieceType.Empty, 0)), "Qb2xb4 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.C3, 0)), "Qb2-c3 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.C2, 0)), "Qb2-c2 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.C1, 0)), "Qb2-c1 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.B3, 0)), "Qb2-b3 missing");//
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.B4, BitPieceType.Rook, Square.B4, BitPieceType.Empty, 0)), "Qb2xb4 missing");//
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.C3, 0)), "Qb2-c3 missing");//
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.C2, 0)), "Qb2-c2 missing");//
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.C1, 0)), "Qb2-c1 missing");//
             Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.B1, 0)), "Qb2-b1 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.A1, 0)), "Qb2-a1 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.A1, 0)), "Qb2-a1 missing");//
             Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.A2, 0)), "Qb2-a2 missing");
-            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.A3, 0)), "Qb2-a3 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.A3, 0)), "Qb2-a3 missing");//
+        }
+
+        [TestMethod]
+        public void GetMoves_WhenQueen_ThenOnlyTwoMoves()
+        {
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "BBK....." +
+                              ".QP....." +
+                              "R.N.....");
+            var bitMoveGenerator = new BitMoveGenerator(board);
+
+            var moves = bitMoveGenerator.GetQueenMoves(BitColor.White).ToList();
+
+            Assert.AreEqual(2, moves.Count);
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.B1, 0)), "Qb2-b1 missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Queen, Square.B2, Square.A2, 0)), "Qb2-a2 missing");
         }
 
         [TestMethod]

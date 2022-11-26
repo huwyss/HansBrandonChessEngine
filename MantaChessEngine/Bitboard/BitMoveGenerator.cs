@@ -17,12 +17,19 @@ namespace MantaChessEngine
         public BitMoveGenerator(Bitboards bitboards)
         {
             _bitboards = bitboards;
+            _moves = new List<BitMove>();
+            _captures = new List<BitMove>();
+        }
+
+        private void ClearLists()
+        {
+            _moves.Clear();
+            _captures.Clear();
         }
 
         public IEnumerable<BitMove> GetAllMoves(BitColor color, bool includeCastling = true, bool includePawnMoves = true)
         {
-            _moves = new List<BitMove>();
-            _captures = new List<BitMove>();
+            ClearLists();
 
             GeneratePawnMoves(color);
             GenerateKnightMoves(color);
@@ -116,9 +123,23 @@ namespace MantaChessEngine
             }
         }
 
+        private void GenerateBishopMoves(BitColor color)
+        {
+            Bitboard bishopBitboard = _bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.Bishop];
+
+            // todo implement...
+        }
+
         private void GenerateRookMoves(BitColor color)
         {
             Bitboard rookBitboard = _bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.Rook];
+
+            // todo implement...
+        }
+
+        private void GenerateQueenMoves(BitColor color)
+        {
+            Bitboard queenBitboard = _bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.Queen];
 
             // todo implement...
         }
@@ -176,8 +197,7 @@ namespace MantaChessEngine
 
         internal IEnumerable<BitMove> GetPawnMoves(BitColor color)
         {
-            _moves = new List<BitMove>();
-            _captures = new List<BitMove>();
+            ClearLists();
 
             GeneratePawnMoves(color);
 
@@ -186,20 +206,36 @@ namespace MantaChessEngine
 
         internal IEnumerable<BitMove> GetKnightMoves(BitColor color)
         {
-            _moves = new List<BitMove>();
-            _captures = new List<BitMove>();
+            ClearLists();
 
             GenerateKnightMoves(color);
 
             return _moves;
         }
 
+        internal IEnumerable<BitMove> GetBishopMoves(BitColor color)
+        {
+            ClearLists();
+
+            GenerateBishopMoves(color);
+
+            return _moves;
+        }
+
         internal IEnumerable<BitMove> GetRookMoves(BitColor color)
         {
-            _moves = new List<BitMove>();
-            _captures = new List<BitMove>();
+            ClearLists();
 
             GenerateRookMoves(color);
+
+            return _moves;
+        }
+
+        internal IEnumerable<BitMove> GetQueenMoves(BitColor color)
+        {
+            ClearLists();
+
+            GenerateQueenMoves(color);
 
             return _moves;
         }

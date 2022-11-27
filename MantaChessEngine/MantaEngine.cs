@@ -24,7 +24,7 @@ namespace MantaChessEngine
         public MantaEngine(EngineType engineType)
         {
             _moveFactory = new MoveFactory();
-            _moveGenerator = new MoveGenerator(_moveFactory);
+            _moveGenerator = new MoveGenerator();
 
             switch (engineType)
             {

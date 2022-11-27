@@ -8,11 +8,8 @@ namespace MantaChessEngine
 {
     public class MoveGenerator : IMoveGenerator
     {
-        private MoveFactory _factory;
-
-        public MoveGenerator(MoveFactory factory)
+        public MoveGenerator()
         {
-            _factory = factory;
         }
 
         /// <summary>

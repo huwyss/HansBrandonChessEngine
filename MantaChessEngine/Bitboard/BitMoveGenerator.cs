@@ -131,7 +131,6 @@ namespace MantaChessEngine
             }
         }
 
-        // todo: optimize sliding moves
         private void GenerateSlidingPieceMoves(BitColor color, BitPieceType piece)
         {
             Bitboard pieceBitboard = _bitboards.Bitboard_Pieces[(int)color, (int)piece];

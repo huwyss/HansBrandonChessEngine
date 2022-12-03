@@ -1103,88 +1103,104 @@ namespace MantaChessEngineTest
 
         // black
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMovesTest_WhenCastlingRightOk_ThenCastling_Black()
         {
-            MoveGenerator generator = new MoveGenerator();
-            Board board = new Board();
-            string position = "r...k..r" +
+            var stateMock = new Mock<IBitBoardState>();
+            stateMock.Setup(s => s.LastCastlingRightBlackKingSide).Returns(true);
+            stateMock.Setup(s => s.LastCastlingRightBlackQueenSide).Returns(true);
+            Bitboards board = new Bitboards(stateMock.Object);
+            board.Initialize();
+            board.SetPosition("r...k..r" +
                               "p......." +
                               "........" +
                               "........" +
                               "........" +
                               "........" +
                               "P......." +
-                              "R...K..R";
-            board.SetPosition(position);
+                              "R...K..R");
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var king = new King(ChessColor.Black);
-            List<IMove> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 8, true);
-            Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(CastlingType.BlackKingSide, new King(ChessColor.Black))), "e8g8. 0-0 castling missing");
-            Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(CastlingType.BlackQueenSide, new King(ChessColor.Black))), "e8c8. 0-0-0 castling missing");
+            var moves = bitMoveGenerator.GetCastlingUnchecked(BitColor.Black).ToList();
+
+            Assert.AreEqual(2, moves.Count);
+            Assert.IsTrue(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E8, Square.G8, 0)), "Ke8-g8 0-0 castling missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E8, Square.C8, 0)), "Ke8-c8 0-0-0 castling missing");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMovesTest_WhenKingMoved_ThenNoCastling_Black()
         {
-            MoveGenerator generator = new MoveGenerator();
-            Board board = new Board();
-            string position = "r..k...r" + // king moved!
+            var stateMock = new Mock<IBitBoardState>();
+            stateMock.Setup(s => s.LastCastlingRightBlackKingSide).Returns(true);
+            stateMock.Setup(s => s.LastCastlingRightBlackQueenSide).Returns(true);
+            Bitboards board = new Bitboards(stateMock.Object);
+            board.Initialize();
+            board.SetPosition("r..k...r" + // king moved!
                               "p......." +
                               "........" +
                               "........" +
                               "........" +
                               "........" +
                               "P......R" +
-                              "...QK...";
-            board.SetPosition(position);
+                              "...QK...");
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var king = new King(ChessColor.Black);
-            List<IMove> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('d'), 8, true);
-            Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(CastlingType.BlackKingSide, new King(ChessColor.Black))), "e1g1. 0-0 castling not possible");
-            Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(CastlingType.BlackQueenSide, new King(ChessColor.Black))), "e1c1. 0-0-0 castling not possible");
+            var moves = bitMoveGenerator.GetCastlingUnchecked(BitColor.Black).ToList();
+
+            Assert.AreEqual(0, moves.Count);
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E8, Square.G8, 0)), "Ke8-g8 0-0 castling not possible");
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E8, Square.C8, 0)), "Ke8-c8 0-0-0 castling not possible");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMovesTest_WhenRookMoved_ThenNoCastling_Black()
         {
-            MoveGenerator generator = new MoveGenerator();
-            Board board = new Board();
-            string position = ".r..k..r." + // rooks moved!
+            var stateMock = new Mock<IBitBoardState>();
+            stateMock.Setup(s => s.LastCastlingRightBlackKingSide).Returns(true);
+            stateMock.Setup(s => s.LastCastlingRightBlackQueenSide).Returns(true);
+            Bitboards board = new Bitboards(stateMock.Object);
+            board.Initialize();
+            board.SetPosition(".r..k.r." + // rooks moved!
                               "p......." +
                               "........" +
                               "........" +
                               "........" +
                               "........" +
                               "P......R" +
-                              "...QK...";
-            board.SetPosition(position);
+                              "...QK...");
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var king = new King(ChessColor.Black);
-            List<IMove> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('d'), 8, true);
-            Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(CastlingType.BlackKingSide, new King(ChessColor.Black))), "e1g1. 0-0 castling not possible");
-            Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(CastlingType.BlackQueenSide, new King(ChessColor.Black))), "e1c1. 0-0-0 castling not possible");
+            var moves = bitMoveGenerator.GetCastlingUnchecked(BitColor.Black).ToList();
+
+            Assert.AreEqual(0, moves.Count);
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E8, Square.G8, 0)), "Ke8-g8 0-0 castling not possible");
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E8, Square.C8, 0)), "Ke8-c8 0-0-0 castling not possible");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMovesTest_WhenCastlingBlocked_ThenNoCastling_Black()
         {
-            MoveGenerator generator = new MoveGenerator();
-            Board board = new Board();
-            string position = "r.b.k.nr" +
+            var stateMock = new Mock<IBitBoardState>();
+            stateMock.Setup(s => s.LastCastlingRightBlackKingSide).Returns(true);
+            stateMock.Setup(s => s.LastCastlingRightBlackQueenSide).Returns(true);
+            Bitboards board = new Bitboards(stateMock.Object);
+            board.Initialize();
+            board.SetPosition("r.b.k.nr" +
                               "p......." +
                               "........" +
                               "........" +
                               "........" +
                               "........" +
                               "P......." +
-                              "R..QK.NR";
-            board.SetPosition(position);
+                              "R..QK.NR");
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var king = new King(ChessColor.Black);
-            List<IMove> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 8, true);
-            Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(CastlingType.BlackKingSide, new King(ChessColor.Black))), "e1g1. 0-0 castling not possible");
-            Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(CastlingType.BlackQueenSide, new King(ChessColor.Black))), "e1c1. 0-0-0 castling not possible");
+            var moves = bitMoveGenerator.GetCastlingUnchecked(BitColor.Black).ToList();
+
+            Assert.AreEqual(0, moves.Count);
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E8, Square.G8, 0)), "Ke8-g8 0-0 castling not possible");
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E8, Square.C8, 0)), "Ke8-c8 0-0-0 castling not possible");
         }
 
         [TestMethod, Ignore]

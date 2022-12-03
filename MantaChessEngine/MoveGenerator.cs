@@ -35,7 +35,11 @@ namespace MantaChessEngine
             return legalMoves;
         }
 
-        public IEnumerable<IMove> GetAllMoves(IBoard board, ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
+        /// <summary>
+        /// Returns all pseudo legal moves of that piece. Pseudo means the king is allowed to be under attack but
+        /// otherwise the move must be legal.
+        /// </summary>
+        internal IEnumerable<IMove> GetAllMoves(IBoard board, ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
         {
             var allMovesUnchecked = GetAllMovesUnchecked(board, color, includeCastling, includePawnMoves);
             return allMovesUnchecked;

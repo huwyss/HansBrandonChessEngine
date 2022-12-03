@@ -207,7 +207,45 @@ namespace MantaChessEngine.BitboardEngine
 
         private void GenerateCastling(BitColor color)
         {
-            // wie castling ?
+            throw new NotImplementedException();
+        }
+
+        private void GenerateCastlingUnchecked(BitColor color)
+        {
+            bool castlingRightKingSide, castlingRightQueenSide;
+            Square kingSquare, kingToSquareQueenSide, kingToSquareKingSide;
+            Square rookKingSquare, rookQueenSquare;
+
+            if (color == BitColor.White)
+            {
+                castlingRightKingSide = _bitboards.BoardState.LastCastlingRightWhiteKingSide;
+                castlingRightQueenSide = _bitboards.BoardState.LastCastlingRightWhiteQueenSide;
+                kingSquare = Square.E1;
+                kingToSquareQueenSide = Square.C1;
+                kingToSquareKingSide = Square.G1;
+                rookKingSquare = Square.H1;
+                rookQueenSquare =  Square.A1;
+            }
+            else
+            {
+                castlingRightKingSide = _bitboards.BoardState.LastCastlingRightBlackKingSide;
+                castlingRightQueenSide = _bitboards.BoardState.LastCastlingRightBlackQueenSide;
+                kingSquare = Square.E8;
+                kingToSquareQueenSide = Square.C8;
+                kingToSquareKingSide = Square.G8;
+                rookKingSquare = Square.H8;
+                rookQueenSquare = Square.A8;
+            }
+
+            if (castlingRightKingSide && (_bitboards.BetweenMatrix[(int)kingSquare, (int)rookKingSquare] & _bitboards.Bitboard_AllPieces) == 0)
+            {
+                AddCastlingMove(BitPieceType.King, kingSquare, kingToSquareKingSide, 0);
+            }
+
+            if (castlingRightQueenSide && (_bitboards.BetweenMatrix[(int)kingSquare, (int)rookQueenSquare] & _bitboards.Bitboard_AllPieces) == 0)
+            {
+                AddCastlingMove(BitPieceType.King, kingSquare, kingToSquareQueenSide, 0);
+            }
         }
 
         private void AddMove(BitPieceType movingPiece, Square fromSquare, Square toSquare, BitPieceType promotionPiece, byte value)
@@ -220,6 +258,11 @@ namespace MantaChessEngine.BitboardEngine
             var capture = BitMove.CreateCapture(movingPiece, fromSquare, toSquare, capturedPiece, capturedSquare, promotionPiece, value);
             _captures.Add(capture);
             _moves.Add(capture);
+        }
+
+        private void AddCastlingMove(BitPieceType movingPiece, Square fromSquare, Square toSquare, byte value)
+        {
+            _moves.Add(BitMove.CreateCastling(movingPiece, fromSquare, toSquare, value));
         }
 
 
@@ -301,10 +344,10 @@ namespace MantaChessEngine.BitboardEngine
             return _moves;
         }
 
-        internal IEnumerable<BitMove> GetCastlingMoves(BitColor color)
+        internal IEnumerable<BitMove> GetCastlingUnchecked(BitColor color)
         {
             ClearLists();
-            GenerateCastling(color);
+            GenerateCastlingUnchecked(color);
             return _moves;
         }
     }

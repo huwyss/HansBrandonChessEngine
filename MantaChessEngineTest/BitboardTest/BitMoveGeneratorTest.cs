@@ -832,7 +832,10 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMovesTest_WhenCastlingRightOk_ThenCastling()
         {
-            Bitboards board = new Bitboards();
+            var stateMock = new Mock<IBitBoardState>();
+            stateMock.Setup(s => s.LastCastlingRightWhiteKingSide).Returns(true);
+            stateMock.Setup(s => s.LastCastlingRightWhiteQueenSide).Returns(true);
+            Bitboards board = new Bitboards(stateMock.Object);
             board.Initialize();
             board.SetPosition("r...k..r" +
                               "p......." +
@@ -844,7 +847,7 @@ namespace MantaChessEngineTest
                               "R...K..R");
             var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetCastlingMoves(BitColor.White).ToList();
+            var moves = bitMoveGenerator.GetCastlingUnchecked(BitColor.White).ToList();
 
             Assert.AreEqual(2, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E1, Square.G1, 0)), "Ke1-g1 0-0 castling missing");

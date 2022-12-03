@@ -2,7 +2,28 @@
 {
     public struct BitMove
     {
-        public BitMove(
+        // capture constructor
+        private BitMove(
+            BitPieceType movingPiece,
+            Square fromSquare,
+            Square toSquare,
+            BitPieceType capturedPiece,
+            Square capturedSquare,
+            BitPieceType promotionPiece,
+            bool castling,
+            byte value)
+        {
+            MovingPiece = movingPiece;
+            FromSquare = fromSquare;
+            ToSquare = toSquare;
+            CapturedPiece = capturedPiece;
+            CapturedSquare = capturedSquare;
+            PromotionPiece = promotionPiece;
+            Castling = castling;
+            Value = value;
+        }
+
+        public static BitMove CreateCapture(
             BitPieceType movingPiece,
             Square fromSquare,
             Square toSquare,
@@ -11,22 +32,28 @@
             BitPieceType promotionPiece,
             byte value)
         {
-            FromSquare = fromSquare;
-            ToSquare = toSquare;
-            MovingPiece = movingPiece;
-            CapturedPiece = capturedPiece;
-            CapturedSquare = capturedSquare;
-            PromotionPiece = promotionPiece;
-            Value = value;
+            return new BitMove(movingPiece, fromSquare, toSquare, capturedPiece, capturedSquare, promotionPiece, false, value);
         }
 
-        public BitMove(
+        // move constructor
+        public static BitMove CreateMove(
+            BitPieceType movingPiece,
+            Square fromSquare,
+            Square toSquare,
+            BitPieceType promotionPiece,
+            byte value)
+        {
+            return new BitMove(movingPiece, fromSquare, toSquare, BitPieceType.Empty, Square.NoSquare, promotionPiece, false, value);
+        }
+
+        // castling constructor
+        public static BitMove CreateCastling(
             BitPieceType movingPiece,
             Square fromSquare,
             Square toSquare,
             byte value)
-            : this (movingPiece, fromSquare, toSquare, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, value)
-        {           
+        {
+            return new BitMove(movingPiece, fromSquare, toSquare, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, true, value);
         }
 
         public BitPieceType MovingPiece { get; }
@@ -35,6 +62,7 @@
         public BitPieceType CapturedPiece { get; }
         public Square CapturedSquare { get; }
         public BitPieceType PromotionPiece { get; }
+        public bool Castling { get; }
         public byte Value { get; }
     }
 

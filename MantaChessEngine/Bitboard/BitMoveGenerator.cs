@@ -34,7 +34,7 @@ namespace MantaChessEngine.BitboardEngine
             GenerateKingMoves(color);
 
             GenerateEnpassant(color);
-            ////GenerateCastlingcolor);
+            GenerateCastling(color);
 
             return _captures.Concat(_moves);
         }
@@ -205,20 +205,21 @@ namespace MantaChessEngine.BitboardEngine
             }
         }
 
-        private void AddCastling()
+        private void GenerateCastling(BitColor color)
         {
             // wie castling ?
         }
 
         private void AddMove(BitPieceType movingPiece, Square fromSquare, Square toSquare, BitPieceType promotionPiece, byte value)
         {
-            _moves.Add(new BitMove(movingPiece, fromSquare, toSquare, BitPieceType.Empty, Square.NoSquare, promotionPiece, value));
+            _moves.Add(BitMove.CreateMove(movingPiece, fromSquare, toSquare, promotionPiece, value));
         }
 
         private void AddCapture(BitPieceType movingPiece, Square fromSquare, Square toSquare, BitPieceType capturedPiece, Square capturedSquare, BitPieceType promotionPiece, byte value)
         {
-            _captures.Add(new BitMove(movingPiece, fromSquare, toSquare, capturedPiece, capturedSquare, promotionPiece, value));
-            _moves.Add(new BitMove(movingPiece, fromSquare, toSquare, capturedPiece, capturedSquare, promotionPiece, value));
+            var capture = BitMove.CreateCapture(movingPiece, fromSquare, toSquare, capturedPiece, capturedSquare, promotionPiece, value);
+            _captures.Add(capture);
+            _moves.Add(capture);
         }
 
 
@@ -297,6 +298,13 @@ namespace MantaChessEngine.BitboardEngine
         {
             ClearLists();
             GenerateEnpassant(color);
+            return _moves;
+        }
+
+        internal IEnumerable<BitMove> GetCastlingMoves(BitColor color)
+        {
+            ClearLists();
+            GenerateCastling(color);
             return _moves;
         }
     }

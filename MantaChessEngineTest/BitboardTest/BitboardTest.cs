@@ -845,6 +845,10 @@ namespace MantaChessEngineTest
             }), target.PawnCaptures[(int)BitColor.White, (int)Square.E5]);
             Assert.AreEqual(Square.F6, target.PawnRight[(int)BitColor.White, (int)Square.E5]);
             Assert.AreEqual(Square.D6, target.PawnLeft[(int)BitColor.White, (int)Square.E5]);
+
+            Assert.AreEqual(Square.NoSquare, target.PawnRight[(int)BitColor.White, (int)Square.H5]);
+            Assert.AreEqual(Square.NoSquare, target.PawnLeft[(int)BitColor.White, (int)Square.A5]);
+
         }
 
         [TestMethod]

@@ -411,10 +411,33 @@ namespace MantaChessEngineTest
                               "...K....");
             var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetPawnMoves(BitColor.White).ToList();
+            var moves = bitMoveGenerator.GetEnPassant(BitColor.White).ToList();
 
             Assert.AreEqual(1, moves.Count);
             Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.B5, Square.A6, BitPieceType.Pawn, Square.A5, BitPieceType.Empty, 0)), "B5xA6 ep missing");
+        }
+
+        [TestMethod]
+        public void GetMoves_WhenBlackCanCaptureEnPassant_ThenListEnPassant()
+        {
+            var stateMock = new Mock<IBitBoardState>();
+            stateMock.Setup(s => s.LastEnPassantSquare).Returns(Square.D3);
+            Bitboards board = new Bitboards(stateMock.Object);
+            board.Initialize();
+            board.SetPosition(".......k" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "..pPp..." +
+                              "........" +
+                              "........" +
+                              "...K....");
+            var bitMoveGenerator = new BitMoveGenerator(board);
+
+            var moves = bitMoveGenerator.GetEnPassant(BitColor.Black).ToList();
+            Assert.AreEqual(2, moves.Count);
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.C4, Square.D3, BitPieceType.Pawn, Square.D4, BitPieceType.Empty, 0)), "C4xD3 ep missing");
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.E4, Square.D3, BitPieceType.Pawn, Square.D4, BitPieceType.Empty, 0)), "E4xD3 ep missing");
         }
 
         [TestMethod]

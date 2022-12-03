@@ -587,6 +587,15 @@ namespace MantaChessEngine.BitboardEngine
             PawnRight = new Square[2, 64];
             PawnDefends = new Bitboard[2, 64];
 
+            // clear PawnLeft and PawnRight
+            for (int i = 0; i < 64; i++)
+            {
+                PawnLeft[(int)BitColor.White, i] = Square.NoSquare;
+                PawnLeft[(int)BitColor.Black, i] = Square.NoSquare;
+                PawnRight[(int)BitColor.White, i] = Square.NoSquare;
+                PawnRight[(int)BitColor.Black, i] = Square.NoSquare;
+            }
+
             for (int i = 0; i < 64; i++)
             {
                 if (Col[i] > 0)

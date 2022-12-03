@@ -1,4 +1,4 @@
-﻿namespace MantaChessEngine
+﻿namespace MantaChessEngine.BitboardEngine
 {
     public struct BitMove
     {
@@ -50,7 +50,7 @@
             return move.PromotionPiece != BitPieceType.Empty; 
         }
 
-        public static bool IsEnpassantMove(this BitMove move)
+        public static bool IsEnpassantCapture(this BitMove move)
         {
             return move.MovingPiece == BitPieceType.Pawn &&
                 move.CapturedPiece != BitPieceType.Empty &&

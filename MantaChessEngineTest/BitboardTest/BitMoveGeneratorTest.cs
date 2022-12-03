@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MantaChessEngine;
+using MantaChessEngine.BitboardEngine;
+using MantaChessEngine; // todo: remove this dependency later...
 using static MantaChessEngine.Definitions;
 using System.Linq;
 

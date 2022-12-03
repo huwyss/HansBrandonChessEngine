@@ -45,12 +45,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bitboard\Bitboards.cs" />
+    <Compile Include="Bitboard\BitBoardState.cs" />
     <Compile Include="Bitboard\BitHelper.cs" />
     <Compile Include="Bitboard\BitMove.cs" />
     <Compile Include="Bitboard\BitMoveExecutor.cs" />
     <Compile Include="Bitboard\BitMoveGenerator.cs" />
     <Compile Include="Bitboard\BitPiece.cs" />
     <Compile Include="Bitboard\Const.cs" />
+    <Compile Include="Bitboard\IBitBoard.cs" />
     <Compile Include="FenParser.cs" />
     <Compile Include="Interfaces\IBoard.cs" />
     <Compile Include="Interfaces\IMoveGenerator.cs" />

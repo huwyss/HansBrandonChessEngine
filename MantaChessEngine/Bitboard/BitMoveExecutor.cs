@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MantaChessEngine
+namespace MantaChessEngine.BitboardEngine
 {
     public class BitMoveExecutor
     {
-        public void DoMove(BitMove bitMove, IBoard bitBoards)
+        public void DoMove(BitMove bitMove, IBitBoard bitBoards)
         {
         }
     }

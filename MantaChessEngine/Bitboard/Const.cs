@@ -1,4 +1,4 @@
-﻿namespace MantaChessEngine
+﻿namespace MantaChessEngine.BitboardEngine
 {
     public enum Square : byte
     {

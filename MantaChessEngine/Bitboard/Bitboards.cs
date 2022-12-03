@@ -2,9 +2,9 @@
 using System.Text;
 using Bitboard = System.UInt64;
 
-namespace MantaChessEngine
+namespace MantaChessEngine.BitboardEngine
 {
-    public class Bitboards : IBoard
+    public class Bitboards : IBitBoard
     {
         private readonly FenParser _fenParser;
         private readonly BitMoveExecutor _moveExecutor;
@@ -21,8 +21,8 @@ namespace MantaChessEngine
         public Bitboard QueenSideMask { get; set; }
         public Bitboard KingSideMask { get; set; }
 
-        public int[,] PawnLeft { get; set; } // dimensions: color, square
-        public int[,] PawnRight { get; set; }
+        public Square[,] PawnLeft { get; set; } // dimensions: color, square
+        public Square[,] PawnRight { get; set; }
         public int[,] PawnStep { get; set; }
         public int[,] PawnDoubleStep { get; set; }
         public Bitboard[,] PawnCaptures { get; set; }
@@ -61,16 +61,7 @@ namespace MantaChessEngine
         /// </summary>
         public bool XSide => !Side;
 
-        /// <summary>
-        /// Counts plys since last capture or pawn move.
-        /// </summary>
-        public int FiftyCounter { get; private set; }
-
-        // ---- from IBoard ----
-
-        public int MoveCountSincePawnOrCapture { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-       
-        public BoardState BoardState { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public BitBoardState BoardState { get ; }
        
         public string GetPositionString => throw new NotImplementedException();
 
@@ -587,8 +578,8 @@ namespace MantaChessEngine
         private void SetPawnCaptures()
         {
             PawnCaptures = new Bitboard[2, 64];
-            PawnLeft = new int[2, 64];
-            PawnRight = new int[2, 64];
+            PawnLeft = new Square[2, 64];
+            PawnRight = new Square[2, 64];
             PawnDefends = new Bitboard[2, 64];
 
             for (int i = 0; i < 64; i++)
@@ -600,7 +591,7 @@ namespace MantaChessEngine
                         // white captures left
                         var stepLeftWhite = i + 7;
                         SetBit(ref PawnCaptures[(int)BitColor.White, i], stepLeftWhite);
-                        PawnLeft[(int)BitColor.White, i] = stepLeftWhite;
+                        PawnLeft[(int)BitColor.White, i] = (Square)stepLeftWhite;
                     }
 
                     if (Row[i] > 0)
@@ -608,7 +599,7 @@ namespace MantaChessEngine
                         // black captures left
                         var stepLeftBlack = i - 9;
                         SetBit(ref PawnCaptures[(int)BitColor.Black, i], stepLeftBlack);
-                        PawnLeft[(int)BitColor.Black, i] = stepLeftBlack;
+                        PawnLeft[(int)BitColor.Black, i] = (Square)stepLeftBlack;
                     }
                 }
 
@@ -619,7 +610,7 @@ namespace MantaChessEngine
                         // white captures right
                         var stepRightWhite = i + 9;
                         SetBit(ref PawnCaptures[(int)BitColor.White, i], stepRightWhite);
-                        PawnRight[(int)BitColor.White, i] = stepRightWhite;
+                        PawnRight[(int)BitColor.White, i] = (Square)stepRightWhite;
                     }
 
                     if (Row[i] > 0)
@@ -627,7 +618,7 @@ namespace MantaChessEngine
                         // black captures right
                         var stepRightBlack = i - 7;
                         SetBit(ref PawnCaptures[(int)BitColor.Black, i], stepRightBlack);
-                        PawnRight[(int)BitColor.Black, i] = stepRightBlack;
+                        PawnRight[(int)BitColor.Black, i] = (Square)stepRightBlack;
                     }
                 }
 
@@ -835,14 +826,13 @@ namespace MantaChessEngine
 
             SetPosition(positionInfo.PositionString);
             BoardState.Add(
-                null,
-                positionInfo.EnPassantFile - '0',
-                positionInfo.EnPassantRank,
+                new BitMove(),
+                (Square)(positionInfo.EnPassantFile - '0' - 1 + 8 * positionInfo.EnPassantRank),
                 positionInfo.CastlingRightWhiteQueenSide,
                 positionInfo.CastlingRightWhiteKingSide,
                 positionInfo.CastlingRightBlackQueenSide,
                 positionInfo.CastlingRightBlackKingSide,
-                positionInfo.SideToMove);
+                positionInfo.SideToMove == Definitions.ChessColor.White ? BitColor.White : BitColor.Black);
 
             return string.Empty;
         }
@@ -930,16 +920,6 @@ namespace MantaChessEngine
             }
         }
 
-        public Piece GetPiece(int file, int rank)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetPiece(Piece piece, int file, int rank)
-        {
-            throw new NotImplementedException();
-        }
-
         public BitPiece GetPiece(Square square)
         {
             return new BitPiece(BoardColor[(int)square], BoardAllPieces[(int)square]);
@@ -953,11 +933,6 @@ namespace MantaChessEngine
             SetBit(ref Bitboard_AllPieces, (int)square); // todo test this
             SetBit(ref Bitboard_ColoredPieces[(int) color], (int)square); // todo test this
         }
-       
-        public void Move(IMove nextMove)
-        {
-            throw new NotImplementedException();
-        }
 
         public void Move(BitMove nextMove)
         {
@@ -965,16 +940,6 @@ namespace MantaChessEngine
         }
 
         public void Back()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Definitions.ChessColor GetColor(int file, int rank)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Position GetKing(Definitions.ChessColor color)
         {
             throw new NotImplementedException();
         }

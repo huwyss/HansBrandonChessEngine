@@ -5,6 +5,7 @@ using MantaChessEngine.BitboardEngine;
 using MantaChessEngine; // todo: remove this dependency later...
 using static MantaChessEngine.Definitions;
 using System.Linq;
+using Moq;
 
 namespace MantaChessEngineTest
 {
@@ -393,29 +394,27 @@ namespace MantaChessEngineTest
             Assert.AreEqual(0, moves.Count);
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMoves_WhenWhiteCanCaptureEnPassant_ThenListEnPassant()
         {
-            Board board = new Board();
-            string position = ".......k" +
-                              "p......." +
+            var stateMock = new Mock<IBitBoardState>();
+            stateMock.Setup(s => s.LastEnPassantSquare).Returns(Square.A6);
+            Bitboards board = new Bitboards(stateMock.Object);
+            board.Initialize();
+            board.SetPosition(".......k" +
                               "........" +
-                              ".P......" +
+                              "........" +
+                              "pP......" +
                               "........" +
                               "........" + 
                               "........" + 
-                              "...K....";
-            board.SetPosition(position);
-            board.Move(new NormalMove(new Pawn(ChessColor.Black),'a',7,'a',5,null));
-            Assert.AreEqual(Helper.FileCharToFile('a'), board.BoardState.LastEnPassantFile);
-            Assert.AreEqual(6, board.BoardState.LastEnPassantRank);
+                              "...K....");
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var pawn = new Pawn(ChessColor.White);
-            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('b'), 5, true); // white pawn
+            var moves = bitMoveGenerator.GetPawnMoves(BitColor.White).ToList();
 
-            Assert.AreEqual(2, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new EnPassantCaptureMove(Piece.MakePiece('P'), 'b', 5, 'a', 6, Piece.MakePiece('p'))), "b5a6pe en passant missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'b', 5, 'b', 6, null)), "b5b6. missing");
+            Assert.AreEqual(1, moves.Count);
+            Assert.IsTrue(moves.Contains(new BitMove(BitPieceType.Pawn, Square.B5, Square.A6, BitPieceType.Pawn, Square.A5, BitPieceType.Empty, 0)), "B5xA6 ep missing");
         }
 
         [TestMethod]

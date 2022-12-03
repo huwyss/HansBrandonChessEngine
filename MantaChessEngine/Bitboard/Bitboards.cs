@@ -61,7 +61,7 @@ namespace MantaChessEngine.BitboardEngine
         /// </summary>
         public bool XSide => !Side;
 
-        public BitBoardState BoardState { get ; }
+        public IBitBoardState BoardState { get ; }
        
         public string GetPositionString => throw new NotImplementedException();
 
@@ -80,6 +80,11 @@ namespace MantaChessEngine.BitboardEngine
             MovesPieces = new Bitboard[6, 64];
 
             InitBitboard();
+        }
+
+        public Bitboards(IBitBoardState state) : this ()
+        {
+            BoardState = state;
         }
 
         public void Initialize()

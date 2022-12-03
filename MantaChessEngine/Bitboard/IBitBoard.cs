@@ -4,7 +4,7 @@ namespace MantaChessEngine.BitboardEngine
 {
     public interface IBitBoard
     {
-        BitBoardState BoardState { get; }
+        IBitBoardState BoardState { get; }
         
         string GetPositionString { get; }
 

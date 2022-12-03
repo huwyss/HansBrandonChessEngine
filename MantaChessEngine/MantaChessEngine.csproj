@@ -53,6 +53,7 @@
     <Compile Include="Bitboard\BitPiece.cs" />
     <Compile Include="Bitboard\Const.cs" />
     <Compile Include="Bitboard\IBitBoard.cs" />
+    <Compile Include="Bitboard\IBitBoardState.cs" />
     <Compile Include="FenParser.cs" />
     <Compile Include="Interfaces\IBoard.cs" />
     <Compile Include="Interfaces\IMoveGenerator.cs" />

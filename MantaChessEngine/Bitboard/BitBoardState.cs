@@ -2,7 +2,7 @@
 
 namespace MantaChessEngine.BitboardEngine
 {
-    public class BitBoardState
+    public class BitBoardState : IBitBoardState
     {
         private List<Square> EnPassantSquare { get; set; }
         private List<bool> CastlingRightWhiteQueenSide { get; set; }

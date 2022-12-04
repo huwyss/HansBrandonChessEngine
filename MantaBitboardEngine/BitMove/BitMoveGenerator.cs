@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Bitboard = System.UInt64;
 
-namespace MantaChessEngine.BitboardEngine
+namespace MantaBitboardEngine
 {
     public class BitMoveGenerator
     {
@@ -268,7 +268,6 @@ namespace MantaChessEngine.BitboardEngine
         {
             _moves.Add(BitMove.CreateCastling(movingPiece, fromSquare, toSquare, value));
         }
-
 
         public IEnumerable<BitMove> GetAllCaptures(IBitBoard board, BitColor color)
         {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MantaChessEngine.BitboardEngine
+namespace MantaBitboardEngine
 {
     public class BitBoardState : IBitBoardState
     {

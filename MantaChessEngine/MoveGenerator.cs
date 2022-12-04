@@ -4,6 +4,7 @@ using System.Linq;
 using static MantaChessEngine.Definitions;
 
 [assembly: InternalsVisibleTo("MantaChessEngineTest")]
+[assembly: InternalsVisibleTo("MantaBitboardEngineTest")]
 namespace MantaChessEngine
 {
     public class MoveGenerator : IMoveGenerator

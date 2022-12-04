@@ -1,8 +1,11 @@
-﻿using System;
+﻿using MantaChessEngine;
+using System;
 using System.Text;
+using System.Runtime.CompilerServices;
 using Bitboard = System.UInt64;
 
-namespace MantaChessEngine.BitboardEngine
+[assembly: InternalsVisibleTo("MantaBitboardEngineTest")]
+namespace MantaBitboardEngine
 {
     public class Bitboards : IBitBoard
     {

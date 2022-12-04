@@ -1,6 +1,6 @@
 ﻿using static MantaChessEngine.Definitions;
 
-namespace MantaChessEngine.BitboardEngine
+namespace MantaBitboardEngine
 {
     public interface IBitBoard
     {

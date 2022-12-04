@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MantaUCI", "MantaUCI\MantaU
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerformanceMeter", "PerformanceMeter\PerformanceMeter.csproj", "{C9070427-C3C3-4274-9997-4DE71BAE9CFA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MantaBitboardEngine", "MantaBitboardEngine\MantaBitboardEngine.csproj", "{C52486DA-4C3F-4431-A99C-9C9191D47F51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MantaBitboardEngineTest", "MantaBitboardEngineTest\MantaBitboardEngineTest.csproj", "{7A82BF65-6EC7-4334-995A-75DD6586B629}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{C9070427-C3C3-4274-9997-4DE71BAE9CFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9070427-C3C3-4274-9997-4DE71BAE9CFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9070427-C3C3-4274-9997-4DE71BAE9CFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C52486DA-4C3F-4431-A99C-9C9191D47F51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C52486DA-4C3F-4431-A99C-9C9191D47F51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C52486DA-4C3F-4431-A99C-9C9191D47F51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C52486DA-4C3F-4431-A99C-9C9191D47F51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A82BF65-6EC7-4334-995A-75DD6586B629}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A82BF65-6EC7-4334-995A-75DD6586B629}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A82BF65-6EC7-4334-995A-75DD6586B629}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A82BF65-6EC7-4334-995A-75DD6586B629}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

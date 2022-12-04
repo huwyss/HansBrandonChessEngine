@@ -10,6 +10,7 @@ namespace MantaBitboardEngine
     {
         public void DoMove(BitMove bitMove, IBitBoard bitBoards)
         {
+            
         }
     }
 }

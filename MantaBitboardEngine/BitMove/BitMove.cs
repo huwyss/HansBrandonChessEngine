@@ -10,7 +10,7 @@
             BitPieceType capturedPiece,
             Square capturedSquare,
             BitPieceType promotionPiece,
-            bool castling,
+            CastlingType castling,
             BitColor movingColor,
             byte value)
         {
@@ -35,7 +35,7 @@
             BitColor movingColor,
             byte value)
         {
-            return new BitMove(movingPiece, fromSquare, toSquare, capturedPiece, capturedSquare, promotionPiece, false, movingColor, value);
+            return new BitMove(movingPiece, fromSquare, toSquare, capturedPiece, capturedSquare, promotionPiece, CastlingType.None, movingColor, value);
         }
 
         // move constructor
@@ -47,7 +47,7 @@
             BitColor movingColor,
             byte value)
         {
-            return new BitMove(movingPiece, fromSquare, toSquare, BitPieceType.Empty, Square.NoSquare, promotionPiece, false, movingColor, value);
+            return new BitMove(movingPiece, fromSquare, toSquare, BitPieceType.Empty, Square.NoSquare, promotionPiece, CastlingType.None, movingColor, value);
         }
 
         // castling constructor
@@ -56,9 +56,10 @@
             Square fromSquare,
             Square toSquare,
             BitColor movingColor,
+            CastlingType castling,
             byte value)
         {
-            return new BitMove(movingPiece, fromSquare, toSquare, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, true, movingColor, value);
+            return new BitMove(movingPiece, fromSquare, toSquare, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, castling, movingColor, value);
         }
 
         public BitPieceType MovingPiece { get; }
@@ -67,7 +68,7 @@
         public BitPieceType CapturedPiece { get; }
         public Square CapturedSquare { get; }
         public BitPieceType PromotionPiece { get; }
-        public bool Castling { get; }
+        public CastlingType Castling { get; }
         public BitColor MovingColor { get; }
         public byte Value { get; }
     }

@@ -94,4 +94,11 @@
         Black = 1,
         Empty = 2
     }
+
+    public enum CastlingType : byte
+    {
+        None = 0,
+        KingSide = 1,
+        QueenSide = 2,
+    }
 }

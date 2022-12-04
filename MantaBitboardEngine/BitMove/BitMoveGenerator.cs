@@ -241,14 +241,14 @@ namespace MantaBitboardEngine
                 _bitboards.BoardAllPieces[(int)kingSquare] == BitPieceType.King && _bitboards.BoardColor[(int)kingSquare] == color &&
                 _bitboards.BoardAllPieces[(int)rookKingSquare] == BitPieceType.Rook && _bitboards.BoardColor[(int)rookKingSquare] == color)
             {
-                AddCastlingMove(BitPieceType.King, kingSquare, kingToSquareKingSide, color, 0);
+                AddCastlingMove(BitPieceType.King, kingSquare, kingToSquareKingSide, color, CastlingType.KingSide, 0);
             }
 
             if (castlingRightQueenSide && (_bitboards.BetweenMatrix[(int)kingSquare, (int)rookQueenSquare] & _bitboards.Bitboard_AllPieces) == 0 &&
                 _bitboards.BoardAllPieces[(int)kingSquare] == BitPieceType.King && _bitboards.BoardColor[(int)kingSquare] == color &&
                 _bitboards.BoardAllPieces[(int)rookQueenSquare] == BitPieceType.Rook && _bitboards.BoardColor[(int)rookQueenSquare] == color)
             {
-                AddCastlingMove(BitPieceType.King, kingSquare, kingToSquareQueenSide, color, 0);
+                AddCastlingMove(BitPieceType.King, kingSquare, kingToSquareQueenSide, color, CastlingType.QueenSide, 0);
             }
         }
 
@@ -264,9 +264,9 @@ namespace MantaBitboardEngine
             _moves.Add(capture);
         }
 
-        private void AddCastlingMove(BitPieceType movingPiece, Square fromSquare, Square toSquare, BitColor movingColor, byte value)
+        private void AddCastlingMove(BitPieceType movingPiece, Square fromSquare, Square toSquare, BitColor movingColor, CastlingType castling, byte value)
         {
-            _moves.Add(BitMove.CreateCastling(movingPiece, fromSquare, toSquare, movingColor, value));
+            _moves.Add(BitMove.CreateCastling(movingPiece, fromSquare, toSquare, movingColor, castling, value));
         }
 
         public IEnumerable<BitMove> GetAllCaptures(IBitBoard board, BitColor color)

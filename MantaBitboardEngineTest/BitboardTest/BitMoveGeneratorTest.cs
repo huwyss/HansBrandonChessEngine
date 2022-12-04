@@ -6,7 +6,7 @@ using static MantaChessEngine.Definitions;
 using System.Linq;
 using Moq;
 
-namespace MantaChessEngineTest
+namespace MantaBitboardEngineTest
 {
     [TestClass]
     public class BitMoveGeneratorTest

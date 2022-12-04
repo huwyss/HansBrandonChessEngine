@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MantaBitboardEngine;
 
-namespace MantaChessEngineTest
+namespace MantaBitboardEngineTest
 {
     [TestClass]
     public class BitboardTest

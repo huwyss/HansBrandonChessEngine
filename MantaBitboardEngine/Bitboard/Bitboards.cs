@@ -74,6 +74,7 @@ namespace MantaBitboardEngine
         {
             _fenParser = new FenParser();
             _moveExecutor = new BitMoveExecutor();
+            BoardState = new BitBoardState();
 
             Bitboard_Pieces = new Bitboard[2, 7]; // todo: what is the 7th son of a seventh son?
             BoardAllPieces = new BitPieceType[64];

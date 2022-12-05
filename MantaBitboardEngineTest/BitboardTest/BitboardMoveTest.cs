@@ -30,39 +30,82 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(BitColor.Empty, piece.Color);
         }
 
-       [TestMethod, Ignore]
+       [TestMethod]
         public void InitPosition_WhenInitializedPosition_ThenPiecesAtInitPosition()
         {
-            var target = new Board();
+            var target = new Bitboards();
+            target.Initialize();
             target.SetInitialPosition();
 
-            Assert.AreEqual(new Rook(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('a'), 1));
-            Assert.AreEqual(new Knight(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('b'), 1));
-            Assert.AreEqual(new Bishop(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('c'), 1));
-            Assert.AreEqual(new Queen(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('d'), 1));
-            Assert.AreEqual(new King(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('e'), 1));
-            Assert.AreEqual(new Bishop(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('f'), 1));
-            Assert.AreEqual(new Knight(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('g'), 1));
-            Assert.AreEqual(new Rook(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('h'), 1));
+            Assert.AreEqual(BitPieceType.Rook,  target.GetPiece(Square.A1).Piece);
+            Assert.AreEqual(BitColor.White, target.GetPiece(Square.A1).Color);
 
-            Assert.AreEqual(new Pawn(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('b'), 2)); // white pawn
-            Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('c'), 3)); // empty
-            Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('d'), 4)); // empty
-            Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('e'), 5)); // empty
-            Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('f'), 6)); // empty
-            Assert.AreEqual(new Pawn(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('g'), 7)); // black pawn
+            Assert.AreEqual(BitPieceType.Knight, target.GetPiece(Square.B1).Piece);
+            Assert.AreEqual(BitColor.White, target.GetPiece(Square.B1).Color);
 
-            Assert.AreEqual(new Rook(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('a'), 8));
-            Assert.AreEqual(new Knight(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('b'), 8));
-            Assert.AreEqual(new Bishop(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('c'), 8));
-            Assert.AreEqual(new Queen(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('d'), 8));
-            Assert.AreEqual(new King(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('e'), 8));
-            Assert.AreEqual(new Bishop(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('f'), 8));
-            Assert.AreEqual(new Knight(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('g'), 8));
-            Assert.AreEqual(new Rook(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('h'), 8));
+            Assert.AreEqual(BitPieceType.Bishop, target.GetPiece(Square.C1).Piece);
+            Assert.AreEqual(BitColor.White, target.GetPiece(Square.C1).Color);
 
-            Assert.AreEqual(0, target.BoardState.LastEnPassantFile);
-            Assert.AreEqual(0, target.BoardState.LastEnPassantRank);
+            Assert.AreEqual(BitPieceType.Queen, target.GetPiece(Square.D1).Piece);
+            Assert.AreEqual(BitColor.White, target.GetPiece(Square.D1).Color);
+
+            Assert.AreEqual(BitPieceType.King, target.GetPiece(Square.E1).Piece);
+            Assert.AreEqual(BitColor.White, target.GetPiece(Square.E1).Color);
+
+            Assert.AreEqual(BitPieceType.Bishop, target.GetPiece(Square.F1).Piece);
+            Assert.AreEqual(BitColor.White, target.GetPiece(Square.F1).Color);
+
+            Assert.AreEqual(BitPieceType.Knight, target.GetPiece(Square.G1).Piece);
+            Assert.AreEqual(BitColor.White, target.GetPiece(Square.G1).Color);
+
+            Assert.AreEqual(BitPieceType.Rook, target.GetPiece(Square.H1).Piece);
+            Assert.AreEqual(BitColor.White, target.GetPiece(Square.H1).Color);
+
+            Assert.AreEqual(BitPieceType.Pawn, target.GetPiece(Square.B2).Piece); // white pawn
+            Assert.AreEqual(BitColor.White, target.GetPiece(Square.B2).Color);
+
+
+            Assert.AreEqual(BitPieceType.Empty, target.GetPiece(Square.C3).Piece); // empty
+            Assert.AreEqual(BitColor.Empty, target.GetPiece(Square.C3).Color);
+
+            Assert.AreEqual(BitPieceType.Empty, target.GetPiece(Square.D4).Piece); // empty
+            Assert.AreEqual(BitColor.Empty, target.GetPiece(Square.D4).Color);
+
+            Assert.AreEqual(BitPieceType.Empty, target.GetPiece(Square.E5).Piece); // empty
+            Assert.AreEqual(BitColor.Empty, target.GetPiece(Square.E5).Color);
+
+            Assert.AreEqual(BitPieceType.Empty, target.GetPiece(Square.F6).Piece); // empty
+            Assert.AreEqual(BitColor.Empty, target.GetPiece(Square.F6).Color);
+
+
+            Assert.AreEqual(BitPieceType.Pawn, target.GetPiece(Square.G7).Piece); // black pawn
+            Assert.AreEqual(BitColor.Black, target.GetPiece(Square.G7).Color);
+
+            Assert.AreEqual(BitPieceType.Rook, target.GetPiece(Square.A8).Piece);
+            Assert.AreEqual(BitColor.Black, target.GetPiece(Square.A8).Color);
+
+            Assert.AreEqual(BitPieceType.Knight, target.GetPiece(Square.B8).Piece);
+            Assert.AreEqual(BitColor.Black, target.GetPiece(Square.B8).Color);
+
+            Assert.AreEqual(BitPieceType.Bishop, target.GetPiece(Square.C8).Piece);
+            Assert.AreEqual(BitColor.Black, target.GetPiece(Square.C8).Color);
+
+            Assert.AreEqual(BitPieceType.Queen, target.GetPiece(Square.D8).Piece);
+            Assert.AreEqual(BitColor.Black, target.GetPiece(Square.D8).Color);
+
+            Assert.AreEqual(BitPieceType.King, target.GetPiece(Square.E8).Piece);
+            Assert.AreEqual(BitColor.Black, target.GetPiece(Square.E8).Color);
+
+            Assert.AreEqual(BitPieceType.Bishop, target.GetPiece(Square.F8).Piece);
+            Assert.AreEqual(BitColor.Black, target.GetPiece(Square.F8).Color);
+
+            Assert.AreEqual(BitPieceType.Knight, target.GetPiece(Square.G8).Piece);
+            Assert.AreEqual(BitColor.Black, target.GetPiece(Square.G8).Color);
+
+            Assert.AreEqual(BitPieceType.Rook, target.GetPiece(Square.H8).Piece);
+            Assert.AreEqual(BitColor.Black, target.GetPiece(Square.H8).Color);
+
+            Assert.AreEqual(Square.NoSquare, target.BoardState.LastEnPassantSquare);
             Assert.AreEqual(true, target.BoardState.LastCastlingRightWhiteKingSide);  // Castling white  
             Assert.AreEqual(true, target.BoardState.LastCastlingRightWhiteQueenSide); // 
             Assert.AreEqual(true, target.BoardState.LastCastlingRightBlackKingSide);  // castling black

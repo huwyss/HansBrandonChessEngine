@@ -8,30 +8,26 @@ namespace MantaBitboardEngineTest
     [TestClass]
     public class BitboardMoveTest
     {
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetSetPieceTest_WhenSetPieceRookToD8_ThenGetPieceD8ShouldReturnRook()
         {
-            var target = new Board();
-            target.SetPiece(Piece.MakePiece('R'), 4, 8);
-            char piece = target.GetPiece(Helper.FileCharToFile('d'), 8).Symbol;
-            Assert.AreEqual('R', piece);
+            var target = new Bitboards();
+            target.Initialize();
+            target.SetPiece(BitColor.White, BitPieceType.Rook, Square.D8);
+            
+            var piece = target.GetPiece(Square.D8);
+            Assert.AreEqual(BitPieceType.Rook, piece.Piece);
+            Assert.AreEqual(BitColor.White, piece.Color);
         }
 
-       [TestMethod, Ignore]
-        public void GetSetPieceTest_WhenSetPieceRookTo48_ThenGetPiece48ShouldReturnRook()
-        {
-            var target = new Board();
-            target.SetPiece(Piece.MakePiece('R'), 4, 8);
-            char piece = target.GetPiece(4, 8).Symbol;
-            Assert.AreEqual('R', piece);
-        }
-
-       [TestMethod, Ignore]
+       [TestMethod]
         public void GetPiece_WhenNewBoard_ThenAllPositionsEmpty()
         {
-            var target = new Board();
-            Piece piece = target.GetPiece(Helper.FileCharToFile('d'), 8);
-            Assert.AreEqual(null, piece);
+            var target = new Bitboards();
+            target.Initialize();
+            var piece = target.GetPiece(Square.D8);
+            Assert.AreEqual(BitPieceType.Empty, piece.Piece);
+            Assert.AreEqual(BitColor.Empty, piece.Color);
         }
 
        [TestMethod, Ignore]

@@ -26,8 +26,6 @@ namespace MantaBitboardEngine
         /// </summary>
         BitPiece GetPiece(Square square);
 
-        ////BitColor GetColor(Square square);
-
         /// <summary>
         /// Sets a chess piece to the field.
         /// </summary>

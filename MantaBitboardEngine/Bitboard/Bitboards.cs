@@ -952,6 +952,18 @@ namespace MantaBitboardEngine
             SetBit(ref Bitboard_ColoredPieces[(int) color], (int)square); // todo test this
         }
 
+        public void RemovePiece(Square square)
+        {
+            var piece = BoardAllPieces[(int)square];
+            var color = BoardColor[(int)square];
+            ClearBit(ref Bitboard_Pieces[(int)color, (int)piece], (int)square);
+            ClearBit(ref Bitboard_AllPieces, (int)square); // todo test this
+            ClearBit(ref Bitboard_ColoredPieces[(int)color], (int)square); // todo test this
+
+            BoardAllPieces[(int)square] = BitPieceType.Empty;
+            BoardColor[(int)square] = BitColor.Empty;
+        }
+
         public void Move(BitMove nextMove)
         {
             _moveExecutor.DoMove(nextMove, this);

@@ -10,16 +10,19 @@ namespace MantaBitboardEngine
     {
         public void DoMove(BitMove bitMove, IBitBoard bitBoards)
         {
-            bitBoards.SetPiece(BitColor.Empty, BitPieceType.Empty, bitMove.FromSquare);
-            bitBoards.SetPiece(BitColor.Empty, BitPieceType.Empty, bitMove.CapturedSquare);
+            bitBoards.RemovePiece(bitMove.FromSquare);
+            if (bitMove.CapturedSquare != Square.NoSquare)
+            {
+                bitBoards.RemovePiece(bitMove.CapturedSquare);
+            }
 
             if (bitMove.IsPromotionMove())
             {
-                bitBoards.SetPiece(bitMove.MovingColor, bitMove.MovingPiece, bitMove.ToSquare);
+                bitBoards.SetPiece(bitMove.MovingColor, bitMove.PromotionPiece, bitMove.ToSquare);
             }
             else
             {
-                bitBoards.SetPiece(bitMove.MovingColor, bitMove.PromotionPiece, bitMove.ToSquare);
+                bitBoards.SetPiece(bitMove.MovingColor, bitMove.MovingPiece, bitMove.ToSquare);
             }
 
             switch (bitMove.Castling)
@@ -54,7 +57,16 @@ namespace MantaBitboardEngine
                     break;
             }
 
-            // todo: bitBoards.BoardState.Add()
+            // todo: bitBoards.BoardState correctly...
+            var enPassantSquare = Square.NoSquare; // todo 
+            bitBoards.BoardState.Add(
+                bitMove,
+                enPassantSquare,
+                true, // castlingRightWhiteQueenSide,
+                true, // castlingRightWhiteKingSide,
+                true, // castlingRightBlackQueenSide,
+                true, // castlingRightBlackKingSide,
+                BitHelper.OtherColor(bitMove.MovingColor));
         }
     }
 }

@@ -32,6 +32,12 @@ namespace MantaBitboardEngine
         void SetPiece(BitColor color, BitPieceType piece, Square square);
 
         /// <summary>
+        /// Removes the piece from the square.
+        /// </summary>
+        /// <param name="square"></param>
+        void RemovePiece(Square square);
+
+        /// <summary>
         /// Do a move and update the board
         /// </summary>
         void Move(BitMove nextMove);

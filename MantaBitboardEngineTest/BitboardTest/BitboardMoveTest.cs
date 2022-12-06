@@ -112,16 +112,22 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(true, target.BoardState.LastCastlingRightBlackQueenSide); // 
         }
 
-       [TestMethod, Ignore]
+       [TestMethod]
         public void MoveTest_WhenPawnMovesNormal_ThenNewPositionOk()
         {
-            Board target = new Board();
+            var target = new Bitboards();
+            target.Initialize();
             target.SetInitialPosition();
 
-            target.Move(new NormalMove(Piece.MakePiece('P'),'e',2,'e',4,null));
-            Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('e'), 2));
-            Assert.AreEqual(new Pawn(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('e'), 4));
-            Assert.AreEqual(Definitions.ChessColor.Black, target.BoardState.SideToMove);
+            target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.E2, Square.E4, BitPieceType.Empty, BitColor.White, 0));
+            
+            Assert.AreEqual(BitPieceType.Empty, target.GetPiece(Square.E2).Piece);
+            Assert.AreEqual(BitColor.Empty, target.GetPiece(Square.E2).Color);
+
+            Assert.AreEqual(BitPieceType.Pawn, target.GetPiece(Square.E4).Piece);
+            Assert.AreEqual(BitColor.White, target.GetPiece(Square.E4).Color);
+
+            Assert.AreEqual(BitColor.Black, target.BoardState.SideToMove);
         }
 
        [TestMethod, Ignore]

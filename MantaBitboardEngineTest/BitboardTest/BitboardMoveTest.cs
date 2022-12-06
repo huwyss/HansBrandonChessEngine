@@ -130,50 +130,46 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(BitColor.Black, target.BoardState.SideToMove);
         }
 
-       [TestMethod, Ignore]
-        public void MoveTest_WhenPawnMovesNormalAndMoveIsOfTypeMove_ThenNewPositionOk()
-        {
-            Board target = new Board();
-            target.SetInitialPosition();
-            target.Move(new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 4, null));
-
-            Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('e'), 2));
-            Assert.AreEqual(new Pawn(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('e'), 4));
-            Assert.AreEqual(Definitions.ChessColor.Black, target.BoardState.SideToMove);
-        }
-
-       [TestMethod, Ignore]
+        [TestMethod]
         public void MoveTest_WhenQueenCapturesPiece_ThenNewPositionOk()
         {
-            Board target = new Board();
+            var target = new Bitboards();
+            target.Initialize();
             target.SetInitialPosition();
-            target.SetPiece(null, Helper.FileCharToFile('d'), 2);
+            target.RemovePiece(Square.D2);
 
-            target.Move(new NormalMove(new Queen(Definitions.ChessColor.White),'d',1,'d',7,Piece.MakePiece('p')));
-            Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('d'), 1));
-            Assert.AreEqual(new Queen(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('d'), 7));
-            Assert.AreEqual(Definitions.ChessColor.Black, target.BoardState.SideToMove);
+            var capture = BitMove.CreateCapture(BitPieceType.Queen, Square.D1, Square.D7, BitPieceType.Pawn, Square.D7, BitPieceType.Empty, BitColor.White, 0);
+            target.Move(capture);
+            
+            Assert.AreEqual(BitPieceType.Empty, target.GetPiece(Square.D1).Piece);
+            Assert.AreEqual(BitColor.Empty, target.GetPiece(Square.D1).Color);
+
+            Assert.AreEqual(BitPieceType.Queen, target.GetPiece(Square.D7).Piece);
+            Assert.AreEqual(BitColor.White, target.GetPiece(Square.D7).Color);
+
+            Assert.AreEqual(BitColor.Black, target.BoardState.SideToMove);
 
             Assert.AreEqual(1, target.BoardState.Moves.Count);
-            Assert.AreEqual(new NormalMove(new Queen(Definitions.ChessColor.White), 4, 1, 4, 7, Piece.MakePiece('p')), target.BoardState.Moves[0]);
+            Assert.AreEqual(capture, target.BoardState.Moves[0]);
         }
 
-       [TestMethod, Ignore]
+       [TestMethod]
         public void MoveTest_WhenPawnMovesTwoFields_ThenEnPassantFieldSet_Black()
         {
-            Board board = new Board();
-            string position = ".......k" +
-                              "p......." +
-                              "........" +
-                              ".P......" +
-                              "........" +
-                              "........" +
-                              "........" +
-                              "...K....";
-            board.SetPosition(position);
-            board.Move(new NormalMove(Piece.MakePiece('p'),'a',7,'a',5,null));
-            Assert.AreEqual(Helper.FileCharToFile('a'), board.BoardState.LastEnPassantFile);
-            Assert.AreEqual(6, board.BoardState.LastEnPassantRank);
+            var target = new Bitboards();
+            target.Initialize();
+            target.SetPosition(".......k" +
+                               "p......." +
+                               "........" +
+                               ".P......" +
+                               "........" +
+                               "........" +
+                               "........" +
+                               "...K....");
+
+            target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A7, Square.A5, BitPieceType.Empty, BitColor.Black, 0));
+
+            Assert.AreEqual(Square.A6, target.BoardState.LastEnPassantSquare);
         }
 
        [TestMethod, Ignore]

@@ -58,7 +58,7 @@ namespace MantaBitboardEngine
             }
 
             // todo: bitBoards.BoardState correctly...
-            var enPassantSquare = Square.NoSquare; // todo 
+            var enPassantSquare = GetEnPassantSquare(bitMove);
             bitBoards.BoardState.Add(
                 bitMove,
                 enPassantSquare,
@@ -67,6 +67,34 @@ namespace MantaBitboardEngine
                 true, // castlingRightBlackQueenSide,
                 true, // castlingRightBlackKingSide,
                 BitHelper.OtherColor(bitMove.MovingColor));
+        }
+
+        private Square GetEnPassantSquare(BitMove move)
+        {
+            var enPassantSquare = Square.NoSquare;
+
+            if (move.MovingPiece != BitPieceType.Pawn)
+            {
+                return enPassantSquare;
+            }
+
+            // black en passant field
+            if (move.MovingColor == BitColor.Black) // black pawn
+            {
+                if (move.FromSquare - move.ToSquare == 16) // 2 fields move
+                {
+                    enPassantSquare = move.FromSquare - 8;
+                }
+            }
+            else // white pawn
+            {
+                if (move.ToSquare - move.FromSquare == 16) // 2 fields move
+                {
+                    enPassantSquare = move.FromSquare + 8;
+                }
+            }
+
+            return enPassantSquare;
         }
     }
 }

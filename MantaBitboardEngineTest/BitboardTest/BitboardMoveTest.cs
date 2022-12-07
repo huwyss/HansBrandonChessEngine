@@ -172,40 +172,43 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(Square.A6, target.BoardState.LastEnPassantSquare);
         }
 
-       [TestMethod, Ignore]
+       [TestMethod]
         public void MoveTest_WhenPawnMovesTwoFields_ThenEnPassantFieldSet_White()
         {
-            Board board = new Board();
-            string position = ".......k" +
-                              "........" +
-                              "........" +
-                              "........" +
-                              "p......." +
-                              "........" +
-                              ".P......" +
-                              "...K....";
-            board.SetPosition(position);
-            board.Move(new NormalMove(Piece.MakePiece('P'),'b',2,'b',4,null));
-            Assert.AreEqual(Helper.FileCharToFile('b'), board.BoardState.LastEnPassantFile);
-            Assert.AreEqual(3, board.BoardState.LastEnPassantRank);
+            var target = new Bitboards();
+            target.Initialize();
+            target.SetPosition(".......k" +
+                               "........" +
+                               "........" +
+                               "........" +
+                               "p......." +
+                               "........" +
+                               ".P......" +
+                               "...K....");
+
+            target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.B2, Square.B4, BitPieceType.Empty, BitColor.White, 0));
+
+            Assert.AreEqual(Square.B3, target.BoardState.LastEnPassantSquare);
         }
 
-       [TestMethod, Ignore]
+        [TestMethod]
         public void MoveTest_WhenBlackCapturesEnPassant_ThenMoveCorrect_BlackMoves()
         {
-            Board board = new Board();
-            string position = ".......k" +
-                              "........" +
-                              "........" +
-                              "........" +
-                              "p......." +
-                              "........" +
-                              ".P......" +
-                              "...K....";
-            board.SetPosition(position);
-            board.Move(new NormalMove(Piece.MakePiece('P'),'b',2,'b',4,null));
+            var target = new Bitboards();
+            target.Initialize();
+            target.SetPosition(".......k" +
+                               "........" +
+                               "........" +
+                               "........" +
+                               "p......." +
+                               "........" +
+                               ".P......" +
+                               "...K....");
 
-            board.Move(new EnPassantCaptureMove(Piece.MakePiece('p'),'a',4,'b',3,Piece.MakePiece('P'))); // capture en passant
+            target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.B2, Square.B4, BitPieceType.Empty, BitColor.White, 0));
+
+            var enPassantCapture = BitMove.CreateCapture(BitPieceType.Pawn, Square.A4, Square.B3, BitPieceType.Pawn, Square.B4, BitPieceType.Empty, BitColor.Black, 0);
+            target.Move(enPassantCapture);
 
             string expPosit = ".......k" +
                               "........" +
@@ -215,8 +218,8 @@ namespace MantaBitboardEngineTest
                               ".p......" +
                               "........" +
                               "...K....";
-            Assert.AreEqual(expPosit, board.GetPositionString, "En passant capture not correct move.");
-            Assert.AreEqual(board.BoardState.Moves[1], new EnPassantCaptureMove(Piece.MakePiece('p'), 'a', 4, 'b', 3, Piece.MakePiece('P')));
+            Assert.AreEqual(expPosit, target.GetPositionString, "En passant capture not correct move.");
+            Assert.AreEqual(target.BoardState.Moves[1], enPassantCapture);
         }
 
        [TestMethod, Ignore]

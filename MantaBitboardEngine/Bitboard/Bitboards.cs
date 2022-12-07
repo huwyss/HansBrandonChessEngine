@@ -66,7 +66,83 @@ namespace MantaBitboardEngine
 
         public IBitBoardState BoardState { get ; }
        
-        public string GetPositionString => throw new NotImplementedException();
+        public string GetPositionString
+        {
+            get
+            {
+                string positionString = "";
+                var row = 7;
+                var col = 0;
+
+                for (int i = 0; i < 64; i++)
+                {
+                    var square = (Square)(col + 8 * row);
+
+                    var piece = GetPiece(square);
+                    if (piece.Color == BitColor.White && piece.Piece == BitPieceType.Pawn)
+                    {
+                        positionString += "P";
+                    }
+                    else if (piece.Color == BitColor.White && piece.Piece == BitPieceType.Knight)
+                    {
+                        positionString += "N";
+                    }
+                    else if (piece.Color == BitColor.White && piece.Piece == BitPieceType.Bishop)
+                    {
+                        positionString += "B";
+                    }
+                    else if (piece.Color == BitColor.White && piece.Piece == BitPieceType.Rook)
+                    {
+                        positionString += "R";
+                    }
+                    else if (piece.Color == BitColor.White && piece.Piece == BitPieceType.Queen)
+                    {
+                        positionString += "Q";
+                    }
+                    else if (piece.Color == BitColor.White && piece.Piece == BitPieceType.King)
+                    {
+                        positionString += "K";
+                    }
+                    else if (piece.Color == BitColor.Black && piece.Piece == BitPieceType.Pawn)
+                    {
+                        positionString += "p";
+                    }
+                    else if (piece.Color == BitColor.Black && piece.Piece == BitPieceType.Knight)
+                    {
+                        positionString += "n";
+                    }
+                    else if (piece.Color == BitColor.Black && piece.Piece == BitPieceType.Bishop)
+                    {
+                        positionString += "b";
+                    }
+                    else if (piece.Color == BitColor.Black && piece.Piece == BitPieceType.Rook)
+                    {
+                        positionString += "r";
+                    }
+                    else if (piece.Color == BitColor.Black && piece.Piece == BitPieceType.Queen)
+                    {
+                        positionString += "q";
+                    }
+                    else if (piece.Color == BitColor.Black && piece.Piece == BitPieceType.King)
+                    {
+                        positionString += "k";
+                    }
+                    else if (piece.Color == BitColor.Empty && piece.Piece == BitPieceType.Empty)
+                    {
+                        positionString += ".";
+                    }
+
+                    col++;
+                    if (col >= 8)
+                    {
+                        row--;
+                        col = 0;
+                    }
+                }
+
+                return positionString;
+            }
+        }
 
         public string GetPrintString => throw new NotImplementedException();
 

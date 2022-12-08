@@ -222,22 +222,24 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(target.BoardState.Moves[1], enPassantCapture);
         }
 
-       [TestMethod, Ignore]
+       [TestMethod]
         public void MoveTest_WhenWhiteCapturesEnPassant_ThenMoveCorrect_WhiteMoves()
         {
-            Board board = new Board();
-            string position = ".......k" +
-                              ".p......" +
-                              "........" +
-                              "P......." +
-                              "........" +
-                              "........" +
-                              "........" +
-                              "...K....";
-            board.SetPosition(position);
-            board.Move(new NormalMove(Piece.MakePiece('p'),'b',7,'b',5,null));
+            var target = new Bitboards();
+            target.Initialize();
+            target.SetPosition(".......k" +
+                               ".p......" +
+                               "........" +
+                               "P......." +
+                               "........" +
+                               "........" +
+                               "........" +
+                               "...K....");
 
-            board.Move(new EnPassantCaptureMove(Piece.MakePiece('P'),'a',5,'b',6,Piece.MakePiece('p'))); // capture en passant
+            target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.B7, Square.B5, BitPieceType.Empty, BitColor.Black, 0));
+
+            var enpassantCapture = BitMove.CreateCapture(BitPieceType.Pawn, Square.A5, Square.B6, BitPieceType.Pawn, Square.B5, BitPieceType.Empty, BitColor.White, 0);
+            target.Move(enpassantCapture); // capture en passant
 
             string expPosit = ".......k" +
                               "........" +
@@ -247,25 +249,27 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "...K....";
-            Assert.AreEqual(expPosit, board.GetPositionString, "En passant capture not correct move.");
-            Assert.AreEqual(board.BoardState.Moves[1], new EnPassantCaptureMove(Piece.MakePiece('P'), 'a', 5, 'b', 6, Piece.MakePiece('p')));
+            Assert.AreEqual(expPosit, target.GetPositionString, "En passant capture not correct move.");
+            Assert.AreEqual(target.BoardState.Moves[1], enpassantCapture);
         }
 
-       [TestMethod, Ignore]
+       [TestMethod]
         public void GetColorTest()
         {
-            var target = new Board();
+            var target = new Bitboards();
+            target.Initialize();
             target.SetInitialPosition();
-            Assert.AreEqual(Definitions.ChessColor.White, target.GetColor(5, 2));
-            Assert.AreEqual(Definitions.ChessColor.Empty, target.GetColor(5, 3));
-            Assert.AreEqual(Definitions.ChessColor.Black, target.GetColor(5, 7));
-            Assert.AreEqual(Definitions.ChessColor.Empty, target.GetColor(5, 5));
+            Assert.AreEqual(BitColor.White, target.GetPiece(Square.E2).Color);
+            Assert.AreEqual(BitColor.Empty, target.GetPiece(Square.E3).Color);
+            Assert.AreEqual(BitColor.Black, target.GetPiece(Square.E7).Color);
+            Assert.AreEqual(BitColor.Empty, target.GetPiece(Square.E5).Color);
         }
 
-       [TestMethod, Ignore]
+       [TestMethod]
         public void GetStringTest_WhenInitPos_ThenCorrect()
         {
-            var target = new Board();
+            var target = new Bitboards();
+            target.Initialize();
             target.SetInitialPosition();
 
             string boardString = target.GetPositionString;
@@ -281,10 +285,11 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(expectedString, boardString);
         }
 
-       [TestMethod, Ignore]
+       [TestMethod]
         public void GetPrintStringTest_WhenInitPos_ThenCorrect()
         {
-            var target = new Board();
+            var target = new Bitboards();
+            target.Initialize();
             target.SetInitialPosition();
 
             string boardString = target.GetPrintString;

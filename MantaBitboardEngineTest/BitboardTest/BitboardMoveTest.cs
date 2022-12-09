@@ -409,38 +409,39 @@ namespace MantaBitboardEngineTest
         // Castling tests
         // -------------------------------------------------------------------
 
-       [TestMethod, Ignore]
+        [TestMethod]
         public void CastlingRightTest_WhenKingOrRookMoved_ThenRightFalse()
         {
-            Board board = new Board();
-            string position = "r...k..r" +
-                              "p......." +
-                              "........" +
-                              "........" +
-                              "........" +
-                              "........" +
-                              "P......." +
-                              "R...K..R";
-            board.SetPosition(position);
+            var target = new Bitboards();
+            target.Initialize();
+            target.SetPosition("r...k..r" +
+                               "p......." +
+                               "........" +
+                               "........" +
+                               "........" +
+                               "........" +
+                               "P......." +
+                               "R...K..R");
 
-            Assert.AreEqual(true, board.BoardState.LastCastlingRightWhiteQueenSide);
-            Assert.AreEqual(true, board.BoardState.LastCastlingRightWhiteKingSide);
-            Assert.AreEqual(true, board.BoardState.LastCastlingRightBlackQueenSide);
-            Assert.AreEqual(true, board.BoardState.LastCastlingRightBlackKingSide);
+            Assert.AreEqual(true, target.BoardState.LastCastlingRightWhiteQueenSide);
+            Assert.AreEqual(true, target.BoardState.LastCastlingRightWhiteKingSide);
+            Assert.AreEqual(true, target.BoardState.LastCastlingRightBlackQueenSide);
+            Assert.AreEqual(true, target.BoardState.LastCastlingRightBlackKingSide);
 
-            board.Move(new NormalMove(Piece.MakePiece('R'),'h',1,'g',1,null));
-            Assert.AreEqual(true, board.BoardState.LastCastlingRightWhiteQueenSide);
-            Assert.AreEqual(false, board.BoardState.LastCastlingRightWhiteKingSide);
+            target.Move(BitMove.CreateMove(BitPieceType.Rook, Square.H1, Square.G1, BitPieceType.Empty, BitColor.White, 0));
 
-            board.Move(new NormalMove(Piece.MakePiece('R'),'a',1,'c',1,null));
-            Assert.AreEqual(false, board.BoardState.LastCastlingRightWhiteQueenSide);
-            Assert.AreEqual(false, board.BoardState.LastCastlingRightWhiteKingSide);
+            Assert.AreEqual(true, target.BoardState.LastCastlingRightWhiteQueenSide);
+            Assert.AreEqual(false, target.BoardState.LastCastlingRightWhiteKingSide);
 
-            board.Move(new NormalMove(Piece.MakePiece('k'),'e',8,'f',8,null));
-            Assert.AreEqual(false, board.BoardState.LastCastlingRightWhiteQueenSide);
-            Assert.AreEqual(false, board.BoardState.LastCastlingRightWhiteKingSide);
-            Assert.AreEqual(false, board.BoardState.LastCastlingRightBlackQueenSide);
-            Assert.AreEqual(false, board.BoardState.LastCastlingRightBlackKingSide);
+            target.Move(BitMove.CreateMove(BitPieceType.Rook, Square.A1, Square.C1, BitPieceType.Empty, BitColor.White, 0));
+            Assert.AreEqual(false, target.BoardState.LastCastlingRightWhiteQueenSide);
+            Assert.AreEqual(false, target.BoardState.LastCastlingRightWhiteKingSide);
+
+            target.Move(BitMove.CreateMove(BitPieceType.King, Square.E8, Square.F8, BitPieceType.Empty, BitColor.Black, 0));
+            Assert.AreEqual(false, target.BoardState.LastCastlingRightWhiteQueenSide);
+            Assert.AreEqual(false, target.BoardState.LastCastlingRightWhiteKingSide);
+            Assert.AreEqual(false, target.BoardState.LastCastlingRightBlackQueenSide);
+            Assert.AreEqual(false, target.BoardState.LastCastlingRightBlackKingSide);
         }
 
        [TestMethod, Ignore]
@@ -579,7 +580,7 @@ namespace MantaBitboardEngineTest
         // Promotion tests
         // -------------------------------------------------------------------
 
-       [TestMethod, Ignore]
+       [TestMethod]
         public void MoveTest_WhenWhitePromotion_ThenCorrectMove()
         {
             Board board = new Board();

@@ -25,6 +25,11 @@ namespace MantaBitboardEngine
                 bitBoards.SetPiece(bitMove.MovingColor, bitMove.MovingPiece, bitMove.ToSquare);
             }
 
+            var castlingDoneWhiteQueenSide = false;
+            var castlingDoneRightWhiteKingSide = false;
+            var castlingDoneRightBlackQueenSide = false;
+            var castlingDoneRightBlackKingSide = false;
+
             switch (bitMove.Castling)
             {
                 case CastlingType.KingSide:
@@ -32,11 +37,13 @@ namespace MantaBitboardEngine
                     {
                         bitBoards.SetPiece(BitColor.Empty, BitPieceType.Empty, Square.H1);
                         bitBoards.SetPiece(BitColor.White, BitPieceType.Rook, Square.F1);
+                        castlingDoneRightWhiteKingSide = true;
                     }
                     else
                     {
                         bitBoards.SetPiece(BitColor.Empty, BitPieceType.Empty, Square.H8);
                         bitBoards.SetPiece(BitColor.White, BitPieceType.Rook, Square.F8);
+                        castlingDoneRightBlackKingSide = true;
                     }
                     break;
 
@@ -45,11 +52,13 @@ namespace MantaBitboardEngine
                     {
                         bitBoards.SetPiece(BitColor.Empty, BitPieceType.Empty, Square.A1);
                         bitBoards.SetPiece(BitColor.White, BitPieceType.Rook, Square.D1);
+                        castlingDoneWhiteQueenSide = true;
                     }
                     else
                     {
                         bitBoards.SetPiece(BitColor.Empty, BitPieceType.Empty, Square.A8);
                         bitBoards.SetPiece(BitColor.White, BitPieceType.Rook, Square.D8);
+                        castlingDoneRightBlackQueenSide = true;
                     }
                     break;
 
@@ -57,15 +66,15 @@ namespace MantaBitboardEngine
                     break;
             }
 
-            // todo: bitBoards.BoardState correctly...
-            var enPassantSquare = GetEnPassantSquare(bitMove);
+
+
             bitBoards.BoardState.Add(
                 bitMove,
-                enPassantSquare,
-                true, // castlingRightWhiteQueenSide,
-                true, // castlingRightWhiteKingSide,
-                true, // castlingRightBlackQueenSide,
-                true, // castlingRightBlackKingSide,
+                GetEnPassantSquare(bitMove),
+                bitBoards.BoardState.LastCastlingRightWhiteQueenSide && !castlingDoneWhiteQueenSide,
+                bitBoards.BoardState.LastCastlingRightWhiteKingSide && !castlingDoneRightWhiteKingSide,
+                bitBoards.BoardState.LastCastlingRightWhiteQueenSide && !castlingDoneRightBlackQueenSide,
+                bitBoards.BoardState.LastCastlingRightWhiteKingSide && !castlingDoneRightBlackKingSide,
                 BitHelper.OtherColor(bitMove.MovingColor));
         }
 

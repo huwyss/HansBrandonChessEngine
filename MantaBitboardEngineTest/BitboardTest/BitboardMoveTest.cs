@@ -285,7 +285,7 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(expectedString, boardString);
         }
 
-       [TestMethod]
+        [TestMethod]
         public void GetPrintStringTest_WhenInitPos_ThenCorrect()
         {
             var target = new Bitboards();
@@ -341,7 +341,7 @@ namespace MantaBitboardEngineTest
                                     "PPPP.PPP" +
                                     "RNBQKBNR";
             Assert.AreEqual(expectedString, target.GetPositionString);
-            Assert.AreEqual(Definitions.ChessColor.Black, target.BoardState.SideToMove);
+            Assert.AreEqual(BitColor.Black, target.BoardState.SideToMove);
             Assert.AreEqual(Square.E3, target.BoardState.LastEnPassantSquare, "en passant square wrong after 1st back");
 
             target.Back();
@@ -354,7 +354,7 @@ namespace MantaBitboardEngineTest
                              "PPPPPPPP" +
                              "RNBQKBNR";
             Assert.AreEqual(expectedString, target.GetPositionString);
-            Assert.AreEqual(Definitions.ChessColor.White, target.BoardState.SideToMove);
+            Assert.AreEqual(BitColor.White, target.BoardState.SideToMove);
             Assert.AreEqual(Square.NoSquare, target.BoardState.LastEnPassantSquare, "en passant square wrong after 2dn back");
         }
 
@@ -375,7 +375,7 @@ namespace MantaBitboardEngineTest
             target.SetPosition(position);
 
             target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.B2, Square.B4, BitPieceType.Empty, BitColor.White, 0));
-            target.Move(BitMove.CreateCapture(BitPieceType.Pawn, Square.A4, Square.B3, BitPieceType.Pawn, Square.B4, BitPieceType.Empty, BitColor.White, 0));
+            target.Move(BitMove.CreateCapture(BitPieceType.Pawn, Square.A4, Square.B3, BitPieceType.Pawn, Square.B4, BitPieceType.Empty, BitColor.Black, 0));
 
             string expPosit = ".......k" + // position after capture en passant
                               "........" +
@@ -402,7 +402,7 @@ namespace MantaBitboardEngineTest
 
             target.Back();
             Assert.AreEqual(position, target.GetPositionString, "2nd back after en passant capture not correct.");
-            Assert.AreEqual(0, target.BoardState.LastEnPassantSquare, "En passant square wrong after 2nd back.");
+            Assert.AreEqual(Square.NoSquare, target.BoardState.LastEnPassantSquare, "En passant square wrong after 2nd back.");
         }
 
         // -------------------------------------------------------------------
@@ -444,10 +444,11 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(false, target.BoardState.LastCastlingRightBlackKingSide);
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void MoveTest_WhenKingSideCastling_ThenCorrectMove_White()
         {
-            Board board = new Board();
+            var target = new Bitboards();
+            target.Initialize();
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -456,10 +457,9 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "R...K..R";
-            board.SetPosition(position);
+            target.SetPosition(position);
 
-            board.Move(new CastlingMove(MantaChessEngine.CastlingType.WhiteKingSide, new King(Definitions.ChessColor.White)));
-
+            target.Move(BitMove.CreateCastling(BitPieceType.King, Square.E1, Square.G1, BitColor.White, MantaBitboardEngine.CastlingType.KingSide, 0));
             string expecPos = "r...k..r" +
                               "p......." +
                               "........" +
@@ -468,19 +468,20 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "R....RK.";
-            Assert.AreEqual(expecPos, board.GetPositionString, "White King Side Castling not correct.");
+            Assert.AreEqual(expecPos, target.GetPositionString, "White King Side Castling not correct.");
 
-            board.Back();
+            target.Back();
 
-            Assert.AreEqual(position, board.GetPositionString, "White King Side Castling: back not correct.");
-            Assert.AreEqual(true, board.BoardState.LastCastlingRightWhiteKingSide, "castling right must be true after back.");
-            Assert.AreEqual(true, board.BoardState.LastCastlingRightWhiteQueenSide, "castling right must be true after back.");
+            Assert.AreEqual(position, target.GetPositionString, "White King Side Castling: back not correct.");
+            Assert.IsTrue(target.BoardState.LastCastlingRightWhiteKingSide, "castling right must be true after back.");
+            Assert.IsTrue(target.BoardState.LastCastlingRightWhiteQueenSide, "castling right must be true after back.");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void MoveTest_WhenQueenSideCastling_ThenCorrectMove_White()
         {
-            Board board = new Board();
+            var target = new Bitboards();
+            target.Initialize();
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -489,9 +490,9 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "R...K..R";
-            board.SetPosition(position);
+            target.SetPosition(position);
 
-            board.Move(new CastlingMove(MantaChessEngine.CastlingType.WhiteQueenSide, new King(Definitions.ChessColor.White)));
+            target.Move(BitMove.CreateCastling(BitPieceType.King, Square.E1, Square.C1, BitColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0));
 
             string expecPos = "r...k..r" +
                               "p......." +
@@ -501,13 +502,13 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "..KR...R";
-            Assert.AreEqual(expecPos, board.GetPositionString, "White Queen Side Castling not correct.");
+            Assert.AreEqual(expecPos, target.GetPositionString, "White Queen Side Castling not correct.");
 
-            board.Back();
+            target.Back();
 
-            Assert.AreEqual(position, board.GetPositionString, "White Queen Side Castling: back not correct.");
-            Assert.AreEqual(true, board.BoardState.LastCastlingRightWhiteKingSide, "castling right must be true after back.");
-            Assert.AreEqual(true, board.BoardState.LastCastlingRightWhiteQueenSide, "castling right must be true after back.");
+            Assert.AreEqual(position, target.GetPositionString, "White Queen Side Castling: back not correct.");
+            Assert.IsTrue(target.BoardState.LastCastlingRightWhiteKingSide, "castling right must be true after back.");
+            Assert.IsTrue(target.BoardState.LastCastlingRightWhiteQueenSide, "castling right must be true after back.");
         }
 
         [TestMethod, Ignore]

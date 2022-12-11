@@ -69,6 +69,8 @@ namespace MantaBitboardEngine
                 CastlingRightBlackKingSide.RemoveAt(Count);
 
                 Moves.RemoveAt(Count - 1); // do this last. it changes Count!
+
+                SideToMove = BitHelper.OtherColor(SideToMove);
             }
         }
 

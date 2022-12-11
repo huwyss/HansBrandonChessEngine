@@ -30,18 +30,19 @@ namespace MantaBitboardEngine
             var castlingDoneRightBlackQueenSide = false;
             var castlingDoneRightBlackKingSide = false;
 
+            // Do rook move in case of castling
             switch (bitMove.Castling)
             {
                 case CastlingType.KingSide:
                     if (bitMove.MovingColor == BitColor.White)
                     {
-                        bitBoards.SetPiece(BitColor.Empty, BitPieceType.Empty, Square.H1);
+                        bitBoards.RemovePiece(Square.H1);
                         bitBoards.SetPiece(BitColor.White, BitPieceType.Rook, Square.F1);
                         castlingDoneRightWhiteKingSide = true;
                     }
                     else
                     {
-                        bitBoards.SetPiece(BitColor.Empty, BitPieceType.Empty, Square.H8);
+                        bitBoards.RemovePiece(Square.H8);
                         bitBoards.SetPiece(BitColor.White, BitPieceType.Rook, Square.F8);
                         castlingDoneRightBlackKingSide = true;
                     }
@@ -50,13 +51,13 @@ namespace MantaBitboardEngine
                 case CastlingType.QueenSide:
                     if (bitMove.MovingColor == BitColor.White)
                     {
-                        bitBoards.SetPiece(BitColor.Empty, BitPieceType.Empty, Square.A1);
+                        bitBoards.RemovePiece(Square.A1);
                         bitBoards.SetPiece(BitColor.White, BitPieceType.Rook, Square.D1);
                         castlingDoneWhiteQueenSide = true;
                     }
                     else
                     {
-                        bitBoards.SetPiece(BitColor.Empty, BitPieceType.Empty, Square.A8);
+                        bitBoards.RemovePiece(Square.A8);
                         bitBoards.SetPiece(BitColor.White, BitPieceType.Rook, Square.D8);
                         castlingDoneRightBlackQueenSide = true;
                     }
@@ -65,8 +66,6 @@ namespace MantaBitboardEngine
                 default:
                     break;
             }
-
-
 
             bitBoards.BoardState.Add(
                 bitMove,
@@ -108,7 +107,47 @@ namespace MantaBitboardEngine
 
         public void UndoMove(BitMove bitMove, IBitBoard bitBoards)
         {
+            bitBoards.RemovePiece(bitMove.ToSquare);
+            bitBoards.SetPiece(bitMove.MovingColor, bitMove.MovingPiece, bitMove.FromSquare);
+            if (bitMove.CapturedSquare != Square.NoSquare)
+            {
+                bitBoards.SetPiece(BitHelper.OtherColor(bitMove.MovingColor), bitMove.CapturedPiece, bitMove.CapturedSquare);
+            }
 
+            // Undo rook move in case of castling
+            switch (bitMove.Castling)
+            {
+                case CastlingType.KingSide:
+                    if (bitMove.MovingColor == BitColor.White)
+                    {
+                        bitBoards.RemovePiece(Square.F1);
+                        bitBoards.SetPiece(BitColor.White, BitPieceType.Rook, Square.H1);
+                    }
+                    else
+                    {
+                        bitBoards.RemovePiece(Square.F8);
+                        bitBoards.SetPiece(BitColor.White, BitPieceType.Rook, Square.H8);
+                    }
+                    break;
+
+                case CastlingType.QueenSide:
+                    if (bitMove.MovingColor == BitColor.White)
+                    {
+                        bitBoards.RemovePiece(Square.D1);
+                        bitBoards.SetPiece(BitColor.White, BitPieceType.Rook, Square.A1);
+                    }
+                    else
+                    {
+                        bitBoards.RemovePiece(Square.D8);
+                        bitBoards.SetPiece(BitColor.White, BitPieceType.Rook, Square.A8);
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+
+            bitBoards.BoardState.Back();
         }
     }
 }

@@ -321,13 +321,15 @@ namespace MantaBitboardEngineTest
         // Back tests
         // -------------------------------------------------------------------
 
-       [TestMethod, Ignore]
+        [TestMethod]
         public void BackTest_WhenWhiteAndBlackMovesDone_ThenGoBackToInitPosition()
         {
-            Board target = new Board();
+            var target = new Bitboards();
+            target.Initialize();
             target.SetInitialPosition();
-            target.Move(new NormalMove(Piece.MakePiece('P'),'e',2,'e',4,null));
-            target.Move(new NormalMove(Piece.MakePiece('p'),'e',7,'e',5,null));
+            target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.E2, Square.E4, BitPieceType.Empty, BitColor.White, 0));
+            target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.E7, Square.E5, BitPieceType.Empty, BitColor.Black, 0));
+
 
             target.Back();
             string expectedString = "rnbqkbnr" +
@@ -340,8 +342,7 @@ namespace MantaBitboardEngineTest
                                     "RNBQKBNR";
             Assert.AreEqual(expectedString, target.GetPositionString);
             Assert.AreEqual(Definitions.ChessColor.Black, target.BoardState.SideToMove);
-            Assert.AreEqual(Helper.FileCharToFile('e'), target.BoardState.LastEnPassantFile, "en passant file wrong after 1st back");
-            Assert.AreEqual(3, target.BoardState.LastEnPassantRank, "en passant rank wrong after 1st back");
+            Assert.AreEqual(Square.E3, target.BoardState.LastEnPassantSquare, "en passant square wrong after 1st back");
 
             target.Back();
             expectedString = "rnbqkbnr" +
@@ -354,26 +355,27 @@ namespace MantaBitboardEngineTest
                              "RNBQKBNR";
             Assert.AreEqual(expectedString, target.GetPositionString);
             Assert.AreEqual(Definitions.ChessColor.White, target.BoardState.SideToMove);
-            Assert.AreEqual(0, target.BoardState.LastEnPassantFile, "en passant file wrong after 2dn back");
-            Assert.AreEqual(0, target.BoardState.LastEnPassantRank, "en passant rank wrong after 2dn back");
+            Assert.AreEqual(Square.NoSquare, target.BoardState.LastEnPassantSquare, "en passant square wrong after 2dn back");
         }
 
-       [TestMethod, Ignore]
+        [TestMethod]
         public void MoveTest_WhenBackAfterEnPassant_ThenMoveCorrect()
         {
             // init move: white pawn moves two fields and black captures en passant
-            Board board = new Board();
-            string position = ".......k" +
-                              "........" +
-                              "........" +
-                              "........" +
-                              "p......." +
-                              "........" +
-                              ".P......" +
-                              "...K....";
-            board.SetPosition(position);
-            board.Move(new NormalMove(Piece.MakePiece('P'),'b',2,'b',4,null));
-            board.Move(new EnPassantCaptureMove(Piece.MakePiece('p'),'a',4,'b',3, Piece.MakePiece('P'))); // capture en passant
+            var target = new Bitboards();
+            target.Initialize();
+            var position = ".......k" +
+                           "........" +
+                           "........" +
+                           "........" +
+                           "p......." +
+                           "........" +
+                           ".P......" +
+                           "...K....";
+            target.SetPosition(position);
+
+            target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.B2, Square.B4, BitPieceType.Empty, BitColor.White, 0));
+            target.Move(BitMove.CreateCapture(BitPieceType.Pawn, Square.A4, Square.B3, BitPieceType.Pawn, Square.B4, BitPieceType.Empty, BitColor.White, 0));
 
             string expPosit = ".......k" + // position after capture en passant
                               "........" +
@@ -383,10 +385,10 @@ namespace MantaBitboardEngineTest
                               ".p......" +
                               "........" +
                               "...K....";
-            Assert.AreEqual(expPosit, board.GetPositionString, "En passant capture not correct move.");
+            Assert.AreEqual(expPosit, target.GetPositionString, "En passant capture not correct move.");
 
             // en passant back
-            board.Back();
+            target.Back();
             expPosit = ".......k" + // position before capture en passant
                        "........" +
                        "........" +
@@ -395,14 +397,12 @@ namespace MantaBitboardEngineTest
                        "........" +
                        "........" +
                        "...K....";
-            Assert.AreEqual(expPosit, board.GetPositionString, "Back after en passant capture not correct.");
-            Assert.AreEqual(Helper.FileCharToFile('b'), board.BoardState.LastEnPassantFile, "En passant file wrong after 1st back.");
-            Assert.AreEqual(3, board.BoardState.LastEnPassantRank, "En passant rank wrong after 1st back.");
+            Assert.AreEqual(expPosit, target.GetPositionString, "Back after en passant capture not correct.");
+            Assert.AreEqual(Square.B3, target.BoardState.LastEnPassantSquare, "En passant square wrong after 1st back.");
 
-            board.Back();
-            Assert.AreEqual(position, board.GetPositionString, "2nd back after en passant capture not correct.");
-            Assert.AreEqual(0, board.BoardState.LastEnPassantFile, "En passant file wrong after 2nd back.");
-            Assert.AreEqual(0, board.BoardState.LastEnPassantRank, "En passant rank wrong after 2nd back.");
+            target.Back();
+            Assert.AreEqual(position, target.GetPositionString, "2nd back after en passant capture not correct.");
+            Assert.AreEqual(0, target.BoardState.LastEnPassantSquare, "En passant square wrong after 2nd back.");
         }
 
         // -------------------------------------------------------------------
@@ -444,7 +444,7 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(false, target.BoardState.LastCastlingRightBlackKingSide);
         }
 
-       [TestMethod, Ignore]
+        [TestMethod, Ignore]
         public void MoveTest_WhenKingSideCastling_ThenCorrectMove_White()
         {
             Board board = new Board();
@@ -477,7 +477,7 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(true, board.BoardState.LastCastlingRightWhiteQueenSide, "castling right must be true after back.");
         }
 
-       [TestMethod, Ignore]
+        [TestMethod, Ignore]
         public void MoveTest_WhenQueenSideCastling_ThenCorrectMove_White()
         {
             Board board = new Board();
@@ -510,7 +510,7 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(true, board.BoardState.LastCastlingRightWhiteQueenSide, "castling right must be true after back.");
         }
 
-       [TestMethod, Ignore]
+        [TestMethod, Ignore]
         public void MoveTest_WhenKingSideCastling_ThenCorrectMove_Black()
         {
             Board board = new Board();
@@ -543,7 +543,7 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(true, board.BoardState.LastCastlingRightBlackQueenSide, "castling right must be true after back.");
         }
 
-       [TestMethod, Ignore]
+        [TestMethod, Ignore]
         public void MoveTest_WhenQueenSideCastling_ThenCorrectMove_Black()
         {
             Board board = new Board();
@@ -580,7 +580,7 @@ namespace MantaBitboardEngineTest
         // Promotion tests
         // -------------------------------------------------------------------
 
-       [TestMethod]
+        [TestMethod, Ignore]
         public void MoveTest_WhenWhitePromotion_ThenCorrectMove()
         {
             Board board = new Board();
@@ -611,7 +611,7 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(position, board.GetPositionString, "White straight promotion: back not correct.");
         }
 
-       [TestMethod, Ignore]
+        [TestMethod, Ignore]
         public void MoveTest_WhenMinorWhitePromotion_ThenCorrectMove()
         {
             Board board = new Board();
@@ -642,7 +642,7 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(position, board.GetPositionString, "White straight minor (rook) promotion: back not correct.");
         }
 
-       [TestMethod, Ignore]
+        [TestMethod, Ignore]
         public void MoveTest_WhenWhitePromotionWithCapture_ThenCorrectMove()
         {
             Board board = new Board();
@@ -673,7 +673,7 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(position, board.GetPositionString, "White promotion with capture: back not correct.");
         }
 
-       [TestMethod, Ignore]
+        [TestMethod, Ignore]
         public void MoveTest_WhenBlackPromotion_ThenCorrectMove()
         {
             Board board = new Board();
@@ -704,7 +704,7 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(position, board.GetPositionString, "Black straight promotion: back not correct.");
         }
 
-       [TestMethod, Ignore]
+        [TestMethod, Ignore]
         public void MoveTest_WhenBlackPromotionWithCapture_ThenCorrectMove()
         {
             Board board = new Board();

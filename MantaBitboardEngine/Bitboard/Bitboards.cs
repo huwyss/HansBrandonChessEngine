@@ -1047,7 +1047,7 @@ namespace MantaBitboardEngine
 
         public void Back()
         {
-            throw new NotImplementedException();
+            _moveExecutor.UndoMove(BoardState.LastMove, this);
         }
     }
 }

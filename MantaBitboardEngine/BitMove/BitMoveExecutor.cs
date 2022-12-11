@@ -105,5 +105,10 @@ namespace MantaBitboardEngine
 
             return enPassantSquare;
         }
+
+        public void UndoMove(BitMove bitMove, IBitBoard bitBoards)
+        {
+
+        }
     }
 }

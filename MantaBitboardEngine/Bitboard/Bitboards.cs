@@ -77,60 +77,8 @@ namespace MantaBitboardEngine
                 for (int i = 0; i < 64; i++)
                 {
                     var square = (Square)(col + 8 * row);
-
                     var piece = GetPiece(square);
-                    if (piece.Color == BitColor.White && piece.Piece == BitPieceType.Pawn)
-                    {
-                        positionString += "P";
-                    }
-                    else if (piece.Color == BitColor.White && piece.Piece == BitPieceType.Knight)
-                    {
-                        positionString += "N";
-                    }
-                    else if (piece.Color == BitColor.White && piece.Piece == BitPieceType.Bishop)
-                    {
-                        positionString += "B";
-                    }
-                    else if (piece.Color == BitColor.White && piece.Piece == BitPieceType.Rook)
-                    {
-                        positionString += "R";
-                    }
-                    else if (piece.Color == BitColor.White && piece.Piece == BitPieceType.Queen)
-                    {
-                        positionString += "Q";
-                    }
-                    else if (piece.Color == BitColor.White && piece.Piece == BitPieceType.King)
-                    {
-                        positionString += "K";
-                    }
-                    else if (piece.Color == BitColor.Black && piece.Piece == BitPieceType.Pawn)
-                    {
-                        positionString += "p";
-                    }
-                    else if (piece.Color == BitColor.Black && piece.Piece == BitPieceType.Knight)
-                    {
-                        positionString += "n";
-                    }
-                    else if (piece.Color == BitColor.Black && piece.Piece == BitPieceType.Bishop)
-                    {
-                        positionString += "b";
-                    }
-                    else if (piece.Color == BitColor.Black && piece.Piece == BitPieceType.Rook)
-                    {
-                        positionString += "r";
-                    }
-                    else if (piece.Color == BitColor.Black && piece.Piece == BitPieceType.Queen)
-                    {
-                        positionString += "q";
-                    }
-                    else if (piece.Color == BitColor.Black && piece.Piece == BitPieceType.King)
-                    {
-                        positionString += "k";
-                    }
-                    else if (piece.Color == BitColor.Empty && piece.Piece == BitPieceType.Empty)
-                    {
-                        positionString += ".";
-                    }
+                    positionString += GetSymbol(piece.Color, piece.Piece);
 
                     col++;
                     if (col >= 8)
@@ -144,7 +92,109 @@ namespace MantaBitboardEngine
             }
         }
 
-        public string GetPrintString => throw new NotImplementedException();
+        public string GetPrintString
+        {
+            get
+            {
+                string boardString = "";
+                var row = 7;
+                var col = 0;
+
+                boardString += "    a  b  c  d  e  f  g  h\n";
+                boardString += "  +------------------------+\n";
+
+                for (int i = 0; i < 64; i++)
+                {
+                    if (col == 0)
+                    {
+                        boardString += (row + 1) + " |";
+                    }
+
+                    var square = (Square)(col + 8 * row);
+                    var piece = GetPiece(square);
+                    boardString += " " + GetSymbol(piece.Color, piece.Piece) + " ";
+
+                    if (col == 7)
+                    {
+                        boardString += "| " + (row + 1) + "\n";
+                    }
+
+                    col++;
+                    if (col >= 8)
+                    {
+                        row--;
+                        col = 0;
+                        if (row >= 0)
+                        {
+                            boardString += "  |                        |\n";
+                        }
+                    }
+                }
+
+                boardString += "  +------------------------+\n";
+                boardString += "    a  b  c  d  e  f  g  h\n";
+
+                return boardString;
+            }
+        }
+
+        private string GetSymbol(BitColor color, BitPieceType piece)
+        {
+            if (color == BitColor.White && piece == BitPieceType.Pawn)
+            {
+                return "P";
+            }
+            else if (color == BitColor.White && piece == BitPieceType.Knight)
+            {
+                return "N";
+            }
+            else if (color == BitColor.White && piece == BitPieceType.Bishop)
+            {
+                return "B";
+            }
+            else if (color == BitColor.White && piece == BitPieceType.Rook)
+            {
+                return "R";
+            }
+            else if (color == BitColor.White && piece == BitPieceType.Queen)
+            {
+                return "Q";
+            }
+            else if (color == BitColor.White && piece == BitPieceType.King)
+            {
+                return "K";
+            }
+            else if (color == BitColor.Black && piece == BitPieceType.Pawn)
+            {
+                return "p";
+            }
+            else if (color == BitColor.Black && piece == BitPieceType.Knight)
+            {
+                return "n";
+            }
+            else if (color == BitColor.Black && piece == BitPieceType.Bishop)
+            {
+                return "b";
+            }
+            else if (color == BitColor.Black && piece == BitPieceType.Rook)
+            {
+                return "r";
+            }
+            else if (color == BitColor.Black && piece == BitPieceType.Queen)
+            {
+                return "q";
+            }
+            else if (color == BitColor.Black && piece == BitPieceType.King)
+            {
+                return "k";
+            }
+            else if (color == BitColor.Empty && piece == BitPieceType.Empty)
+            {
+                return ".";
+            }
+
+            return ".";
+        }
 
         public Bitboards()
         {

@@ -459,7 +459,7 @@ namespace MantaBitboardEngineTest
                               "R...K..R";
             target.SetPosition(position);
 
-            target.Move(BitMove.CreateCastling(BitPieceType.King, Square.E1, Square.G1, BitColor.White, MantaBitboardEngine.CastlingType.KingSide, 0));
+            target.Move(BitMove.CreateCastling(BitColor.White, MantaBitboardEngine.CastlingType.KingSide, 0));
             string expecPos = "r...k..r" +
                               "p......." +
                               "........" +
@@ -492,7 +492,7 @@ namespace MantaBitboardEngineTest
                               "R...K..R";
             target.SetPosition(position);
 
-            target.Move(BitMove.CreateCastling(BitPieceType.King, Square.E1, Square.C1, BitColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0));
+            target.Move(BitMove.CreateCastling(BitColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0));
 
             string expecPos = "r...k..r" +
                               "p......." +

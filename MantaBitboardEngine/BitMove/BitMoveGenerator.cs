@@ -266,7 +266,7 @@ namespace MantaBitboardEngine
 
         private void AddCastlingMove(BitPieceType movingPiece, Square fromSquare, Square toSquare, BitColor movingColor, CastlingType castling, byte value)
         {
-            _moves.Add(BitMove.CreateCastling(movingPiece, fromSquare, toSquare, movingColor, castling, value));
+            _moves.Add(BitMove.CreateCastling(movingColor, castling, value));
         }
 
         public IEnumerable<BitMove> GetAllCaptures(IBitBoard board, BitColor color)

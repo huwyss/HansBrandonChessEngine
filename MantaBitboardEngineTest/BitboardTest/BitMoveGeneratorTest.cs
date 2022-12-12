@@ -850,8 +850,8 @@ namespace MantaBitboardEngineTest
             var moves = bitMoveGenerator.GetCastlingUnchecked(BitColor.White).ToList();
 
             Assert.AreEqual(2, moves.Count);
-            Assert.IsTrue(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E1, Square.G1, BitColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke1-g1 0-0 castling missing");
-            Assert.IsTrue(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E1, Square.C1, BitColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0)), "Ke1-c1 0-0-0 castling missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateCastling(BitColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke1-g1 0-0 castling missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateCastling(BitColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0)), "Ke1-c1 0-0-0 castling missing");
         }
 
         [TestMethod]
@@ -875,8 +875,8 @@ namespace MantaBitboardEngineTest
             var moves = bitMoveGenerator.GetCastlingUnchecked(BitColor.White).ToList();
 
             Assert.AreEqual(0, moves.Count);
-            Assert.AreEqual(false, moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E1, Square.G1, BitColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke1-g1 0-0 castling not possible");
-            Assert.AreEqual(false, moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E1, Square.C1, BitColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0)), "Ke1-c1 0-0-0 castling not possible");
+            Assert.AreEqual(false, moves.Contains(BitMove.CreateCastling(BitColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke1-g1 0-0 castling not possible");
+            Assert.AreEqual(false, moves.Contains(BitMove.CreateCastling(BitColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0)), "Ke1-c1 0-0-0 castling not possible");
         }
 
         [TestMethod]
@@ -900,8 +900,8 @@ namespace MantaBitboardEngineTest
             var moves = bitMoveGenerator.GetCastlingUnchecked(BitColor.White).ToList();
 
             Assert.AreEqual(0, moves.Count);
-            Assert.AreEqual(false, moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E1, Square.G1, BitColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke1-g1 0-0 castling not possible");
-            Assert.AreEqual(false, moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E1, Square.C1, BitColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0)), "Ke1-c1 0-0-0 castling not possible");
+            Assert.AreEqual(false, moves.Contains(BitMove.CreateCastling(BitColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke1-g1 0-0 castling not possible");
+            Assert.AreEqual(false, moves.Contains(BitMove.CreateCastling(BitColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0)), "Ke1-c1 0-0-0 castling not possible");
         }
 
         [TestMethod]
@@ -925,8 +925,8 @@ namespace MantaBitboardEngineTest
             var moves = bitMoveGenerator.GetCastlingUnchecked(BitColor.White).ToList();
 
             Assert.AreEqual(1, moves.Count);
-            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E1, Square.G1, BitColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke1-g1 0-0 castling not possible");
-            Assert.IsTrue(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E1, Square.C1, BitColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0)), "Ke1-c1 0-0-0 castling missing");
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke1-g1 0-0 castling not possible");
+            Assert.IsTrue(moves.Contains(BitMove.CreateCastling(BitColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0)), "Ke1-c1 0-0-0 castling missing");
         }
 
         [TestMethod]
@@ -950,8 +950,8 @@ namespace MantaBitboardEngineTest
             var moves = bitMoveGenerator.GetCastlingUnchecked(BitColor.White).ToList();
 
             Assert.AreEqual(1, moves.Count);
-            Assert.IsTrue(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E1, Square.G1, BitColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke1-g1 0-0 castling missing");
-            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E1, Square.C1, BitColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0)), "Ke1-c1 0-0-0 castling not possible");
+            Assert.IsTrue(moves.Contains(BitMove.CreateCastling(BitColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke1-g1 0-0 castling missing");
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0)), "Ke1-c1 0-0-0 castling not possible");
         }
 
         [TestMethod, Ignore]
@@ -1124,8 +1124,8 @@ namespace MantaBitboardEngineTest
             var moves = bitMoveGenerator.GetCastlingUnchecked(BitColor.Black).ToList();
 
             Assert.AreEqual(2, moves.Count);
-            Assert.IsTrue(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E8, Square.G8, BitColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke8-g8 0-0 castling missing");
-            Assert.IsTrue(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E8, Square.C8, BitColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0)), "Ke8-c8 0-0-0 castling missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateCastling(BitColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke8-g8 0-0 castling missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateCastling(BitColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0)), "Ke8-c8 0-0-0 castling missing");
         }
 
         [TestMethod]
@@ -1149,8 +1149,8 @@ namespace MantaBitboardEngineTest
             var moves = bitMoveGenerator.GetCastlingUnchecked(BitColor.Black).ToList();
 
             Assert.AreEqual(0, moves.Count);
-            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E8, Square.G8, BitColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke8-g8 0-0 castling not possible");
-            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E8, Square.C8, BitColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0)), "Ke8-c8 0-0-0 castling not possible");
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke8-g8 0-0 castling not possible");
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0)), "Ke8-c8 0-0-0 castling not possible");
         }
 
         [TestMethod]
@@ -1174,8 +1174,8 @@ namespace MantaBitboardEngineTest
             var moves = bitMoveGenerator.GetCastlingUnchecked(BitColor.Black).ToList();
 
             Assert.AreEqual(0, moves.Count);
-            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E8, Square.G8, BitColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke8-g8 0-0 castling not possible");
-            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E8, Square.C8, BitColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0)), "Ke8-c8 0-0-0 castling not possible");
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke8-g8 0-0 castling not possible");
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0)), "Ke8-c8 0-0-0 castling not possible");
         }
 
         [TestMethod]
@@ -1199,8 +1199,8 @@ namespace MantaBitboardEngineTest
             var moves = bitMoveGenerator.GetCastlingUnchecked(BitColor.Black).ToList();
 
             Assert.AreEqual(0, moves.Count);
-            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E8, Square.G8, BitColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke8-g8 0-0 castling not possible");
-            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitPieceType.King, Square.E8, Square.C8, BitColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0)), "Ke8-c8 0-0-0 castling not possible");
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke8-g8 0-0 castling not possible");
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0)), "Ke8-c8 0-0-0 castling not possible");
         }
 
         [TestMethod, Ignore]

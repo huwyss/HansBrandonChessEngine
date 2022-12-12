@@ -52,14 +52,32 @@
 
         // castling constructor
         public static BitMove CreateCastling(
-            BitPieceType movingPiece,
-            Square fromSquare,
-            Square toSquare,
             BitColor movingColor,
             CastlingType castling,
             byte value)
         {
-            return new BitMove(movingPiece, fromSquare, toSquare, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, castling, movingColor, value);
+            if (movingColor == BitColor.White)
+            {
+                if (castling == CastlingType.KingSide)
+                {
+                    return new BitMove(BitPieceType.King, Square.E1, Square.G1, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, castling, movingColor, value);
+                }
+                else
+                {
+                    return new BitMove(BitPieceType.King, Square.E1, Square.C1, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, castling, movingColor, value);
+                }
+            }
+            else
+            {
+                if (castling == CastlingType.KingSide)
+                {
+                    return new BitMove(BitPieceType.King, Square.E8, Square.G8, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, castling, movingColor, value);
+                }
+                else
+                {
+                    return new BitMove(BitPieceType.King, Square.E8, Square.C8, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, castling, movingColor, value);
+                }
+            }
         }
 
         public BitPieceType MovingPiece { get; }

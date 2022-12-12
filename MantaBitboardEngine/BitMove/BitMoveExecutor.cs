@@ -25,12 +25,11 @@ namespace MantaBitboardEngine
                 bitBoards.SetPiece(bitMove.MovingColor, bitMove.MovingPiece, bitMove.ToSquare);
             }
 
+            // Do rook move in case of castling
             var castlingDoneWhiteQueenSide = false;
             var castlingDoneRightWhiteKingSide = false;
             var castlingDoneRightBlackQueenSide = false;
             var castlingDoneRightBlackKingSide = false;
-
-            // Do rook move in case of castling
             switch (bitMove.Castling)
             {
                 case CastlingType.KingSide:
@@ -67,13 +66,34 @@ namespace MantaBitboardEngine
                     break;
             }
 
+            var whiteKingRookMoved = false;
+            var whiteQueenRookMoved = false;
+            var blackKingRookMoved = false;
+            var blackQueenRookMoved = false;
+            if (bitMove.MovingColor == BitColor.White && bitMove.MovingPiece == BitPieceType.Rook && bitMove.FromSquare == Square.H1)
+            {
+                whiteKingRookMoved = true;
+            }
+            else if (bitMove.MovingColor == BitColor.White && bitMove.MovingPiece == BitPieceType.Rook && bitMove.FromSquare == Square.A1)
+            {
+                whiteQueenRookMoved = true;
+            }
+            else if (bitMove.MovingColor == BitColor.Black && bitMove.MovingPiece == BitPieceType.Rook && bitMove.FromSquare == Square.H8)
+            {
+                blackKingRookMoved = true;
+            }
+            else if (bitMove.MovingColor == BitColor.Black && bitMove.MovingPiece == BitPieceType.Rook && bitMove.FromSquare == Square.A8)
+            {
+                blackQueenRookMoved = true;
+            }
+
             bitBoards.BoardState.Add(
                 bitMove,
                 GetEnPassantSquare(bitMove),
-                bitBoards.BoardState.LastCastlingRightWhiteQueenSide && !castlingDoneWhiteQueenSide,
-                bitBoards.BoardState.LastCastlingRightWhiteKingSide && !castlingDoneRightWhiteKingSide,
-                bitBoards.BoardState.LastCastlingRightWhiteQueenSide && !castlingDoneRightBlackQueenSide,
-                bitBoards.BoardState.LastCastlingRightWhiteKingSide && !castlingDoneRightBlackKingSide,
+                bitBoards.BoardState.LastCastlingRightWhiteQueenSide && !castlingDoneWhiteQueenSide && !whiteQueenRookMoved,
+                bitBoards.BoardState.LastCastlingRightWhiteKingSide && !castlingDoneRightWhiteKingSide && !whiteKingRookMoved,
+                bitBoards.BoardState.LastCastlingRightWhiteQueenSide && !castlingDoneRightBlackQueenSide && !blackQueenRookMoved,
+                bitBoards.BoardState.LastCastlingRightWhiteKingSide && !castlingDoneRightBlackKingSide && !blackKingRookMoved,
                 BitHelper.OtherColor(bitMove.MovingColor));
         }
 

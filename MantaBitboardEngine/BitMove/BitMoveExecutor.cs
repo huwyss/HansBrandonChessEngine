@@ -42,7 +42,7 @@ namespace MantaBitboardEngine
                     else
                     {
                         bitBoards.RemovePiece(Square.H8);
-                        bitBoards.SetPiece(BitColor.White, BitPieceType.Rook, Square.F8);
+                        bitBoards.SetPiece(BitColor.Black, BitPieceType.Rook, Square.F8);
                         castlingDoneRightBlackKingSide = true;
                     }
                     break;
@@ -57,7 +57,7 @@ namespace MantaBitboardEngine
                     else
                     {
                         bitBoards.RemovePiece(Square.A8);
-                        bitBoards.SetPiece(BitColor.White, BitPieceType.Rook, Square.D8);
+                        bitBoards.SetPiece(BitColor.Black, BitPieceType.Rook, Square.D8);
                         castlingDoneRightBlackQueenSide = true;
                     }
                     break;
@@ -66,6 +66,7 @@ namespace MantaBitboardEngine
                     break;
             }
 
+            // rook moved? -> remove castling right
             var whiteKingRookMoved = false;
             var whiteQueenRookMoved = false;
             var blackKingRookMoved = false;
@@ -146,7 +147,7 @@ namespace MantaBitboardEngine
                     else
                     {
                         bitBoards.RemovePiece(Square.F8);
-                        bitBoards.SetPiece(BitColor.White, BitPieceType.Rook, Square.H8);
+                        bitBoards.SetPiece(BitColor.Black, BitPieceType.Rook, Square.H8);
                     }
                     break;
 
@@ -159,7 +160,7 @@ namespace MantaBitboardEngine
                     else
                     {
                         bitBoards.RemovePiece(Square.D8);
-                        bitBoards.SetPiece(BitColor.White, BitPieceType.Rook, Square.A8);
+                        bitBoards.SetPiece(BitColor.Black, BitPieceType.Rook, Square.A8);
                     }
                     break;
 

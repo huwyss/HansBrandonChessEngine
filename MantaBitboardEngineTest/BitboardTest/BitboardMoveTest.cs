@@ -511,10 +511,11 @@ namespace MantaBitboardEngineTest
             Assert.IsTrue(target.BoardState.LastCastlingRightWhiteQueenSide, "castling right must be true after back.");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void MoveTest_WhenKingSideCastling_ThenCorrectMove_Black()
         {
-            Board board = new Board();
+            var target = new Bitboards();
+            target.Initialize();
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -523,9 +524,9 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "R...K..R";
-            board.SetPosition(position);
+            target.SetPosition(position);
 
-            board.Move(new CastlingMove(MantaChessEngine.CastlingType.BlackKingSide, new King(Definitions.ChessColor.Black)));
+            target.Move(BitMove.CreateCastling(BitColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0));
 
             string expecPos = "r....rk." +
                               "p......." +
@@ -535,13 +536,13 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "R...K..R";
-            Assert.AreEqual(expecPos, board.GetPositionString, "Black King Side Castling not correct.");
+            Assert.AreEqual(expecPos, target.GetPositionString, "Black King Side Castling not correct.");
 
-            board.Back();
+            target.Back();
 
-            Assert.AreEqual(position, board.GetPositionString, "Black King Side Castling: back not correct.");
-            Assert.AreEqual(true, board.BoardState.LastCastlingRightBlackKingSide, "castling right must be true after back.");
-            Assert.AreEqual(true, board.BoardState.LastCastlingRightBlackQueenSide, "castling right must be true after back.");
+            Assert.AreEqual(position, target.GetPositionString, "Black King Side Castling: back not correct.");
+            Assert.IsTrue(target.BoardState.LastCastlingRightBlackKingSide, "castling right must be true after back.");
+            Assert.IsTrue(target.BoardState.LastCastlingRightBlackQueenSide, "castling right must be true after back.");
         }
 
         [TestMethod, Ignore]

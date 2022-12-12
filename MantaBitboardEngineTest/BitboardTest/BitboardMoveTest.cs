@@ -545,10 +545,11 @@ namespace MantaBitboardEngineTest
             Assert.IsTrue(target.BoardState.LastCastlingRightBlackQueenSide, "castling right must be true after back.");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void MoveTest_WhenQueenSideCastling_ThenCorrectMove_Black()
         {
-            Board board = new Board();
+            var target = new Bitboards();
+            target.Initialize();
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -557,9 +558,9 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "R...K..R";
-            board.SetPosition(position);
+            target.SetPosition(position);
 
-            board.Move(new CastlingMove(MantaChessEngine.CastlingType.BlackQueenSide, new King(Definitions.ChessColor.Black)));
+            target.Move(BitMove.CreateCastling(BitColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0));
 
             string expecPos = "..kr...r" +
                               "p......." +
@@ -569,23 +570,24 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "R...K..R";
-            Assert.AreEqual(expecPos, board.GetPositionString, "Black Queen Side Castling not correct.");
+            Assert.AreEqual(expecPos, target.GetPositionString, "Black Queen Side Castling not correct.");
 
-            board.Back();
+            target.Back();
 
-            Assert.AreEqual(position, board.GetPositionString, "Black Queen Side Castling: back not correct.");
-            Assert.AreEqual(true, board.BoardState.LastCastlingRightBlackKingSide, "castling right must be true after back.");
-            Assert.AreEqual(true, board.BoardState.LastCastlingRightBlackQueenSide, "castling right must be true after back.");
+            Assert.AreEqual(position, target.GetPositionString, "Black Queen Side Castling: back not correct.");
+            Assert.IsTrue(target.BoardState.LastCastlingRightBlackKingSide, "castling right must be true after back.");
+            Assert.IsTrue(target.BoardState.LastCastlingRightBlackQueenSide, "castling right must be true after back.");
         }
 
         // -------------------------------------------------------------------
         // Promotion tests
         // -------------------------------------------------------------------
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void MoveTest_WhenWhitePromotion_ThenCorrectMove()
         {
-            Board board = new Board();
+            var target = new Bitboards();
+            target.Initialize();
             string position = "....k..." +
                               "P......." +
                               "........" +
@@ -594,9 +596,9 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "....K...";
-            board.SetPosition(position);
+            target.SetPosition(position);
 
-            board.Move(new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'a', 8, null, Definitions.QUEEN)); 
+            target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A7, Square.A8, BitPieceType.Queen, BitColor.White, 0));
 
             string expecPos = "Q...k..." +
                               "........" +
@@ -606,17 +608,18 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "....K...";
-            Assert.AreEqual(expecPos, board.GetPositionString, "White straight promotion not correct.");
+            Assert.AreEqual(expecPos, target.GetPositionString, "White straight promotion not correct.");
 
-            board.Back();
+            target.Back();
 
-            Assert.AreEqual(position, board.GetPositionString, "White straight promotion: back not correct.");
+            Assert.AreEqual(position, target.GetPositionString, "White straight promotion: back not correct.");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void MoveTest_WhenMinorWhitePromotion_ThenCorrectMove()
         {
-            Board board = new Board();
+            var target = new Bitboards();
+            target.Initialize();
             string position = "....k..." +
                               "P......." +
                               "........" +
@@ -625,9 +628,9 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "....K...";
-            board.SetPosition(position);
+            target.SetPosition(position);
 
-            board.Move(new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'a', 8, null, Definitions.ROOK));
+            target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A7, Square.A8, BitPieceType.Rook, BitColor.White, 0));
 
             string expecPos = "R...k..." +
                               "........" +
@@ -637,17 +640,18 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "....K...";
-            Assert.AreEqual(expecPos, board.GetPositionString, "White straight minor (rook) promotion not correct.");
+            Assert.AreEqual(expecPos, target.GetPositionString, "White straight minor (rook) promotion not correct.");
 
-            board.Back();
+            target.Back();
 
-            Assert.AreEqual(position, board.GetPositionString, "White straight minor (rook) promotion: back not correct.");
+            Assert.AreEqual(position, target.GetPositionString, "White straight minor (rook) promotion: back not correct.");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void MoveTest_WhenWhitePromotionWithCapture_ThenCorrectMove()
         {
-            Board board = new Board();
+            var target = new Bitboards();
+            target.Initialize();
             string position = ".r..k..." +
                               "P......." +
                               "........" +
@@ -656,9 +660,9 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "....K...";
-            board.SetPosition(position);
+            target.SetPosition(position);
 
-            board.Move(new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'b', 8, Piece.MakePiece('r'), Definitions.QUEEN));
+            target.Move(BitMove.CreateCapture(BitPieceType.Pawn, Square.A7, Square.B8, BitPieceType.Rook, Square.B8, BitPieceType.Queen, BitColor.White, 0));
 
             string expecPos = ".Q..k..." +
                               "........" +
@@ -668,17 +672,18 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "....K...";
-            Assert.AreEqual(expecPos, board.GetPositionString, "White promotion with capture not correct.");
+            Assert.AreEqual(expecPos, target.GetPositionString, "White promotion with capture not correct.");
 
-            board.Back();
+            target.Back();
 
-            Assert.AreEqual(position, board.GetPositionString, "White promotion with capture: back not correct.");
+            Assert.AreEqual(position, target.GetPositionString, "White promotion with capture: back not correct.");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void MoveTest_WhenBlackPromotion_ThenCorrectMove()
         {
-            Board board = new Board();
+            var target = new Bitboards();
+            target.Initialize();
             string position = "....k..." +
                               "........" +
                               "........" +
@@ -687,9 +692,9 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "p......." +
                               "....K...";
-            board.SetPosition(position);
+            target.SetPosition(position);
 
-            board.Move(new PromotionMove(Piece.MakePiece('p'), 'a', 2, 'a', 1, null, Definitions.QUEEN));
+            target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A2, Square.A1, BitPieceType.Queen, BitColor.Black, 0));
 
             string expecPos = "....k..." +
                               "........" +
@@ -699,17 +704,18 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "q...K...";
-            Assert.AreEqual(expecPos, board.GetPositionString, "Black straight promotion not correct.");
+            Assert.AreEqual(expecPos, target.GetPositionString, "Black straight promotion not correct.");
 
-            board.Back();
+            target.Back();
 
-            Assert.AreEqual(position, board.GetPositionString, "Black straight promotion: back not correct.");
+            Assert.AreEqual(position, target.GetPositionString, "Black straight promotion: back not correct.");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void MoveTest_WhenBlackPromotionWithCapture_ThenCorrectMove()
         {
-            Board board = new Board();
+            var target = new Bitboards();
+            target.Initialize();
             string position = "....k..." +
                               "........" +
                               "........" +
@@ -718,9 +724,9 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "p......." +
                               ".R..K...";
-            board.SetPosition(position);
+            target.SetPosition(position);
 
-            board.Move(new PromotionMove(Piece.MakePiece('p'), 'a', 2, 'b', 1, Piece.MakePiece('R'), Definitions.QUEEN));
+            target.Move(BitMove.CreateCapture(BitPieceType.Pawn, Square.A2, Square.B1, BitPieceType.Rook, Square.B1, BitPieceType.Queen, BitColor.Black, 0));
 
             string expecPos = "....k..." +
                               "........" +
@@ -730,11 +736,11 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               ".q..K...";
-            Assert.AreEqual(expecPos, board.GetPositionString, "Black promotion with capture not correct.");
+            Assert.AreEqual(expecPos, target.GetPositionString, "Black promotion with capture not correct.");
 
-            board.Back();
+            target.Back();
 
-            Assert.AreEqual(position, board.GetPositionString, "Black promotion with capture: back not correct.");
+            Assert.AreEqual(position, target.GetPositionString, "Black promotion with capture: back not correct.");
         }
         
     }

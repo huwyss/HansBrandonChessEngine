@@ -67,34 +67,51 @@ namespace MantaBitboardEngine
             }
 
             // rook moved? -> remove castling right
+            // king moved? -> remove castling right
             var whiteKingRookMoved = false;
             var whiteQueenRookMoved = false;
             var blackKingRookMoved = false;
             var blackQueenRookMoved = false;
-            if (bitMove.MovingColor == BitColor.White && bitMove.MovingPiece == BitPieceType.Rook && bitMove.FromSquare == Square.H1)
+            var whiteKingMoved = false;
+            var blackKingMoved = false;
+            if (bitMove.MovingPiece == BitPieceType.Rook)
             {
-                whiteKingRookMoved = true;
+                if (bitMove.MovingColor == BitColor.White && bitMove.FromSquare == Square.H1)
+                {
+                    whiteKingRookMoved = true;
+                }
+                else if (bitMove.MovingColor == BitColor.White && bitMove.FromSquare == Square.A1)
+                {
+                    whiteQueenRookMoved = true;
+                }
+                else if (bitMove.MovingColor == BitColor.Black && bitMove.FromSquare == Square.H8)
+                {
+                    blackKingRookMoved = true;
+                }
+                else if (bitMove.MovingColor == BitColor.Black && bitMove.FromSquare == Square.A8)
+                {
+                    blackQueenRookMoved = true;
+                }
             }
-            else if (bitMove.MovingColor == BitColor.White && bitMove.MovingPiece == BitPieceType.Rook && bitMove.FromSquare == Square.A1)
+            else if (bitMove.MovingPiece == BitPieceType.King)
             {
-                whiteQueenRookMoved = true;
-            }
-            else if (bitMove.MovingColor == BitColor.Black && bitMove.MovingPiece == BitPieceType.Rook && bitMove.FromSquare == Square.H8)
-            {
-                blackKingRookMoved = true;
-            }
-            else if (bitMove.MovingColor == BitColor.Black && bitMove.MovingPiece == BitPieceType.Rook && bitMove.FromSquare == Square.A8)
-            {
-                blackQueenRookMoved = true;
+                if (bitMove.MovingColor == BitColor.White)
+                {
+                    whiteKingMoved = true;
+                }
+                else if (bitMove.MovingColor == BitColor.Black)
+                {
+                    blackKingMoved = true;
+                }
             }
 
             bitBoards.BoardState.Add(
                 bitMove,
                 GetEnPassantSquare(bitMove),
-                bitBoards.BoardState.LastCastlingRightWhiteQueenSide && !castlingDoneWhiteQueenSide && !whiteQueenRookMoved,
-                bitBoards.BoardState.LastCastlingRightWhiteKingSide && !castlingDoneRightWhiteKingSide && !whiteKingRookMoved,
-                bitBoards.BoardState.LastCastlingRightWhiteQueenSide && !castlingDoneRightBlackQueenSide && !blackQueenRookMoved,
-                bitBoards.BoardState.LastCastlingRightWhiteKingSide && !castlingDoneRightBlackKingSide && !blackKingRookMoved,
+                bitBoards.BoardState.LastCastlingRightWhiteQueenSide && !castlingDoneWhiteQueenSide && !whiteQueenRookMoved && !whiteKingMoved,
+                bitBoards.BoardState.LastCastlingRightWhiteKingSide && !castlingDoneRightWhiteKingSide && !whiteKingRookMoved && !whiteKingMoved,
+                bitBoards.BoardState.LastCastlingRightBlackQueenSide && !castlingDoneRightBlackQueenSide && !blackQueenRookMoved && !blackKingMoved,
+                bitBoards.BoardState.LastCastlingRightBlackKingSide && !castlingDoneRightBlackKingSide && !blackKingRookMoved && !blackKingMoved,
                 BitHelper.OtherColor(bitMove.MovingColor));
         }
 

@@ -66,7 +66,17 @@ namespace MantaBitboardEngine
                 pawnCapturingToLeft &= _bitboards.NotIndexMask[fromSquareMovingPawn];
                 var toSquare = _bitboards.PawnLeft[(int)color, fromSquareMovingPawn];
                 var capturedPiece = _bitboards.BoardAllPieces[(int)toSquare];
-                AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, toSquare, capturedPiece, toSquare, BitPieceType.Empty, color, 0); // empty ?, value ?
+                if (_bitboards.Rank[(int)color, (int)toSquare] < 7) // normal move
+                {
+                    AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, toSquare, capturedPiece, toSquare, BitPieceType.Empty, color, 0);
+                }
+                else // promotion
+                {
+                    for (BitPieceType promotionPiece = BitPieceType.Knight; promotionPiece <= BitPieceType.Queen; promotionPiece++)
+                    {
+                        AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, toSquare, capturedPiece, toSquare, promotionPiece, color, 0);
+                    }
+                }
             }
 
             while (pawnCapturingToRight != 0)
@@ -75,7 +85,17 @@ namespace MantaBitboardEngine
                 pawnCapturingToRight &= _bitboards.NotIndexMask[fromSquareMovingPawn];
                 var toSquare = _bitboards.PawnRight[(int)color, fromSquareMovingPawn];
                 var capturedPiece = _bitboards.BoardAllPieces[(int)toSquare];
-                AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, toSquare, capturedPiece, toSquare, BitPieceType.Empty, color, 0); // empty ?, value ?
+                if (_bitboards.Rank[(int)color, (int)toSquare] < 7) // normal move
+                {
+                    AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, toSquare, capturedPiece, toSquare, BitPieceType.Empty, color, 0);
+                }
+                else // promotion
+                {
+                    for (BitPieceType promotionPiece = BitPieceType.Knight; promotionPiece <= BitPieceType.Queen; promotionPiece++)
+                    {
+                        AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, toSquare, capturedPiece, toSquare, promotionPiece, color, 0);
+                    }
+                }
             }
 
             while (pawnMoveStraight != 0)
@@ -83,7 +103,17 @@ namespace MantaBitboardEngine
                 var fromSquareMovingPawn = _bitboards.BitScanForward(pawnMoveStraight);
                 pawnMoveStraight &= _bitboards.NotIndexMask[fromSquareMovingPawn];
                 var toSquare = _bitboards.PawnStep[(int)color, fromSquareMovingPawn];
-                AddMove(BitPieceType.Pawn, (Square)fromSquareMovingPawn, (Square)toSquare, BitPieceType.Empty, color, 0); // value ?
+                if (_bitboards.Rank[(int)color, toSquare] < 7) // normal move
+                {
+                    AddMove(BitPieceType.Pawn, (Square)fromSquareMovingPawn, (Square)toSquare, BitPieceType.Empty, color, 0); // value ?
+                }
+                else // promotion
+                {
+                    for (BitPieceType promotionPiece = BitPieceType.Knight; promotionPiece <= BitPieceType.Queen; promotionPiece++)
+                    {
+                        AddMove(BitPieceType.Pawn, (Square)fromSquareMovingPawn, (Square)toSquare, promotionPiece, color, 0);
+                    }
+                }
 
                 if (_bitboards.Rank[(int)color, fromSquareMovingPawn] == 1 &&
                     _bitboards.BoardAllPieces[_bitboards.PawnDoubleStep[(int)color, fromSquareMovingPawn]] == BitPieceType.Empty)

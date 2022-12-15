@@ -484,100 +484,100 @@ namespace MantaBitboardEngineTest
             Assert.IsTrue(moves.Contains(BitMove.CreateCapture(BitPieceType.Pawn, Square.B5, Square.B4, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, BitColor.Black, 0)), "B5-B4 missing");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMoves_WhenWhitePawnAt8Straight_ThenPromoted()
         {
-            Board board = new Board();
-            string position = "........" +
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("........" +
                               ".P......" + // white pawn gets promoted to queen, rook, bishop or knight
                               "........" +
                               "........" + 
                               "........" +
                               "........" +
                               "........" +
-                              "........";
-            board.SetPosition(position);
+                              "........");
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var pawn = new Pawn(ChessColor.White);
-            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('b'), 7, true); // white pawn
+            var moves = bitMoveGenerator.GetPawnMoves(BitColor.White).ToList();
 
             Assert.AreEqual(4, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'b', 8, null, Definitions.QUEEN)), "b7b8 missing (promotion to queen walking straight)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'b', 8, null, Definitions.ROOK)), "b7b8 missing (promotion to rook walking straight)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'b', 8, null, Definitions.BISHOP)), "b7b8 missing (promotion to bishop walking straight)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'b', 8, null, Definitions.KNIGHT)), "b7b8 missing (promotion to knight walking straight)");
+            Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Pawn, Square.B7, Square.B8, BitPieceType.Queen, BitColor.White, 0)), "b7-b8Q missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Pawn, Square.B7, Square.B8, BitPieceType.Rook, BitColor.White, 0)), "b7-b8R missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Pawn, Square.B7, Square.B8, BitPieceType.Bishop, BitColor.White, 0)), "b7-b8B missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Pawn, Square.B7, Square.B8, BitPieceType.Knight, BitColor.White, 0)), "b7-b8N missing");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMoves_WhenBlackPawnAt1Straight_ThenPromoted()
         {
-            Board board = new Board();
-            string position = "........" +
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("........" +
                               "........" +
                               "........" +
                               "........" +
                               "........" +
                               "........" +
                               ".p......" +  // black pawn gets promoted to queen, rook, bishop or knight
-                              "........";
-            board.SetPosition(position);
+                              "........");
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var pawn = new Pawn(ChessColor.Black);
-            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('b'), 2, true); // black pawn
+            var moves = bitMoveGenerator.GetPawnMoves(BitColor.Black).ToList();
 
             Assert.AreEqual(4, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'b', 1, null, Definitions.QUEEN)), "b2b1 missing (promotion to queen walking straight)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'b', 1, null, Definitions.ROOK)), "b2b1 missing (promotion to rook walking straight)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'b', 1, null, Definitions.BISHOP)), "b2b1 missing (promotion to bishop walking straight)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'b', 1, null, Definitions.KNIGHT)), "b2b1 missing (promotion to knight walking straight)");
+            Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Pawn, Square.B2, Square.B1, BitPieceType.Queen, BitColor.Black, 0)), "b2-b1Q missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Pawn, Square.B2, Square.B1, BitPieceType.Rook, BitColor.Black, 0)), "b2-b1R missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Pawn, Square.B2, Square.B1, BitPieceType.Bishop, BitColor.Black, 0)), "b2-b1B missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Pawn, Square.B2, Square.B1, BitPieceType.Knight, BitColor.Black, 0)), "b2-b1N missing");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMoves_WhenWhitePawnAt8Capturing_ThenPromoted()
         {
-            Board board = new Board();
-            string position = "rN......" +
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("rN......" +
                               ".P......" + // white pawn gets promoted to queen, rook, bishop or knight
                               "........" +
                               "........" +
                               "........" +
                               "........" +
                               "........" +
-                              "........";
-            board.SetPosition(position);
+                              "........");
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var pawn = new Pawn(ChessColor.White);
-            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('b'), 7, true); // white pawn
+            var moves = bitMoveGenerator.GetPawnMoves(BitColor.White).ToList();
 
             Assert.AreEqual(4, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'a', 8, Piece.MakePiece('r'), Definitions.QUEEN)), "b7a8 missing (promotion to queen when capturing)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'a', 8, Piece.MakePiece('r'), Definitions.ROOK)), "b7a8 missing (promotion to rook when capturing)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'a', 8, Piece.MakePiece('r'), Definitions.BISHOP)), "b7a8 missing (promotion to bishop when capturing)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'a', 8, Piece.MakePiece('r'), Definitions.KNIGHT)), "b7a8 missing (promotion to knight when capturing)");
+            Assert.IsTrue(moves.Contains(BitMove.CreateCapture(BitPieceType.Pawn, Square.B7, Square.A8, BitPieceType.Rook, Square.A8, BitPieceType.Queen, BitColor.White, 0)), "b7xa8Q missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateCapture(BitPieceType.Pawn, Square.B7, Square.A8, BitPieceType.Rook, Square.A8, BitPieceType.Rook, BitColor.White, 0)), "b7xa8R missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateCapture(BitPieceType.Pawn, Square.B7, Square.A8, BitPieceType.Rook, Square.A8, BitPieceType.Bishop, BitColor.White, 0)), "b7xa8B missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateCapture(BitPieceType.Pawn, Square.B7, Square.A8, BitPieceType.Rook, Square.A8, BitPieceType.Knight, BitColor.White, 0)), "b7xa8N missing");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMoves_WhenBlackPawnAt1Capturing_ThenPromoted()
         {
-            Board board = new Board();
-            string position = "........" +
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("........" +
                               "........" + // white pawn gets promoted to queen, rook, bishop or knight
                               "........" +
                               "........" +
                               "........" +
                               "........" +
                               ".p......" +
-                              "Rn......";
-            board.SetPosition(position);
+                              "Rn......");
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var pawn = new Pawn(ChessColor.Black);
-            var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('b'), 2, true); // black pawn
+            var moves = bitMoveGenerator.GetPawnMoves(BitColor.Black).ToList();
 
             Assert.AreEqual(4, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'a', 1, Piece.MakePiece('R'), Definitions.QUEEN)), "b2a1 missing (promotion to queen when capturing)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'a', 1, Piece.MakePiece('R'), Definitions.ROOK)), "b2a1 missing (promotion to rook when capturing)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'a', 1, Piece.MakePiece('R'), Definitions.BISHOP)), "b2a1 missing (promotion to bishop when capturing)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'a', 1, Piece.MakePiece('R'), Definitions.KNIGHT)), "b2a1 missing (promotion to knight when capturing)");
+            Assert.IsTrue(moves.Contains(BitMove.CreateCapture(BitPieceType.Pawn, Square.B2, Square.A1, BitPieceType.Rook, Square.A1, BitPieceType.Queen, BitColor.Black, 0)), "b2xa1Q missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateCapture(BitPieceType.Pawn, Square.B2, Square.A1, BitPieceType.Rook, Square.A1, BitPieceType.Rook, BitColor.Black, 0)), "b2xa1R missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateCapture(BitPieceType.Pawn, Square.B2, Square.A1, BitPieceType.Rook, Square.A1, BitPieceType.Bishop, BitColor.Black, 0)), "b2xa1B missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateCapture(BitPieceType.Pawn, Square.B2, Square.A1, BitPieceType.Rook, Square.A1, BitPieceType.Knight, BitColor.Black, 0)), "b2xa1N missing");
         }
 
         // ----------------------------------------------------------------------------------------------------

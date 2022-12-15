@@ -707,45 +707,8 @@ namespace MantaBitboardEngineTest
         }
 
         // ----------------------------------------------------------------------------------------------------
-        // Get End Position Tests
+        // Get correct move
         // ----------------------------------------------------------------------------------------------------
-
-        [TestMethod, Ignore]
-        public void GetEndPosition_WhenKnightSequence_ThenCorrectEndRankFile()
-        {
-            string knightSequence = "uul";
-
-            var target = new MoveGenerator();
-            target.GetEndPosition(Helper.FileCharToFile('b'), 1, knightSequence, out int targetFile, out int targetRank, out bool valid);
-
-            Assert.AreEqual(Helper.FileCharToFile('a'), targetFile);
-            Assert.AreEqual(3, targetRank);
-            Assert.AreEqual(true, valid);
-        }
-
-        [TestMethod, Ignore]
-        public void GetEndPosition_WhenOtherKnightSequence_ThenCorrectEndRankFile()
-        {
-            string knightSequence = "ddr";
-
-            var target = new MoveGenerator();
-            target.GetEndPosition(Helper.FileCharToFile('c'), 3, knightSequence, out int targetFile, out int targetRank, out bool valid);
-
-            Assert.AreEqual(Helper.FileCharToFile('d'), targetFile);
-            Assert.AreEqual(1, targetRank);
-            Assert.AreEqual(true, valid);
-        }
-
-        [TestMethod, Ignore]
-        public void GetEndPosition_WhenKnightSequenceInvalid_ThenMoveInvalid()
-        {
-            string knightSequence = "ddl";
-
-            var target = new MoveGenerator();
-            target.GetEndPosition(Helper.FileCharToFile('a'), 1, knightSequence, out int targetFile, out int targetRank, out bool valid);
-
-            Assert.AreEqual(false, valid);
-        }
 
         [TestMethod, Ignore]
         public void GetCorrectMoveTest_Whene2e4_ThenAddDot()

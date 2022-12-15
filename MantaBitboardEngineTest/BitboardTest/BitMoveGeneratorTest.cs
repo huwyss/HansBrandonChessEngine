@@ -609,27 +609,7 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'f', 2, null)), "e1f2. missing");
             Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'f', 1, null)), "e1f1. missing");
         }
-
-        [TestMethod, Ignore]
-        public void GetAllMoves_WhenNoWhiteKing_ThenNoMovesReturned_White()
-        {
-            MoveGenerator target = new MoveGenerator();
-            Board board = new Board();
-            string position = "........" +
-                              "........" +
-                              "........" +
-                              "........" +
-                              "........" +
-                              ".......k" +
-                              ".......r" +
-                              ".......R"; // No white King
-            board.SetPosition(position);
-
-            var moves = target.GetAllMoves(board, ChessColor.White).ToList<IMove>();
-
-            Assert.AreEqual(0, moves.Count, "white has no king. so no white moves possible.");
-        }
-        
+ 
         // ----------------------------------------------------------------------------------------------------
         // Is Move Valid Tests
         // ----------------------------------------------------------------------------------------------------
@@ -714,7 +694,6 @@ namespace MantaBitboardEngineTest
         public void GetCorrectMoveTest_Whene2e4_ThenAddDot()
         {
             var factory = new MoveFactory();
-            MoveGenerator target = new MoveGenerator();
             Board board = new Board();
             board.SetInitialPosition();
 
@@ -963,108 +942,102 @@ namespace MantaBitboardEngineTest
         /// White Castling rights lost after king or rook move
         /// -----------------------------------------------------------------------------------------
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMovesTest_WhenwhiteKingMoved_ThenCastlingRightLost()
         {
-            MoveGenerator generator = new MoveGenerator();
-            Board board = new Board();
-            string position = "r...k..r" +
+            var stateMock = new Mock<IBitBoardState>();
+            stateMock.Setup(s => s.LastCastlingRightBlackKingSide).Returns(true);
+            stateMock.Setup(s => s.LastCastlingRightBlackQueenSide).Returns(true);
+            Bitboards board = new Bitboards(stateMock.Object);
+            board.Initialize();
+            board.SetPosition("r...k..r" +
                               "p......." +
                               "........" +
                               "........" +
                               "........" +
                               "........" +
                               "P...K..." +
-                              "R......R";
-            board.SetPosition(position);
+                              "R......R");
+            var bitMoveGenerator = new BitMoveGenerator(board);
+
+            
 
             // white king moves -> loses castling right
-            board.BoardState.SideToMove = ChessColor.White;
-            var king = new King(ChessColor.White);
-            var kingMove = new NormalMove(king, 'e', 2, 'e', 1, null);
-            board.Move(kingMove);
+            board.Move(BitMove.CreateMove(BitPieceType.King, Square.E2, Square.E1, BitPieceType.Empty, BitColor.White, 0));
 
             // black move
-            var pawn = new Pawn(ChessColor.Black);
-            var pawnMove = new NormalMove(pawn, 'a', 7, 'a', 6, null);
-            board.Move(pawnMove);
+            board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A7, Square.A6, BitPieceType.Empty, BitColor.Black, 0));
 
             // get legal moves of king. should not include castling.
-            var kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 1, true);
+            var moves = bitMoveGenerator.GetCastlingUnchecked(BitColor.White).ToList();
 
-            Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.WhiteKingSide, new King(ChessColor.White))), "e1g1. 0-0 castling missing");
-            Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.WhiteQueenSide, new King(ChessColor.White))), "e1c1. 0-0-0 castling missing");
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "0-0 castling not allowed");
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0)), "0-0-0 castling not allowed");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMovesTest_WhenWhiteKingRookMoved_ThenCastlingRightKingSideLost()
         {
-            MoveGenerator generator = new MoveGenerator();
-            Board board = new Board();
-            string position = "r...k..r" +
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("r...k..r" +
                               "p......." +
                               "........" +
                               "........" +
                               "........" +
                               "........" +
-                              "P......R" +
-                              "R...K...";
-            board.SetPosition(position);
+                              "P......." +
+                              "R...K..R");
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
             // white king side rook moves -> loses castling right
-            board.BoardState.SideToMove = ChessColor.White;
-            var rook = new Rook(ChessColor.White);
-            var rookMove = new NormalMove(rook, 'h', 2, 'h', 1, null);
-            board.Move(rookMove);
+            board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.H1, Square.H2, BitPieceType.Empty, BitColor.White, 0));
 
-            // black move
-            var pawn = new Pawn(ChessColor.Black);
-            var pawnMove = new NormalMove(pawn, 'a', 7, 'a', 6, null);
-            board.Move(pawnMove);
+            // moves to bring rook back to original position
+            board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A7, Square.A6, BitPieceType.Empty, BitColor.Black, 0));
+            board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.H2, Square.H1, BitPieceType.Empty, BitColor.White, 0));
+            board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A6, Square.A5, BitPieceType.Empty, BitColor.Black, 0));
 
             // get legal moves of king. should not include castling.
-            var king = new King(ChessColor.White);
-            var kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 1, true);
+            var moves = bitMoveGenerator.GetCastlingUnchecked(BitColor.White).ToList();
 
-            Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.WhiteKingSide, new King(ChessColor.White))), "e1g1. 0-0 castling missing");
-            Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.WhiteQueenSide, new King(ChessColor.White))), "e1c1. 0-0-0 castling missing");
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "0-0 castling not allowed");
+            Assert.IsTrue(moves.Contains(BitMove.CreateCastling(BitColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0)), "0-0-0 castling missing");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMovesTest_WhenWhiteQueenRookMoved_ThenCastlingRightQueenSideLost()
         {
-            MoveGenerator generator = new MoveGenerator();
-            Board board = new Board();
-            string position = "r...k..r" +
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("r...k..r" +
                               "p......." +
                               "........" +
                               "........" +
                               "........" +
                               "P......." +
-                              "R......." +
-                              "....K..R";
-            board.SetPosition(position);
+                              "........" +
+                              "R...K..R");
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
             // white king side rook moves -> loses castling right
-            board.BoardState.SideToMove = ChessColor.White;
-            var rook = new Rook(ChessColor.White);
-            var rookMove = new NormalMove(rook, 'a', 2, 'a', 1, null);
-            board.Move(rookMove);
+            board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.A1, Square.A2, BitPieceType.Empty, BitColor.White, 0));
 
-            // black move
-            var pawn = new Pawn(ChessColor.Black);
-            var pawnMove = new NormalMove(pawn, 'a', 7, 'a', 6, null);
-            board.Move(pawnMove);
+            // moves to bring white rook back to original position
+            board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A7, Square.A6, BitPieceType.Empty, BitColor.Black, 0));
+            board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.A2, Square.A1, BitPieceType.Empty, BitColor.White, 0));
+            board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A6, Square.A5, BitPieceType.Empty, BitColor.Black, 0));
 
             // get legal moves of king. should not include castling.
-            var king = new King(ChessColor.White);
-            var kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 1, true);
+            var moves = bitMoveGenerator.GetCastlingUnchecked(BitColor.White).ToList();
 
-            Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.WhiteKingSide, new King(ChessColor.White))), "e1g1. 0-0 castling missing");
-            Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.WhiteQueenSide, new King(ChessColor.White))), "e1c1. 0-0-0 castling missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateCastling(BitColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "0-0 castling missing");
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(BitColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0)), "0-0-0 castling not allowed");
         }
 
-        // black
+        /// -----------------------------------------------------------------------------------------
+        /// Black Castling rights lost after king or rook move
+        /// -----------------------------------------------------------------------------------------
 
         [TestMethod]
         public void GetMovesTest_WhenCastlingRightOk_ThenCastling_Black()

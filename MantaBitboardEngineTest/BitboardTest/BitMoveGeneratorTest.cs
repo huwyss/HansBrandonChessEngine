@@ -1300,45 +1300,41 @@ namespace MantaBitboardEngineTest
             board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.H7, Square.H8, BitPieceType.Empty, BitColor.Black, 0));
             board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A3, Square.A4, BitPieceType.Empty, BitColor.White, 0));
 
-            // get legal moves of king. should not include castling.
+            // get legal moves of king. should not include kingside castling.
             var kingMoves = bitMoveGenerator.GetCastlingUnchecked(BitColor.Black).ToList();
 
             Assert.IsFalse(kingMoves.Contains(BitMove.CreateCastling(BitColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "0-0 castling not allowed as rook already moved");
             Assert.IsTrue(kingMoves.Contains(BitMove.CreateCastling(BitColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0)), "0-0-0 castling missing");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMovesTest_WhenBlackQueenRookMoved_ThenCastlingRightQueenSideLost()
         {
-            MoveGenerator generator = new MoveGenerator();
-            Board board = new Board();
-            string position = "....k..r" +
-                              "r......." +
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("r...k..r" +
+                              "........" +
                               "p......." +
                               "........" +
                               "........" +
                               "........" +
                               "P......." +
-                              "R...K..R";
-            board.SetPosition(position);
+                              "R...K..R");
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            // Black king side rook moves -> loses castling right
-            board.BoardState.SideToMove = ChessColor.Black;
-            var rook = new Rook(ChessColor.Black);
-            var rookMove = new NormalMove(rook, 'a', 7, 'a', 8, null);
-            board.Move(rookMove);
+            // Black queen side rook moves -> loses castling right
+            board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.A8, Square.A7, BitPieceType.Empty, BitColor.Black, 0));
 
-            // White move
-            var pawn = new Pawn(ChessColor.White);
-            var pawnMove = new NormalMove(pawn, 'a', 2, 'a', 3, null);
-            board.Move(pawnMove);
+            // some moves to bring black rook back to origin position
+            board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A2, Square.A3, BitPieceType.Empty, BitColor.White, 0));
+            board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.A7, Square.A8, BitPieceType.Empty, BitColor.Black, 0));
+            board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A3, Square.A4, BitPieceType.Empty, BitColor.White, 0));
 
-            // get legal moves of king. should not include castling.
-            var king = new King(ChessColor.Black);
-            var kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 8, true);
+            // get legal moves of king. should not include queenside castling.
+            var kingMoves = bitMoveGenerator.GetCastlingUnchecked(BitColor.Black).ToList();
 
-            Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.BlackKingSide, new King(ChessColor.Black))), "e8g8. 0-0 castling missing");
-            Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.BlackQueenSide, new King(ChessColor.Black))), "e8c8. 0-0-0 castling missing");
+            Assert.IsTrue(kingMoves.Contains(BitMove.CreateCastling(BitColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "0-0 castling missing");
+            Assert.IsFalse(kingMoves.Contains(BitMove.CreateCastling(BitColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0)), "0-0-0 castling not allowed as rook already moved");
         }
 
         [TestMethod, Ignore]

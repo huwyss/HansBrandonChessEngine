@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MantaCommon;
 
 namespace MantaChessEngine
 {
     public class Rook : MultiStepPiece
     {
-        public Rook(Definitions.ChessColor color) : base(color)
+        public Rook(ChessColor color) : base(color)
         {
         }
 
@@ -16,7 +17,7 @@ namespace MantaChessEngine
         {
             get
             {
-                return Color == Definitions.ChessColor.White ? 'R' : 'r';
+                return Color == ChessColor.White ? 'R' : 'r';
             }
         }
 

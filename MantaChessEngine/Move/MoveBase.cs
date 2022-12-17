@@ -1,4 +1,5 @@
 ﻿using static MantaChessEngine.Definitions;
+using MantaCommon;
 
 namespace MantaChessEngine
 {

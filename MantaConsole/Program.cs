@@ -1,5 +1,6 @@
 ﻿using System;
 using MantaChessEngine;
+using MantaCommon;
 using log4net;
 
 namespace MantaConsole
@@ -143,7 +144,7 @@ namespace MantaConsole
                 {
                     if (!quiet)
                     {
-                        if (whiteEngine.SideToMove() == Definitions.ChessColor.White)
+                        if (whiteEngine.SideToMove() == ChessColor.White)
                         {
                             Console.WriteLine(moveCount++);
                         }
@@ -156,8 +157,8 @@ namespace MantaConsole
                     }
 
                     // Human move
-                    if ((whiteHuman && whiteEngine.SideToMove() == Definitions.ChessColor.White) ||
-                        (blackHuman && whiteEngine.SideToMove() == Definitions.ChessColor.Black))
+                    if ((whiteHuman && whiteEngine.SideToMove() == ChessColor.White) ||
+                        (blackHuman && whiteEngine.SideToMove() == ChessColor.Black))
                     {
                         // human move from console
                         do
@@ -183,9 +184,10 @@ namespace MantaConsole
                     {
                         MoveRating moveComputer = null;
                         // computer move for white
-                        if (!whiteHuman && whiteEngine.SideToMove() == Definitions.ChessColor.White)
+                        if (!whiteHuman && whiteEngine.SideToMove() == ChessColor.White)
                         {
-                            moveComputer = whiteEngine.DoBestMove(Definitions.ChessColor.White);
+                            ////moveComputer = whiteEngine.DoBestMove(ChessColor.White);
+                            //// todo fix if required
 
                             if (!quiet && moveComputer.Move.ToString() != "")
                             {
@@ -195,7 +197,7 @@ namespace MantaConsole
                             if (moveComputer.Move is NoLegalMove)
                             {
                                 // check for stall mate and check mate
-                                if (whiteEngine.IsCheck(Definitions.ChessColor.White))
+                                if (whiteEngine.IsCheck(ChessColor.White))
                                 {
                                     Console.WriteLine("\nBlack wins!");
                                     blackWins++;
@@ -216,9 +218,10 @@ namespace MantaConsole
                             }
                         }
                         // computer move for black
-                        else if (!blackHuman && whiteEngine.SideToMove() == Definitions.ChessColor.Black)
+                        else if (!blackHuman && whiteEngine.SideToMove() == ChessColor.Black)
                         {
-                            moveComputer = blackEngine.DoBestMove(Definitions.ChessColor.Black);
+                            ////moveComputer = blackEngine.DoBestMove(ChessColor.Black);
+                            //// todo fix if required
 
                             if (!quiet && moveComputer.Move.ToString() != "")
                             {
@@ -228,7 +231,7 @@ namespace MantaConsole
                             if (moveComputer.Move is NoLegalMove)
                             {
                                 // check for stall mate and check mate
-                                if (whiteEngine.IsCheck(Definitions.ChessColor.Black))
+                                if (whiteEngine.IsCheck(ChessColor.Black))
                                 {
                                     Console.WriteLine("\nWhite wins!");
                                     whiteWins++;

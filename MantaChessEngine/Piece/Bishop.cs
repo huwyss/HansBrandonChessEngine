@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MantaCommon;
 
 namespace MantaChessEngine
 {
     public class Bishop : MultiStepPiece
     {
-        public Bishop(Definitions.ChessColor color) : base(color)
+        public Bishop(ChessColor color) : base(color)
         {
         }
 
@@ -16,7 +17,7 @@ namespace MantaChessEngine
         {
             get
             {
-                return Color == Definitions.ChessColor.White ? 'B' : 'b';
+                return Color == ChessColor.White ? 'B' : 'b';
             }
         }
 

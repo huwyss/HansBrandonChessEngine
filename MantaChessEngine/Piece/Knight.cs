@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MantaCommon;
 
 namespace MantaChessEngine
 {
     public class Knight : SingleStepPiece
     {
-        public Knight(Definitions.ChessColor color) : base(color)
+        public Knight(ChessColor color) : base(color)
         {
         }
 
@@ -16,7 +17,7 @@ namespace MantaChessEngine
         {
             get
             {
-                return Color == Definitions.ChessColor.White ? 'N' : 'n';
+                return Color == ChessColor.White ? 'N' : 'n';
             }
         }
 

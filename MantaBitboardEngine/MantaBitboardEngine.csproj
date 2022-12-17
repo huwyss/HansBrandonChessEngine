@@ -59,6 +59,10 @@
       <Project>{64c19389-904b-4c0b-8dfb-8a907931c056}</Project>
       <Name>MantaChessEngine</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MantaCommon\MantaCommon.csproj">
+      <Project>{a16f618c-7e58-4d1a-9864-989affba87ee}</Project>
+      <Name>MantaCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

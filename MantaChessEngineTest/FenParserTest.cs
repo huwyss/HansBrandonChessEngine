@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MantaChessEngine;
+using MantaCommon;
 
 namespace MantaChessEngineTest
 {
@@ -49,7 +50,7 @@ namespace MantaChessEngineTest
         public void SideToMoveIsWhiteTest()
         {
             var fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-            var expectedSide = Definitions.ChessColor.White;
+            var expectedSide = ChessColor.White;
 
             var actualSideToMove = _fenParser.ToPositionInfo(fen).SideToMove;
 
@@ -60,7 +61,7 @@ namespace MantaChessEngineTest
         public void SideToMoveIsBlackTest()
         {
             var fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
-            var expectedSide = Definitions.ChessColor.Black;
+            var expectedSide = ChessColor.Black;
 
             var actualSideToMove = _fenParser.ToPositionInfo(fen).SideToMove;
 

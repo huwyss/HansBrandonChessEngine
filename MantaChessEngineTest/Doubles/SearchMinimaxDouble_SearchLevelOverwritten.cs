@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MantaChessEngine;
+using MantaCommon;
 
 namespace MantaChessEngineTest.Doubles
 {
@@ -17,7 +18,7 @@ namespace MantaChessEngineTest.Doubles
             _moveAndRating = scoresAndMoves;
         }
 
-        internal override IEnumerable<MoveRating> SearchLevel(IBoard board, Definitions.ChessColor color, int level)
+        internal override IEnumerable<MoveRating> SearchLevel(IBoard board, ChessColor color, int level)
         {
             //rating = _moveAndRating[level].Rating;
             //return _moveAndRating[level].Move;

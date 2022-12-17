@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MantaCommon;
 
 namespace MantaBitboardEngine
 {
     public struct BitPiece
     {
-        public BitPiece(BitColor color, BitPieceType piece)
+        public BitPiece(ChessColor color, BitPieceType piece)
         {
             Color = color;
             Piece = piece;
         }
 
-        public BitColor Color { get; }
+        public ChessColor Color { get; }
         public BitPieceType Piece { get; }
     }
 }

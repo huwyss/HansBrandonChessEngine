@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-
+using MantaCommon;
+    
 namespace MantaBitboardEngine
 {
     public class BitBoardState : IBitBoardState
@@ -13,7 +14,7 @@ namespace MantaBitboardEngine
         public List<BitMove> Moves { get; set; }
         public bool WhiteDidCastling { get; set; }
         public bool BlackDidCastling { get; set; }
-        public BitColor SideToMove { get; set; }
+        public ChessColor SideToMove { get; set; }
 
         public int MoveCountSincePawnOrCapture { get; private set; } // todo implement this rule...
 
@@ -39,14 +40,14 @@ namespace MantaBitboardEngine
             CastlingRightBlackQueenSide.Add(true);
             CastlingRightBlackKingSide.Add(true);
 
-            SideToMove = BitColor.White;
+            SideToMove = ChessColor.White;
             WhiteDidCastling = false;
             BlackDidCastling = false;
 
             MoveCountSincePawnOrCapture = 0;
         }
 
-        public void Add(BitMove move, Square enPassantSquare, bool castlingRightWhiteQueenSide, bool castlingRightWhiteKingSide, bool castlingRightBlackQueenSide, bool castlingRightBlackKingSide, BitColor sideToMove)
+        public void Add(BitMove move, Square enPassantSquare, bool castlingRightWhiteQueenSide, bool castlingRightWhiteKingSide, bool castlingRightBlackQueenSide, bool castlingRightBlackKingSide, ChessColor sideToMove)
         {
             Moves.Add(move);
             EnPassantSquare.Add(enPassantSquare);
@@ -70,7 +71,7 @@ namespace MantaBitboardEngine
 
                 Moves.RemoveAt(Count - 1); // do this last. it changes Count!
 
-                SideToMove = BitHelper.OtherColor(SideToMove);
+                SideToMove = CommonHelper.OtherColor(SideToMove);
             }
         }
 

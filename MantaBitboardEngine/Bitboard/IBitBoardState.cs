@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MantaCommon;
 
 namespace MantaBitboardEngine
 {
@@ -11,13 +12,13 @@ namespace MantaBitboardEngine
         List<BitMove> Moves { get; }
         bool WhiteDidCastling { get; }
         bool BlackDidCastling { get; }
-        BitColor SideToMove { get; }
+        ChessColor SideToMove { get; }
 
         int MoveCountSincePawnOrCapture { get; }
 
         void Clear();
 
-        void Add(BitMove move, Square enPassantSquare, bool castlingRightWhiteQueenSide, bool castlingRightWhiteKingSide, bool castlingRightBlackQueenSide, bool castlingRightBlackKingSide, BitColor sideToMove);
+        void Add(BitMove move, Square enPassantSquare, bool castlingRightWhiteQueenSide, bool castlingRightWhiteKingSide, bool castlingRightBlackQueenSide, bool castlingRightBlackKingSide, ChessColor sideToMove);
 
         void Back();
 

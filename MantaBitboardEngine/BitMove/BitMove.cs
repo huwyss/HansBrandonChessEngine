@@ -1,4 +1,6 @@
-﻿namespace MantaBitboardEngine
+﻿using MantaCommon;
+
+namespace MantaBitboardEngine
 {
     public struct BitMove
     {
@@ -11,7 +13,7 @@
             Square capturedSquare,
             BitPieceType promotionPiece,
             CastlingType castling,
-            BitColor movingColor,
+            ChessColor movingColor,
             byte value)
         {
             MovingPiece = movingPiece;
@@ -32,7 +34,7 @@
             BitPieceType capturedPiece,
             Square capturedSquare,
             BitPieceType promotionPiece,
-            BitColor movingColor,
+            ChessColor movingColor,
             byte value)
         {
             return new BitMove(movingPiece, fromSquare, toSquare, capturedPiece, capturedSquare, promotionPiece, CastlingType.None, movingColor, value);
@@ -44,7 +46,7 @@
             Square fromSquare,
             Square toSquare,
             BitPieceType promotionPiece,
-            BitColor movingColor,
+            ChessColor movingColor,
             byte value)
         {
             return new BitMove(movingPiece, fromSquare, toSquare, BitPieceType.Empty, Square.NoSquare, promotionPiece, CastlingType.None, movingColor, value);
@@ -52,11 +54,11 @@
 
         // castling constructor
         public static BitMove CreateCastling(
-            BitColor movingColor,
+            ChessColor movingColor,
             CastlingType castling,
             byte value)
         {
-            if (movingColor == BitColor.White)
+            if (movingColor == ChessColor.White)
             {
                 if (castling == CastlingType.KingSide)
                 {
@@ -87,7 +89,7 @@
         public Square CapturedSquare { get; }
         public BitPieceType PromotionPiece { get; }
         public CastlingType Castling { get; }
-        public BitColor MovingColor { get; }
+        public ChessColor MovingColor { get; }
         public byte Value { get; }
     }
 

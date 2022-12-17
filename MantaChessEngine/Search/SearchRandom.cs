@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MantaCommon;
 
 namespace MantaChessEngine
 {
@@ -23,7 +24,7 @@ namespace MantaChessEngine
             _rand = new Random();
         }
 
-        public MoveRating Search(IBoard board, Definitions.ChessColor color)
+        public MoveRating Search(IBoard board, ChessColor color)
         {
             IMove nextMove = null;
             var possibleMovesComputer = _moveGenerator.GetLegalMoves(board, color).ToList<IMove>();

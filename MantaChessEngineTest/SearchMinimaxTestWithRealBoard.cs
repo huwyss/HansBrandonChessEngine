@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MantaChessEngine;
 using MantaChessEngineTest.Doubles;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MantaCommon;
 
 namespace MantaChessEngineTest
 {
@@ -35,7 +36,7 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1).First(); // level 1
+            var bestRatingActual = target.SearchLevel(board, ChessColor.White, 1).First(); // level 1
             IMove goodMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
 
             Assert.AreEqual(goodMove, bestRatingActual.Move, "White bishop should capture pawn. We are on level 1");
@@ -59,7 +60,7 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1).First(); // level 2
+            var bestRatingActual = target.SearchLevel(board, ChessColor.White, 1).First(); // level 2
             IMove badMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
 
             Assert.AreNotEqual(badMove, bestRatingActual.Move, "White bishop should not capture pawn.");
@@ -92,7 +93,7 @@ namespace MantaChessEngineTest
                                  //"........" +
                                  //"K.......";
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1).First(); // level 3
+            var bestRatingActual = target.SearchLevel(board, ChessColor.White, 1).First(); // level 3
             IMove expectedMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
             IMove expectedMove2 = new NormalMove(Piece.MakePiece('N'), 'f', 3, 'e', 5, Piece.MakePiece('p'));
 
@@ -120,7 +121,7 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1).First(); // level 4
+            var bestRatingActual = target.SearchLevel(board, ChessColor.White, 1).First(); // level 4
             IMove badMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
             IMove badMove2 = new NormalMove(Piece.MakePiece('N'), 'f', 3, 'e', 5, Piece.MakePiece('p'));
 
@@ -146,7 +147,7 @@ namespace MantaChessEngineTest
                                  "........";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1).First(); // level 3
+            var bestRatingActual = target.SearchLevel(board, ChessColor.White, 1).First(); // level 3
             IMove wrongMove = new NormalMove(Piece.MakePiece('R'), 'h', 8, 'e', 8, Piece.MakePiece('q'));
             IMove wrongMove2 = new NormalMove(Piece.MakePiece('K'), 'e', 4, 'd', 5, Piece.MakePiece('b'));
 
@@ -171,7 +172,7 @@ namespace MantaChessEngineTest
                                  "...K....";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1).First(); // level 3
+            var bestRatingActual = target.SearchLevel(board, ChessColor.White, 1).First(); // level 3
             IMove expectedMove = new NoLegalMove();
 
             Assert.AreEqual(expectedMove, bestRatingActual.Move, "White is check mate. no legal move possible.");
@@ -198,7 +199,7 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1).First(); // level 1
+            var bestRatingActual = target.SearchLevel(board, ChessColor.Black, 1).First(); // level 1
             IMove goodMove = new NormalMove(Piece.MakePiece('b'), 'f', 6, 'e', 5, Piece.MakePiece('P'));
 
             Assert.AreEqual(goodMove, bestRatingActual.Move, "Black bishop should capture pawn. We are on level 1");
@@ -222,7 +223,7 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1).First(); // level 2
+            var bestRatingActual = target.SearchLevel(board, ChessColor.Black, 1).First(); // level 2
             IMove badMove = new NormalMove(Piece.MakePiece('b'), 'f', 6, 'e', 5, Piece.MakePiece('P'));
 
             Assert.AreNotEqual(badMove, bestRatingActual.Move, "Black bishop should not capture pawn.");
@@ -255,7 +256,7 @@ namespace MantaChessEngineTest
             //"........" +
             //"K.......";
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1).First(); // level 3
+            var bestRatingActual = target.SearchLevel(board, ChessColor.Black, 1).First(); // level 3
             IMove expectedMove = new NormalMove(Piece.MakePiece('b'), 'd', 6, 'e', 5, Piece.MakePiece('P'));
             IMove expectedMove2 = new NormalMove(Piece.MakePiece('n'), 'd', 7, 'e', 5, Piece.MakePiece('P'));
 
@@ -283,7 +284,7 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1).First(); // level 4
+            var bestRatingActual = target.SearchLevel(board, ChessColor.Black, 1).First(); // level 4
             IMove badMove = new NormalMove(Piece.MakePiece('b'), 'd', 6, 'e', 5, Piece.MakePiece('P'));
             IMove badMove2 = new NormalMove(Piece.MakePiece('n'), 'd', 7, 'e', 5, Piece.MakePiece('P'));
 
@@ -313,7 +314,7 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1).First();
+            var bestRatingActual = target.SearchLevel(board, ChessColor.White, 1).First();
 
             AssertHelper.StallMate(bestRatingActual);
             Assert.AreEqual(new NoLegalMove(), bestRatingActual.Move, "Should be NoLegalMove, white is stalemate");
@@ -336,7 +337,7 @@ namespace MantaChessEngineTest
                                  "K.......";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.White, 1).First();
+            var bestRatingActual = target.SearchLevel(board, ChessColor.White, 1).First();
 
             Assert.AreEqual(new NoLegalMove(), bestRatingActual.Move, "Should be NoLegalMove, white is checkmate");
             AssertHelper.BlackWins(bestRatingActual);
@@ -359,7 +360,7 @@ namespace MantaChessEngineTest
                                  "R.BnK..R";
             board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1).First();
+            var bestRatingActual = target.SearchLevel(board, ChessColor.Black, 1).First();
 
             Assert.AreEqual(new NoLegalMove(), bestRatingActual.Move, "Should be NoLegalMove, Black is checkmate");
             AssertHelper.WhiteWins(bestRatingActual);
@@ -385,7 +386,7 @@ namespace MantaChessEngineTest
 
             IMove expectedMove = new NormalMove(Piece.MakePiece('q'), 'h', 2, 'b', 2, null);
 
-            var bestRatingActual = target.SearchLevel(board, Definitions.ChessColor.Black, 1).First();
+            var bestRatingActual = target.SearchLevel(board, ChessColor.Black, 1).First();
 
             Assert.AreEqual(expectedMove, bestRatingActual.Move, "Should be find checkmate for black: ... Qh2b2 #");
             AssertHelper.BlackWins(bestRatingActual);

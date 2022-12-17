@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MantaCommon;
 
 namespace MantaBitboardEngine
 {
@@ -33,31 +34,31 @@ namespace MantaBitboardEngine
             switch (bitMove.Castling)
             {
                 case CastlingType.KingSide:
-                    if (bitMove.MovingColor == BitColor.White)
+                    if (bitMove.MovingColor == ChessColor.White)
                     {
                         bitBoards.RemovePiece(Square.H1);
-                        bitBoards.SetPiece(BitColor.White, BitPieceType.Rook, Square.F1);
+                        bitBoards.SetPiece(ChessColor.White, BitPieceType.Rook, Square.F1);
                         castlingDoneRightWhiteKingSide = true;
                     }
                     else
                     {
                         bitBoards.RemovePiece(Square.H8);
-                        bitBoards.SetPiece(BitColor.Black, BitPieceType.Rook, Square.F8);
+                        bitBoards.SetPiece(ChessColor.Black, BitPieceType.Rook, Square.F8);
                         castlingDoneRightBlackKingSide = true;
                     }
                     break;
 
                 case CastlingType.QueenSide:
-                    if (bitMove.MovingColor == BitColor.White)
+                    if (bitMove.MovingColor == ChessColor.White)
                     {
                         bitBoards.RemovePiece(Square.A1);
-                        bitBoards.SetPiece(BitColor.White, BitPieceType.Rook, Square.D1);
+                        bitBoards.SetPiece(ChessColor.White, BitPieceType.Rook, Square.D1);
                         castlingDoneWhiteQueenSide = true;
                     }
                     else
                     {
                         bitBoards.RemovePiece(Square.A8);
-                        bitBoards.SetPiece(BitColor.Black, BitPieceType.Rook, Square.D8);
+                        bitBoards.SetPiece(ChessColor.Black, BitPieceType.Rook, Square.D8);
                         castlingDoneRightBlackQueenSide = true;
                     }
                     break;
@@ -76,30 +77,30 @@ namespace MantaBitboardEngine
             var blackKingMoved = false;
             if (bitMove.MovingPiece == BitPieceType.Rook)
             {
-                if (bitMove.MovingColor == BitColor.White && bitMove.FromSquare == Square.H1)
+                if (bitMove.MovingColor == ChessColor.White && bitMove.FromSquare == Square.H1)
                 {
                     whiteKingRookMoved = true;
                 }
-                else if (bitMove.MovingColor == BitColor.White && bitMove.FromSquare == Square.A1)
+                else if (bitMove.MovingColor == ChessColor.White && bitMove.FromSquare == Square.A1)
                 {
                     whiteQueenRookMoved = true;
                 }
-                else if (bitMove.MovingColor == BitColor.Black && bitMove.FromSquare == Square.H8)
+                else if (bitMove.MovingColor == ChessColor.Black && bitMove.FromSquare == Square.H8)
                 {
                     blackKingRookMoved = true;
                 }
-                else if (bitMove.MovingColor == BitColor.Black && bitMove.FromSquare == Square.A8)
+                else if (bitMove.MovingColor == ChessColor.Black && bitMove.FromSquare == Square.A8)
                 {
                     blackQueenRookMoved = true;
                 }
             }
             else if (bitMove.MovingPiece == BitPieceType.King)
             {
-                if (bitMove.MovingColor == BitColor.White)
+                if (bitMove.MovingColor == ChessColor.White)
                 {
                     whiteKingMoved = true;
                 }
-                else if (bitMove.MovingColor == BitColor.Black)
+                else if (bitMove.MovingColor == ChessColor.Black)
                 {
                     blackKingMoved = true;
                 }
@@ -112,7 +113,7 @@ namespace MantaBitboardEngine
                 bitBoards.BoardState.LastCastlingRightWhiteKingSide && !castlingDoneRightWhiteKingSide && !whiteKingRookMoved && !whiteKingMoved,
                 bitBoards.BoardState.LastCastlingRightBlackQueenSide && !castlingDoneRightBlackQueenSide && !blackQueenRookMoved && !blackKingMoved,
                 bitBoards.BoardState.LastCastlingRightBlackKingSide && !castlingDoneRightBlackKingSide && !blackKingRookMoved && !blackKingMoved,
-                BitHelper.OtherColor(bitMove.MovingColor));
+                CommonHelper.OtherColor(bitMove.MovingColor));
         }
 
         private Square GetEnPassantSquare(BitMove move)
@@ -125,7 +126,7 @@ namespace MantaBitboardEngine
             }
 
             // black en passant field
-            if (move.MovingColor == BitColor.Black) // black pawn
+            if (move.MovingColor == ChessColor.Black) // black pawn
             {
                 if (move.FromSquare - move.ToSquare == 16) // 2 fields move
                 {
@@ -149,35 +150,35 @@ namespace MantaBitboardEngine
             bitBoards.SetPiece(bitMove.MovingColor, bitMove.MovingPiece, bitMove.FromSquare);
             if (bitMove.CapturedSquare != Square.NoSquare)
             {
-                bitBoards.SetPiece(BitHelper.OtherColor(bitMove.MovingColor), bitMove.CapturedPiece, bitMove.CapturedSquare);
+                bitBoards.SetPiece(CommonHelper.OtherColor(bitMove.MovingColor), bitMove.CapturedPiece, bitMove.CapturedSquare);
             }
 
             // Undo rook move in case of castling
             switch (bitMove.Castling)
             {
                 case CastlingType.KingSide:
-                    if (bitMove.MovingColor == BitColor.White)
+                    if (bitMove.MovingColor == ChessColor.White)
                     {
                         bitBoards.RemovePiece(Square.F1);
-                        bitBoards.SetPiece(BitColor.White, BitPieceType.Rook, Square.H1);
+                        bitBoards.SetPiece(ChessColor.White, BitPieceType.Rook, Square.H1);
                     }
                     else
                     {
                         bitBoards.RemovePiece(Square.F8);
-                        bitBoards.SetPiece(BitColor.Black, BitPieceType.Rook, Square.H8);
+                        bitBoards.SetPiece(ChessColor.Black, BitPieceType.Rook, Square.H8);
                     }
                     break;
 
                 case CastlingType.QueenSide:
-                    if (bitMove.MovingColor == BitColor.White)
+                    if (bitMove.MovingColor == ChessColor.White)
                     {
                         bitBoards.RemovePiece(Square.D1);
-                        bitBoards.SetPiece(BitColor.White, BitPieceType.Rook, Square.A1);
+                        bitBoards.SetPiece(ChessColor.White, BitPieceType.Rook, Square.A1);
                     }
                     else
                     {
                         bitBoards.RemovePiece(Square.D8);
-                        bitBoards.SetPiece(BitColor.Black, BitPieceType.Rook, Square.A8);
+                        bitBoards.SetPiece(ChessColor.Black, BitPieceType.Rook, Square.A8);
                     }
                     break;
 

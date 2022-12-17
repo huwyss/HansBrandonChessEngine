@@ -1,5 +1,5 @@
 ﻿using System;
-using static MantaChessEngine.Definitions;
+using MantaCommon;
 
 namespace MantaChessEngine
 {

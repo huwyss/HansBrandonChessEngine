@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MantaChessEngine;
+using MantaCommon;
 
 namespace MantaChessEngineTest.Doubles
 {
@@ -30,7 +31,7 @@ namespace MantaChessEngineTest.Doubles
             _iteratorIsChecks = isChecksToReturn.GetEnumerator();
         }
 
-        public IEnumerable<IMove> GetAllMoves(IBoard board, Definitions.ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
+        public IEnumerable<IMove> GetAllMoves(IBoard board, ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
         {
             _iteratorMoves.MoveNext();
 
@@ -54,18 +55,18 @@ namespace MantaChessEngineTest.Doubles
         }
 
         public bool ReturnsIsAttacked { get; set; }
-        public bool IsAttacked(IBoard board, Definitions.ChessColor color, int file, int rank)
+        public bool IsAttacked(IBoard board, ChessColor color, int file, int rank)
         {
             return ReturnsIsAttacked;
         }
 
-        public bool ReturnsIsCheck { get; set; }public bool IsCheck(IBoard board, Definitions.ChessColor color)
+        public bool ReturnsIsCheck { get; set; }public bool IsCheck(IBoard board, ChessColor color)
         {
             _iteratorIsChecks.MoveNext();
             return _iteratorIsChecks.Current;
         }
 
-        public IEnumerable<IMove> GetLegalMoves(IBoard board, Definitions.ChessColor color)
+        public IEnumerable<IMove> GetLegalMoves(IBoard board, ChessColor color)
         {
             _iteratorMoves.MoveNext();
 

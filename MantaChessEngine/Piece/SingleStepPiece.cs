@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MantaCommon;
 
 namespace MantaChessEngine
 {
@@ -11,7 +12,7 @@ namespace MantaChessEngine
     /// </summary>
     public abstract class SingleStepPiece : Piece
     {
-        public SingleStepPiece(Definitions.ChessColor color) : base(color)
+        public SingleStepPiece(ChessColor color) : base(color)
         {
         }
 

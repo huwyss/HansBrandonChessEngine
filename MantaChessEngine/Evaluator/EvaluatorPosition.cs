@@ -1,4 +1,6 @@
-﻿namespace MantaChessEngine
+﻿using MantaCommon;
+
+namespace MantaChessEngine
 {
     public class EvaluatorPosition : IEvaluator
     {
@@ -31,7 +33,7 @@
                 {
                     Piece piece = board.GetPiece(file, rank);
                     int pieceScore = GetPieceScore(piece, file, rank);
-                    if (board.GetColor(file, rank) == Definitions.ChessColor.White)
+                    if (board.GetColor(file, rank) == ChessColor.White)
                     {
                         scoreWhite += pieceScore;
                     }
@@ -77,7 +79,7 @@
                 return ValueKnight + KnightPositionBonus[index];
             else if (piece is Bishop)
             {
-                if (piece.Color == Definitions.ChessColor.Black)
+                if (piece.Color == ChessColor.Black)
                 {
                     numberBlackBishop++;
                 }

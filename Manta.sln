@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MantaBitboardEngine", "Mant
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MantaBitboardEngineTest", "MantaBitboardEngineTest\MantaBitboardEngineTest.csproj", "{7A82BF65-6EC7-4334-995A-75DD6586B629}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MantaCommon", "MantaCommon\MantaCommon.csproj", "{A16F618C-7E58-4D1A-9864-989AFFBA87EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{7A82BF65-6EC7-4334-995A-75DD6586B629}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A82BF65-6EC7-4334-995A-75DD6586B629}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A82BF65-6EC7-4334-995A-75DD6586B629}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A16F618C-7E58-4D1A-9864-989AFFBA87EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A16F618C-7E58-4D1A-9864-989AFFBA87EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A16F618C-7E58-4D1A-9864-989AFFBA87EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A16F618C-7E58-4D1A-9864-989AFFBA87EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MantaChessEngine;
+using MantaCommon;
 
 namespace MantaChessEngineTest
 {
@@ -11,9 +12,9 @@ namespace MantaChessEngineTest
     {
         public List<IMove> ReturnsWhiteGetAllMoves { get; set; }
         public List<IMove> ReturnsBlackGetAllMoves { get; set; }
-        public IEnumerable<IMove> GetAllMoves(IBoard board, Definitions.ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
+        public IEnumerable<IMove> GetAllMoves(IBoard board, ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
         {
-            return color == Definitions.ChessColor.White ? ReturnsWhiteGetAllMoves : ReturnsBlackGetAllMoves;
+            return color == ChessColor.White ? ReturnsWhiteGetAllMoves : ReturnsBlackGetAllMoves;
         }
 
         public List<IMove> ReturnsGetMoves { get; set; }
@@ -29,18 +30,18 @@ namespace MantaChessEngineTest
         }
 
         public bool ReturnsIsAttacked { get; set; }
-        public bool IsAttacked(IBoard board, Definitions.ChessColor color, int file, int rank)
+        public bool IsAttacked(IBoard board, ChessColor color, int file, int rank)
         {
             return ReturnsIsAttacked;
         }
 
         public bool ReturnsIsCheck { get; set; }
-        public bool IsCheck(IBoard board, Definitions.ChessColor color)
+        public bool IsCheck(IBoard board, ChessColor color)
         {
             return ReturnsIsCheck;
         }
 
-        public IEnumerable<IMove> GetLegalMoves(IBoard board, Definitions.ChessColor color)
+        public IEnumerable<IMove> GetLegalMoves(IBoard board, ChessColor color)
         {
             throw new NotImplementedException();
         }

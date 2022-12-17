@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MantaCommon;
 
 namespace MantaChessEngine
 {
     public abstract class Piece
     {
-        public Definitions.ChessColor Color { get; set; }
-        public Piece(Definitions.ChessColor color)
+        public ChessColor Color { get; set; }
+        public Piece(ChessColor color)
         {
             Color = color;
         }
@@ -30,7 +31,7 @@ namespace MantaChessEngine
             return MakePiece(pieceChar, Helper.GetPieceColor(pieceChar));
         }
 
-        public static Piece MakePiece(char pieceChar, Definitions.ChessColor color)
+        public static Piece MakePiece(char pieceChar, ChessColor color)
         {
             switch (pieceChar.ToString().ToLower()[0])
             {

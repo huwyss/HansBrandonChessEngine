@@ -1,4 +1,4 @@
-﻿using static MantaChessEngine.Definitions;
+﻿using MantaCommon;
 
 namespace MantaBitboardEngine
 {
@@ -29,7 +29,7 @@ namespace MantaBitboardEngine
         /// <summary>
         /// Sets a chess piece to the field.
         /// </summary>
-        void SetPiece(BitColor color, BitPieceType piece, Square square);
+        void SetPiece(ChessColor color, BitPieceType piece, Square square);
 
         /// <summary>
         /// Removes the piece from the square.

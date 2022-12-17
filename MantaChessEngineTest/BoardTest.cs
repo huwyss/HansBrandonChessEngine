@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MantaChessEngine;
+using MantaCommon;
 
 namespace MantaChessEngineTest
 {
@@ -39,30 +40,30 @@ namespace MantaChessEngineTest
             var target = new Board();
             target.SetInitialPosition();
 
-            Assert.AreEqual(new Rook(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('a'), 1));
-            Assert.AreEqual(new Knight(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('b'), 1));
-            Assert.AreEqual(new Bishop(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('c'), 1));
-            Assert.AreEqual(new Queen(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('d'), 1));
-            Assert.AreEqual(new King(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('e'), 1));
-            Assert.AreEqual(new Bishop(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('f'), 1));
-            Assert.AreEqual(new Knight(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('g'), 1));
-            Assert.AreEqual(new Rook(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('h'), 1));
+            Assert.AreEqual(new Rook(ChessColor.White), target.GetPiece(Helper.FileCharToFile('a'), 1));
+            Assert.AreEqual(new Knight(ChessColor.White), target.GetPiece(Helper.FileCharToFile('b'), 1));
+            Assert.AreEqual(new Bishop(ChessColor.White), target.GetPiece(Helper.FileCharToFile('c'), 1));
+            Assert.AreEqual(new Queen(ChessColor.White), target.GetPiece(Helper.FileCharToFile('d'), 1));
+            Assert.AreEqual(new King(ChessColor.White), target.GetPiece(Helper.FileCharToFile('e'), 1));
+            Assert.AreEqual(new Bishop(ChessColor.White), target.GetPiece(Helper.FileCharToFile('f'), 1));
+            Assert.AreEqual(new Knight(ChessColor.White), target.GetPiece(Helper.FileCharToFile('g'), 1));
+            Assert.AreEqual(new Rook(ChessColor.White), target.GetPiece(Helper.FileCharToFile('h'), 1));
 
-            Assert.AreEqual(new Pawn(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('b'), 2)); // white pawn
+            Assert.AreEqual(new Pawn(ChessColor.White), target.GetPiece(Helper.FileCharToFile('b'), 2)); // white pawn
             Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('c'), 3)); // empty
             Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('d'), 4)); // empty
             Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('e'), 5)); // empty
             Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('f'), 6)); // empty
-            Assert.AreEqual(new Pawn(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('g'), 7)); // black pawn
+            Assert.AreEqual(new Pawn(ChessColor.Black), target.GetPiece(Helper.FileCharToFile('g'), 7)); // black pawn
 
-            Assert.AreEqual(new Rook(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('a'), 8));
-            Assert.AreEqual(new Knight(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('b'), 8));
-            Assert.AreEqual(new Bishop(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('c'), 8));
-            Assert.AreEqual(new Queen(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('d'), 8));
-            Assert.AreEqual(new King(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('e'), 8));
-            Assert.AreEqual(new Bishop(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('f'), 8));
-            Assert.AreEqual(new Knight(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('g'), 8));
-            Assert.AreEqual(new Rook(Definitions.ChessColor.Black), target.GetPiece(Helper.FileCharToFile('h'), 8));
+            Assert.AreEqual(new Rook(ChessColor.Black), target.GetPiece(Helper.FileCharToFile('a'), 8));
+            Assert.AreEqual(new Knight(ChessColor.Black), target.GetPiece(Helper.FileCharToFile('b'), 8));
+            Assert.AreEqual(new Bishop(ChessColor.Black), target.GetPiece(Helper.FileCharToFile('c'), 8));
+            Assert.AreEqual(new Queen(ChessColor.Black), target.GetPiece(Helper.FileCharToFile('d'), 8));
+            Assert.AreEqual(new King(ChessColor.Black), target.GetPiece(Helper.FileCharToFile('e'), 8));
+            Assert.AreEqual(new Bishop(ChessColor.Black), target.GetPiece(Helper.FileCharToFile('f'), 8));
+            Assert.AreEqual(new Knight(ChessColor.Black), target.GetPiece(Helper.FileCharToFile('g'), 8));
+            Assert.AreEqual(new Rook(ChessColor.Black), target.GetPiece(Helper.FileCharToFile('h'), 8));
 
             Assert.AreEqual(0, target.BoardState.LastEnPassantFile);
             Assert.AreEqual(0, target.BoardState.LastEnPassantRank);
@@ -80,8 +81,8 @@ namespace MantaChessEngineTest
 
             target.Move(new NormalMove(Piece.MakePiece('P'),'e',2,'e',4,null));
             Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('e'), 2));
-            Assert.AreEqual(new Pawn(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('e'), 4));
-            Assert.AreEqual(Definitions.ChessColor.Black, target.BoardState.SideToMove);
+            Assert.AreEqual(new Pawn(ChessColor.White), target.GetPiece(Helper.FileCharToFile('e'), 4));
+            Assert.AreEqual(ChessColor.Black, target.BoardState.SideToMove);
         }
 
         [TestMethod]
@@ -92,8 +93,8 @@ namespace MantaChessEngineTest
             target.Move(new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 4, null));
 
             Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('e'), 2));
-            Assert.AreEqual(new Pawn(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('e'), 4));
-            Assert.AreEqual(Definitions.ChessColor.Black, target.BoardState.SideToMove);
+            Assert.AreEqual(new Pawn(ChessColor.White), target.GetPiece(Helper.FileCharToFile('e'), 4));
+            Assert.AreEqual(ChessColor.Black, target.BoardState.SideToMove);
         }
 
         [TestMethod]
@@ -103,13 +104,13 @@ namespace MantaChessEngineTest
             target.SetInitialPosition();
             target.SetPiece(null, Helper.FileCharToFile('d'), 2);
 
-            target.Move(new NormalMove(new Queen(Definitions.ChessColor.White),'d',1,'d',7,Piece.MakePiece('p')));
+            target.Move(new NormalMove(new Queen(ChessColor.White),'d',1,'d',7,Piece.MakePiece('p')));
             Assert.AreEqual(null, target.GetPiece(Helper.FileCharToFile('d'), 1));
-            Assert.AreEqual(new Queen(Definitions.ChessColor.White), target.GetPiece(Helper.FileCharToFile('d'), 7));
-            Assert.AreEqual(Definitions.ChessColor.Black, target.BoardState.SideToMove);
+            Assert.AreEqual(new Queen(ChessColor.White), target.GetPiece(Helper.FileCharToFile('d'), 7));
+            Assert.AreEqual(ChessColor.Black, target.BoardState.SideToMove);
 
             Assert.AreEqual(1, target.BoardState.Moves.Count);
-            Assert.AreEqual(new NormalMove(new Queen(Definitions.ChessColor.White), 4, 1, 4, 7, Piece.MakePiece('p')), target.BoardState.Moves[0]);
+            Assert.AreEqual(new NormalMove(new Queen(ChessColor.White), 4, 1, 4, 7, Piece.MakePiece('p')), target.BoardState.Moves[0]);
         }
 
         [TestMethod]
@@ -211,10 +212,10 @@ namespace MantaChessEngineTest
         {
             var target = new Board();
             target.SetInitialPosition();
-            Assert.AreEqual(Definitions.ChessColor.White, target.GetColor(5, 2));
-            Assert.AreEqual(Definitions.ChessColor.Empty, target.GetColor(5, 3));
-            Assert.AreEqual(Definitions.ChessColor.Black, target.GetColor(5, 7));
-            Assert.AreEqual(Definitions.ChessColor.Empty, target.GetColor(5, 5));
+            Assert.AreEqual(ChessColor.White, target.GetColor(5, 2));
+            Assert.AreEqual(ChessColor.Empty, target.GetColor(5, 3));
+            Assert.AreEqual(ChessColor.Black, target.GetColor(5, 7));
+            Assert.AreEqual(ChessColor.Empty, target.GetColor(5, 5));
         }
 
         [TestMethod]
@@ -289,7 +290,7 @@ namespace MantaChessEngineTest
                                     "PPPP.PPP" +
                                     "RNBQKBNR";
             Assert.AreEqual(expectedString, target.GetPositionString);
-            Assert.AreEqual(Definitions.ChessColor.Black, target.BoardState.SideToMove);
+            Assert.AreEqual(ChessColor.Black, target.BoardState.SideToMove);
             Assert.AreEqual(Helper.FileCharToFile('e'), target.BoardState.LastEnPassantFile, "en passant file wrong after 1st back");
             Assert.AreEqual(3, target.BoardState.LastEnPassantRank, "en passant rank wrong after 1st back");
 
@@ -303,7 +304,7 @@ namespace MantaChessEngineTest
                              "PPPPPPPP" +
                              "RNBQKBNR";
             Assert.AreEqual(expectedString, target.GetPositionString);
-            Assert.AreEqual(Definitions.ChessColor.White, target.BoardState.SideToMove);
+            Assert.AreEqual(ChessColor.White, target.BoardState.SideToMove);
             Assert.AreEqual(0, target.BoardState.LastEnPassantFile, "en passant file wrong after 2dn back");
             Assert.AreEqual(0, target.BoardState.LastEnPassantRank, "en passant rank wrong after 2dn back");
         }
@@ -407,7 +408,7 @@ namespace MantaChessEngineTest
                               "R...K..R";
             board.SetPosition(position);
 
-            board.Move(new CastlingMove(CastlingType.WhiteKingSide, new King(Definitions.ChessColor.White)));
+            board.Move(new CastlingMove(CastlingType.WhiteKingSide, new King(ChessColor.White)));
 
             string expecPos = "r...k..r" +
                               "p......." +
@@ -440,7 +441,7 @@ namespace MantaChessEngineTest
                               "R...K..R";
             board.SetPosition(position);
 
-            board.Move(new CastlingMove(CastlingType.WhiteQueenSide, new King(Definitions.ChessColor.White)));
+            board.Move(new CastlingMove(CastlingType.WhiteQueenSide, new King(ChessColor.White)));
 
             string expecPos = "r...k..r" +
                               "p......." +
@@ -473,7 +474,7 @@ namespace MantaChessEngineTest
                               "R...K..R";
             board.SetPosition(position);
 
-            board.Move(new CastlingMove(CastlingType.BlackKingSide, new King(Definitions.ChessColor.Black)));
+            board.Move(new CastlingMove(CastlingType.BlackKingSide, new King(ChessColor.Black)));
 
             string expecPos = "r....rk." +
                               "p......." +
@@ -506,7 +507,7 @@ namespace MantaChessEngineTest
                               "R...K..R";
             board.SetPosition(position);
 
-            board.Move(new CastlingMove(CastlingType.BlackQueenSide, new King(Definitions.ChessColor.Black)));
+            board.Move(new CastlingMove(CastlingType.BlackQueenSide, new King(ChessColor.Black)));
 
             string expecPos = "..kr...r" +
                               "p......." +

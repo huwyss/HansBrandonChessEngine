@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MantaCommon;
 
 namespace MantaChessEngine
 {
@@ -20,25 +21,25 @@ namespace MantaChessEngine
             return file;
         }
 
-        public static Definitions.ChessColor GetOppositeColor(Definitions.ChessColor color)
+        public static ChessColor GetOppositeColor(ChessColor color)
         {
-            Definitions.ChessColor oposite = Definitions.ChessColor.Empty;
+            ChessColor oposite = ChessColor.Empty;
 
-            if (color == Definitions.ChessColor.White)
+            if (color == ChessColor.White)
             {
-                oposite = Definitions.ChessColor.Black;
+                oposite = ChessColor.Black;
             }
-            else if (color == Definitions.ChessColor.Black)
+            else if (color == ChessColor.Black)
             {
-                oposite = Definitions.ChessColor.White;
+                oposite = ChessColor.White;
             }
 
             return oposite;
         }
 
-        public static Definitions.ChessColor GetPieceColor(char piece)
+        public static ChessColor GetPieceColor(char piece)
         {
-            return piece < 'a' ? Definitions.ChessColor.White : Definitions.ChessColor.Black; 
+            return piece < 'a' ? ChessColor.White : ChessColor.Black; 
         }
 
         public static bool IsCorrectMove(string moveString)

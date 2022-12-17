@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using static MantaChessEngine.Definitions;
+using MantaCommon;
 using log4net;
 
 [assembly: InternalsVisibleTo("MantaChessEngineTest")]

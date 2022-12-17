@@ -3,6 +3,7 @@ using System;
 using System.Text;
 using System.Runtime.CompilerServices;
 using Bitboard = System.UInt64;
+using MantaCommon;
 
 [assembly: InternalsVisibleTo("MantaBitboardEngineTest")]
 namespace MantaBitboardEngine
@@ -12,7 +13,7 @@ namespace MantaBitboardEngine
         private readonly FenParser _fenParser;
         private readonly BitMoveExecutor _moveExecutor;
         public BitPieceType[] BoardAllPieces;
-        public BitColor[] BoardColor;
+        public ChessColor[] BoardColor;
 
         public Bitboard[,] Bitboard_Pieces { get; set; } // Dimensions: color, piece
         public Bitboard[] Bitboard_ColoredPieces { get; set; }
@@ -138,57 +139,57 @@ namespace MantaBitboardEngine
             }
         }
 
-        private string GetSymbol(BitColor color, BitPieceType piece)
+        private string GetSymbol(ChessColor color, BitPieceType piece)
         {
-            if (color == BitColor.White && piece == BitPieceType.Pawn)
+            if (color == ChessColor.White && piece == BitPieceType.Pawn)
             {
                 return "P";
             }
-            else if (color == BitColor.White && piece == BitPieceType.Knight)
+            else if (color == ChessColor.White && piece == BitPieceType.Knight)
             {
                 return "N";
             }
-            else if (color == BitColor.White && piece == BitPieceType.Bishop)
+            else if (color == ChessColor.White && piece == BitPieceType.Bishop)
             {
                 return "B";
             }
-            else if (color == BitColor.White && piece == BitPieceType.Rook)
+            else if (color == ChessColor.White && piece == BitPieceType.Rook)
             {
                 return "R";
             }
-            else if (color == BitColor.White && piece == BitPieceType.Queen)
+            else if (color == ChessColor.White && piece == BitPieceType.Queen)
             {
                 return "Q";
             }
-            else if (color == BitColor.White && piece == BitPieceType.King)
+            else if (color == ChessColor.White && piece == BitPieceType.King)
             {
                 return "K";
             }
-            else if (color == BitColor.Black && piece == BitPieceType.Pawn)
+            else if (color == ChessColor.Black && piece == BitPieceType.Pawn)
             {
                 return "p";
             }
-            else if (color == BitColor.Black && piece == BitPieceType.Knight)
+            else if (color == ChessColor.Black && piece == BitPieceType.Knight)
             {
                 return "n";
             }
-            else if (color == BitColor.Black && piece == BitPieceType.Bishop)
+            else if (color == ChessColor.Black && piece == BitPieceType.Bishop)
             {
                 return "b";
             }
-            else if (color == BitColor.Black && piece == BitPieceType.Rook)
+            else if (color == ChessColor.Black && piece == BitPieceType.Rook)
             {
                 return "r";
             }
-            else if (color == BitColor.Black && piece == BitPieceType.Queen)
+            else if (color == ChessColor.Black && piece == BitPieceType.Queen)
             {
                 return "q";
             }
-            else if (color == BitColor.Black && piece == BitPieceType.King)
+            else if (color == ChessColor.Black && piece == BitPieceType.King)
             {
                 return "k";
             }
-            else if (color == BitColor.Empty && piece == BitPieceType.Empty)
+            else if (color == ChessColor.Empty && piece == BitPieceType.Empty)
             {
                 return ".";
             }
@@ -204,7 +205,7 @@ namespace MantaBitboardEngine
 
             Bitboard_Pieces = new Bitboard[2, 7]; // todo: what is the 7th son of a seventh son?
             BoardAllPieces = new BitPieceType[64];
-            BoardColor = new BitColor[64];
+            BoardColor = new ChessColor[64];
             Bitboard_ColoredPieces = new Bitboard[2];
 
             MovesPieces = new Bitboard[6, 64];
@@ -237,7 +238,7 @@ namespace MantaBitboardEngine
             for (var i = 0; i < 64; i++)
             {
                 BoardAllPieces[i] = BitPieceType.Empty;
-                BoardColor[i] = BitColor.Empty;
+                BoardColor[i] = ChessColor.Empty;
             }
 
             for (var color = 0; color < 2; color++)
@@ -720,10 +721,10 @@ namespace MantaBitboardEngine
             // clear PawnLeft and PawnRight
             for (int i = 0; i < 64; i++)
             {
-                PawnLeft[(int)BitColor.White, i] = Square.NoSquare;
-                PawnLeft[(int)BitColor.Black, i] = Square.NoSquare;
-                PawnRight[(int)BitColor.White, i] = Square.NoSquare;
-                PawnRight[(int)BitColor.Black, i] = Square.NoSquare;
+                PawnLeft[(int)ChessColor.White, i] = Square.NoSquare;
+                PawnLeft[(int)ChessColor.Black, i] = Square.NoSquare;
+                PawnRight[(int)ChessColor.White, i] = Square.NoSquare;
+                PawnRight[(int)ChessColor.Black, i] = Square.NoSquare;
             }
 
             for (int i = 0; i < 64; i++)
@@ -734,16 +735,16 @@ namespace MantaBitboardEngine
                     {
                         // white captures left
                         var stepLeftWhite = i + 7;
-                        SetBit(ref PawnCaptures[(int)BitColor.White, i], stepLeftWhite);
-                        PawnLeft[(int)BitColor.White, i] = (Square)stepLeftWhite;
+                        SetBit(ref PawnCaptures[(int)ChessColor.White, i], stepLeftWhite);
+                        PawnLeft[(int)ChessColor.White, i] = (Square)stepLeftWhite;
                     }
 
                     if (Row[i] > 0)
                     {
                         // black captures left
                         var stepLeftBlack = i - 9;
-                        SetBit(ref PawnCaptures[(int)BitColor.Black, i], stepLeftBlack);
-                        PawnLeft[(int)BitColor.Black, i] = (Square)stepLeftBlack;
+                        SetBit(ref PawnCaptures[(int)ChessColor.Black, i], stepLeftBlack);
+                        PawnLeft[(int)ChessColor.Black, i] = (Square)stepLeftBlack;
                     }
                 }
 
@@ -753,21 +754,21 @@ namespace MantaBitboardEngine
                     {
                         // white captures right
                         var stepRightWhite = i + 9;
-                        SetBit(ref PawnCaptures[(int)BitColor.White, i], stepRightWhite);
-                        PawnRight[(int)BitColor.White, i] = (Square)stepRightWhite;
+                        SetBit(ref PawnCaptures[(int)ChessColor.White, i], stepRightWhite);
+                        PawnRight[(int)ChessColor.White, i] = (Square)stepRightWhite;
                     }
 
                     if (Row[i] > 0)
                     {
                         // black captures right
                         var stepRightBlack = i - 7;
-                        SetBit(ref PawnCaptures[(int)BitColor.Black, i], stepRightBlack);
-                        PawnRight[(int)BitColor.Black, i] = (Square)stepRightBlack;
+                        SetBit(ref PawnCaptures[(int)ChessColor.Black, i], stepRightBlack);
+                        PawnRight[(int)ChessColor.Black, i] = (Square)stepRightBlack;
                     }
                 }
 
-                PawnDefends[(int)BitColor.White, i] = PawnCaptures[(int)BitColor.Black, i];
-                PawnDefends[(int)BitColor.Black, i] = PawnCaptures[(int)BitColor.White, i];
+                PawnDefends[(int)ChessColor.White, i] = PawnCaptures[(int)ChessColor.Black, i];
+                PawnDefends[(int)ChessColor.Black, i] = PawnCaptures[(int)ChessColor.White, i];
             }
         }
 
@@ -782,29 +783,29 @@ namespace MantaBitboardEngine
                 if (Row[i] < 7 )
                 {
                     // step white
-                    SetBit(ref PawnMoves[(int)BitColor.White, i], i + 8);
-                    PawnStep[(int)BitColor.White, i] = i + 8;
+                    SetBit(ref PawnMoves[(int)ChessColor.White, i], i + 8);
+                    PawnStep[(int)ChessColor.White, i] = i + 8;
                 }
 
                 if (Row[i] == 1)
                 {
                     // double step white
-                    SetBit(ref PawnMoves[(int)BitColor.White, i], i + 16);
-                    PawnDoubleStep[(int)BitColor.White, i] = i + 16;
+                    SetBit(ref PawnMoves[(int)ChessColor.White, i], i + 16);
+                    PawnDoubleStep[(int)ChessColor.White, i] = i + 16;
                 }
 
                 if (Row[i] > 0)
                 {
                     // step black
-                    SetBit(ref PawnMoves[(int)BitColor.Black, i], i - 8);
-                    PawnStep[(int)BitColor.Black, i] = i - 8;
+                    SetBit(ref PawnMoves[(int)ChessColor.Black, i], i - 8);
+                    PawnStep[(int)ChessColor.Black, i] = i - 8;
                 }
 
                 if (Row[i] == 6)
                 {
                     // step black
-                    SetBit(ref PawnMoves[(int)BitColor.Black, i], i - 16);
-                    PawnDoubleStep[(int)BitColor.Black, i] = i - 16;
+                    SetBit(ref PawnMoves[(int)ChessColor.Black, i], i - 16);
+                    PawnDoubleStep[(int)ChessColor.Black, i] = i - 16;
                 }
             }
         }
@@ -976,7 +977,7 @@ namespace MantaBitboardEngine
                 positionInfo.CastlingRightWhiteKingSide,
                 positionInfo.CastlingRightBlackQueenSide,
                 positionInfo.CastlingRightBlackKingSide,
-                positionInfo.SideToMove == Definitions.ChessColor.White ? BitColor.White : BitColor.Black);
+                positionInfo.SideToMove == ChessColor.White ? ChessColor.White : ChessColor.Black);
 
             return string.Empty;
         }
@@ -1013,40 +1014,40 @@ namespace MantaBitboardEngine
                 switch (position[i])
                 {
                     case 'P':
-                        SetPiece(BitColor.White, BitPieceType.Pawn, square);
+                        SetPiece(ChessColor.White, BitPieceType.Pawn, square);
                         break;
                     case 'N':
-                        SetPiece(BitColor.White, BitPieceType.Knight, square);
+                        SetPiece(ChessColor.White, BitPieceType.Knight, square);
                         break;
                     case 'B':
-                        SetPiece(BitColor.White, BitPieceType.Bishop, square);
+                        SetPiece(ChessColor.White, BitPieceType.Bishop, square);
                         break;
                     case 'R':
-                        SetPiece(BitColor.White, BitPieceType.Rook, square);
+                        SetPiece(ChessColor.White, BitPieceType.Rook, square);
                         break;
                     case 'Q':
-                        SetPiece(BitColor.White, BitPieceType.Queen, square);
+                        SetPiece(ChessColor.White, BitPieceType.Queen, square);
                         break;
                     case 'K':
-                        SetPiece(BitColor.White, BitPieceType.King, square);
+                        SetPiece(ChessColor.White, BitPieceType.King, square);
                         break;
                     case 'p':
-                        SetPiece(BitColor.Black, BitPieceType.Pawn, square);
+                        SetPiece(ChessColor.Black, BitPieceType.Pawn, square);
                         break;
                     case 'n':
-                        SetPiece(BitColor.Black, BitPieceType.Knight, square);
+                        SetPiece(ChessColor.Black, BitPieceType.Knight, square);
                         break;
                     case 'b':
-                        SetPiece(BitColor.Black, BitPieceType.Bishop, square);
+                        SetPiece(ChessColor.Black, BitPieceType.Bishop, square);
                         break;
                     case 'r':
-                        SetPiece(BitColor.Black, BitPieceType.Rook, square);
+                        SetPiece(ChessColor.Black, BitPieceType.Rook, square);
                         break;
                     case 'q':
-                        SetPiece(BitColor.Black, BitPieceType.Queen, square);
+                        SetPiece(ChessColor.Black, BitPieceType.Queen, square);
                         break;
                     case 'k':
-                        SetPiece(BitColor.Black, BitPieceType.King, square);
+                        SetPiece(ChessColor.Black, BitPieceType.King, square);
                         break;
                     case '.':
                     case ' ':
@@ -1069,7 +1070,7 @@ namespace MantaBitboardEngine
             return new BitPiece(BoardColor[(int)square], BoardAllPieces[(int)square]);
         }
 
-        public void SetPiece(BitColor color, BitPieceType piece, Square square)
+        public void SetPiece(ChessColor color, BitPieceType piece, Square square)
         {
             BoardAllPieces[(int)square] = piece;
             BoardColor[(int)square] = color;
@@ -1087,7 +1088,7 @@ namespace MantaBitboardEngine
             ClearBit(ref Bitboard_ColoredPieces[(int)color], (int)square); // todo test this
 
             BoardAllPieces[(int)square] = BitPieceType.Empty;
-            BoardColor[(int)square] = BitColor.Empty;
+            BoardColor[(int)square] = ChessColor.Empty;
         }
 
         public void Move(BitMove nextMove)

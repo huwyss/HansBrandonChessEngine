@@ -1,5 +1,6 @@
 ﻿using System;
 using MantaChessEngine;
+using MantaCommon;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace MantaChessEngineTest
@@ -23,7 +24,7 @@ namespace MantaChessEngineTest
                                  "RNBQKBNR";
             engine.SetPosition(boardString);
 
-            engine.DoBestMove(Definitions.ChessColor.White);
+            engine.DoBestMove(ChessColor.White);
 
             string actualBoard = engine.GetString();
             string expectedBoard = "rnb.kbnr" +
@@ -53,7 +54,7 @@ namespace MantaChessEngineTest
                                  "RNB.KBNR";
             engine.SetPosition(boardString);
 
-            engine.DoBestMove(Definitions.ChessColor.Black);
+            engine.DoBestMove(ChessColor.Black);
 
             string actualBoard = engine.GetString();
             string expectedBoard = "rnbqkbnr" +
@@ -100,13 +101,13 @@ namespace MantaChessEngineTest
                                  "...K....";
             engine.SetPosition(boardString);
 
-            var actualMove = engine.DoBestMove(Definitions.ChessColor.White);
+            var actualMove = engine.DoBestMove(ChessColor.White);
 
             string actualBoard = engine.GetString();
             string expectedBoard = boardString;
             Assert.AreEqual(new NoLegalMove(), actualMove.Move, "White is check mate, so no legal move possible");
             Assert.AreEqual(expectedBoard, actualBoard, "White is check mate");
-            Assert.IsTrue(engine.IsCheck(Definitions.ChessColor.White), "white is check mate. must be check");
+            Assert.IsTrue(engine.IsCheck(ChessColor.White), "white is check mate. must be check");
         }
 
         [TestMethod]
@@ -142,13 +143,13 @@ namespace MantaChessEngineTest
                                  "K.......";
             engine.SetPosition(boardString);
 
-            var actualMove = engine.DoBestMove(Definitions.ChessColor.White);
+            var actualMove = engine.DoBestMove(ChessColor.White);
             
             string actualBoard = engine.GetString();
             string expectedBoard = boardString;
             Assert.AreEqual(new NoLegalMove(), actualMove.Move, "White is stall mate, so no legal move possible");
             Assert.AreEqual(expectedBoard, actualBoard, "White is stall mate");
-            Assert.IsFalse(engine.IsCheck(Definitions.ChessColor.White), "white is stall mate. not check");
+            Assert.IsFalse(engine.IsCheck(ChessColor.White), "white is stall mate. not check");
         }
 
         [TestMethod]
@@ -166,7 +167,7 @@ namespace MantaChessEngineTest
                                  ".......K"; // king is in check and must escape. only move is Kh1g1
             engine.SetPosition(boardString);
 
-            var actualMove = engine.DoBestMove(Definitions.ChessColor.White);
+            var actualMove = engine.DoBestMove(ChessColor.White);
 
             Assert.AreEqual(new NormalMove(Piece.MakePiece('K'), 'h', 1, 'g', 1, null), actualMove.Move, "should be h1g1");
         }

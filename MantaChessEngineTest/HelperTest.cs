@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MantaChessEngine;
+using MantaCommon;
 
 namespace MantaChessEngineTest
 {
@@ -27,9 +28,9 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetOpositColorTest_WhenWhite_ThenOpositeIsBlack_AndViceVersa()
         {
-            Assert.AreEqual(Definitions.ChessColor.Black, Helper.GetOppositeColor(Definitions.ChessColor.White));
-            Assert.AreEqual(Definitions.ChessColor.White, Helper.GetOppositeColor(Definitions.ChessColor.Black));
-            Assert.AreEqual(Definitions.ChessColor.Empty, Helper.GetOppositeColor(Definitions.ChessColor.Empty));
+            Assert.AreEqual(ChessColor.Black, Helper.GetOppositeColor(ChessColor.White));
+            Assert.AreEqual(ChessColor.White, Helper.GetOppositeColor(ChessColor.Black));
+            Assert.AreEqual(ChessColor.Empty, Helper.GetOppositeColor(ChessColor.Empty));
         }
     }
 }

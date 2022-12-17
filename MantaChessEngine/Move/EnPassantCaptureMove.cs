@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MantaCommon;
 
 namespace MantaChessEngine
 {
@@ -22,7 +23,7 @@ namespace MantaChessEngine
         {
             get
             {
-                if (Color == Definitions.ChessColor.White)
+                if (Color == ChessColor.White)
                 {
                     return TargetRank - 1;
                 }

@@ -1,4 +1,4 @@
-﻿using static MantaChessEngine.Definitions;
+﻿using MantaCommon;
 using System.Collections.Generic;
 using System.Linq;
 

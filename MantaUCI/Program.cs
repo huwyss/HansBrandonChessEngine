@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Diagnostics;
 using MantaChessEngine;
+using MantaBitboardEngine;
+using MantaCommon;
 
 namespace MantaUCI
 {
     class Program
     {
-        static MantaEngine _engine = null;
-        static Board _board = null;
+        static IMantaEngine _engine = null;
+        ////static Board _board = null;
+
+        ////static Bitboards bitboards = null;
+        
+
         static string[] _movesFromInitPosition = new string[0];
         static Stopwatch _stopwatch = new Stopwatch();
-
         static string _fenString = "";
 
         static void Main(string[] args)
@@ -131,7 +136,7 @@ namespace MantaUCI
         {
             if (string.IsNullOrEmpty(_fenString))
             {
-                _board.SetInitialPosition();
+                _engine.SetInitialPosition();
             }
             else
             {
@@ -153,7 +158,7 @@ namespace MantaUCI
 
         private static void AnswerBestMove(int depth)
         {
-            MoveRating bestMove = null;
+            UciMoveRating bestMove = null;
             _engine.ClearPreviousPV();
             _engine.SetAdditionalSelectiveDepth(1);
 
@@ -165,14 +170,14 @@ namespace MantaUCI
                 _stopwatch.Restart();
                 bestMove = _engine.DoBestMove();
                 _stopwatch.Stop();
-                var scoreFromEngine = bestMove.Move.Color == Definitions.ChessColor.White
+                var scoreFromEngine = bestMove.MovingColor == ChessColor.White
                     ? bestMove.Score
                     : - bestMove.Score;
 
                 string principalVariation = string.Empty;
                 foreach (var move in bestMove.PrincipalVariation)
                 {
-                    principalVariation += move.ToUciString() + " ";
+                    principalVariation += move + " ";
                 }
 
                 var duration = _stopwatch.ElapsedMilliseconds;
@@ -181,17 +186,17 @@ namespace MantaUCI
                 Console.WriteLine("info depth " + bestMove.Depth + " seldepth " + bestMove.SelectiveDepth + " score cp " + scoreFromEngine + " nodes " + bestMove.EvaluatedPositions + " nps " + nps + " time " + duration + " pv " + principalVariation );
             }
             
-            Console.WriteLine("bestmove " + bestMove.Move.ToUciString());
+            Console.WriteLine("bestmove " + bestMove.Move);
         }
 
         private static void CreateEngine()
         {
-            _board = new Board();
+            ////_board = new Board();
             _engine = new MantaEngine(EngineType.AlphaBeta);
             ////_engine = new MantaEngine(EngineType.MinimaxPosition);
             ////_engine = new MantaEngine(EngineType.Random);
             _engine.SetMaxSearchDepth(3);
-            _engine.SetBoard(_board);
+            ////_engine.SetBoard(_board);
         }
     }
 }

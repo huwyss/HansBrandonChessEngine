@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MantaChessEngine;
-using static MantaChessEngine.Definitions;
+using MantaCommon;
 using System.Linq;
 
 namespace MantaChessEngineTest
@@ -413,7 +413,7 @@ namespace MantaChessEngineTest
                               "....K...";
             board.SetPosition(position);
            
-            var moves = target.GetAllMoves(board, Definitions.ChessColor.White).ToList<IMove>();
+            var moves = target.GetAllMoves(board, ChessColor.White).ToList<IMove>();
 
             Assert.AreEqual(6, moves.Count);
             Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 3, null)), "e2e3. missing");

@@ -1,11 +1,13 @@
-﻿namespace MantaChessEngine
+﻿using MantaCommon;
+
+namespace MantaChessEngine
 {
     public interface IMove
     {
         Piece CapturedPiece { get; }
         int CapturedFile { get; }
         int CapturedRank { get; }
-        Definitions.ChessColor Color { get; }
+        ChessColor Color { get; }
         Piece MovingPiece { get; }
         int SourceFile { get; }
         int SourceRank { get; }

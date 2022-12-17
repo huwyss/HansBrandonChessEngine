@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MantaCommon;
 
 namespace MantaChessEngine
 {
@@ -11,7 +12,7 @@ namespace MantaChessEngine
         /// <summary>
         /// Multistep pieces are queen, rook and bishop
         /// </summary>
-        public MultiStepPiece(Definitions.ChessColor color) : base(color)
+        public MultiStepPiece(ChessColor color) : base(color)
         {
         }
 
@@ -30,7 +31,7 @@ namespace MantaChessEngine
                     {
                         break;
                     }
-                    Definitions.ChessColor targetColor = board.GetColor(targetFile, targetRank);
+                    ChessColor targetColor = board.GetColor(targetFile, targetRank);
                     if (Color == targetColor)
                     {
                         break;
@@ -39,7 +40,7 @@ namespace MantaChessEngine
                     Piece targetPiece = board.GetPiece(targetFile, targetRank);
                     moves.Add(MoveFactory.MakeNormalMove(this, file, rank, targetFile, targetRank, targetPiece));
 
-                    if (Definitions.ChessColor.Empty != targetColor)
+                    if (ChessColor.Empty != targetColor)
                     {
                         break;
                     }

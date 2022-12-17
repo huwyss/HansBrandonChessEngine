@@ -1,4 +1,6 @@
-﻿namespace MantaChessEngine
+﻿using MantaCommon;
+
+namespace MantaChessEngine
 {
     public class EvaluatorSimple : IEvaluator
     {
@@ -22,7 +24,7 @@
                 {
                     Piece piece = board.GetPiece(file, rank);
                     int pieceScore = GetPieceScore(piece);
-                    if (board.GetColor(file, rank) == Definitions.ChessColor.White)
+                    if (board.GetColor(file, rank) == ChessColor.White)
                     {
                         scoreWhite += pieceScore;
                     }

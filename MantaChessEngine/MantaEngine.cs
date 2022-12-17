@@ -1,5 +1,5 @@
 ﻿using System;
-using static MantaChessEngine.Definitions;
+using MantaCommon;
 
 namespace MantaChessEngine
 {
@@ -11,7 +11,7 @@ namespace MantaChessEngine
         AlphaBeta
     }
 
-    public class MantaEngine
+    public class MantaEngine : IMantaEngine
     {
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -120,7 +120,7 @@ namespace MantaChessEngine
             return valid;
         }
 
-        public bool Move(IMove move)
+        private bool Move(IMove move)
         {
             _board.Move(move);
             return true;
@@ -132,22 +132,28 @@ namespace MantaChessEngine
             return true;
         }
 
-        public MoveRating DoBestMove(ChessColor color)
+        public UciMoveRating DoBestMove(ChessColor color)
         {
             MoveRating nextMove = _search.Search(_board, color);
             _board.Move(nextMove.Move);
             _log.Debug("Score: " + nextMove.Score);
 
-            return nextMove;
+            UciMoveRating uciRating = new UciMoveRating();
+            // todo implement conversion.
+
+            return uciRating;
         }
 
-        public MoveRating DoBestMove()
+        public UciMoveRating DoBestMove()
         {
             MoveRating nextMove = _search.Search(_board, _board.BoardState.SideToMove);
             _board.Move(nextMove.Move);
             _log.Debug("Score: " + nextMove.Score);
 
-            return nextMove;
+            UciMoveRating uciRating = new UciMoveRating();
+            // todo implement conversion.
+
+            return uciRating;
         }
 
         public ChessColor SideToMove()
@@ -155,7 +161,7 @@ namespace MantaChessEngine
             return _board.BoardState.SideToMove;
         }
 
-        public bool IsCheck(Definitions.ChessColor color)
+        public bool IsCheck(ChessColor color)
         {
             return _moveGenerator.IsCheck(_board, color);
         }

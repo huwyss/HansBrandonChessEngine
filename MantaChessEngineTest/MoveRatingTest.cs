@@ -1,6 +1,7 @@
 ﻿using static MantaChessEngine.Definitions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MantaChessEngine;
+using MantaCommon;
 
 namespace MantaChessEngineTest
 {

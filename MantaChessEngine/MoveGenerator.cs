@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Linq;
 using static MantaChessEngine.Definitions;
+using MantaCommon;
 
 [assembly: InternalsVisibleTo("MantaChessEngineTest")]
 [assembly: InternalsVisibleTo("MantaBitboardEngineTest")]

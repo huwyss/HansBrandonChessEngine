@@ -8,13 +8,6 @@ namespace MantaChessEngine
 {
     public static class Definitions
     {
-        public enum ChessColor
-        {
-            White,
-            Black,
-            Empty
-        }
-
         public static char EmptyField = '.';
 
         public const char KING = 'k';

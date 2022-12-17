@@ -1,5 +1,5 @@
 ﻿using MantaChessEngine;
-using static MantaChessEngine.Definitions;
+using MantaCommon;
 
 namespace MantaChessEngineTest.Doubles
 {

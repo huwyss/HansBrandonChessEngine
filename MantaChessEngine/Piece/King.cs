@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using static MantaChessEngine.Definitions;
+using MantaCommon;
 
 namespace MantaChessEngine
 {
@@ -13,7 +13,7 @@ namespace MantaChessEngine
         {
             get
             {
-                return Color == Definitions.ChessColor.White ? 'K' : 'k';
+                return Color == ChessColor.White ? 'K' : 'k';
             }
         }
 
@@ -38,7 +38,7 @@ namespace MantaChessEngine
                 Piece maybeWhiteKingRook = board.GetPiece(Helper.FileCharToFile('h'), 1);
                 if (board.BoardState.LastCastlingRightWhiteKingSide && // castling right
                     file == Helper.FileCharToFile('e') && rank == 1 && // king initial position
-                    maybeWhiteKingRook is Rook && maybeWhiteKingRook.Color == Definitions.ChessColor.White && // rook init position
+                    maybeWhiteKingRook is Rook && maybeWhiteKingRook.Color == ChessColor.White && // rook init position
                     IsFieldsEmpty(board, Helper.FileCharToFile('f'), 1, Helper.FileCharToFile('g')) && // fields between king and rook empty
                     !moveGen.IsAttacked(board, ChessColor.White, Helper.FileCharToFile('e'), 1) && // king not attacked
                     !moveGen.IsAttacked(board, ChessColor.White, Helper.FileCharToFile('f'), 1) && // field next to king not attacked
@@ -52,7 +52,7 @@ namespace MantaChessEngine
                 Piece maybeWhiteQueenRook = board.GetPiece(Helper.FileCharToFile('a'), 1);
                 if (board.BoardState.LastCastlingRightWhiteQueenSide && // castling right
                     file == Helper.FileCharToFile('e') && rank == 1 && // king initial position
-                    maybeWhiteQueenRook is Rook && maybeWhiteQueenRook.Color == Definitions.ChessColor.White && // rook init position
+                    maybeWhiteQueenRook is Rook && maybeWhiteQueenRook.Color == ChessColor.White && // rook init position
                     IsFieldsEmpty(board, Helper.FileCharToFile('b'), 1, Helper.FileCharToFile('d')) &&// fields between king and rook empty
                     !moveGen.IsAttacked(board, ChessColor.White, Helper.FileCharToFile('e'), 1) && // king not attacked
                     !moveGen.IsAttacked(board, ChessColor.White, Helper.FileCharToFile('d'), 1) && // field next to king not attacked
@@ -63,13 +63,13 @@ namespace MantaChessEngine
                 }
             }
             
-            if (Color == Definitions.ChessColor.Black) // black king
+            if (Color == ChessColor.Black) // black king
             {
                 // check for king side castling (0-0)
                 Piece maybeBlackKingRook = board.GetPiece(Helper.FileCharToFile('h'), 8);
                 if (board.BoardState.LastCastlingRightBlackKingSide && // castling right
                     file == Helper.FileCharToFile('e') && rank == 8 && // king initial position
-                    maybeBlackKingRook is Rook && maybeBlackKingRook.Color == Definitions.ChessColor.Black && // rook init position
+                    maybeBlackKingRook is Rook && maybeBlackKingRook.Color == ChessColor.Black && // rook init position
                     IsFieldsEmpty(board, Helper.FileCharToFile('f'), 8, Helper.FileCharToFile('g')) && // fields between king and rook empty
                     !moveGen.IsAttacked(board, ChessColor.Black, Helper.FileCharToFile('e'), 8) && // king not attacked
                     !moveGen.IsAttacked(board, ChessColor.Black, Helper.FileCharToFile('f'), 8) && // field next to king not attacked
@@ -83,7 +83,7 @@ namespace MantaChessEngine
                 Piece maybeBlackQueenRook = board.GetPiece(Helper.FileCharToFile('a'), 8);
                 if (board.BoardState.LastCastlingRightBlackQueenSide && // castling right
                     file == Helper.FileCharToFile('e') && rank == 8 && // king initial position
-                    maybeBlackQueenRook is Rook && maybeBlackQueenRook.Color == Definitions.ChessColor.Black && // rook init position
+                    maybeBlackQueenRook is Rook && maybeBlackQueenRook.Color == ChessColor.Black && // rook init position
                     IsFieldsEmpty(board, Helper.FileCharToFile('b'), 8, Helper.FileCharToFile('d')) && // fields between king and rook empty
                     !moveGen.IsAttacked(board, ChessColor.Black, Helper.FileCharToFile('e'), 8) && // king not attacked
                     !moveGen.IsAttacked(board, ChessColor.Black, Helper.FileCharToFile('d'), 8) && // field next to king not attacked

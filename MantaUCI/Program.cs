@@ -9,10 +9,6 @@ namespace MantaUCI
     class Program
     {
         static IMantaEngine _engine = null;
-        ////static Board _board = null;
-
-        ////static Bitboards bitboards = null;
-        
 
         static string[] _movesFromInitPosition = new string[0];
         static Stopwatch _stopwatch = new Stopwatch();
@@ -191,11 +187,27 @@ namespace MantaUCI
 
         private static void CreateEngine()
         {
-            _engine = new MantaBitboardEngine.MantaBitboardEngine();
-            ////_engine = new MantaEngine(EngineType.AlphaBeta);
+            _engine = GetMantaBitboardEngine();
+
+            ////_engine = GetMantaEngine();
+        }
+
+        private static IMantaEngine GetMantaBitboardEngine()
+        {
+            var engine = new MantaBitboardEngine.MantaBitboardEngine();
+
+            return engine;
+        }
+
+        private static IMantaEngine GetMantaEngine()
+        {
+            var engine = new MantaEngine(EngineType.AlphaBeta);
             ////_engine = new MantaEngine(EngineType.MinimaxPosition);
             ////_engine = new MantaEngine(EngineType.Random);
-            _engine.SetMaxSearchDepth(3);
+            engine.SetMaxSearchDepth(3);
+
+            return engine;
         }
+
     }
 }

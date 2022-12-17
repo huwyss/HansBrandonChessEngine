@@ -160,7 +160,7 @@ namespace MantaChessEngine
                     {
                         Piece piece = GetPiece(file, rank);
 
-                        boardString += piece!=null ? piece.Symbol : Definitions.EmptyField;
+                        boardString += piece!=null ? piece.Symbol : CommonDefinitions.EmptyField;
                     }
                 }
 
@@ -184,7 +184,7 @@ namespace MantaChessEngine
                     {
                         Piece piece = GetPiece(file, rank);
                         boardString += " ";
-                        boardString += piece != null ? piece.Symbol : EmptyField;
+                        boardString += piece != null ? piece.Symbol : CommonDefinitions.EmptyField;
                         boardString += " ";
                     }
 

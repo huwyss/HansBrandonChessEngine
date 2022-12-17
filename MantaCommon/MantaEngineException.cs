@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MantaChessEngine
+namespace MantaCommon
 {
     public class MantaEngineException : Exception
     {

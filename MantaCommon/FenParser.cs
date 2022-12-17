@@ -1,7 +1,6 @@
 ﻿using System;
-using MantaCommon;
 
-namespace MantaChessEngine
+namespace MantaCommon
 {
     public class FenParser
     {
@@ -50,7 +49,7 @@ namespace MantaChessEngine
                     var numberEmpty = int.Parse(posChar.ToString());
                     for (int i = 0; i < numberEmpty; i++)
                     {
-                        positionChars[index++] = Definitions.EmptyField;
+                        positionChars[index++] = CommonDefinitions.EmptyField;
                     }
                 }
                 else if (posChar == '/')

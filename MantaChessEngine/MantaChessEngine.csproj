@@ -44,7 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FenParser.cs" />
     <Compile Include="Interfaces\IBoard.cs" />
     <Compile Include="Interfaces\IMoveGenerator.cs" />
     <Compile Include="MantaEngine.cs" />
@@ -57,7 +56,6 @@
     <Compile Include="BoardState.cs" />
     <Compile Include="Interfaces\IMoveFilter.cs" />
     <Compile Include="Interfaces\IMoveOrder.cs" />
-    <Compile Include="MantaEngineException.cs" />
     <Compile Include="MoveOrder\FilterCapturesOnly.cs" />
     <Compile Include="MoveOrder\OrderPvAndImportance.cs" />
     <Compile Include="Move\CastlingMove.cs" />

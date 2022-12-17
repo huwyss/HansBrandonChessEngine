@@ -20,4 +20,9 @@ namespace MantaCommon
             return color == ChessColor.White ? ChessColor.Black : ChessColor.White;
         }
     }
+
+    public static class CommonDefinitions
+    {
+        public static char EmptyField = '.';
+    }
 }

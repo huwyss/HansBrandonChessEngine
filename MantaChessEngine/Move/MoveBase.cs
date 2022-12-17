@@ -97,7 +97,7 @@ namespace MantaChessEngine
             moveString += SourceRank.ToString();
             moveString += Helper.FileToFileChar(TargetFile);
             moveString += TargetRank;
-            moveString += CapturedPiece != null ? CapturedPiece.Symbol : EmptyField;
+            moveString += CapturedPiece != null ? CapturedPiece.Symbol : CommonDefinitions.EmptyField;
             return moveString;
         }
 

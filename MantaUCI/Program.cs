@@ -191,12 +191,11 @@ namespace MantaUCI
 
         private static void CreateEngine()
         {
-            ////_board = new Board();
-            _engine = new MantaEngine(EngineType.AlphaBeta);
+            _engine = new MantaBitboardEngine.MantaBitboardEngine();
+            ////_engine = new MantaEngine(EngineType.AlphaBeta);
             ////_engine = new MantaEngine(EngineType.MinimaxPosition);
             ////_engine = new MantaEngine(EngineType.Random);
             _engine.SetMaxSearchDepth(3);
-            ////_engine.SetBoard(_board);
         }
     }
 }

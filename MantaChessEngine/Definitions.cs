@@ -8,8 +8,6 @@ namespace MantaChessEngine
 {
     public static class Definitions
     {
-        public static char EmptyField = '.';
-
         public const char KING = 'k';
         public const char PAWN = 'p';
         public const char KNIGHT = 'n';

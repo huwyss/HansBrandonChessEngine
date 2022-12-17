@@ -52,6 +52,7 @@
     <Compile Include="Bitboard\Const.cs" />
     <Compile Include="Bitboard\IBitBoard.cs" />
     <Compile Include="Bitboard\IBitBoardState.cs" />
+    <Compile Include="MantaBitboardEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

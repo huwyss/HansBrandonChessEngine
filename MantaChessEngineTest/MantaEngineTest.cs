@@ -105,7 +105,7 @@ namespace MantaChessEngineTest
 
             string actualBoard = engine.GetString();
             string expectedBoard = boardString;
-            Assert.AreEqual(new NoLegalMove(), actualMove.Move, "White is check mate, so no legal move possible");
+            Assert.AreEqual("NoLegalMove", actualMove.Move, "White is check mate, so no legal move possible");
             Assert.AreEqual(expectedBoard, actualBoard, "White is check mate");
             Assert.IsTrue(engine.IsCheck(ChessColor.White), "white is check mate. must be check");
         }
@@ -147,7 +147,7 @@ namespace MantaChessEngineTest
             
             string actualBoard = engine.GetString();
             string expectedBoard = boardString;
-            Assert.AreEqual(new NoLegalMove(), actualMove.Move, "White is stall mate, so no legal move possible");
+            Assert.AreEqual("NoLegalMove", actualMove.Move, "White is stall mate, so no legal move possible");
             Assert.AreEqual(expectedBoard, actualBoard, "White is stall mate");
             Assert.IsFalse(engine.IsCheck(ChessColor.White), "white is stall mate. not check");
         }
@@ -169,7 +169,7 @@ namespace MantaChessEngineTest
 
             var actualMove = engine.DoBestMove(ChessColor.White);
 
-            Assert.AreEqual(new NormalMove(Piece.MakePiece('K'), 'h', 1, 'g', 1, null), actualMove.Move, "should be h1g1");
+            Assert.AreEqual("h1g1", actualMove.Move, "should be h1g1");
         }
     }
 }

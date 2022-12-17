@@ -138,8 +138,7 @@ namespace MantaChessEngine
             _board.Move(nextMove.Move);
             _log.Debug("Score: " + nextMove.Score);
 
-            UciMoveRating uciRating = new UciMoveRating();
-            // todo implement conversion.
+            UciMoveRating uciRating = MoveRatingConverter.NewFrom(nextMove);
 
             return uciRating;
         }
@@ -150,8 +149,7 @@ namespace MantaChessEngine
             _board.Move(nextMove.Move);
             _log.Debug("Score: " + nextMove.Score);
 
-            UciMoveRating uciRating = new UciMoveRating();
-            // todo implement conversion.
+            UciMoveRating uciRating = MoveRatingConverter.NewFrom(nextMove);
 
             return uciRating;
         }

@@ -32,6 +32,11 @@ namespace MantaChessEngine
             return ToString();
         }
 
+        public override string ToUciString()
+        {
+            return ToString();
+        }
+
         public override int GetHashCode()
         {
             return ToString().GetHashCode();

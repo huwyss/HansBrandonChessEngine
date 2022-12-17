@@ -16,7 +16,7 @@ namespace MantaChessEngine
         {
             get
             {
-                return MovingPiece.Color;
+                return MovingPiece != null ? MovingPiece.Color : ChessColor.Empty;
             }
         }
 

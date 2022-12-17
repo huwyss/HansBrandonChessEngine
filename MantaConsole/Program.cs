@@ -20,7 +20,7 @@ namespace MantaConsole
         {
             _log.Info("ManteChessEngine started");
 
-            var gameType = GameType.HumanVsComputer;
+            var gameType = GameType.ComputerVsComputerOnce;
             var whiteLevel = 2;
             var blackLevel = 2;
             
@@ -182,19 +182,18 @@ namespace MantaConsole
                     }
                     else
                     {
-                        MoveRating moveComputer = null;
+                        UciMoveRating moveComputer = null;
                         // computer move for white
                         if (!whiteHuman && whiteEngine.SideToMove() == ChessColor.White)
                         {
-                            ////moveComputer = whiteEngine.DoBestMove(ChessColor.White);
-                            //// todo fix if required
+                            moveComputer = whiteEngine.DoBestMove(ChessColor.White);
 
-                            if (!quiet && moveComputer.Move.ToString() != "")
+                            if (!quiet && moveComputer.Move != "")
                             {
-                                Console.WriteLine("Computer move: " + moveComputer.Move.ToPrintString());
+                                Console.WriteLine("Computer move: " + moveComputer.Move);
                             }
 
-                            if (moveComputer.Move is NoLegalMove)
+                            if (moveComputer.Move == "NoLegalMove")
                             {
                                 // check for stall mate and check mate
                                 if (whiteEngine.IsCheck(ChessColor.White))
@@ -220,15 +219,14 @@ namespace MantaConsole
                         // computer move for black
                         else if (!blackHuman && whiteEngine.SideToMove() == ChessColor.Black)
                         {
-                            ////moveComputer = blackEngine.DoBestMove(ChessColor.Black);
-                            //// todo fix if required
+                            moveComputer = blackEngine.DoBestMove(ChessColor.Black);
 
-                            if (!quiet && moveComputer.Move.ToString() != "")
+                            if (!quiet && moveComputer.Move != "")
                             {
-                                Console.WriteLine("Computer move: " + moveComputer.Move.ToPrintString());
+                                Console.WriteLine("Computer move: " + moveComputer.Move);
                             }
 
-                            if (moveComputer.Move is NoLegalMove)
+                            if (moveComputer.Move == "NoLegalMove")
                             {
                                 // check for stall mate and check mate
                                 if (whiteEngine.IsCheck(ChessColor.Black))

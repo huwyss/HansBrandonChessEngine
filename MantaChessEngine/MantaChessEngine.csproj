@@ -81,6 +81,7 @@
     <Compile Include="MoveGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Search\MoveRating.cs" />
+    <Compile Include="Search\MoveRatingConverter.cs" />
     <Compile Include="Search\SearchAlphaBeta.cs" />
     <Compile Include="Search\SearchMinimax.cs" />
     <Compile Include="Search\SearchRandom.cs" />

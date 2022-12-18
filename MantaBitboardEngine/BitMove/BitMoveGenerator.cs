@@ -243,11 +243,6 @@ namespace MantaBitboardEngine
 
         private void GenerateCastling(ChessColor color)
         {
-            GenerateCastlingUnchecked(color);
-        }
-
-        private void GenerateCastlingUnchecked(ChessColor color)
-        {
             bool castlingRightKingSide, castlingRightQueenSide;
             Square kingSquare;
             Square rookKingSquare, rookQueenSquare;
@@ -269,20 +264,50 @@ namespace MantaBitboardEngine
                 rookQueenSquare = Square.A8;
             }
 
-            if (castlingRightKingSide && (_bitboards.BetweenMatrix[(int)kingSquare, (int)rookKingSquare] & _bitboards.Bitboard_AllPieces) == 0 &&
-                _bitboards.BoardAllPieces[(int)kingSquare] == BitPieceType.King && _bitboards.BoardColor[(int)kingSquare] == color &&
-                _bitboards.BoardAllPieces[(int)rookKingSquare] == BitPieceType.Rook && _bitboards.BoardColor[(int)rookKingSquare] == color)
+            if (castlingRightKingSide && // castling right available
+                (_bitboards.BetweenMatrix[(int)kingSquare, (int)rookKingSquare] & _bitboards.Bitboard_AllPieces) == 0 && // space between king and rook free
+                _bitboards.BoardAllPieces[(int)kingSquare] == BitPieceType.King && _bitboards.BoardColor[(int)kingSquare] == color && // king is on original square. necessary ??? should be in right
+                _bitboards.BoardAllPieces[(int)rookKingSquare] == BitPieceType.Rook && _bitboards.BoardColor[(int)rookKingSquare] == color && // rook is on original square. necessary ??? should be in right
+                !CastlingSquaresAttacked(color, CastlingType.KingSide))
             {
                 AddCastlingMove(color, CastlingType.KingSide, 0);
             }
 
             if (castlingRightQueenSide && (_bitboards.BetweenMatrix[(int)kingSquare, (int)rookQueenSquare] & _bitboards.Bitboard_AllPieces) == 0 &&
                 _bitboards.BoardAllPieces[(int)kingSquare] == BitPieceType.King && _bitboards.BoardColor[(int)kingSquare] == color &&
-                _bitboards.BoardAllPieces[(int)rookQueenSquare] == BitPieceType.Rook && _bitboards.BoardColor[(int)rookQueenSquare] == color)
+                _bitboards.BoardAllPieces[(int)rookQueenSquare] == BitPieceType.Rook && _bitboards.BoardColor[(int)rookQueenSquare] == color &&
+                !CastlingSquaresAttacked(color, CastlingType.QueenSide))
             {
                 AddCastlingMove(color, CastlingType.QueenSide, 0);
             }
         }
+
+        private bool CastlingSquaresAttacked(ChessColor color, CastlingType castlingType)
+        {
+            if (color == ChessColor.White)
+            {
+                if (castlingType == CastlingType.KingSide)
+                {
+                    return IsAttacked(color, Square.E1) || IsAttacked(color, Square.F1) || IsAttacked(color, Square.G1);
+                }
+                else
+                {
+                    return IsAttacked(color, Square.E1) || IsAttacked(color, Square.D1) || IsAttacked(color, Square.C1);
+                }
+            }
+            else
+            {
+                if (castlingType == CastlingType.KingSide)
+                {
+                    return IsAttacked(color, Square.E8) || IsAttacked(color, Square.F8) || IsAttacked(color, Square.G8);
+                }
+                else
+                {
+                    return IsAttacked(color, Square.E8) || IsAttacked(color, Square.D8) || IsAttacked(color, Square.C8);
+                }
+            }
+        }
+
 
         private void AddMove(BitPieceType movingPiece, Square fromSquare, Square toSquare, BitPieceType promotionPiece, ChessColor movingColor, byte value)
         {
@@ -411,10 +436,10 @@ namespace MantaBitboardEngine
             return _moves;
         }
 
-        internal IEnumerable<BitMove> GetCastlingUnchecked(ChessColor color)
+        internal IEnumerable<BitMove> GetCastling(ChessColor color)
         {
             ClearLists();
-            GenerateCastlingUnchecked(color);
+            GenerateCastling(color);
             return _moves;
         }
     }

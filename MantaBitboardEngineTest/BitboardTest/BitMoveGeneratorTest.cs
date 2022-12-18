@@ -1272,75 +1272,65 @@ namespace MantaBitboardEngineTest
             Assert.IsFalse(kingMoves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0)), "0-0-0 castling not allowed as rook already moved");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMovesTest_WhenEnPassantCaptureAndKingInCheck_ThenNoCastlingPossible()
         {
             // Kiwipete position
             // Position is after "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 0"
             // and move d5 x e6     d7-d5
-            //          e6 x d7 ep
+            //          e6 x f7
 
-            MoveGenerator generator = new MoveGenerator();
-            Board board = new Board();
-            string position = "r...k..r" +
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("r...k..r" +
                               "p.ppqpb." +
                               "bn..pnp." +
                               "...PN..." +
                               ".p..P..." +
                               "..N..Q.p" +
                               "PPPBBPPP" +
-                              "R...K..R";
-            board.SetPosition(position);
+                              "R...K..R");
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
             // White pawn captures d5 x e6
-            board.BoardState.SideToMove = ChessColor.White;
-            var pawnW = new Pawn(ChessColor.White);
-            var pawnWMove = new NormalMove(pawnW, 'd', 5, 'e', 6, new Pawn(ChessColor.Black));
-            board.Move(pawnWMove);
+            board.Move(BitMove.CreateCapture(BitPieceType.Pawn, Square.D5, Square.E6, BitPieceType.Pawn, Square.E6, BitPieceType.Empty, ChessColor.White, 0));
 
             // Black pawn move d7-d5
-            var pawnB = new Pawn(ChessColor.Black);
-            var pawnBMove = new NormalMove(pawnB, 'd', 7, 'd', 5, null);
-            board.Move(pawnBMove);
+            board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.D7, Square.D5, BitPieceType.Empty, ChessColor.Black, 0));
 
-            // white pawn (en passant) move e6 X d7 ep (results black king is in check)
-            var pawnWMoveEnCap = new EnPassantCaptureMove(pawnW, 'e', 6, 'd', 7, pawnB);
-            board.Move(pawnWMoveEnCap);
+            // white pawn move e6 X f7 (results black king is in check)
+            board.Move(BitMove.CreateCapture(BitPieceType.Pawn, Square.E6, Square.F7, BitPieceType.Pawn, Square.F7, BitPieceType.Empty, ChessColor.White, 0));
 
             // get legal moves of king. should not include castling.
-            var king = new King(ChessColor.Black);
-            var kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 8, true);
+            var moves = bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
 
-            Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.BlackKingSide, new King(ChessColor.Black))), "e8g8. 0-0 castling missing");
-            Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.BlackQueenSide, new King(ChessColor.Black))), "e8c8. 0-0-0 castling missing");
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "0-0 castling not allowed. king in check.");
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0)), "0-0-0 castling not allowed. king in check.");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetMovesTest_KiwipetePosition_PawnAttacksFieldsNextToBlackKing_ThenNoCastlingPossible()
         {
             // Kiwipete position
             // position fen r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 0 moves d5e6 e7c5 e6e7
-            
-            MoveGenerator generator = new MoveGenerator();
-            Board board = new Board();
-            string position = "r...k..r" +
+
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("r...k..r" +
                               "p.ppP.b." +
                               "bn...np." +
                               "..q.N..." +
                               ".p..P..." +
                               "..N..Q.p" +
                               "PPPBBPPP" +
-                              "R...K..R";
-            board.SetPosition(position);
-
-            board.BoardState.SideToMove = ChessColor.Black;
+                              "R...K..R");
+            var bitMoveGenerator = new BitMoveGenerator(board);
 
             // get legal moves of king. should not include castling.
-            var king = new King(ChessColor.Black);
-            var kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 8, true);
+            var moves = bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
 
-            Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.BlackKingSide, new King(ChessColor.Black))), "e8g8. 0-0 castling missing");
-            Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.BlackQueenSide, new King(ChessColor.Black))), "e8c8. 0-0-0 castling missing");
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "0-0 castling not allowed. f8 is attacked.");
+            Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0)), "0-0-0 castling not allowed. d8 is attacked.");
         }
 
         // ----------------------------------------------------------------

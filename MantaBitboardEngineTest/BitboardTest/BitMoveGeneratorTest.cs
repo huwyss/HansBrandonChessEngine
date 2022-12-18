@@ -585,30 +585,30 @@ namespace MantaBitboardEngineTest
         // Get All Moves Tests
         // ----------------------------------------------------------------------------------------------------
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void GetAllMoves_WhenTwoPieces_ThenShowMovesOfBothPieces()
         {
-            MoveGenerator target = new MoveGenerator();
-            Board board = new Board();
-            string position = "........" +
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("........" +
                               "........" +
                               "....p..." +
                               "........" +
                               "........" +
                               "........" +
                               "....P..." +
-                              "....K...";
-            board.SetPosition(position);
-           
-            var moves = target.GetAllMoves(board, ChessColor.White).ToList<IMove>();
+                              "....K...");
+            var bitMoveGenerator = new BitMoveGenerator(board);
+
+            var moves = bitMoveGenerator.GetAllMoves(ChessColor.White).ToList();
 
             Assert.AreEqual(6, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 3, null)), "e2e3. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 4, null)), "e2e4. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'd', 1, null)), "e1d1. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'd', 2, null)), "e1d2. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'f', 2, null)), "e1f2. missing");
-            Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'f', 1, null)), "e1f1. missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Pawn, Square.E2, Square.E3, BitPieceType.Empty, ChessColor.White, 0)), "e2-e3 missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Pawn, Square.E2, Square.E4, BitPieceType.Empty, ChessColor.White, 0)), "e2-e4 missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.King, Square.E1, Square.D1, BitPieceType.Empty, ChessColor.White, 0)), "Ke1-d1 missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.King, Square.E1, Square.D2, BitPieceType.Empty, ChessColor.White, 0)), "Ke1-d2 missing"); 
+            Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.King, Square.E1, Square.F2, BitPieceType.Empty, ChessColor.White, 0)), "Ke1-f2 missing");
+            Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.King, Square.E1, Square.F1, BitPieceType.Empty, ChessColor.White, 0)), "Ke1-f1 missing");
         }
  
         // ----------------------------------------------------------------------------------------------------

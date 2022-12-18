@@ -219,6 +219,11 @@ namespace MantaBitboardEngine
         private void GenerateEnpassant(ChessColor color)
         {
             var enpassantSquare = _bitboards.BoardState.LastEnPassantSquare;
+            if (enpassantSquare == Square.NoSquare)
+            {
+                return;
+            }
+
             var capturedPawnSquare = color == ChessColor.White ? enpassantSquare - 8 : enpassantSquare + 8;
             var fromSquareCapturingToLeft = _bitboards.PawnRight[(int)CommonHelper.OtherColor(color), (int)enpassantSquare];
             var fromSquareCapturingToRight = _bitboards.PawnLeft[(int)CommonHelper.OtherColor(color), (int)enpassantSquare];
@@ -238,7 +243,7 @@ namespace MantaBitboardEngine
 
         private void GenerateCastling(ChessColor color)
         {
-            throw new NotImplementedException();
+            GenerateCastlingUnchecked(color);
         }
 
         private void GenerateCastlingUnchecked(ChessColor color)
@@ -312,7 +317,7 @@ namespace MantaBitboardEngine
 
         public bool IsAttacked(IBitBoard board, ChessColor color, Square square)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public bool IsCheck(IBitBoard board, ChessColor color)

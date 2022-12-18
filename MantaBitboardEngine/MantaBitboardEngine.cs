@@ -113,7 +113,7 @@ namespace MantaBitboardEngine
 
             UInt64 nodes = 0;
 
-            var moves = _moveGenerator.GetLegalMoves(_board, SideToMove());
+            var moves = _moveGenerator.GetLegalMoves(SideToMove()).ToList();
             foreach (var move in moves)
             {
                 Move(move);
@@ -148,7 +148,7 @@ namespace MantaBitboardEngine
         {
             Console.WriteLine($"Divide depth {depth}");
 
-            var moves = _moveGenerator.GetLegalMoves(_board, SideToMove());
+            var moves = _moveGenerator.GetLegalMoves(SideToMove());
             foreach (var move in moves)
             {
                 Move(move);

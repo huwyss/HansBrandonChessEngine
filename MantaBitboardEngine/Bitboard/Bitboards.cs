@@ -1013,9 +1013,13 @@ namespace MantaBitboardEngine
             }
 
             SetPosition(positionInfo.PositionString);
+            var enpassantSquare = positionInfo.EnPassantFile != '\0'
+                ? (Square)(positionInfo.EnPassantFile - '0' - 1 + 8 * positionInfo.EnPassantRank)
+                : Square.NoSquare;
+
             BoardState.Add(
                 new BitMove(),
-                (Square)(positionInfo.EnPassantFile - '0' - 1 + 8 * positionInfo.EnPassantRank),
+                enpassantSquare,
                 positionInfo.CastlingRightWhiteQueenSide,
                 positionInfo.CastlingRightWhiteKingSide,
                 positionInfo.CastlingRightBlackQueenSide,

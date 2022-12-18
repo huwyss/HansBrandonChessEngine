@@ -331,9 +331,9 @@ namespace MantaBitboardEngine
             return null;
         }
 
-        public IEnumerable<BitMove> GetLegalMoves(IBitBoard board, ChessColor color)
+        public IEnumerable<BitMove> GetLegalMoves(ChessColor color)
         {
-            throw new NotImplementedException();
+            return GetAllMoves(color);
         }
 
         public bool IsAttacked(ChessColor color, Square square)

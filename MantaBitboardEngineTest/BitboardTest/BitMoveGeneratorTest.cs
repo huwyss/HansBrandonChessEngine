@@ -3,7 +3,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MantaBitboardEngine;
 using MantaCommon;
 using MantaChessEngine; // todo: remove this dependency later...
-using static MantaChessEngine.Definitions;
 using System.Linq;
 using Moq;
 
@@ -1273,7 +1272,7 @@ namespace MantaBitboardEngineTest
         }
 
         [TestMethod]
-        public void GetMovesTest_WhenEnPassantCaptureAndKingInCheck_ThenNoCastlingPossible()
+        public void GetMovesTest_KiwipetePosition_WhenKingInCheck_ThenNoCastlingPossible()
         {
             // Kiwipete position
             // Position is after "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 0"

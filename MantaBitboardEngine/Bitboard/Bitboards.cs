@@ -15,25 +15,68 @@ namespace MantaBitboardEngine
         public BitPieceType[] BoardAllPieces;
         public ChessColor[] BoardColor;
 
-        public Bitboard[,] Bitboard_Pieces { get; set; } // Dimensions: color, piece
+        /// <summary>
+        /// Bitboard of each piece. Dimension: ChessColor, BitPieceType.
+        /// </summary>
+        public Bitboard[,] Bitboard_Pieces { get; set; }
+        
+        /// <summary>
+        /// Bitboard of the pieces of one color. Dimendion: ChessColor.
+        /// </summary>
         public Bitboard[] Bitboard_ColoredPieces { get; set; }
+
+        /// <summary>
+        /// All pieces in one bitboard.
+        /// </summary>
         public Bitboard Bitboard_AllPieces;
 
         public Bitboard[,] BetweenMatrix { get; set; }
+
         public Bitboard[,] RayAfterMatrix { get; set; }
 
         public Bitboard QueenSideMask { get; set; }
+
         public Bitboard KingSideMask { get; set; }
 
-        public Square[,] PawnLeft { get; set; } // dimensions: color, square
+        /// <summary>
+        /// ToSquare of pawn attacking left. Dimensions: ChessColor, Square.
+        /// </summary>
+        public Square[,] PawnLeft { get; set; }
+
+        /// <summary>
+        /// ToSquare of pawn attacking right. Dimensions: ChessColor, Square.
+        /// </summary>
         public Square[,] PawnRight { get; set; }
-        public int[,] PawnStep { get; set; }
-        public int[,] PawnDoubleStep { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Square[,] PawnStep { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Square[,] PawnDoubleStep { get; set; }
+
+        /// <summary>
+        /// Bitboard of all capturing pawn move of a color from square. Dimensions: ChessColor, Square.
+        /// </summary>
         public Bitboard[,] PawnCaptures { get; set; }
+
+        /// <summary>
+        /// Bitboard of all defending pawn move of a color from square. Dimensions: ChessColor, Square.
+        /// </summary>
         public Bitboard[,] PawnDefends { get; set; }
+
+        /// <summary>
+        /// Bitboard of all pawn move of a color from square. Dimensions: ChessColor, Square.
+        /// </summary>
         public Bitboard[,] PawnMoves { get; set; }
 
-        public Bitboard[,] MovesPieces { get; set; } // dimensions: piece, square (only knight, bishop, rook, queen, king, not for pawn)
+        /// <summary>
+        /// Bitboard of all moves of piece type from square. Dimensions: BitPieceType, Square (piece: only knight, bishop, rook, queen, king, not for pawn)
+        /// </summary>
+        public Bitboard[,] MovesPieces { get; set; }
 
         public int[] Row { get; set; }
         public int[] Col { get; set; }
@@ -775,8 +818,8 @@ namespace MantaBitboardEngine
         private void SetPawnStraightMoves()
         {
             PawnMoves = new Bitboard[2, 64];
-            PawnStep = new int[2, 64];
-            PawnDoubleStep = new int[2, 64];
+            PawnStep = new Square[2, 64];
+            PawnDoubleStep = new Square[2, 64];
 
             for (int i = 0; i < 64; i++)
             {
@@ -784,28 +827,28 @@ namespace MantaBitboardEngine
                 {
                     // step white
                     SetBit(ref PawnMoves[(int)ChessColor.White, i], i + 8);
-                    PawnStep[(int)ChessColor.White, i] = i + 8;
+                    PawnStep[(int)ChessColor.White, i] = (Square)(i + 8);
                 }
 
                 if (Row[i] == 1)
                 {
                     // double step white
                     SetBit(ref PawnMoves[(int)ChessColor.White, i], i + 16);
-                    PawnDoubleStep[(int)ChessColor.White, i] = i + 16;
+                    PawnDoubleStep[(int)ChessColor.White, i] = (Square)(i + 16);
                 }
 
                 if (Row[i] > 0)
                 {
                     // step black
                     SetBit(ref PawnMoves[(int)ChessColor.Black, i], i - 8);
-                    PawnStep[(int)ChessColor.Black, i] = i - 8;
+                    PawnStep[(int)ChessColor.Black, i] = (Square)(i - 8);
                 }
 
                 if (Row[i] == 6)
                 {
                     // step black
                     SetBit(ref PawnMoves[(int)ChessColor.Black, i], i - 16);
-                    PawnDoubleStep[(int)ChessColor.Black, i] = i - 16;
+                    PawnDoubleStep[(int)ChessColor.Black, i] = (Square)(i - 16);
                 }
             }
         }

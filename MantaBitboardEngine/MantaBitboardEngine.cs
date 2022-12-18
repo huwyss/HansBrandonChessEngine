@@ -83,7 +83,7 @@ namespace MantaBitboardEngine
 
         public bool IsCheck(ChessColor color)
         {
-            return _moveGenerator.IsCheck(_board, color);
+            return _moveGenerator.IsCheck(color);
         }
 
         public void Back()

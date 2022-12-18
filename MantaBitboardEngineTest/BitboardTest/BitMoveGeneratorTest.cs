@@ -1349,11 +1349,10 @@ namespace MantaBitboardEngineTest
         // IsCheck Test
         // ----------------------------------------------------------------
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void IsCheckTest_WhenKingAttacked_ThenTrue()
         {
-            MantaEngine engine = new MantaEngine(EngineType.MinimaxPosition);
-            Board board = new Board();
+            var engine = new MantaBitboardEngine.MantaBitboardEngine();
             string position = "....rk.." +
                               "........" +
                               "........" +
@@ -1362,17 +1361,15 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "....K...";
-            board.SetPosition(position);
-            engine.SetBoard(board);
+            engine.SetPosition(position);
 
-            Assert.AreEqual(true, engine.IsCheck(ChessColor.White), "king is attacked by rook! IsCheck should return true.");
+            Assert.IsTrue(engine.IsCheck(ChessColor.White), "king is attacked by rook! IsCheck should return true.");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void IsCheckTest_WhenKingNotAttacked_ThenFalse()
         {
-            MantaEngine engine = new MantaEngine(EngineType.MinimaxPosition);
-            Board board = new Board();
+            var engine = new MantaBitboardEngine.MantaBitboardEngine();
             string position = ".....k.." +
                               ".....p.." +
                               "........" +
@@ -1381,17 +1378,15 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "....K...";
-            board.SetPosition(position);
-            engine.SetBoard(board);
+            engine.SetPosition(position);
 
-            Assert.AreEqual(false, engine.IsCheck(ChessColor.White), "king is not attacked! IsCheck shoult return false.");
+            Assert.IsFalse(engine.IsCheck(ChessColor.White), "king is not attacked! IsCheck shoult return false.");
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void IsCheckTest_WhenPawnInRank7CanPromote_ThenKingNotInCheck()
         {
-            MantaEngine engine = new MantaEngine(EngineType.MinimaxPosition);
-            Board board = new Board();
+            var engine = new MantaBitboardEngine.MantaBitboardEngine();
             string position = "r...k..." +
                               "pppp...P" +
                               "........" +
@@ -1400,44 +1395,56 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "....K...";
-            board.SetPosition(position);
-            engine.SetBoard(board);
+            engine.SetPosition(position);
 
-            Assert.AreEqual(false, engine.IsCheck(ChessColor.Black), "king is not attacked! Promotion move does not count.");
+            Assert.IsFalse(engine.IsCheck(ChessColor.Black), "king is not attacked! Promotion move does not count.");
         }
 
         // ----------------------------------------------------------------
         // IsAttacked Test
         // ----------------------------------------------------------------
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void IsAttackedTest_FieldDiagonalOfPawnIsAttacked()
         {
-            MoveGenerator generator = new MoveGenerator();
-            Board board = new Board();
-            string position = "r...k..." +
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("r...k..." +
                               "...p...." +
-                              "........" +
+                              ".N......" +
                               ".......r" +
                               "........" +
                               "........" +
                               "....P..." +
-                              "....K..R";
-            board.SetPosition(position);
-           
+                              "...QK..R");
+            var bitMoveGenerator = new BitMoveGenerator(board);
+
             // field in front of pawn
-            Assert.AreEqual(false, generator.IsAttacked(board, ChessColor.Black, 5, 3), "Field in front of pawn is not attacked");
+            Assert.IsFalse(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.E3), "Field in front of pawn is not attacked");
+
             // field diagonal in front of pawn
-            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 4, 3), "Field diagonal in front of pawn is attacked");
-            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 6, 3), "Field diagonal in front of pawn is attacked");
+            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.D3), "Field diagonal in front of pawn is attacked");
+            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.F3), "Field diagonal in front of pawn is attacked");
 
             // black rook is attacked
-            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 8, 5), "Black rook is attacked");
+            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black,Square.H5), "Black rook is attacked");
+
             // fields between the rooks is attacked by white rook
-            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 8, 5), "Fields between the rooks is attacked by the white rook");
-            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 8, 4), "Fields between the rooks is attacked by the white rook");
-            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 8, 3), "Fields between the rooks is attacked by the white rook");
-            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 8, 2), "Fields between the rooks is attacked by the white rook");
+            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.H5), "Fields between the rooks is attacked by the white rook");
+            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.H4), "Fields between the rooks is attacked by the white rook");
+            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.H3), "Fields between the rooks is attacked by the white rook");
+            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.H2), "Fields between the rooks is attacked by the white rook");
+
+            // Knight attacks
+            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.D7), "Field D7 is attacked by knight");
+            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.A8), "Field A8 is attacked by knight");
+            Assert.IsFalse(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.B8), "b8 not attacked by knight");
+
+            // Queen attacks
+            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.D6), "Field D6 is attacked by queen");
+            Assert.IsFalse(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.D8), "Field D8 is not attacked by queen");
+            Assert.IsFalse(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.A2), "Field A2 not attacked by queen");
+
         }
     }
 }

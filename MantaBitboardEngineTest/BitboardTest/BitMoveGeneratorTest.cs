@@ -359,7 +359,7 @@ namespace MantaBitboardEngineTest
             Bitboards board = new Bitboards();
             board.Initialize();
             board.SetPosition("........" +
-                              "........" + 
+                              "........" +
                               "..p....." + // black pawn
                               "..P....." + // white pawn must not do c5-c7 !
                               "........" +
@@ -379,8 +379,8 @@ namespace MantaBitboardEngineTest
             Bitboards board = new Bitboards();
             board.Initialize();
             board.SetPosition("........" +
-                              "........" + 
-                              "........" + 
+                              "........" +
+                              "........" +
                               "........" +
                               "........" +
                               "..p....." + // black pawn
@@ -405,8 +405,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "pP......" +
                               "........" +
-                              "........" + 
-                              "........" + 
+                              "........" +
+                              "........" +
                               "...K....");
             var bitMoveGenerator = new BitMoveGenerator(board);
 
@@ -472,7 +472,7 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               ".p......" + // black pawn must not do b5-b3 !
-                              "........" + 
+                              "........" +
                               "........" +
                               "........" +
                               "........");
@@ -492,7 +492,7 @@ namespace MantaBitboardEngineTest
             board.SetPosition("........" +
                               ".P......" + // white pawn gets promoted to queen, rook, bishop or knight
                               "........" +
-                              "........" + 
+                              "........" +
                               "........" +
                               "........" +
                               "........" +
@@ -605,11 +605,11 @@ namespace MantaBitboardEngineTest
             Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Pawn, Square.E2, Square.E3, BitPieceType.Empty, ChessColor.White, 0)), "e2-e3 missing");
             Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Pawn, Square.E2, Square.E4, BitPieceType.Empty, ChessColor.White, 0)), "e2-e4 missing");
             Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.King, Square.E1, Square.D1, BitPieceType.Empty, ChessColor.White, 0)), "Ke1-d1 missing");
-            Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.King, Square.E1, Square.D2, BitPieceType.Empty, ChessColor.White, 0)), "Ke1-d2 missing"); 
+            Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.King, Square.E1, Square.D2, BitPieceType.Empty, ChessColor.White, 0)), "Ke1-d2 missing");
             Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.King, Square.E1, Square.F2, BitPieceType.Empty, ChessColor.White, 0)), "Ke1-f2 missing");
             Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.King, Square.E1, Square.F1, BitPieceType.Empty, ChessColor.White, 0)), "Ke1-f1 missing");
         }
- 
+
         // ----------------------------------------------------------------------------------------------------
         // Is Move Valid Tests
         // ----------------------------------------------------------------------------------------------------
@@ -628,7 +628,7 @@ namespace MantaBitboardEngineTest
                               "..P....." +
                               ".......K";
             board.SetPosition(position);
-            
+
             bool valid = target.IsMoveValid(board, new NormalMove(Piece.MakePiece('P'), 'c', 2, 'c', 3, null)); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
         }
@@ -647,7 +647,7 @@ namespace MantaBitboardEngineTest
                               "..P....." +
                               ".......K";
             board.SetPosition(position);
-            
+
             bool valid = target.IsMoveValid(board, new NormalMove(Piece.MakePiece('P'), 'c', 2, 'c', 4, null)); // pawn
             Assert.AreEqual(false, valid, "Move should be invalid.");
         }
@@ -667,7 +667,7 @@ namespace MantaBitboardEngineTest
                               ".......K";
             board.SetPosition(position);
             board.BoardState.SideToMove = ChessColor.Black;
-            
+
             bool valid = target.IsMoveValid(board, new NormalMove(Piece.MakePiece('p'), 'c', 7, 'c', 5, null)); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
 
@@ -736,7 +736,7 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "..K.....";
             board.SetPosition(position);
-            board.Move(new NormalMove(Piece.MakePiece('p'),'c',7,'c',5,null));
+            board.Move(new NormalMove(Piece.MakePiece('p'), 'c', 7, 'c', 5, null));
 
             IMove actualMove = factory.MakeMove(board, "d5c6");
             Assert.AreEqual("d5c6pe", actualMove.ToString());
@@ -960,7 +960,7 @@ namespace MantaBitboardEngineTest
                               "R......R");
             var bitMoveGenerator = new BitMoveGenerator(board);
 
-            
+
 
             // white king moves -> loses castling right
             board.Move(BitMove.CreateMove(BitPieceType.King, Square.E2, Square.E1, BitPieceType.Empty, ChessColor.White, 0));
@@ -1414,7 +1414,7 @@ namespace MantaBitboardEngineTest
             Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.F3), "Field diagonal in front of pawn is attacked");
 
             // black rook is attacked
-            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black,Square.H5), "Black rook is attacked");
+            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.H5), "Black rook is attacked");
 
             // fields between the rooks is attacked by white rook
             Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.H5), "Fields between the rooks is attacked by the white rook");
@@ -1431,7 +1431,25 @@ namespace MantaBitboardEngineTest
             Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.D6), "Field D6 is attacked by queen");
             Assert.IsFalse(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.D8), "Field D8 is not attacked by queen");
             Assert.IsFalse(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.A2), "Field A2 not attacked by queen");
+        }
 
+        [TestMethod]
+        public void FromPerftKinglostTest()
+        {
+            Bitboards board = new Bitboards();
+            board.Initialize();
+            board.SetPosition("........" +
+                              "..p....." +
+                              ".P.p...." +
+                              "r......." +
+                              ".R...p.k" +
+                              "........" +
+                              "....P.P." +
+                              "........");
+            var bitMoveGenerator = new BitMoveGenerator(board);
+
+            var moves = bitMoveGenerator.GetAllMoves(ChessColor.White).ToList();
+            Assert.Fail("should not find king move !!");
         }
     }
 }

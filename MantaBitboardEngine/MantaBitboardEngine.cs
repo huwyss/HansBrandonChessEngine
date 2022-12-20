@@ -114,8 +114,14 @@ namespace MantaBitboardEngine
             UInt64 nodes = 0;
 
             var moves = _moveGenerator.GetLegalMoves(SideToMove()).ToList();
+
+            Console.Write(_board.GetPrintString);
+            Console.WriteLine();
+
+
             foreach (var move in moves)
             {
+                Console.WriteLine(move.ToPrintString());
                 Move(move);
                 nodes += Perft(depth - 1);
                 UndoMove();

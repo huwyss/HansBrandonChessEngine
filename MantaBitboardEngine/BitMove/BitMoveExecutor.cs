@@ -11,6 +11,12 @@ namespace MantaBitboardEngine
     {
         public void DoMove(BitMove bitMove, IBitBoard bitBoards)
         {
+            if (bitMove.CapturedSquare != Square.NoSquare && bitMove.CapturedPiece == BitPieceType.Empty ||
+                bitMove.CapturedSquare == Square.NoSquare && bitMove.CapturedPiece != BitPieceType.Empty)
+            {
+                throw new MantaEngineException($"captured piece and captured square are wrong: {bitMove.CapturedSquare}, {bitMove.CapturedPiece}");
+            }
+
             bitBoards.RemovePiece(bitMove.FromSquare);
             if (bitMove.CapturedSquare != Square.NoSquare)
             {

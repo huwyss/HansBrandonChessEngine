@@ -73,6 +73,10 @@ namespace MantaBitboardEngine
 
                 SideToMove = CommonHelper.OtherColor(SideToMove);
             }
+            else
+            {
+                throw new MantaEngineException("Back called on BitboardState but counter 0!");
+            }
         }
 
         public int Count { get { return Moves.Count; } }

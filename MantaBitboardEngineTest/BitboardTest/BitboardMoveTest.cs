@@ -406,6 +406,57 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(Square.NoSquare, target.BoardState.LastEnPassantSquare, "En passant square wrong after 2nd back.");
         }
 
+        [TestMethod]
+        public void BackOfCaptureMoveTest()
+        {
+            var target = new Bitboards();
+            target.Initialize();
+            target.SetInitialPosition();
+            target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.E2, Square.E4, BitPieceType.Empty, ChessColor.White, 0));
+            target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.D7, Square.D5, BitPieceType.Empty, ChessColor.Black, 0));
+            target.Move(BitMove.CreateCapture(BitPieceType.Pawn, Square.E4, Square.D5, BitPieceType.Pawn, Square.D5, BitPieceType.Empty, ChessColor.White, 0));
+
+
+            target.Back();
+            string expectedString = "rnbqkbnr" +
+                                    "ppp.pppp" +
+                                    "........" +
+                                    "...p...." +
+                                    "....P..." +
+                                    "........" +
+                                    "PPPP.PPP" +
+                                    "RNBQKBNR";
+            Assert.AreEqual(expectedString, target.GetPositionString);
+            Assert.AreEqual(ChessColor.White, target.BoardState.SideToMove);
+            Assert.AreEqual(Square.D6, target.BoardState.LastEnPassantSquare, "en passant square wrong after 1st back");
+
+            target.Back();
+            expectedString = "rnbqkbnr" +
+                             "pppppppp" +
+                             "........" +
+                             "........" +
+                             "....P..." +
+                             "........" +
+                             "PPPP.PPP" +
+                             "RNBQKBNR";
+            Assert.AreEqual(expectedString, target.GetPositionString);
+            Assert.AreEqual(ChessColor.Black, target.BoardState.SideToMove);
+            Assert.AreEqual(Square.E3, target.BoardState.LastEnPassantSquare, "en passant square wrong after 2dn back");
+
+            target.Back();
+            expectedString = "rnbqkbnr" +
+                             "pppppppp" +
+                             "........" +
+                             "........" +
+                             "........" +
+                             "........" +
+                             "PPPPPPPP" +
+                             "RNBQKBNR";
+            Assert.AreEqual(expectedString, target.GetPositionString);
+            Assert.AreEqual(ChessColor.White, target.BoardState.SideToMove);
+            Assert.AreEqual(Square.NoSquare, target.BoardState.LastEnPassantSquare, "en passant square wrong after 3rd back");
+        }
+
         // -------------------------------------------------------------------
         // Castling tests
         // -------------------------------------------------------------------

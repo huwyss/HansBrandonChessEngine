@@ -1,4 +1,5 @@
 ﻿using MantaCommon;
+using System.Text;
 
 namespace MantaBitboardEngine
 {
@@ -110,6 +111,19 @@ namespace MantaBitboardEngine
             return move.MovingPiece == BitPieceType.Pawn &&
                 move.CapturedPiece != BitPieceType.Empty &&
                 move.CapturedSquare != move.ToSquare;
+        }
+
+        public static string ToPrintString(this BitMove move)
+        {
+            var builder = new StringBuilder();
+            builder.Append(move.MovingPiece != BitPieceType.Pawn ? Bitboards.GetSymbol(move.MovingColor, move.MovingPiece).ToString() : "");
+            builder.Append(move.FromSquare);
+            builder.Append(move.IsCaptureMove() ? "x" : "-");
+            builder.Append(move.ToSquare);
+            builder.Append(move.IsPromotionMove() ? Bitboards.GetSymbol(move.MovingColor, move.PromotionPiece).ToString() : "");
+            builder.Append(move.IsEnpassantCapture() ? " ep" : "");
+
+            return builder.ToString();
         }
     }
 }

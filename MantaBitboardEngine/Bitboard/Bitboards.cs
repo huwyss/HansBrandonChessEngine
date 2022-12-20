@@ -182,7 +182,7 @@ namespace MantaBitboardEngine
             }
         }
 
-        private string GetSymbol(ChessColor color, BitPieceType piece)
+        public static string GetSymbol(ChessColor color, BitPieceType piece)
         {
             if (color == ChessColor.White && piece == BitPieceType.Pawn)
             {
@@ -1018,7 +1018,7 @@ namespace MantaBitboardEngine
                 : Square.NoSquare;
 
             BoardState.Add(
-                new BitMove(),
+                BitMove.CreateMove(BitPieceType.Empty, Square.NoSquare, Square.NoSquare, BitPieceType.Empty, ChessColor.Empty, 255),
                 enpassantSquare,
                 positionInfo.CastlingRightWhiteQueenSide,
                 positionInfo.CastlingRightWhiteKingSide,

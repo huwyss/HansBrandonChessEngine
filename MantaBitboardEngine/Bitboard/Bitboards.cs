@@ -1017,6 +1017,7 @@ namespace MantaBitboardEngine
                 ? (Square)(positionInfo.EnPassantFile - '0' - 1 + 8 * positionInfo.EnPassantRank)
                 : Square.NoSquare;
 
+            BoardState.Clear();
             BoardState.Add(
                 BitMove.CreateMove(BitPieceType.Empty, Square.NoSquare, Square.NoSquare, BitPieceType.Empty, ChessColor.Empty, 255),
                 enpassantSquare,

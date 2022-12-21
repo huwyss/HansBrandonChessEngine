@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,11 +12,9 @@ namespace MantaBitboardEngine
     {
         public void DoMove(BitMove bitMove, IBitBoard bitBoards)
         {
-            if (bitMove.CapturedSquare != Square.NoSquare && bitMove.CapturedPiece == BitPieceType.Empty ||
-                bitMove.CapturedSquare == Square.NoSquare && bitMove.CapturedPiece != BitPieceType.Empty)
-            {
-                throw new MantaEngineException($"captured piece and captured square are wrong: {bitMove.CapturedSquare}, {bitMove.CapturedPiece}");
-            }
+            Debug.Assert(bitMove.CapturedSquare != Square.NoSquare && bitMove.CapturedPiece != BitPieceType.Empty ||
+                bitMove.CapturedSquare == Square.NoSquare && bitMove.CapturedPiece == BitPieceType.Empty,
+                $"Illegal move detected: The captured square and the captured piece must be either both empty or both something.\nSquare: {bitMove.CapturedSquare}. Piece: {bitMove.CapturedPiece}");
 
             bitBoards.RemovePiece(bitMove.FromSquare);
             if (bitMove.CapturedSquare != Square.NoSquare)

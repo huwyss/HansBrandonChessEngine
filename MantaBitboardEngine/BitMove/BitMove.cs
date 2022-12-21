@@ -125,5 +125,15 @@ namespace MantaBitboardEngine
 
             return builder.ToString();
         }
+
+        public static string ToUciString(this BitMove move)
+        {
+            var builder = new StringBuilder();
+            builder.Append(move.FromSquare);
+            builder.Append(move.ToSquare);
+            builder.Append(move.IsPromotionMove() ? Bitboards.GetSymbol(move.MovingColor, move.PromotionPiece).ToString() : "");
+
+            return builder.ToString();
+        }
     }
 }

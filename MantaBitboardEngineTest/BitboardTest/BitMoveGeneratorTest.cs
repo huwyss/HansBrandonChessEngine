@@ -1433,23 +1433,27 @@ namespace MantaBitboardEngineTest
             Assert.IsFalse(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.A2), "Field A2 not attacked by queen");
         }
 
-        [TestMethod]
-        public void FromPerftKinglostTest()
+        /// <summary>
+        /// I do not fix this because this is an illegal board position. There must be a king.
+        /// The move generator finds king moves from a1.
+        /// </summary>
+        [TestMethod, Ignore]
+        public void NoPiecesMustGenerateNoMovesTest()
         {
             Bitboards board = new Bitboards();
             board.Initialize();
             board.SetPosition("........" +
-                              "..p....." +
-                              ".P.p...." +
-                              "r......." +
-                              ".R...p.k" +
                               "........" +
-                              "....P.P." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
                               "........");
             var bitMoveGenerator = new BitMoveGenerator(board);
 
             var moves = bitMoveGenerator.GetAllMoves(ChessColor.White).ToList();
-            Assert.Fail("should not find king move !!");
+            Assert.AreEqual(0, moves.Count, "Should not find any moves. Board is empty.");
         }
     }
 }

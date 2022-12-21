@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Bitboard = System.UInt64;
 using MantaCommon;
+using System.Diagnostics;
 
 namespace MantaBitboardEngine
 {
@@ -196,6 +197,9 @@ namespace MantaBitboardEngine
         private void GenerateKingMoves(ChessColor color)
         {
             Bitboard kingBitboard = _bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.King];
+
+            Debug.Assert(kingBitboard != 0, "Illegal situation detected: The king is missing on the board.");
+
             var fromSquareMovingKing = _bitboards.BitScanForward(kingBitboard);
 
             var kingCaptures = _bitboards.MovesPieces[(int)BitPieceType.King, fromSquareMovingKing] & _bitboards.Bitboard_ColoredPieces[(int)CommonHelper.OtherColor(color)];

@@ -21,16 +21,19 @@ namespace MantaBitboardEngine
 
         public void SetInitialPosition()
         {
+            _board.ClearAllPieces();
             _board.SetInitialPosition();
         }
 
         public void SetPosition(string position)
         {
+            _board.ClearAllPieces();
             _board.SetPosition(position);
         }
 
         public string SetFenPosition(string fen)
         {
+            _board.ClearAllPieces();
             return _board.SetFenPosition(fen);
         }
 

@@ -21,6 +21,8 @@ namespace MantaBitboardEngine
 
         void SetPosition(string position);
 
+        void ClearAllPieces();
+
         /// <summary>
         /// Returns the chess piece.
         /// </summary>

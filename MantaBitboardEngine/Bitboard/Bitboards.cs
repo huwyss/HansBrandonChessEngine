@@ -252,8 +252,6 @@ namespace MantaBitboardEngine
             Bitboard_ColoredPieces = new Bitboard[2];
 
             MovesPieces = new Bitboard[6, 64];
-
-            InitBitboard();
         }
 
         public Bitboards(IBitBoardState state) : this ()
@@ -263,6 +261,7 @@ namespace MantaBitboardEngine
 
         public void Initialize()
         {
+            InitBitboardRowColDiag();
             SetBetweenMatrix();
             SetRayAfterMatrix();
             SetKingAndQueenSideMask();
@@ -276,7 +275,7 @@ namespace MantaBitboardEngine
             ClearAllPieces();
     }
 
-        private void ClearAllPieces()
+        public void ClearAllPieces()
         {
             for (var i = 0; i < 64; i++)
             {
@@ -290,10 +289,14 @@ namespace MantaBitboardEngine
                 {
                     Bitboard_Pieces[color, pieceType] = 0;
                 }
+
+                Bitboard_ColoredPieces[color] = 0;
             }
+
+            Bitboard_AllPieces = 0;
         }
 
-        private void InitBitboard()
+        private void InitBitboardRowColDiag()
         {
 
             Row = new int[64]

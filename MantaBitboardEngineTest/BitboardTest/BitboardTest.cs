@@ -281,6 +281,7 @@ namespace MantaBitboardEngineTest
         public void GetEdgeTest()
         {
             var target = new Bitboards();
+            target.Initialize();
 
             Assert.AreEqual((int)Square.A1, target.GetEdge((int)Square.A1, -1));
             Assert.AreEqual((int)Square.H1, target.GetEdge((int)Square.H1, 1));

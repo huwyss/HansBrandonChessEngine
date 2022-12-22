@@ -338,6 +338,21 @@ namespace MantaBitboardEngine
         public IEnumerable<BitMove> GetLegalMoves(ChessColor color)
         {
             return GetAllMoves(color);
+            ////var pseudolegalMoves = GetAllMoves(color);
+            ////var legalMoves = new List<BitMove>();
+
+            ////foreach (var move in pseudolegalMoves)
+            ////{
+            ////    _bitboards.Move(move);
+            ////    if (!IsCheck(color))
+            ////    {
+            ////        legalMoves.Add(move);
+            ////    }
+
+            ////    _bitboards.Back();
+            ////}
+
+            ////return legalMoves;
         }
 
         public bool IsAttacked(ChessColor color, Square square)

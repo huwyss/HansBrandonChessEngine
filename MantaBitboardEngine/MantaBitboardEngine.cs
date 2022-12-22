@@ -126,6 +126,12 @@ namespace MantaBitboardEngine
             {
                 ////Console.WriteLine(move.ToPrintString());
                 Move(move);
+                if (IsCheck(move.MovingColor))
+                {
+                    UndoMove();
+                    continue;
+                }
+
                 nodes += Perft(depth - 1);
                 UndoMove();
             }

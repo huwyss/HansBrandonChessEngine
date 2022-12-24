@@ -116,7 +116,7 @@ namespace MantaBitboardEngine
 
             UInt64 nodes = 0;
 
-            var moves = _moveGenerator.GetLegalMoves(SideToMove()).ToList();
+            var moves = _moveGenerator.GetLegalMoves(SideToMove()).ToArray();
 
             ////Console.Write(_board.GetPrintString);
             ////Console.WriteLine();

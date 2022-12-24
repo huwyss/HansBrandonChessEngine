@@ -1,6 +1,6 @@
 ﻿namespace MantaBitboardEngine
 {
-    public enum Square : byte
+    public enum Square 
     {
         A1 = 0,
         B1 = 1,
@@ -77,7 +77,7 @@
         NoSquare = 0xFF
     }
 
-    public enum BitPieceType : byte
+    public enum BitPieceType
     {
         Pawn = 0,
         Knight = 1,
@@ -88,7 +88,7 @@
         Empty = 6,
     }
 
-    public enum CastlingType : byte
+    public enum CastlingType
     {
         None = 0,
         KingSide = 1,

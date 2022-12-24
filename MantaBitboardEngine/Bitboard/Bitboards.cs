@@ -1022,7 +1022,7 @@ namespace MantaBitboardEngine
 
             BoardState.Clear();
             BoardState.Add(
-                BitMove.CreateMove(BitPieceType.Empty, Square.NoSquare, Square.NoSquare, BitPieceType.Empty, ChessColor.Empty, 255),
+                BitMove.CreateEmptyMove(),
                 enpassantSquare,
                 positionInfo.CastlingRightWhiteQueenSide,
                 positionInfo.CastlingRightWhiteKingSide,

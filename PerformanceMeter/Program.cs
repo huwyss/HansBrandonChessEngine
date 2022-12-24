@@ -11,6 +11,7 @@ namespace PerformanceMeter
         static IMantaEngine _engine = null;
         static Board _board = null;
         static Stopwatch _stopwatch = new Stopwatch();
+        static Stopwatch _stopwatchTotal = new Stopwatch();
 
         static void Main(string[] args)
         {
@@ -18,7 +19,7 @@ namespace PerformanceMeter
             CreateBitboardEngine();
 
             Console.WriteLine("Perft tests, see https://www.chessprogramming.org/Perft_Results\n");
-
+            _stopwatchTotal.Start();
             var depth = 5;
             ExecutePerft("Initial Position", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", depth);
             depth = 4;
@@ -31,6 +32,8 @@ namespace PerformanceMeter
             ExecutePerft("Position 5", "rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8  ", depth);
             ExecutePerft("Position 6", "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10", depth);
 
+            _stopwatchTotal.Stop();
+            Console.WriteLine($"Time: {_stopwatchTotal.ElapsedMilliseconds / 1000} seconds.");
             Console.WriteLine("\nTests done. Hit enter to quit.");
             Console.ReadLine();
         }

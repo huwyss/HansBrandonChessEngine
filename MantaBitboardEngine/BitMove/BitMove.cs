@@ -3,7 +3,7 @@ using System.Text;
 
 namespace MantaBitboardEngine
 {
-    public struct BitMove
+    public class BitMove
     {
         // capture constructor
         private BitMove(
@@ -51,6 +51,11 @@ namespace MantaBitboardEngine
             byte value)
         {
             return new BitMove(movingPiece, fromSquare, toSquare, BitPieceType.Empty, Square.NoSquare, promotionPiece, CastlingType.None, movingColor, value);
+        }
+
+        public static BitMove CreateEmptyMove()
+        {
+            return CreateMove(BitPieceType.Empty, Square.NoSquare, Square.NoSquare, BitPieceType.Empty, ChessColor.Empty, 255);
         }
 
         // castling constructor

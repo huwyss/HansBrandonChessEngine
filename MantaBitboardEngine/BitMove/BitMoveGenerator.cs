@@ -11,19 +11,19 @@ namespace MantaBitboardEngine
     {
         private readonly Bitboards _bitboards;
         private List<BitMove> _moves;
-        private List<BitMove> _captures;
+        ////private List<BitMove> _captures;
 
         public BitMoveGenerator(Bitboards bitboards)
         {
             _bitboards = bitboards;
             _moves = new List<BitMove>();
-            _captures = new List<BitMove>();
+            ////_captures = new List<BitMove>();
         }
 
         private void ClearLists()
         {
             _moves.Clear();
-            _captures.Clear();
+            ////_captures.Clear();
         }
 
         public IEnumerable<BitMove> GetAllMoves(ChessColor color, bool includeCastling = true, bool includePawnMoves = true)

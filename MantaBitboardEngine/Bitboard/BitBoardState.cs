@@ -91,7 +91,7 @@ namespace MantaBitboardEngine
                 }
                 else
                 {
-                    return new BitMove();
+                    return BitMove.CreateEmptyMove();
                 }
             }
         }

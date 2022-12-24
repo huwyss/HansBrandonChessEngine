@@ -97,6 +97,26 @@ namespace MantaBitboardEngine
         public CastlingType Castling { get; }
         public ChessColor MovingColor { get; }
         public byte Value { get; }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as BitMove;
+            if (other == null)
+            {
+                return false;
+            }
+            else
+            {
+                return MovingPiece.Equals(other.MovingPiece) &&
+                    FromSquare.Equals(other.FromSquare) &&
+                    ToSquare.Equals(other.ToSquare) &&
+                    CapturedPiece.Equals(other.CapturedPiece) &&
+                    CapturedSquare.Equals(other.CapturedSquare) &&
+                    PromotionPiece.Equals(other.PromotionPiece) &&
+                    Castling.Equals(other.Castling) &&
+                    MovingColor.Equals(other.MovingColor);
+            }
+        }
     }
 
     public static class BitMoveExtension

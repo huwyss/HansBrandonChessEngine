@@ -10,25 +10,28 @@ namespace MantaBitboardEngine
     public class BitMoveGenerator
     {
         private readonly Bitboards _bitboards;
-        private List<BitMove> _moves;
-        ////private List<BitMove> _captures;
+        private int _index;
 
         public BitMoveGenerator(Bitboards bitboards)
         {
             _bitboards = bitboards;
-            _moves = new List<BitMove>();
-            ////_captures = new List<BitMove>();
+            Moves = new BitMove[2000];
+            FirstMoveIndex = new int[20];
         }
 
-        private void ClearLists()
+        public BitMove[] Moves { get; private set; }
+        public int[] FirstMoveIndex { get; private set; }
+
+
+        internal IEnumerable<BitMove> GetAllMoves(ChessColor color)
         {
-            _moves.Clear();
-            ////_captures.Clear();
+            GetAllMoves(color, 0);
+            return Moves.Take(_index);
         }
 
-        public IEnumerable<BitMove> GetAllMoves(ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
+        public void GetAllMoves(ChessColor color, int ply)
         {
-            ClearLists();
+            _index = FirstMoveIndex[ply];
 
             GeneratePawnMoves(color);
             GenerateKnightMoves(color);
@@ -38,7 +41,9 @@ namespace MantaBitboardEngine
             GenerateEnpassant(color);
             GenerateCastling(color);
 
-            return _moves;
+            FirstMoveIndex[ply + 1] = _index;
+
+            return;
         }
 
         private void GeneratePawnMoves(ChessColor color)
@@ -315,18 +320,17 @@ namespace MantaBitboardEngine
 
         private void AddMove(BitPieceType movingPiece, Square fromSquare, Square toSquare, BitPieceType promotionPiece, ChessColor movingColor, byte value)
         {
-            _moves.Add(BitMove.CreateMove(movingPiece, fromSquare, toSquare, promotionPiece, movingColor, value));
+            Moves[_index++] = BitMove.CreateMove(movingPiece, fromSquare, toSquare, promotionPiece, movingColor, value);
         }
 
         private void AddCapture(BitPieceType movingPiece, Square fromSquare, Square toSquare, BitPieceType capturedPiece, Square capturedSquare, BitPieceType promotionPiece, ChessColor movingColor, byte value)
         {
-            var capture = BitMove.CreateCapture(movingPiece, fromSquare, toSquare, capturedPiece, capturedSquare, promotionPiece, movingColor, value);
-            _moves.Add(capture);
+            Moves[_index++] = BitMove.CreateCapture(movingPiece, fromSquare, toSquare, capturedPiece, capturedSquare, promotionPiece, movingColor, value);
         }
 
         private void AddCastlingMove(ChessColor movingColor, CastlingType castling, byte value)
         {
-            _moves.Add(BitMove.CreateCastling(movingColor, castling, value));
+            Moves[_index++] = BitMove.CreateCastling(movingColor, castling, value);
         }
 
         public IEnumerable<BitMove> GetAllCaptures(IBitBoard board, ChessColor color)
@@ -335,25 +339,27 @@ namespace MantaBitboardEngine
             return null;
         }
 
-        public IEnumerable<BitMove> GetLegalMoves(ChessColor color)
-        {
-            return GetAllMoves(color);
-            ////var pseudolegalMoves = GetAllMoves(color);
-            ////var legalMoves = new List<BitMove>();
+        /////// <summary>
+        /////// too slow...
+        /////// </summary>
+        ////private IEnumerable<BitMove> GetLegalMoves(ChessColor color)
+        ////{
+        ////    var pseudolegalMoves = GetAllMoves(color);
+        ////    var legalMoves = new List<BitMove>();
 
-            ////foreach (var move in pseudolegalMoves)
-            ////{
-            ////    _bitboards.Move(move);
-            ////    if (!IsCheck(color))
-            ////    {
-            ////        legalMoves.Add(move);
-            ////    }
+        ////    foreach (var move in pseudolegalMoves)
+        ////    {
+        ////        _bitboards.Move(move);
+        ////        if (!IsCheck(color))
+        ////        {
+        ////            legalMoves.Add(move);
+        ////        }
 
-            ////    _bitboards.Back();
-            ////}
+        ////        _bitboards.Back();
+        ////    }
 
-            ////return legalMoves;
-        }
+        ////    return legalMoves;
+        ////}
 
         public bool IsAttacked(ChessColor color, Square square)
         {
@@ -408,58 +414,58 @@ namespace MantaBitboardEngine
 
         internal IEnumerable<BitMove> GetPawnMoves(ChessColor color)
         {
-            ClearLists();
+            _index = 0;
             GeneratePawnMoves(color);
-            return _moves;
+            return Moves.Take(_index);
         }
 
         internal IEnumerable<BitMove> GetKnightMoves(ChessColor color)
         {
-            ClearLists();
+            _index = 0;
             GenerateKnightMoves(color);
-            return _moves;
+            return Moves.Take(_index);
         }
 
         internal IEnumerable<BitMove> GetBishopMoves(ChessColor color)
         {
-            ClearLists();
+            _index = 0;
             GenerateSlidingPieceMoves(color, BitPieceType.Bishop);
-            return _moves;
+            return Moves.Take(_index);
         }
 
         internal IEnumerable<BitMove> GetRookMoves(ChessColor color)
         {
-            ClearLists();
+            _index = 0;
             GenerateSlidingPieceMoves(color, BitPieceType.Rook);
-            return _moves;
+            return Moves.Take(_index);
         }
 
         internal IEnumerable<BitMove> GetQueenMoves(ChessColor color)
         {
-            ClearLists();
+            _index = 0;
             GenerateSlidingPieceMoves(color, BitPieceType.Queen);
-            return _moves;
+            return Moves.Take(_index);
         }
 
         internal IEnumerable<BitMove> GetKingMoves(ChessColor color)
         {
-            ClearLists();
+            _index = 0;
             GenerateKingMoves(color);
-            return _moves;
+            return Moves.Take(_index);
         }
 
         internal IEnumerable<BitMove> GetEnPassant(ChessColor color)
         {
-            ClearLists();
+            _index = 0;
             GenerateEnpassant(color);
-            return _moves;
+            return Moves.Take(_index);
         }
 
         internal IEnumerable<BitMove> GetCastling(ChessColor color)
         {
-            ClearLists();
+            _index = 0;
             GenerateCastling(color);
-            return _moves;
+            return Moves.Take(_index);
         }
     }
 }

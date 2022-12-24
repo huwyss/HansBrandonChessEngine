@@ -109,21 +109,30 @@ namespace MantaBitboardEngine
 
         public UInt64 Perft(int depth)
         {
+            return Perft(depth, 0);
+        }
+
+        private UInt64 Perft(int depth, int ply)
+        {
             if (depth == 0)
             {
                 return 1;
             }
 
             UInt64 nodes = 0;
+            
+            _moveGenerator.GetAllMoves(SideToMove(), ply);
 
-            var moves = _moveGenerator.GetLegalMoves(SideToMove()).ToList();
+            // moves generated from _moveGenerator.FirstMoveIndex[_ply] to _moveGenerator.FirstMoveIndex[_ply + 1];
 
             ////Console.Write(_board.GetPrintString);
             ////Console.WriteLine();
 
-
-            foreach (var move in moves)
+            var firstIndex = _moveGenerator.FirstMoveIndex[ply];
+            var nextIndex = _moveGenerator.FirstMoveIndex[ply + 1];
+            for (int i = firstIndex; i< nextIndex; i++)
             {
+                var move = _moveGenerator.Moves[i];
                 Move(move);
                 if (IsCheck(move.MovingColor))
                 {
@@ -132,7 +141,7 @@ namespace MantaBitboardEngine
                 }
 
                 ////Console.WriteLine(move.ToPrintString());
-                nodes += Perft(depth - 1);
+                nodes += Perft(depth - 1, ply + 1);
                 UndoMove();
             }
 
@@ -163,7 +172,7 @@ namespace MantaBitboardEngine
         {
             Console.WriteLine($"Divide depth {depth}");
 
-            var moves = _moveGenerator.GetLegalMoves(SideToMove());
+            var moves = _moveGenerator.GetAllMoves(SideToMove());
             foreach (var move in moves)
             {
                 Move(move);

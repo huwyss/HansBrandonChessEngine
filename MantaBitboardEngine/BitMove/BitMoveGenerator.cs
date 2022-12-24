@@ -38,7 +38,7 @@ namespace MantaBitboardEngine
             GenerateEnpassant(color);
             GenerateCastling(color);
 
-            return _captures.Concat(_moves);
+            return _moves;
         }
 
         private void GeneratePawnMoves(ChessColor color)
@@ -321,7 +321,6 @@ namespace MantaBitboardEngine
         private void AddCapture(BitPieceType movingPiece, Square fromSquare, Square toSquare, BitPieceType capturedPiece, Square capturedSquare, BitPieceType promotionPiece, ChessColor movingColor, byte value)
         {
             var capture = BitMove.CreateCapture(movingPiece, fromSquare, toSquare, capturedPiece, capturedSquare, promotionPiece, movingColor, value);
-            _captures.Add(capture);
             _moves.Add(capture);
         }
 
@@ -332,6 +331,7 @@ namespace MantaBitboardEngine
 
         public IEnumerable<BitMove> GetAllCaptures(IBitBoard board, ChessColor color)
         {
+            // todo user _captures
             return null;
         }
 

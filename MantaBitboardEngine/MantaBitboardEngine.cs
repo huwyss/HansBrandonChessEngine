@@ -11,12 +11,13 @@ namespace MantaBitboardEngine
     {
         private readonly Bitboards _board;
         private readonly BitMoveGenerator _moveGenerator;
+        private readonly HelperBitboards _helperBits;
 
         public MantaBitboardEngine()
         {
             _board = new Bitboards();
-            _board.Initialize();
-            _moveGenerator = new BitMoveGenerator(_board);
+            _helperBits = new HelperBitboards();
+            _moveGenerator = new BitMoveGenerator(_board, _helperBits);
         }
 
         public void SetInitialPosition()

@@ -148,50 +148,52 @@ Tests done. Hit enter to quit.
 
 /*
  
-Bitboard Generator, 24.12.2022
+Bitboard Generator, 25.12.2022
 
 Perft tests, see https://www.chessprogramming.org/Perft_Results
 
 Initial Position
-Perft (1): Nodes: 20, time: 18ms, nps: 1k
+Perft (1): Nodes: 20, time: 14ms, nps: 1k
 Perft (2): Nodes: 400, time: 1ms, nps: 400k
-Perft (3): Nodes: 8902, time: 6ms, nps: 1483k
-Perft (4): Nodes: 197281, time: 100ms, nps: 1972k
-Perft (5): Nodes: 4865609, time: 2151ms, nps: 2262k
+Perft (3): Nodes: 8902, time: 4ms, nps: 2225k
+Perft (4): Nodes: 197281, time: 67ms, nps: 2944k
+Perft (5): Nodes: 4865609, time: 1575ms, nps: 3089k
 
 Position 2
 Perft (1): Nodes: 48, time: 1ms, nps: 48k
 Perft (2): Nodes: 2039, time: 1ms, nps: 2039k
-Perft (3): Nodes: 97862, time: 42ms, nps: 2330k
-Perft (4): Nodes: 4085603, time: 1936ms, nps: 2110k
+Perft (3): Nodes: 97862, time: 31ms, nps: 3156k
+Perft (4): Nodes: 4085603, time: 1300ms, nps: 3142k
+Perft (5): Nodes: 193690690, time: 63595ms, nps: 3045k
 
 Position 3
 Perft (1): Nodes: 14, time: 1ms, nps: 14k
 Perft (2): Nodes: 191, time: 1ms, nps: 191k
 Perft (3): Nodes: 2812, time: 1ms, nps: 2812k
-Perft (4): Nodes: 43238, time: 20ms, nps: 2161k
-Perft (5): Nodes: 674624, time: 296ms, nps: 2279k
-Perft (6): Nodes: 11030083, time: 4979ms, nps: 2215k
+Perft (4): Nodes: 43238, time: 16ms, nps: 2702k
+Perft (5): Nodes: 674624, time: 237ms, nps: 2846k
+Perft (6): Nodes: 11030083, time: 3817ms, nps: 2889k
 
 Position 4
 Perft (1): Nodes: 6, time: 1ms, nps: 6k
 Perft (2): Nodes: 264, time: 1ms, nps: 264k
-Perft (3): Nodes: 9467, time: 4ms, nps: 2366k
-Perft (4): Nodes: 422333, time: 186ms, nps: 2270k
-Perft (5): Nodes: 15833292, time: 7146ms, nps: 2215k
+Perft (3): Nodes: 9467, time: 3ms, nps: 3155k
+Perft (4): Nodes: 422333, time: 142ms, nps: 2974k
+Perft (5): Nodes: 15833292, time: 5488ms, nps: 2885k
 
 Position 5
 Perft (1): Nodes: 44, time: 1ms, nps: 44k
 Perft (2): Nodes: 1486, time: 1ms, nps: 1486k
-Perft (3): Nodes: 62379, time: 26ms, nps: 2399k
-Perft (4): Nodes: 2103487, time: 904ms, nps: 2326k
+Perft (3): Nodes: 62379, time: 21ms, nps: 2970k
+Perft (4): Nodes: 2103487, time: 672ms, nps: 3130k
 
 Position 6
 Perft (1): Nodes: 46, time: 1ms, nps: 46k
 Perft (2): Nodes: 2079, time: 1ms, nps: 2079k
-Perft (3): Nodes: 89890, time: 36ms, nps: 2496k
-Perft (4): Nodes: 3894594, time: 1552ms, nps: 2509k
+Perft (3): Nodes: 89890, time: 30ms, nps: 2996k
+Perft (4): Nodes: 3894594, time: 1337ms, nps: 2912k
 
+Time: 78 seconds.
 
 Tests done. Hit enter to quit.
  

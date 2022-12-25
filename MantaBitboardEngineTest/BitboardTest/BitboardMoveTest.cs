@@ -13,7 +13,6 @@ namespace MantaBitboardEngineTest
         public void GetSetPieceTest_WhenSetPieceRookToD8_ThenGetPieceD8ShouldReturnRook()
         {
             var target = new Bitboards();
-            target.Initialize();
             target.SetPiece(ChessColor.White, BitPieceType.Rook, Square.D8);
             
             var piece = target.GetPiece(Square.D8);
@@ -25,7 +24,6 @@ namespace MantaBitboardEngineTest
         public void GetPiece_WhenNewBoard_ThenAllPositionsEmpty()
         {
             var target = new Bitboards();
-            target.Initialize();
             var piece = target.GetPiece(Square.D8);
             Assert.AreEqual(BitPieceType.Empty, piece.Piece);
             Assert.AreEqual(ChessColor.Empty, piece.Color);
@@ -35,7 +33,6 @@ namespace MantaBitboardEngineTest
         public void InitPosition_WhenInitializedPosition_ThenPiecesAtInitPosition()
         {
             var target = new Bitboards();
-            target.Initialize();
             target.SetInitialPosition();
 
             Assert.AreEqual(BitPieceType.Rook,  target.GetPiece(Square.A1).Piece);
@@ -117,7 +114,6 @@ namespace MantaBitboardEngineTest
         public void MoveTest_WhenPawnMovesNormal_ThenNewPositionOk()
         {
             var target = new Bitboards();
-            target.Initialize();
             target.SetInitialPosition();
 
             target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.E2, Square.E4, BitPieceType.Empty, ChessColor.White, 0));
@@ -135,7 +131,6 @@ namespace MantaBitboardEngineTest
         public void MoveTest_WhenQueenCapturesPiece_ThenNewPositionOk()
         {
             var target = new Bitboards();
-            target.Initialize();
             target.SetInitialPosition();
             target.RemovePiece(Square.D2);
 
@@ -158,7 +153,6 @@ namespace MantaBitboardEngineTest
         public void MoveTest_WhenPawnMovesTwoFields_ThenEnPassantFieldSet_Black()
         {
             var target = new Bitboards();
-            target.Initialize();
             target.SetPosition(".......k" +
                                "p......." +
                                "........" +
@@ -177,7 +171,6 @@ namespace MantaBitboardEngineTest
         public void MoveTest_WhenPawnMovesTwoFields_ThenEnPassantFieldSet_White()
         {
             var target = new Bitboards();
-            target.Initialize();
             target.SetPosition(".......k" +
                                "........" +
                                "........" +
@@ -196,7 +189,6 @@ namespace MantaBitboardEngineTest
         public void MoveTest_WhenBlackCapturesEnPassant_ThenMoveCorrect_BlackMoves()
         {
             var target = new Bitboards();
-            target.Initialize();
             target.SetPosition(".......k" +
                                "........" +
                                "........" +
@@ -227,7 +219,6 @@ namespace MantaBitboardEngineTest
         public void MoveTest_WhenWhiteCapturesEnPassant_ThenMoveCorrect_WhiteMoves()
         {
             var target = new Bitboards();
-            target.Initialize();
             target.SetPosition(".......k" +
                                ".p......" +
                                "........" +
@@ -258,7 +249,6 @@ namespace MantaBitboardEngineTest
         public void GetColorTest()
         {
             var target = new Bitboards();
-            target.Initialize();
             target.SetInitialPosition();
             Assert.AreEqual(ChessColor.White, target.GetPiece(Square.E2).Color);
             Assert.AreEqual(ChessColor.Empty, target.GetPiece(Square.E3).Color);
@@ -270,7 +260,6 @@ namespace MantaBitboardEngineTest
         public void GetStringTest_WhenInitPos_ThenCorrect()
         {
             var target = new Bitboards();
-            target.Initialize();
             target.SetInitialPosition();
 
             string boardString = target.GetPositionString;
@@ -290,7 +279,6 @@ namespace MantaBitboardEngineTest
         public void GetPrintStringTest_WhenInitPos_ThenCorrect()
         {
             var target = new Bitboards();
-            target.Initialize();
             target.SetInitialPosition();
 
             string boardString = target.GetPrintString;
@@ -326,7 +314,6 @@ namespace MantaBitboardEngineTest
         public void BackTest_WhenWhiteAndBlackMovesDone_ThenGoBackToInitPosition()
         {
             var target = new Bitboards();
-            target.Initialize();
             target.SetInitialPosition();
             target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.E2, Square.E4, BitPieceType.Empty, ChessColor.White, 0));
             target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.E7, Square.E5, BitPieceType.Empty, ChessColor.Black, 0));
@@ -364,7 +351,6 @@ namespace MantaBitboardEngineTest
         {
             // init move: white pawn moves two fields and black captures en passant
             var target = new Bitboards();
-            target.Initialize();
             var position = ".......k" +
                            "........" +
                            "........" +
@@ -410,7 +396,6 @@ namespace MantaBitboardEngineTest
         public void BackOfCaptureMoveTest()
         {
             var target = new Bitboards();
-            target.Initialize();
             target.SetInitialPosition();
             target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.E2, Square.E4, BitPieceType.Empty, ChessColor.White, 0));
             target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.D7, Square.D5, BitPieceType.Empty, ChessColor.Black, 0));
@@ -465,7 +450,6 @@ namespace MantaBitboardEngineTest
         public void CastlingRightTest_WhenKingOrRookMoved_ThenRightFalse()
         {
             var target = new Bitboards();
-            target.Initialize();
             target.SetPosition("r...k..r" +
                                "p......." +
                                "........" +
@@ -500,7 +484,6 @@ namespace MantaBitboardEngineTest
         public void MoveTest_WhenKingSideCastling_ThenCorrectMove_White()
         {
             var target = new Bitboards();
-            target.Initialize();
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -533,7 +516,6 @@ namespace MantaBitboardEngineTest
         public void MoveTest_WhenQueenSideCastling_ThenCorrectMove_White()
         {
             var target = new Bitboards();
-            target.Initialize();
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -567,7 +549,6 @@ namespace MantaBitboardEngineTest
         public void MoveTest_WhenKingSideCastling_ThenCorrectMove_Black()
         {
             var target = new Bitboards();
-            target.Initialize();
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -601,7 +582,6 @@ namespace MantaBitboardEngineTest
         public void MoveTest_WhenQueenSideCastling_ThenCorrectMove_Black()
         {
             var target = new Bitboards();
-            target.Initialize();
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -639,7 +619,6 @@ namespace MantaBitboardEngineTest
         public void MoveTest_WhenWhitePromotion_ThenCorrectMove()
         {
             var target = new Bitboards();
-            target.Initialize();
             string position = "....k..." +
                               "P......." +
                               "........" +
@@ -671,7 +650,6 @@ namespace MantaBitboardEngineTest
         public void MoveTest_WhenMinorWhitePromotion_ThenCorrectMove()
         {
             var target = new Bitboards();
-            target.Initialize();
             string position = "....k..." +
                               "P......." +
                               "........" +
@@ -703,7 +681,6 @@ namespace MantaBitboardEngineTest
         public void MoveTest_WhenWhitePromotionWithCapture_ThenCorrectMove()
         {
             var target = new Bitboards();
-            target.Initialize();
             string position = ".r..k..." +
                               "P......." +
                               "........" +
@@ -735,7 +712,6 @@ namespace MantaBitboardEngineTest
         public void MoveTest_WhenBlackPromotion_ThenCorrectMove()
         {
             var target = new Bitboards();
-            target.Initialize();
             string position = "....k..." +
                               "........" +
                               "........" +
@@ -767,7 +743,6 @@ namespace MantaBitboardEngineTest
         public void MoveTest_WhenBlackPromotionWithCapture_ThenCorrectMove()
         {
             var target = new Bitboards();
-            target.Initialize();
             string position = "....k..." +
                               "........" +
                               "........" +

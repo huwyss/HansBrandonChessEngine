@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MantaBitboardEngine;
 using MantaCommon;
 using MantaChessEngine; // todo: remove this dependency later...
@@ -11,6 +10,18 @@ namespace MantaBitboardEngineTest
     [TestClass]
     public class BitMoveGeneratorTest
     {
+        private Bitboards _board;
+        private HelperBitboards _helperBits;
+        private BitMoveGenerator _bitMoveGenerator; // test target
+
+        [TestInitialize]
+        public void Setup()
+        {
+            _board = new Bitboards();
+            _helperBits = new HelperBitboards();
+            _bitMoveGenerator = new BitMoveGenerator(_board, _helperBits);
+        }
+
         // ----------------------------------------------------------------------------------------------------
         // Get Moves Tests
         // ----------------------------------------------------------------------------------------------------
@@ -18,12 +29,9 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenWhiteKnight_ThenValidMoves()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetInitialPosition();
-            var bitMoveGenerator = new BitMoveGenerator(board);
+            _board.SetInitialPosition();
 
-            var moves = bitMoveGenerator.GetKnightMoves(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetKnightMoves(ChessColor.White).ToList();
 
             Assert.AreEqual(4, moves.Count);
 
@@ -36,9 +44,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenWhiteKnight_ThenValidCaptures()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("rnbqkbnr" +
+            _board.SetPosition("rnbqkbnr" +
                               "N......." +
                               "......N." +
                               "........" +
@@ -46,9 +52,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "........");
-            var bitMoveGenerator = new BitMoveGenerator(board);
-
-            var moves = bitMoveGenerator.GetKnightMoves(ChessColor.White).ToList();
+            
+            var moves = _bitMoveGenerator.GetKnightMoves(ChessColor.White).ToList();
 
             Assert.AreEqual(9, moves.Count);
 
@@ -67,9 +72,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenBlackKnight_ThenValidCaptures()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("r.bqkb.r" +
+            _board.SetPosition("r.bqkb.r" +
                               "........" +
                               "........" +
                               "........" +
@@ -77,9 +80,8 @@ namespace MantaBitboardEngineTest
                               "......R." +
                               ".....N.." +
                               "..KQ...n");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetKnightMoves(ChessColor.Black).ToList();
+            var moves = _bitMoveGenerator.GetKnightMoves(ChessColor.Black).ToList();
 
             Assert.AreEqual(2, moves.Count);
 
@@ -90,12 +92,9 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenBlackKnight_ThenValidMoves()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetInitialPosition();
-            var bitMoveGenerator = new BitMoveGenerator(board);
+            _board.SetInitialPosition();
 
-            var moves = bitMoveGenerator.GetKnightMoves(ChessColor.Black).ToList();
+            var moves = _bitMoveGenerator.GetKnightMoves(ChessColor.Black).ToList();
 
             Assert.AreEqual(4, moves.Count);
 
@@ -108,9 +107,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenRook_ThenAllMoves()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "....p..." +
                               "........" +
@@ -118,9 +115,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "........");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetRookMoves(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetRookMoves(ChessColor.White).ToList();
 
             Assert.AreEqual(11, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Rook, Square.E4, Square.E5, BitPieceType.Empty, ChessColor.White, 0)), "Re4-e5 missing");
@@ -139,9 +135,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenQueen_ThenAllMoves()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "........" +
                               "........" +
@@ -149,9 +143,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               ".Q.P...." +
                               "........");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetQueenMoves(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetQueenMoves(ChessColor.White).ToList();
 
             Assert.AreEqual(9, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Queen, Square.B2, Square.B3, BitPieceType.Empty, ChessColor.White, 0)), "Qb2-b3 missing");//
@@ -168,9 +161,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenQueen_ThenOnlyTwoMoves()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "........" +
                               "........" +
@@ -178,9 +169,8 @@ namespace MantaBitboardEngineTest
                               "BBK....." +
                               ".QP....." +
                               "R.N.....");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetQueenMoves(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetQueenMoves(ChessColor.White).ToList();
 
             Assert.AreEqual(2, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Queen, Square.B2, Square.B1, BitPieceType.Empty, ChessColor.White, 0)), "Qb2-b1 missing");
@@ -190,9 +180,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenBishop_ThenAllMoves()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "........" +
                               "........" +
@@ -200,9 +188,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "..B....." +
                               "........");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetBishopMoves(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetBishopMoves(ChessColor.White).ToList();
 
             Assert.AreEqual(5, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Bishop, Square.C2, Square.D3, BitPieceType.Empty, ChessColor.White, 0)), "Bc2-d3 missing");
@@ -215,9 +202,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenKing_ThenAllMoves()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "........" +
                               "........" +
@@ -225,9 +210,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               ".rB....." +
                               ".KP.....");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetKingMoves(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetKingMoves(ChessColor.White).ToList();
 
             Assert.AreEqual(3, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateCapture(BitPieceType.King, Square.B1, Square.B2, BitPieceType.Rook, Square.B2, BitPieceType.Empty, ChessColor.White, 0)), "Kb1xb2 missing");
@@ -242,9 +226,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenWhitePawn_ThenAllMoves() // en passant not included
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "........" +
                               "........" +
@@ -252,9 +234,8 @@ namespace MantaBitboardEngineTest
                               ".r.b...." +
                               "..P....." +
                               "........");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetPawnMoves(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetPawnMoves(ChessColor.White).ToList();
 
             Assert.AreEqual(4, moves.Count);
 
@@ -267,9 +248,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenWhitePawnCaptureLeft_ThenAllMoves()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "........" +
                               "........" +
@@ -277,9 +256,8 @@ namespace MantaBitboardEngineTest
                               "nb....rR" +
                               "P.....PP" +
                               "........");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetPawnMoves(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetPawnMoves(ChessColor.White).ToList();
 
             Assert.AreEqual(2, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateCapture(BitPieceType.Pawn, Square.A2, Square.B3, BitPieceType.Bishop, Square.B3, BitPieceType.Empty, ChessColor.White, 0)), "A2xB3 missing");
@@ -289,9 +267,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenWhitePawnCaptureRight_ThenAllMoves()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "........" +
                               "........" +
@@ -299,9 +275,8 @@ namespace MantaBitboardEngineTest
                               "nb....Rr" +
                               "P.....PP" +
                               "........");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetPawnMoves(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetPawnMoves(ChessColor.White).ToList();
 
             Assert.AreEqual(2, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateCapture(BitPieceType.Pawn, Square.A2, Square.B3, BitPieceType.Bishop, Square.B3, BitPieceType.Empty, ChessColor.White, 0)), "A2xB3 missing");
@@ -311,9 +286,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenWhitePawnCaptureLeftAndRight_ThenAllMoves()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "........" +
                               "........" +
@@ -321,9 +294,8 @@ namespace MantaBitboardEngineTest
                               "nb.....r" +
                               "PP.....P" +
                               "........");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetPawnMoves(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetPawnMoves(ChessColor.White).ToList();
 
             Assert.AreEqual(2, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateCapture(BitPieceType.Pawn, Square.A2, Square.B3, BitPieceType.Bishop, Square.B3, BitPieceType.Empty, ChessColor.White, 0)), "a2xb3 missing");
@@ -333,9 +305,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenWhitePawnBlocked_ThenAllMoves() // en passant not included
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "........" +
                               "........" +
@@ -343,9 +313,8 @@ namespace MantaBitboardEngineTest
                               ".r.b...." +
                               "..P....." +
                               "........");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetPawnMoves(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetPawnMoves(ChessColor.White).ToList();
 
             Assert.AreEqual(3, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Pawn, Square.C2, Square.C3, BitPieceType.Empty, ChessColor.White, 0)), "c2-c3 missing");
@@ -356,9 +325,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenWhitePawnBlockedInMiddleOfBoard_ThenAllMoves()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "..p....." + // black pawn
                               "..P....." + // white pawn must not do c5-c7 !
@@ -366,9 +333,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "........");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetPawnMoves(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetPawnMoves(ChessColor.White).ToList();
 
             Assert.AreEqual(0, moves.Count);
         }
@@ -376,9 +342,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenWhitePawnAtA5_ThenAllMoves()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "........" +
                               "........" +
@@ -386,9 +350,8 @@ namespace MantaBitboardEngineTest
                               "..p....." + // black pawn
                               "..P....." + // white pawn must not do c2-c4 !
                               "........");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetPawnMoves(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetPawnMoves(ChessColor.White).ToList();
 
             Assert.AreEqual(0, moves.Count);
         }
@@ -398,9 +361,9 @@ namespace MantaBitboardEngineTest
         {
             var stateMock = new Mock<IBitBoardState>();
             stateMock.Setup(s => s.LastEnPassantSquare).Returns(Square.A6);
-            Bitboards board = new Bitboards(stateMock.Object);
-            board.Initialize();
-            board.SetPosition(".......k" +
+            _board = new Bitboards(stateMock.Object);
+            _bitMoveGenerator = new BitMoveGenerator(_board, _helperBits);
+            _board.SetPosition(".......k" +
                               "........" +
                               "........" +
                               "pP......" +
@@ -408,9 +371,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "...K....");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetEnPassant(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetEnPassant(ChessColor.White).ToList();
 
             Assert.AreEqual(1, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateCapture(BitPieceType.Pawn, Square.B5, Square.A6, BitPieceType.Pawn, Square.A5, BitPieceType.Empty, ChessColor.White, 0)), "B5xA6 ep missing");
@@ -421,9 +383,9 @@ namespace MantaBitboardEngineTest
         {
             var stateMock = new Mock<IBitBoardState>();
             stateMock.Setup(s => s.LastEnPassantSquare).Returns(Square.D3);
-            Bitboards board = new Bitboards(stateMock.Object);
-            board.Initialize();
-            board.SetPosition(".......k" +
+            _board = new Bitboards(stateMock.Object);
+            _bitMoveGenerator = new BitMoveGenerator(_board, _helperBits);
+            _board.SetPosition(".......k" +
                               "........" +
                               "........" +
                               "........" +
@@ -431,9 +393,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "...K....");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetEnPassant(ChessColor.Black).ToList();
+            var moves = _bitMoveGenerator.GetEnPassant(ChessColor.Black).ToList();
             Assert.AreEqual(2, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateCapture(BitPieceType.Pawn, Square.C4, Square.D3, BitPieceType.Pawn, Square.D4, BitPieceType.Empty, ChessColor.Black, 0)), "C4xD3 ep missing");
             Assert.IsTrue(moves.Contains(BitMove.CreateCapture(BitPieceType.Pawn, Square.E4, Square.D3, BitPieceType.Pawn, Square.D4, BitPieceType.Empty, ChessColor.Black, 0)), "E4xD3 ep missing");
@@ -442,9 +403,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenBlackPawn_ThenAllMoves()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "..p....." +
                               ".R.B...." +
                               "........" +
@@ -452,9 +411,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "........");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetPawnMoves(ChessColor.Black).ToList();
+            var moves = _bitMoveGenerator.GetPawnMoves(ChessColor.Black).ToList();
 
             Assert.AreEqual(4, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Pawn, Square.C7, Square.C6, BitPieceType.Empty, ChessColor.Black, 0)), "C7-C6 missing");
@@ -466,9 +424,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenBlackPawnAta4_ThenAllMoves()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "........" +
                               ".p......" + // black pawn must not do b5-b3 !
@@ -476,9 +432,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "........");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetPawnMoves(ChessColor.Black).ToList();
+            var moves = _bitMoveGenerator.GetPawnMoves(ChessColor.Black).ToList();
 
             Assert.AreEqual(1, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateCapture(BitPieceType.Pawn, Square.B5, Square.B4, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, ChessColor.Black, 0)), "B5-B4 missing");
@@ -487,9 +442,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenWhitePawnAt8Straight_ThenPromoted()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               ".P......" + // white pawn gets promoted to queen, rook, bishop or knight
                               "........" +
                               "........" +
@@ -497,9 +450,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "........");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetPawnMoves(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetPawnMoves(ChessColor.White).ToList();
 
             Assert.AreEqual(4, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Pawn, Square.B7, Square.B8, BitPieceType.Queen, ChessColor.White, 0)), "b7-b8Q missing");
@@ -511,9 +463,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenBlackPawnAt1Straight_ThenPromoted()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "........" +
                               "........" +
@@ -521,9 +471,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               ".p......" +  // black pawn gets promoted to queen, rook, bishop or knight
                               "........");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetPawnMoves(ChessColor.Black).ToList();
+            var moves = _bitMoveGenerator.GetPawnMoves(ChessColor.Black).ToList();
 
             Assert.AreEqual(4, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Pawn, Square.B2, Square.B1, BitPieceType.Queen, ChessColor.Black, 0)), "b2-b1Q missing");
@@ -535,9 +484,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenWhitePawnAt8Capturing_ThenPromoted()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("rN......" +
+            _board.SetPosition("rN......" +
                               ".P......" + // white pawn gets promoted to queen, rook, bishop or knight
                               "........" +
                               "........" +
@@ -545,9 +492,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "........");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetPawnMoves(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetPawnMoves(ChessColor.White).ToList();
 
             Assert.AreEqual(4, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateCapture(BitPieceType.Pawn, Square.B7, Square.A8, BitPieceType.Rook, Square.A8, BitPieceType.Queen, ChessColor.White, 0)), "b7xa8Q missing");
@@ -559,9 +505,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMoves_WhenBlackPawnAt1Capturing_ThenPromoted()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" + // white pawn gets promoted to queen, rook, bishop or knight
                               "........" +
                               "........" +
@@ -569,9 +513,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               ".p......" +
                               "Rn......");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetPawnMoves(ChessColor.Black).ToList();
+            var moves = _bitMoveGenerator.GetPawnMoves(ChessColor.Black).ToList();
 
             Assert.AreEqual(4, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateCapture(BitPieceType.Pawn, Square.B2, Square.A1, BitPieceType.Rook, Square.A1, BitPieceType.Queen, ChessColor.Black, 0)), "b2xa1Q missing");
@@ -587,9 +530,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetAllMoves_WhenTwoPieces_ThenShowMovesOfBothPieces()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "....p..." +
                               "........" +
@@ -597,9 +538,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "....P..." +
                               "....K...");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetAllMoves(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetAllMoves(ChessColor.White).ToList();
 
             Assert.AreEqual(6, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.Pawn, Square.E2, Square.E3, BitPieceType.Empty, ChessColor.White, 0)), "e2-e3 missing");
@@ -613,9 +553,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetAllMoves_CaptureMoveMustBeListedOnlyOnce()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("k......." +
+            _board.SetPosition("k......." +
                               "p......." +
                               "R......." +
                               "P......." +
@@ -623,9 +561,8 @@ namespace MantaBitboardEngineTest
                               "P......." +
                               "P......." +
                               "K.......");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetAllMoves(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetAllMoves(ChessColor.White).ToList();
 
             Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.King, Square.A1, Square.B1, BitPieceType.Empty, ChessColor.White, 0)), "Ka1-b1 missing");
             Assert.IsTrue(moves.Contains(BitMove.CreateMove(BitPieceType.King, Square.A1, Square.B2, BitPieceType.Empty, ChessColor.White, 0)), "Ka1-b2 missing");
@@ -811,9 +748,9 @@ namespace MantaBitboardEngineTest
             var stateMock = new Mock<IBitBoardState>();
             stateMock.Setup(s => s.LastCastlingRightWhiteKingSide).Returns(true);
             stateMock.Setup(s => s.LastCastlingRightWhiteQueenSide).Returns(true);
-            Bitboards board = new Bitboards(stateMock.Object);
-            board.Initialize();
-            board.SetPosition("r...k..r" +
+            _board = new Bitboards(stateMock.Object);
+            _bitMoveGenerator = new BitMoveGenerator(_board, _helperBits);
+            _board.SetPosition("r...k..r" +
                               "p......." +
                               "........" +
                               "........" +
@@ -821,9 +758,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "R...K..R");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetCastling(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetCastling(ChessColor.White).ToList();
 
             Assert.AreEqual(2, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateCastling(ChessColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke1-g1 0-0 castling missing");
@@ -837,7 +773,7 @@ namespace MantaBitboardEngineTest
             stateMock.Setup(s => s.LastCastlingRightWhiteKingSide).Returns(true);
             stateMock.Setup(s => s.LastCastlingRightWhiteQueenSide).Returns(true);
             Bitboards board = new Bitboards(stateMock.Object);
-            board.Initialize();
+            _bitMoveGenerator = new BitMoveGenerator(board, _helperBits);
             board.SetPosition("r...k..r" +
                               "p......." +
                               "........" +
@@ -846,9 +782,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "R..K...R");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetCastling(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetCastling(ChessColor.White).ToList();
 
             Assert.AreEqual(0, moves.Count);
             Assert.AreEqual(false, moves.Contains(BitMove.CreateCastling(ChessColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke1-g1 0-0 castling not possible");
@@ -862,7 +797,7 @@ namespace MantaBitboardEngineTest
             stateMock.Setup(s => s.LastCastlingRightWhiteKingSide).Returns(true);
             stateMock.Setup(s => s.LastCastlingRightWhiteQueenSide).Returns(true);
             Bitboards board = new Bitboards(stateMock.Object);
-            board.Initialize();
+            _bitMoveGenerator = new BitMoveGenerator(board, _helperBits);
             board.SetPosition("r...k..r" +
                               "p......." +
                               "........" +
@@ -871,9 +806,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......R" +
                               ".R..K...");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetCastling(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetCastling(ChessColor.White).ToList();
 
             Assert.AreEqual(0, moves.Count);
             Assert.AreEqual(false, moves.Contains(BitMove.CreateCastling(ChessColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke1-g1 0-0 castling not possible");
@@ -887,7 +821,7 @@ namespace MantaBitboardEngineTest
             stateMock.Setup(s => s.LastCastlingRightWhiteKingSide).Returns(true);
             stateMock.Setup(s => s.LastCastlingRightWhiteQueenSide).Returns(true);
             Bitboards board = new Bitboards(stateMock.Object);
-            board.Initialize();
+            _bitMoveGenerator = new BitMoveGenerator(board, _helperBits);
             board.SetPosition("r...k..r" +
                               "p......." +
                               "........" +
@@ -896,9 +830,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "R...K.NR");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetCastling(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetCastling(ChessColor.White).ToList();
 
             Assert.AreEqual(1, moves.Count);
             Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke1-g1 0-0 castling not possible");
@@ -912,7 +845,7 @@ namespace MantaBitboardEngineTest
             stateMock.Setup(s => s.LastCastlingRightWhiteKingSide).Returns(true);
             stateMock.Setup(s => s.LastCastlingRightWhiteQueenSide).Returns(true);
             Bitboards board = new Bitboards(stateMock.Object);
-            board.Initialize();
+            _bitMoveGenerator = new BitMoveGenerator(board, _helperBits);
             board.SetPosition("r...k..r" +
                               "p......." +
                               "........" +
@@ -921,9 +854,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "R..QK..R");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetCastling(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetCastling(ChessColor.White).ToList();
 
             Assert.AreEqual(1, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateCastling(ChessColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke1-g1 0-0 castling missing");
@@ -933,9 +865,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMovesTest_WhenFieldNextToKingIsAttacked_ThenNoCastling()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("....k..." +
+            _board.SetPosition("....k..." +
                               "p..r.r.." +
                               "........" +
                               "........" +
@@ -943,9 +873,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "R...K..R");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetCastling(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetCastling(ChessColor.White).ToList();
 
             Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "0-0 castling not possible");
             Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0)), "0-0-0 castling not possible");
@@ -954,9 +883,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMovesTest_WhenNewKingFieldIsAttacked_ThenNoCastling()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("....k..." +
+            _board.SetPosition("....k..." +
                               "p.r...r." +
                               "........" +
                               "........" +
@@ -964,9 +891,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "R...K..R");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetCastling(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetCastling(ChessColor.White).ToList();
 
             Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "0-0 castling not possible. g1 is attacked.");
             Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0)), "0-0-0 castling not possible. c1 is attacked.");
@@ -982,9 +908,9 @@ namespace MantaBitboardEngineTest
             var stateMock = new Mock<IBitBoardState>();
             stateMock.Setup(s => s.LastCastlingRightBlackKingSide).Returns(true);
             stateMock.Setup(s => s.LastCastlingRightBlackQueenSide).Returns(true);
-            Bitboards board = new Bitboards(stateMock.Object);
-            board.Initialize();
-            board.SetPosition("r...k..r" +
+            _board = new Bitboards(stateMock.Object);
+            _bitMoveGenerator = new BitMoveGenerator(_board, _helperBits);
+            _board.SetPosition("r...k..r" +
                               "p......." +
                               "........" +
                               "........" +
@@ -992,18 +918,18 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P...K..." +
                               "R......R");
-            var bitMoveGenerator = new BitMoveGenerator(board);
+            
 
 
 
             // white king moves -> loses castling right
-            board.Move(BitMove.CreateMove(BitPieceType.King, Square.E2, Square.E1, BitPieceType.Empty, ChessColor.White, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.King, Square.E2, Square.E1, BitPieceType.Empty, ChessColor.White, 0));
 
             // black move
-            board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A7, Square.A6, BitPieceType.Empty, ChessColor.Black, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A7, Square.A6, BitPieceType.Empty, ChessColor.Black, 0));
 
             // get legal moves of king. should not include castling.
-            var moves = bitMoveGenerator.GetCastling(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetCastling(ChessColor.White).ToList();
 
             Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "0-0 castling not allowed");
             Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0)), "0-0-0 castling not allowed");
@@ -1012,9 +938,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMovesTest_WhenWhiteKingRookMoved_ThenCastlingRightKingSideLost()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("r...k..r" +
+            _board.SetPosition("r...k..r" +
                               "p......." +
                               "........" +
                               "........" +
@@ -1022,18 +946,17 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "R...K..R");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
             // white king side rook moves -> loses castling right
-            board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.H1, Square.H2, BitPieceType.Empty, ChessColor.White, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.H1, Square.H2, BitPieceType.Empty, ChessColor.White, 0));
 
             // moves to bring rook back to original position
-            board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A7, Square.A6, BitPieceType.Empty, ChessColor.Black, 0));
-            board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.H2, Square.H1, BitPieceType.Empty, ChessColor.White, 0));
-            board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A6, Square.A5, BitPieceType.Empty, ChessColor.Black, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A7, Square.A6, BitPieceType.Empty, ChessColor.Black, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.H2, Square.H1, BitPieceType.Empty, ChessColor.White, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A6, Square.A5, BitPieceType.Empty, ChessColor.Black, 0));
 
             // get legal moves of king. should not include castling.
-            var moves = bitMoveGenerator.GetCastling(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetCastling(ChessColor.White).ToList();
 
             Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "0-0 castling not allowed");
             Assert.IsTrue(moves.Contains(BitMove.CreateCastling(ChessColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0)), "0-0-0 castling missing");
@@ -1042,9 +965,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMovesTest_WhenWhiteQueenRookMoved_ThenCastlingRightQueenSideLost()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("r...k..r" +
+            _board.SetPosition("r...k..r" +
                               "p......." +
                               "........" +
                               "........" +
@@ -1052,18 +973,17 @@ namespace MantaBitboardEngineTest
                               "P......." +
                               "........" +
                               "R...K..R");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
             // white king side rook moves -> loses castling right
-            board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.A1, Square.A2, BitPieceType.Empty, ChessColor.White, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.A1, Square.A2, BitPieceType.Empty, ChessColor.White, 0));
 
             // moves to bring white rook back to original position
-            board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A7, Square.A6, BitPieceType.Empty, ChessColor.Black, 0));
-            board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.A2, Square.A1, BitPieceType.Empty, ChessColor.White, 0));
-            board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A6, Square.A5, BitPieceType.Empty, ChessColor.Black, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A7, Square.A6, BitPieceType.Empty, ChessColor.Black, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.A2, Square.A1, BitPieceType.Empty, ChessColor.White, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A6, Square.A5, BitPieceType.Empty, ChessColor.Black, 0));
 
             // get legal moves of king. should not include castling.
-            var moves = bitMoveGenerator.GetCastling(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetCastling(ChessColor.White).ToList();
 
             Assert.IsTrue(moves.Contains(BitMove.CreateCastling(ChessColor.White, MantaBitboardEngine.CastlingType.KingSide, 0)), "0-0 castling missing");
             Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0)), "0-0-0 castling not allowed");
@@ -1079,9 +999,9 @@ namespace MantaBitboardEngineTest
             var stateMock = new Mock<IBitBoardState>();
             stateMock.Setup(s => s.LastCastlingRightBlackKingSide).Returns(true);
             stateMock.Setup(s => s.LastCastlingRightBlackQueenSide).Returns(true);
-            Bitboards board = new Bitboards(stateMock.Object);
-            board.Initialize();
-            board.SetPosition("r...k..r" +
+            _board = new Bitboards(stateMock.Object);
+            _bitMoveGenerator = new BitMoveGenerator(_board, _helperBits);
+            _board.SetPosition("r...k..r" +
                               "p......." +
                               "........" +
                               "........" +
@@ -1089,9 +1009,9 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "R...K..R");
-            var bitMoveGenerator = new BitMoveGenerator(board);
+            
 
-            var moves = bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
+            var moves = _bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
 
             Assert.AreEqual(2, moves.Count);
             Assert.IsTrue(moves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke8-g8 0-0 castling missing");
@@ -1104,9 +1024,9 @@ namespace MantaBitboardEngineTest
             var stateMock = new Mock<IBitBoardState>();
             stateMock.Setup(s => s.LastCastlingRightBlackKingSide).Returns(true);
             stateMock.Setup(s => s.LastCastlingRightBlackQueenSide).Returns(true);
-            Bitboards board = new Bitboards(stateMock.Object);
-            board.Initialize();
-            board.SetPosition("r..k...r" + // king moved!
+            _board = new Bitboards(stateMock.Object);
+            _bitMoveGenerator = new BitMoveGenerator(_board, _helperBits);
+            _board.SetPosition("r..k...r" + // king moved!
                               "p......." +
                               "........" +
                               "........" +
@@ -1114,9 +1034,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......R" +
                               "...QK...");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
+            var moves = _bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
 
             Assert.AreEqual(0, moves.Count);
             Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke8-g8 0-0 castling not possible");
@@ -1129,9 +1048,9 @@ namespace MantaBitboardEngineTest
             var stateMock = new Mock<IBitBoardState>();
             stateMock.Setup(s => s.LastCastlingRightBlackKingSide).Returns(true);
             stateMock.Setup(s => s.LastCastlingRightBlackQueenSide).Returns(true);
-            Bitboards board = new Bitboards(stateMock.Object);
-            board.Initialize();
-            board.SetPosition(".r..k.r." + // rooks moved!
+            _board = new Bitboards(stateMock.Object);
+            _bitMoveGenerator = new BitMoveGenerator(_board, _helperBits);
+            _board.SetPosition(".r..k.r." + // rooks moved!
                               "p......." +
                               "........" +
                               "........" +
@@ -1139,9 +1058,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......R" +
                               "...QK...");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
+            var moves = _bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
 
             Assert.AreEqual(0, moves.Count);
             Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke8-g8 0-0 castling not possible");
@@ -1154,9 +1072,9 @@ namespace MantaBitboardEngineTest
             var stateMock = new Mock<IBitBoardState>();
             stateMock.Setup(s => s.LastCastlingRightBlackKingSide).Returns(true);
             stateMock.Setup(s => s.LastCastlingRightBlackQueenSide).Returns(true);
-            Bitboards board = new Bitboards(stateMock.Object);
-            board.Initialize();
-            board.SetPosition("r.b.k.nr" +
+            _board = new Bitboards(stateMock.Object);
+            _bitMoveGenerator = new BitMoveGenerator(_board, _helperBits);
+            _board.SetPosition("r.b.k.nr" +
                               "p......." +
                               "........" +
                               "........" +
@@ -1164,9 +1082,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "R..QK.NR");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
+            var moves = _bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
 
             Assert.AreEqual(0, moves.Count);
             Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "Ke8-g8 0-0 castling not possible");
@@ -1176,9 +1093,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMovesTest_WhenFieldNextToKingAttacked_ThenNoCastling_Black()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("r...k..r" +
+            _board.SetPosition("r...k..r" +
                               "p......." +
                               "........" +
                               "........" +
@@ -1186,9 +1101,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "...RKR..");
-            var generator = new BitMoveGenerator(board);
 
-            var moves = generator.GetCastling(ChessColor.Black).ToList();
+            var moves = _bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
             Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "0-0 castling not possible. f8 attacked");
             Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0)), "0-0-0 castling not possible. d8 attacked");
         }
@@ -1196,9 +1110,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMovesTest_WhenNewKingFieldAttacked_ThenNoCastling_Black()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("r...k..r" +
+            _board.SetPosition("r...k..r" +
                               "p......." +
                               "........" +
                               "........" +
@@ -1206,9 +1118,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "..R.K.R.");
-            var generator = new BitMoveGenerator(board);
 
-            var moves = generator.GetCastling(ChessColor.Black).ToList();
+            var moves = _bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
             Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "0-0 castling not possible. f8 attacked");
             Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0)), "0-0-0 castling not possible. d8 attacked");
         }
@@ -1220,9 +1131,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMovesTest_WhenBlackKingMoved_ThenCastlingRightLost()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("r......r" +
+            _board.SetPosition("r......r" +
                               "p...k..." +
                               "........" +
                               "........" +
@@ -1230,16 +1139,15 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "R...K..R");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
             // Black king moves -> loses castling right
-            board.Move(BitMove.CreateMove(BitPieceType.King, Square.E7, Square.E8, BitPieceType.Empty, ChessColor.Black, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.King, Square.E7, Square.E8, BitPieceType.Empty, ChessColor.Black, 0));
 
             // white move
-            board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A2, Square.A1, BitPieceType.Empty, ChessColor.White, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A2, Square.A1, BitPieceType.Empty, ChessColor.White, 0));
 
             // get legal moves of king. should not include castling.
-            var kingMoves = bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
+            var kingMoves = _bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
 
             Assert.IsFalse(kingMoves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "0-0 castling not allowed as king already moved");
             Assert.IsFalse(kingMoves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0)), "0-0-0 castling not allowed as king already moved");
@@ -1248,9 +1156,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMovesTest_WhenBlackKingRookMoved_ThenCastlingRightKingSideLost()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("r...k..r" +
+            _board.SetPosition("r...k..r" +
                               "p......." +
                               "........" +
                               "........" +
@@ -1258,18 +1164,17 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "R...K..R");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
             // black king side rook moves -> loses castling right
-            board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.H8, Square.H7, BitPieceType.Empty, ChessColor.Black, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.H8, Square.H7, BitPieceType.Empty, ChessColor.Black, 0));
 
             // some moves to bring black rook back to origin position
-            board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A2, Square.A3, BitPieceType.Empty, ChessColor.White, 0));
-            board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.H7, Square.H8, BitPieceType.Empty, ChessColor.Black, 0));
-            board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A3, Square.A4, BitPieceType.Empty, ChessColor.White, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A2, Square.A3, BitPieceType.Empty, ChessColor.White, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.H7, Square.H8, BitPieceType.Empty, ChessColor.Black, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A3, Square.A4, BitPieceType.Empty, ChessColor.White, 0));
 
             // get legal moves of king. should not include kingside castling.
-            var kingMoves = bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
+            var kingMoves = _bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
 
             Assert.IsFalse(kingMoves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "0-0 castling not allowed as rook already moved");
             Assert.IsTrue(kingMoves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0)), "0-0-0 castling missing");
@@ -1278,9 +1183,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetMovesTest_WhenBlackQueenRookMoved_ThenCastlingRightQueenSideLost()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("r...k..r" +
+            _board.SetPosition("r...k..r" +
                               "........" +
                               "p......." +
                               "........" +
@@ -1288,18 +1191,17 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "P......." +
                               "R...K..R");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
             // Black queen side rook moves -> loses castling right
-            board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.A8, Square.A7, BitPieceType.Empty, ChessColor.Black, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.A8, Square.A7, BitPieceType.Empty, ChessColor.Black, 0));
 
             // some moves to bring black rook back to origin position
-            board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A2, Square.A3, BitPieceType.Empty, ChessColor.White, 0));
-            board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.A7, Square.A8, BitPieceType.Empty, ChessColor.Black, 0));
-            board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A3, Square.A4, BitPieceType.Empty, ChessColor.White, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A2, Square.A3, BitPieceType.Empty, ChessColor.White, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.Rook, Square.A7, Square.A8, BitPieceType.Empty, ChessColor.Black, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A3, Square.A4, BitPieceType.Empty, ChessColor.White, 0));
 
             // get legal moves of king. should not include queenside castling.
-            var kingMoves = bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
+            var kingMoves = _bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
 
             Assert.IsTrue(kingMoves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "0-0 castling missing");
             Assert.IsFalse(kingMoves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0)), "0-0-0 castling not allowed as rook already moved");
@@ -1313,9 +1215,7 @@ namespace MantaBitboardEngineTest
             // and move d5 x e6     d7-d5
             //          e6 x f7
 
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("r...k..r" +
+            _board.SetPosition("r...k..r" +
                               "p.ppqpb." +
                               "bn..pnp." +
                               "...PN..." +
@@ -1323,19 +1223,18 @@ namespace MantaBitboardEngineTest
                               "..N..Q.p" +
                               "PPPBBPPP" +
                               "R...K..R");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
             // White pawn captures d5 x e6
-            board.Move(BitMove.CreateCapture(BitPieceType.Pawn, Square.D5, Square.E6, BitPieceType.Pawn, Square.E6, BitPieceType.Empty, ChessColor.White, 0));
+            _board.Move(BitMove.CreateCapture(BitPieceType.Pawn, Square.D5, Square.E6, BitPieceType.Pawn, Square.E6, BitPieceType.Empty, ChessColor.White, 0));
 
             // Black pawn move d7-d5
-            board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.D7, Square.D5, BitPieceType.Empty, ChessColor.Black, 0));
+            _board.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.D7, Square.D5, BitPieceType.Empty, ChessColor.Black, 0));
 
             // white pawn move e6 X f7 (results black king is in check)
-            board.Move(BitMove.CreateCapture(BitPieceType.Pawn, Square.E6, Square.F7, BitPieceType.Pawn, Square.F7, BitPieceType.Empty, ChessColor.White, 0));
+            _board.Move(BitMove.CreateCapture(BitPieceType.Pawn, Square.E6, Square.F7, BitPieceType.Pawn, Square.F7, BitPieceType.Empty, ChessColor.White, 0));
 
             // get legal moves of king. should not include castling.
-            var moves = bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
+            var moves = _bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
 
             Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "0-0 castling not allowed. king in check.");
             Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0)), "0-0-0 castling not allowed. king in check.");
@@ -1347,9 +1246,7 @@ namespace MantaBitboardEngineTest
             // Kiwipete position
             // position fen r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 0 moves d5e6 e7c5 e6e7
 
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("r...k..r" +
+            _board.SetPosition("r...k..r" +
                               "p.ppP.b." +
                               "bn...np." +
                               "..q.N..." +
@@ -1357,10 +1254,9 @@ namespace MantaBitboardEngineTest
                               "..N..Q.p" +
                               "PPPBBPPP" +
                               "R...K..R");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
             // get legal moves of king. should not include castling.
-            var moves = bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
+            var moves = _bitMoveGenerator.GetCastling(ChessColor.Black).ToList();
 
             Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0)), "0-0 castling not allowed. f8 is attacked.");
             Assert.IsFalse(moves.Contains(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0)), "0-0-0 castling not allowed. d8 is attacked.");
@@ -1428,9 +1324,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void IsAttackedTest_FieldDiagonalOfPawnIsAttacked()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("r...k..." +
+            _board.SetPosition("r...k..." +
                               "...p...." +
                               ".N......" +
                               ".......r" +
@@ -1438,33 +1332,32 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "....P..." +
                               "...QK..R");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
             // field in front of pawn
-            Assert.IsFalse(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.E3), "Field in front of pawn is not attacked");
+            Assert.IsFalse(_bitMoveGenerator.IsAttacked(ChessColor.Black, Square.E3), "Field in front of pawn is not attacked");
 
             // field diagonal in front of pawn
-            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.D3), "Field diagonal in front of pawn is attacked");
-            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.F3), "Field diagonal in front of pawn is attacked");
+            Assert.IsTrue(_bitMoveGenerator.IsAttacked(ChessColor.Black, Square.D3), "Field diagonal in front of pawn is attacked");
+            Assert.IsTrue(_bitMoveGenerator.IsAttacked(ChessColor.Black, Square.F3), "Field diagonal in front of pawn is attacked");
 
             // black rook is attacked
-            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.H5), "Black rook is attacked");
+            Assert.IsTrue(_bitMoveGenerator.IsAttacked(ChessColor.Black, Square.H5), "Black rook is attacked");
 
             // fields between the rooks is attacked by white rook
-            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.H5), "Fields between the rooks is attacked by the white rook");
-            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.H4), "Fields between the rooks is attacked by the white rook");
-            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.H3), "Fields between the rooks is attacked by the white rook");
-            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.H2), "Fields between the rooks is attacked by the white rook");
+            Assert.IsTrue(_bitMoveGenerator.IsAttacked(ChessColor.Black, Square.H5), "Fields between the rooks is attacked by the white rook");
+            Assert.IsTrue(_bitMoveGenerator.IsAttacked(ChessColor.Black, Square.H4), "Fields between the rooks is attacked by the white rook");
+            Assert.IsTrue(_bitMoveGenerator.IsAttacked(ChessColor.Black, Square.H3), "Fields between the rooks is attacked by the white rook");
+            Assert.IsTrue(_bitMoveGenerator.IsAttacked(ChessColor.Black, Square.H2), "Fields between the rooks is attacked by the white rook");
 
             // Knight attacks
-            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.D7), "Field D7 is attacked by knight");
-            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.A8), "Field A8 is attacked by knight");
-            Assert.IsFalse(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.B8), "b8 not attacked by knight");
+            Assert.IsTrue(_bitMoveGenerator.IsAttacked(ChessColor.Black, Square.D7), "Field D7 is attacked by knight");
+            Assert.IsTrue(_bitMoveGenerator.IsAttacked(ChessColor.Black, Square.A8), "Field A8 is attacked by knight");
+            Assert.IsFalse(_bitMoveGenerator.IsAttacked(ChessColor.Black, Square.B8), "b8 not attacked by knight");
 
             // Queen attacks
-            Assert.IsTrue(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.D6), "Field D6 is attacked by queen");
-            Assert.IsFalse(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.D8), "Field D8 is not attacked by queen");
-            Assert.IsFalse(bitMoveGenerator.IsAttacked(ChessColor.Black, Square.A2), "Field A2 not attacked by queen");
+            Assert.IsTrue(_bitMoveGenerator.IsAttacked(ChessColor.Black, Square.D6), "Field D6 is attacked by queen");
+            Assert.IsFalse(_bitMoveGenerator.IsAttacked(ChessColor.Black, Square.D8), "Field D8 is not attacked by queen");
+            Assert.IsFalse(_bitMoveGenerator.IsAttacked(ChessColor.Black, Square.A2), "Field A2 not attacked by queen");
         }
 
         /// <summary>
@@ -1474,9 +1367,7 @@ namespace MantaBitboardEngineTest
         [TestMethod, Ignore]
         public void NoPiecesMustGenerateNoMovesTest()
         {
-            Bitboards board = new Bitboards();
-            board.Initialize();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "........" +
                               "........" +
@@ -1484,9 +1375,8 @@ namespace MantaBitboardEngineTest
                               "........" +
                               "........" +
                               "........");
-            var bitMoveGenerator = new BitMoveGenerator(board);
 
-            var moves = bitMoveGenerator.GetAllMoves(ChessColor.White).ToList();
+            var moves = _bitMoveGenerator.GetAllMoves(ChessColor.White).ToList();
             Assert.AreEqual(0, moves.Count, "Should not find any moves. Board is empty.");
         }
     }

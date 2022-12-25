@@ -45,6 +45,7 @@
     <Compile Include="Bitboard\Bitboards.cs" />
     <Compile Include="Bitboard\BitBoardState.cs" />
     <Compile Include="Bitboard\BitHelper.cs" />
+    <Compile Include="Bitboard\HelperBitboards.cs" />
     <Compile Include="BitMove\BitMove.cs" />
     <Compile Include="BitMove\BitMoveExecutor.cs" />
     <Compile Include="BitMove\BitMoveGenerator.cs" />

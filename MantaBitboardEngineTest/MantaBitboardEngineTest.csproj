@@ -52,6 +52,7 @@
     <Compile Include="BitboardTest\BitHelperTest.cs" />
     <Compile Include="BitboardTest\BitMoveGeneratorTest.cs" />
     <Compile Include="BitboardTest\BitboardMoveTest.cs" />
+    <Compile Include="BitboardTest\EvaluatorPositionTest.cs" />
     <Compile Include="BitboardTest\HelperBitboardsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

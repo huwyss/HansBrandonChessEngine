@@ -8,13 +8,6 @@ namespace MantaChessEngine
 {
     public static class Definitions
     {
-        public const char KING = 'k';
-        public const char PAWN = 'p';
-        public const char KNIGHT = 'n';
-        public const char ROOK = 'r';
-        public const char QUEEN = 'q';
-        public const char BISHOP = 'b';
-
         public const char UP = 'u';
         public const char DOWN = 'd';
         public const char LEFT = 'l';

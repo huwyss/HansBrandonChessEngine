@@ -544,7 +544,7 @@ namespace MantaChessEngineTest
                               "....K...";
             board.SetPosition(position);
 
-            board.Move(new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'a', 8, null, Definitions.QUEEN)); 
+            board.Move(new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'a', 8, null, CommonDefinitions.QUEEN)); 
 
             string expecPos = "Q...k..." +
                               "........" +
@@ -575,7 +575,7 @@ namespace MantaChessEngineTest
                               "....K...";
             board.SetPosition(position);
 
-            board.Move(new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'a', 8, null, Definitions.ROOK));
+            board.Move(new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'a', 8, null, CommonDefinitions.ROOK));
 
             string expecPos = "R...k..." +
                               "........" +
@@ -606,7 +606,7 @@ namespace MantaChessEngineTest
                               "....K...";
             board.SetPosition(position);
 
-            board.Move(new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'b', 8, Piece.MakePiece('r'), Definitions.QUEEN));
+            board.Move(new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'b', 8, Piece.MakePiece('r'), CommonDefinitions.QUEEN));
 
             string expecPos = ".Q..k..." +
                               "........" +
@@ -637,7 +637,7 @@ namespace MantaChessEngineTest
                               "....K...";
             board.SetPosition(position);
 
-            board.Move(new PromotionMove(Piece.MakePiece('p'), 'a', 2, 'a', 1, null, Definitions.QUEEN));
+            board.Move(new PromotionMove(Piece.MakePiece('p'), 'a', 2, 'a', 1, null, CommonDefinitions.QUEEN));
 
             string expecPos = "....k..." +
                               "........" +
@@ -668,7 +668,7 @@ namespace MantaChessEngineTest
                               ".R..K...";
             board.SetPosition(position);
 
-            board.Move(new PromotionMove(Piece.MakePiece('p'), 'a', 2, 'b', 1, Piece.MakePiece('R'), Definitions.QUEEN));
+            board.Move(new PromotionMove(Piece.MakePiece('p'), 'a', 2, 'b', 1, Piece.MakePiece('R'), CommonDefinitions.QUEEN));
 
             string expecPos = "....k..." +
                               "........" +

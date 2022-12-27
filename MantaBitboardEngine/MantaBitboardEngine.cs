@@ -9,15 +9,23 @@ namespace MantaBitboardEngine
 {
     public class MantaBitboardEngine : IMantaEngine
     {
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private readonly Bitboards _board;
         private readonly BitMoveGenerator _moveGenerator;
         private readonly HelperBitboards _helperBits;
+        private readonly BitEvaluator _evaluator;
+        private readonly BitSearchAlphaBeta _search;
+        private readonly BitMoveFactory _moveFactory;
 
         public MantaBitboardEngine()
         {
             _board = new Bitboards();
             _helperBits = new HelperBitboards();
             _moveGenerator = new BitMoveGenerator(_board, _helperBits);
+            _evaluator = new BitEvaluator(_helperBits);
+            _search = new BitSearchAlphaBeta(_evaluator, _moveGenerator, 4);
+            _moveFactory = new BitMoveFactory(_helperBits);
         }
 
         public void SetInitialPosition()
@@ -50,7 +58,19 @@ namespace MantaBitboardEngine
 
         public bool MoveUci(string moveStringUci)
         {
-            return true;
+            var move = _moveFactory.MakeMoveUci(_board, moveStringUci);
+            if (move == BitMove.CreateEmptyMove())
+            {
+                return false;
+            }
+
+            bool valid = _moveGenerator.IsMoveValid(move);
+            if (valid)
+            {
+                _board.Move(move);
+            }
+
+            return valid;
         }
 
         public bool Move(string moveStringUser)
@@ -72,12 +92,24 @@ namespace MantaBitboardEngine
 
         public UciMoveRating DoBestMove(ChessColor color)
         {
-            return null;
+            BitMoveRating nextMove = _search.Search(_board, color);
+            _board.Move(nextMove.Move);
+            _log.Debug("Score: " + nextMove.Score);
+
+            UciMoveRating uciRating = BitMoveRatingConverter.NewFrom(nextMove);
+
+            return uciRating;
         }
 
         public UciMoveRating DoBestMove()
         {
-            return null;
+            BitMoveRating nextMove = _search.Search(_board, _board.BoardState.SideToMove);
+            _board.Move(nextMove.Move);
+            _log.Debug("Score: " + nextMove.Score);
+
+            UciMoveRating uciRating = BitMoveRatingConverter.NewFrom(nextMove);
+
+            return uciRating;
         }
 
         public ChessColor SideToMove()
@@ -98,14 +130,23 @@ namespace MantaBitboardEngine
 
         public void SetMaxSearchDepth(int maxDepth)
         {
+            if (_search != null)
+            {
+                _search.SetMaxDepth(maxDepth);
+            }
         }
 
         public void SetAdditionalSelectiveDepth(int additionalSelectiveDepth)
         {
+            if (_search != null)
+            {
+                _search.SetAdditionalSelectiveDepth(additionalSelectiveDepth);
+            }
         }
 
         public void ClearPreviousPV()
         {
+            _search.ClearPreviousPV();
         }
 
         public UInt64 Perft(int depth)

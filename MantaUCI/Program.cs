@@ -4,6 +4,18 @@ using MantaChessEngine;
 using MantaBitboardEngine;
 using MantaCommon;
 
+/*
+Useful commands:
+
+uci
+ucinewgame
+position startpos moves e2e4
+go
+go depth 4
+
+*/
+
+
 namespace MantaUCI
 {
     class Program
@@ -31,7 +43,7 @@ namespace MantaUCI
 
                 if (command.Equals("uci"))
                 {
-                    Console.WriteLine("id name Manta Chess Engine");
+                    Console.WriteLine("id name Manta Bitboard Engine");
                     Console.WriteLine("id author Hans Ulrich Wyss");
                     Console.WriteLine("uciok");
                 }
@@ -97,6 +109,10 @@ namespace MantaUCI
                                 Console.WriteLine(error);
                             }
                         }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Syntax error after 'position'");
                     }
                 }
                 else if (command.Equals("go"))

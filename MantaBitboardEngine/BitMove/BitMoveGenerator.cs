@@ -399,9 +399,23 @@ namespace MantaBitboardEngine
             return IsAttacked(color, kingSquare);
         }
 
-        public bool IsMoveValid(IBitBoard board, BitMove move)
+        public bool IsMoveValid(BitMove move)
         {
-            throw new NotImplementedException();
+            bool valid = HasCorrectColorMoved(move);
+            return valid;
+
+            ////valid &= GetMoves(this, board, move.SourceFile, move.SourceRank).Contains(move);
+
+            ////board.Move(move);
+            ////var king = board.GetKing(move.Color);
+            ////valid &= !IsAttacked(board, move.Color, king.File, king.Rank);
+            ////board.Back();
+            ////return valid;
+        }
+
+        private bool HasCorrectColorMoved(BitMove move)
+        {
+            return move.MovingColor == _bitboards.BoardState.SideToMove;
         }
 
         //////////////////////////////////////////////////////

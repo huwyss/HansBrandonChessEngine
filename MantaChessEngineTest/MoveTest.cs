@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MantaChessEngine;
+using MantaCommon;
 
 namespace MantaChessEngineTest
 {
@@ -74,20 +75,20 @@ namespace MantaChessEngineTest
         public void IsCorrectMoveTest_WhenCorrect_ThenTrue()
         {
             String correctMoveString = "a2a3";
-            Assert.AreEqual(true, Helper.IsCorrectMove(correctMoveString));
+            Assert.AreEqual(true, CommonHelper.IsCorrectMove(correctMoveString));
         }
 
         [TestMethod]
         public void IsCorrectMoveTest_WhenBadInput_ThenFalse()
         {
             String wrongMoveString = "abcd";
-            Assert.AreEqual(false, Helper.IsCorrectMove(wrongMoveString));
+            Assert.AreEqual(false, CommonHelper.IsCorrectMove(wrongMoveString));
 
             wrongMoveString = "abcde";
-            Assert.AreEqual(false, Helper.IsCorrectMove(wrongMoveString));
+            Assert.AreEqual(false, CommonHelper.IsCorrectMove(wrongMoveString));
 
             wrongMoveString = "abcdef";
-            Assert.AreEqual(false, Helper.IsCorrectMove(wrongMoveString));
+            Assert.AreEqual(false, CommonHelper.IsCorrectMove(wrongMoveString));
         }
 
         [TestMethod]

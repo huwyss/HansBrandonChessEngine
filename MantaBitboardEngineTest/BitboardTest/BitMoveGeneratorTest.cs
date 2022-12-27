@@ -731,7 +731,7 @@ namespace MantaBitboardEngineTest
 
             IMove actualMove = factory.MakeMove(board, "a7a8");
 
-            var expectedMove = new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'a', 8, null, Definitions.QUEEN);
+            var expectedMove = new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'a', 8, null, CommonDefinitions.QUEEN);
             Assert.AreEqual("a7a8.", actualMove.ToString());
             Assert.AreEqual(expectedMove, actualMove);
         }

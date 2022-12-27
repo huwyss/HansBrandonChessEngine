@@ -48,10 +48,10 @@ namespace MantaChessEngine
                         }
                         else // pawn is promoted
                         {
-                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, null, Definitions.QUEEN));
-                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, null, Definitions.ROOK));
-                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, null, Definitions.BISHOP));
-                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, null, Definitions.KNIGHT));
+                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, null, CommonDefinitions.QUEEN));
+                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, null, CommonDefinitions.ROOK));
+                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, null, CommonDefinitions.BISHOP));
+                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, null, CommonDefinitions.KNIGHT));
                         }
                     }
                 }
@@ -78,10 +78,10 @@ namespace MantaChessEngine
                         }
                         else // pawn is promoted
                         {
-                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank), Definitions.QUEEN));
-                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank), Definitions.ROOK));
-                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank), Definitions.BISHOP));
-                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank), Definitions.KNIGHT));
+                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank), CommonDefinitions.QUEEN));
+                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank), CommonDefinitions.ROOK));
+                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank), CommonDefinitions.BISHOP));
+                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank), CommonDefinitions.KNIGHT));
                         }
                     }
                     // en passant capture

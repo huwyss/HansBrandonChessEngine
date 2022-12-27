@@ -35,17 +35,17 @@ namespace MantaChessEngine
         {
             switch (pieceChar.ToString().ToLower()[0])
             {
-                case Definitions.KING:
+                case CommonDefinitions.KING:
                     return new King(color);
-                case Definitions.QUEEN:
+                case CommonDefinitions.QUEEN:
                     return new Queen(color);
-                case Definitions.ROOK:
+                case CommonDefinitions.ROOK:
                     return new Rook(color);
-                case Definitions.BISHOP:
+                case CommonDefinitions.BISHOP:
                     return new Bishop(color);
-                case Definitions.KNIGHT:
+                case CommonDefinitions.KNIGHT:
                     return new Knight(color);
-                case Definitions.PAWN:
+                case CommonDefinitions.PAWN:
                     return new Pawn(color);
 
                 default:

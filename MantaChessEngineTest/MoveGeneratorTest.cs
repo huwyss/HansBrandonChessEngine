@@ -316,10 +316,10 @@ namespace MantaChessEngineTest
             var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('b'), 7, true); // white pawn
 
             Assert.AreEqual(4, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'b', 8, null, Definitions.QUEEN)), "b7b8 missing (promotion to queen walking straight)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'b', 8, null, Definitions.ROOK)), "b7b8 missing (promotion to rook walking straight)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'b', 8, null, Definitions.BISHOP)), "b7b8 missing (promotion to bishop walking straight)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'b', 8, null, Definitions.KNIGHT)), "b7b8 missing (promotion to knight walking straight)");
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'b', 8, null, CommonDefinitions.QUEEN)), "b7b8 missing (promotion to queen walking straight)");
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'b', 8, null, CommonDefinitions.ROOK)), "b7b8 missing (promotion to rook walking straight)");
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'b', 8, null, CommonDefinitions.BISHOP)), "b7b8 missing (promotion to bishop walking straight)");
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'b', 8, null, CommonDefinitions.KNIGHT)), "b7b8 missing (promotion to knight walking straight)");
         }
 
         [TestMethod]
@@ -340,10 +340,10 @@ namespace MantaChessEngineTest
             var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('b'), 2, true); // black pawn
 
             Assert.AreEqual(4, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'b', 1, null, Definitions.QUEEN)), "b2b1 missing (promotion to queen walking straight)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'b', 1, null, Definitions.ROOK)), "b2b1 missing (promotion to rook walking straight)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'b', 1, null, Definitions.BISHOP)), "b2b1 missing (promotion to bishop walking straight)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'b', 1, null, Definitions.KNIGHT)), "b2b1 missing (promotion to knight walking straight)");
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'b', 1, null, CommonDefinitions.QUEEN)), "b2b1 missing (promotion to queen walking straight)");
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'b', 1, null, CommonDefinitions.ROOK)), "b2b1 missing (promotion to rook walking straight)");
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'b', 1, null, CommonDefinitions.BISHOP)), "b2b1 missing (promotion to bishop walking straight)");
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'b', 1, null, CommonDefinitions.KNIGHT)), "b2b1 missing (promotion to knight walking straight)");
         }
 
         [TestMethod]
@@ -364,10 +364,10 @@ namespace MantaChessEngineTest
             var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('b'), 7, true); // white pawn
 
             Assert.AreEqual(4, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'a', 8, Piece.MakePiece('r'), Definitions.QUEEN)), "b7a8 missing (promotion to queen when capturing)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'a', 8, Piece.MakePiece('r'), Definitions.ROOK)), "b7a8 missing (promotion to rook when capturing)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'a', 8, Piece.MakePiece('r'), Definitions.BISHOP)), "b7a8 missing (promotion to bishop when capturing)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'a', 8, Piece.MakePiece('r'), Definitions.KNIGHT)), "b7a8 missing (promotion to knight when capturing)");
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'a', 8, Piece.MakePiece('r'), CommonDefinitions.QUEEN)), "b7a8 missing (promotion to queen when capturing)");
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'a', 8, Piece.MakePiece('r'), CommonDefinitions.ROOK)), "b7a8 missing (promotion to rook when capturing)");
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'a', 8, Piece.MakePiece('r'), CommonDefinitions.BISHOP)), "b7a8 missing (promotion to bishop when capturing)");
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('P'), 'b', 7, 'a', 8, Piece.MakePiece('r'), CommonDefinitions.KNIGHT)), "b7a8 missing (promotion to knight when capturing)");
         }
 
         [TestMethod]
@@ -388,10 +388,10 @@ namespace MantaChessEngineTest
             var moves = pawn.GetMoves(null, board, Helper.FileCharToFile('b'), 2, true); // black pawn
 
             Assert.AreEqual(4, moves.Count);
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'a', 1, Piece.MakePiece('R'), Definitions.QUEEN)), "b2a1 missing (promotion to queen when capturing)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'a', 1, Piece.MakePiece('R'), Definitions.ROOK)), "b2a1 missing (promotion to rook when capturing)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'a', 1, Piece.MakePiece('R'), Definitions.BISHOP)), "b2a1 missing (promotion to bishop when capturing)");
-            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'a', 1, Piece.MakePiece('R'), Definitions.KNIGHT)), "b2a1 missing (promotion to knight when capturing)");
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'a', 1, Piece.MakePiece('R'), CommonDefinitions.QUEEN)), "b2a1 missing (promotion to queen when capturing)");
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'a', 1, Piece.MakePiece('R'), CommonDefinitions.ROOK)), "b2a1 missing (promotion to rook when capturing)");
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'a', 1, Piece.MakePiece('R'), CommonDefinitions.BISHOP)), "b2a1 missing (promotion to bishop when capturing)");
+            Assert.AreEqual(true, moves.Contains(new PromotionMove(Piece.MakePiece('p'), 'b', 2, 'a', 1, Piece.MakePiece('R'), CommonDefinitions.KNIGHT)), "b2a1 missing (promotion to knight when capturing)");
         }
 
         // ----------------------------------------------------------------------------------------------------
@@ -632,7 +632,7 @@ namespace MantaChessEngineTest
 
             IMove actualMove = factory.MakeMove(board, "a7a8");
 
-            var expectedMove = new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'a', 8, null, Definitions.QUEEN);
+            var expectedMove = new PromotionMove(Piece.MakePiece('P'), 'a', 7, 'a', 8, null, CommonDefinitions.QUEEN);
             Assert.AreEqual("a7a8.", actualMove.ToString());
             Assert.AreEqual(expectedMove, actualMove);
         }

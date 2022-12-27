@@ -31,7 +31,7 @@ namespace MantaChessEngine
 
         public IMove MakeMoveUci(IBoard board, string moveStringUci) // input is like "e2e4" or "a7a8q" (Promotion)
         {
-            if (!Helper.IsCorrectMoveUci(moveStringUci))
+            if (!CommonHelper.IsCorrectMoveUci(moveStringUci))
             {
                 return null;
             }
@@ -44,12 +44,12 @@ namespace MantaChessEngine
 
         public IMove MakeMove(IBoard board, string moveStringUser) // input is like "e2e4"
         {
-            if (!Helper.IsCorrectMove(moveStringUser))
+            if (!CommonHelper.IsCorrectMove(moveStringUser))
             {
                 return null;
             }
 
-            return MakeCorrectMoveInternal(board, moveStringUser, Definitions.QUEEN);
+            return MakeCorrectMoveInternal(board, moveStringUser, CommonDefinitions.QUEEN);
         }
 
         private IMove MakeCorrectMoveInternal(IBoard board, string moveString, char promotionPiece)

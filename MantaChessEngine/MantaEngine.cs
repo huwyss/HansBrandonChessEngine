@@ -25,6 +25,7 @@ namespace MantaChessEngine
         {
             _moveFactory = new MoveFactory();
             _moveGenerator = new MoveGenerator();
+            _board = new Board();
 
             switch (engineType)
             {

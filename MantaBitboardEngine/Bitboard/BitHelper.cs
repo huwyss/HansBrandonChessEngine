@@ -117,6 +117,11 @@ namespace MantaBitboardEngine
             return ".";
         }
 
+        public static BitPieceType GetBitPieceType(char symbol)
+        {
+            return GetBitPiece(symbol).Piece;
+        }
+
         public static BitPiece GetBitPiece(char symbol)
         {
             BitPiece bitPiece;

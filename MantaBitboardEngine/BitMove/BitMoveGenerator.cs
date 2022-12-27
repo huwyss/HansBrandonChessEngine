@@ -28,7 +28,7 @@ namespace MantaBitboardEngine
             ////_captures.Clear();
         }
 
-        public IEnumerable<BitMove> GetAllMoves(ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
+        public IEnumerable<BitMove> GetAllMoves(ChessColor color)
         {
             ClearLists();
 

@@ -7,7 +7,7 @@ namespace MantaBitboardEngine
         private readonly HelperBitboards _helperBits;
 
         private readonly int[] _value;
-        private readonly int[,,] _positionBonus;
+        private readonly int[,,] _positionBonus; // dimension: color, pieceType, square
 
         public BitEvaluator(HelperBitboards helperBits)
         {

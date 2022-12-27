@@ -59,7 +59,7 @@ namespace MantaBitboardEngine
         public bool MoveUci(string moveStringUci)
         {
             var move = _moveFactory.MakeMoveUci(_board, moveStringUci);
-            if (move == BitMove.CreateEmptyMove())
+            if (move.Equals(BitMove.CreateEmptyMove()))
             {
                 return false;
             }

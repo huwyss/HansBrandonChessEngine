@@ -211,16 +211,8 @@ namespace MantaBitboardEngine
 
         public void SetInitialPosition()
         {
-            string initPosition = "rnbqkbnr" + // black a8-h8
-                                  "pppppppp" +
-                                  "........" +
-                                  "........" +
-                                  "........" +
-                                  "........" +
-                                  "PPPPPPPP" +
-                                  "RNBQKBNR"; // white a1-h1
-
-            SetPosition(initPosition);
+            var fenStartPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+            SetFenPosition(fenStartPosition);
         }
 
         public void SetPosition(string position)

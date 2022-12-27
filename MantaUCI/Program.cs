@@ -13,6 +13,13 @@ position startpos moves e2e4
 go
 go depth 4
 
+debug this:
+position startpos moves e2e4 c7c6 d2d4 d7d5 e4d5 c6d5 c1f4 e7e6 b1c3 b8c6 d1d2 f7f5 e1c1 g8f6 f1b5 c8d7 b5c6 b7c6 c1b1 f8b4 d2d3 f6e4 d3f1 b4c3 b2c3 e4c3 b1b2 c3d1 f1d1 a8c8 d1h5 g7g6 h5h6 d8b6 b2c3 c6c5 c3d3 c5d4 f4e5 b6b5 d3d2 b5b4 d2d1 h8f8 h6h7 b4b1 d1e2 c8c2 e2f3
+go movetime 120000
+
+position startpos moves e2e4 e7e5 d2d4 e5d4 d1d4 b8c6
+go depth 6
+
 */
 
 
@@ -130,7 +137,7 @@ namespace MantaUCI
                         //   go wtime w btime x winc y binc z (w, x, y, z in ms)
                         //   go wtime w btime x winc 0 binc movestogo y (w, x in ms, y number of moves ==> moves to do in time w)
 
-                        AnswerBestMove(4);
+                        AnswerBestMove(6);
                     }
                 }
                 else if (command.Equals("quit"))
@@ -205,12 +212,13 @@ namespace MantaUCI
         {
             _engine = GetMantaBitboardEngine();
 
-            ////_engine = GetMantaEngine();
+            //// _engine = GetMantaEngine();
         }
 
         private static IMantaEngine GetMantaBitboardEngine()
         {
             var engine = new MantaBitboardEngine.MantaBitboardEngine();
+            engine.SetMaxSearchDepth(6);
 
             return engine;
         }

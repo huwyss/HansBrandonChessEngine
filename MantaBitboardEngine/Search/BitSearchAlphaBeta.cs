@@ -147,6 +147,8 @@ namespace MantaBitboardEngine
                 return MakeMoveRatingForGameEnd(board, color, level);
             }
 
+            var hasLegalMoves = false; // we do not know yet if there are legal moves
+
             var allLegalMovesUnsorted = /* _moveFilter != null && level > _maxDepth
                 ? _moveFilter.Filter(allLegalMovesUnsortedUnfiltered)
                 : */ allLegalMovesUnsortedUnfiltered;
@@ -168,6 +170,8 @@ namespace MantaBitboardEngine
                     board.Back();
                     continue;
                 }
+
+                hasLegalMoves = true;
 
                 if (level < _maxDepth || (level < _selectiveDepth && currentMove.CapturedPiece != BitPieceType.Empty)) // we need to do more move levels...
                 //// if (level < _maxDepth)
@@ -220,6 +224,11 @@ namespace MantaBitboardEngine
                         break;
                     }
                 }
+            }
+
+            if (!hasLegalMoves)
+            {
+                return null;
             }
 
             bestRating.Alpha = alpha;

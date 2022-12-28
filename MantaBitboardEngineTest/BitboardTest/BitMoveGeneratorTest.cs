@@ -1317,6 +1317,23 @@ namespace MantaBitboardEngineTest
             Assert.IsFalse(engine.IsCheck(ChessColor.Black), "king is not attacked! Promotion move does not count.");
         }
 
+        [TestMethod]
+        public void IsCheckTest_WhenKingAttacksKing_IsCheck()
+        {
+            var engine = new MantaBitboardEngine.MantaBitboardEngine();
+            string position = ".....k.." +
+                              ".....K.." +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........" +
+                              "........";
+            engine.SetPosition(position);
+
+            Assert.IsTrue(engine.IsCheck(ChessColor.White), "king is attacked! IsCheck shoult return true.");
+        }
+
         // ----------------------------------------------------------------
         // IsAttacked Test
         // ----------------------------------------------------------------

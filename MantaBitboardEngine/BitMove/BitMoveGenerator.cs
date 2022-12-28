@@ -400,6 +400,13 @@ namespace MantaBitboardEngine
                 }
             }
 
+            // is attacked by King
+            var bitboardAttackingKingToSquare = _helperBits.MovesPieces[(int)BitPieceType.King, (int)square];
+            if ((bitboardAttackingKingToSquare & _bitboards.Bitboard_Pieces[(int)otherColor, (int)BitPieceType.King]) != 0)
+            {
+                return true;
+            }
+
             return false;
         }
 

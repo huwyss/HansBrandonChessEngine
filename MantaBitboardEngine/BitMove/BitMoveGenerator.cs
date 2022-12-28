@@ -9,6 +9,12 @@ namespace MantaBitboardEngine
 {
     public class BitMoveGenerator
     {
+        private const int promotionValue = 200;
+        private const int pawnCaptureValue = 100;
+        private const int generalCaptureValue = 50;
+        private const int pawnMoveValue = 20;
+        private const int generalMoveValue = 0;
+
         private readonly Bitboards _bitboards;
         private List<BitMove> _moves;
         private HelperBitboards _helperBits;
@@ -40,7 +46,11 @@ namespace MantaBitboardEngine
             GenerateEnpassant(color);
             GenerateCastling(color);
 
-            return _moves;
+            //// return _moves;
+
+            return color == ChessColor.White
+                ? _moves.OrderBy(m => m.Value)
+                : _moves.OrderByDescending(m => m.Value);
         }
 
         private void GeneratePawnMoves(ChessColor color)
@@ -72,13 +82,13 @@ namespace MantaBitboardEngine
                 var capturedPiece = _bitboards.BoardAllPieces[(int)toSquare];
                 if (_helperBits.Rank[(int)color, (int)toSquare] < 7) // normal move
                 {
-                    AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, toSquare, capturedPiece, toSquare, BitPieceType.Empty, color, 0);
+                    AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, toSquare, capturedPiece, toSquare, BitPieceType.Empty, color, pawnCaptureValue);
                 }
                 else // promotion
                 {
                     for (BitPieceType promotionPiece = BitPieceType.Knight; promotionPiece <= BitPieceType.Queen; promotionPiece++)
                     {
-                        AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, toSquare, capturedPiece, toSquare, promotionPiece, color, 0);
+                        AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, toSquare, capturedPiece, toSquare, promotionPiece, color, promotionValue);
                     }
                 }
             }
@@ -91,13 +101,13 @@ namespace MantaBitboardEngine
                 var capturedPiece = _bitboards.BoardAllPieces[(int)toSquare];
                 if (_helperBits.Rank[(int)color, (int)toSquare] < 7) // normal move
                 {
-                    AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, toSquare, capturedPiece, toSquare, BitPieceType.Empty, color, 0);
+                    AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, toSquare, capturedPiece, toSquare, BitPieceType.Empty, color, pawnCaptureValue);
                 }
                 else // promotion
                 {
                     for (BitPieceType promotionPiece = BitPieceType.Knight; promotionPiece <= BitPieceType.Queen; promotionPiece++)
                     {
-                        AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, toSquare, capturedPiece, toSquare, promotionPiece, color, 0);
+                        AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, toSquare, capturedPiece, toSquare, promotionPiece, color, promotionValue);
                     }
                 }
             }
@@ -109,20 +119,20 @@ namespace MantaBitboardEngine
                 var toSquare = _helperBits.PawnStep[(int)color, fromSquareMovingPawn];
                 if (_helperBits.Rank[(int)color, (int)toSquare] < 7) // normal move
                 {
-                    AddMove(BitPieceType.Pawn, (Square)fromSquareMovingPawn, (Square)toSquare, BitPieceType.Empty, color, 0); // value ?
+                    AddMove(BitPieceType.Pawn, (Square)fromSquareMovingPawn, (Square)toSquare, BitPieceType.Empty, color, pawnMoveValue);
                 }
                 else // promotion
                 {
                     for (BitPieceType promotionPiece = BitPieceType.Knight; promotionPiece <= BitPieceType.Queen; promotionPiece++)
                     {
-                        AddMove(BitPieceType.Pawn, (Square)fromSquareMovingPawn, (Square)toSquare, promotionPiece, color, 0);
+                        AddMove(BitPieceType.Pawn, (Square)fromSquareMovingPawn, (Square)toSquare, promotionPiece, color, promotionValue);
                     }
                 }
 
                 if (_helperBits.Rank[(int)color, fromSquareMovingPawn] == 1 &&
                     _bitboards.BoardAllPieces[(int)_helperBits.PawnDoubleStep[(int)color, fromSquareMovingPawn]] == BitPieceType.Empty)
                 {
-                    AddMove(BitPieceType.Pawn, (Square)fromSquareMovingPawn, (Square)_helperBits.PawnDoubleStep[(int)color, fromSquareMovingPawn], BitPieceType.Empty, color, 0);
+                    AddMove(BitPieceType.Pawn, (Square)fromSquareMovingPawn, (Square)_helperBits.PawnDoubleStep[(int)color, fromSquareMovingPawn], BitPieceType.Empty, color, pawnMoveValue);
                 }
             }
         }
@@ -141,7 +151,7 @@ namespace MantaBitboardEngine
                 {
                     var toSquare = BitHelper.BitScanForward(knightCaptures);
                     knightCaptures &= _helperBits.NotIndexMask[toSquare];
-                    AddCapture(BitPieceType.Knight, (Square)fromSquareMovingKnight, (Square)toSquare, _bitboards.BoardAllPieces[(int)toSquare] , (Square)toSquare, BitPieceType.Empty, color, 0);
+                    AddCapture(BitPieceType.Knight, (Square)fromSquareMovingKnight, (Square)toSquare, _bitboards.BoardAllPieces[(int)toSquare] , (Square)toSquare, BitPieceType.Empty, color, generalCaptureValue);
                 }
 
                 var knightMoves = _helperBits.MovesPieces[(int)BitPieceType.Knight, fromSquareMovingKnight] & ~_bitboards.Bitboard_AllPieces;
@@ -149,7 +159,7 @@ namespace MantaBitboardEngine
                 {
                     var toSquare = BitHelper.BitScanForward(knightMoves);
                     knightMoves &= _helperBits.NotIndexMask[toSquare];
-                    AddMove(BitPieceType.Knight, (Square)fromSquareMovingKnight, (Square)toSquare, BitPieceType.Empty, color, 0);
+                    AddMove(BitPieceType.Knight, (Square)fromSquareMovingKnight, (Square)toSquare, BitPieceType.Empty, color, generalMoveValue);
                 }
             }
         }
@@ -178,7 +188,7 @@ namespace MantaBitboardEngine
                     pieceCaptures &= _helperBits.NotIndexMask[toSquare];
                     if ((_helperBits.BetweenMatrix[(int)fromSquareMovingPiece, (int)toSquare] & _bitboards.Bitboard_AllPieces) == 0)
                     {
-                        AddCapture(piece, (Square)fromSquareMovingPiece, (Square)toSquare, _bitboards.BoardAllPieces[(int)toSquare], (Square)toSquare, BitPieceType.Empty, color, 0);
+                        AddCapture(piece, (Square)fromSquareMovingPiece, (Square)toSquare, _bitboards.BoardAllPieces[(int)toSquare], (Square)toSquare, BitPieceType.Empty, color, generalCaptureValue);
                     }
                 }
 
@@ -190,7 +200,7 @@ namespace MantaBitboardEngine
 
                     if ((_helperBits.BetweenMatrix[fromSquareMovingPiece, toSquare] & _bitboards.Bitboard_AllPieces) == 0)
                     {
-                        AddMove(piece, (Square)fromSquareMovingPiece, (Square)toSquare, BitPieceType.Empty, color, 0);
+                        AddMove(piece, (Square)fromSquareMovingPiece, (Square)toSquare, BitPieceType.Empty, color, generalMoveValue);
                     }
                 }
             }
@@ -209,7 +219,7 @@ namespace MantaBitboardEngine
             {
                 var toSquare = BitHelper.BitScanForward(kingCaptures);
                 kingCaptures &= _helperBits.NotIndexMask[toSquare];
-                AddCapture(BitPieceType.King, (Square)fromSquareMovingKing, (Square)toSquare, _bitboards.BoardAllPieces[(int)toSquare], (Square)toSquare, BitPieceType.Empty, color, 0);
+                AddCapture(BitPieceType.King, (Square)fromSquareMovingKing, (Square)toSquare, _bitboards.BoardAllPieces[(int)toSquare], (Square)toSquare, BitPieceType.Empty, color, generalCaptureValue);
             }
 
             var kingMoves = _helperBits.MovesPieces[(int)BitPieceType.King, fromSquareMovingKing] & ~_bitboards.Bitboard_AllPieces;
@@ -218,7 +228,7 @@ namespace MantaBitboardEngine
             {
                 var toSquare = BitHelper.BitScanForward(kingMoves);
                 kingMoves &= _helperBits.NotIndexMask[toSquare];
-                AddMove(BitPieceType.King, (Square)fromSquareMovingKing, (Square)toSquare, BitPieceType.Empty, color, 0);
+                AddMove(BitPieceType.King, (Square)fromSquareMovingKing, (Square)toSquare, BitPieceType.Empty, color, generalMoveValue);
             }
         }
 
@@ -237,13 +247,13 @@ namespace MantaBitboardEngine
             // capture to the left
             if (fromSquareCapturingToLeft != Square.NoSquare && (_bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.Pawn] & _helperBits.IndexMask[(int)fromSquareCapturingToLeft]) != 0)
             {
-                AddCapture(BitPieceType.Pawn, fromSquareCapturingToLeft, enpassantSquare, _bitboards.BoardAllPieces[(int)capturedPawnSquare], capturedPawnSquare, BitPieceType.Empty, color, 0);
+                AddCapture(BitPieceType.Pawn, fromSquareCapturingToLeft, enpassantSquare, _bitboards.BoardAllPieces[(int)capturedPawnSquare], capturedPawnSquare, BitPieceType.Empty, color, pawnCaptureValue);
             }
 
             // capture to the right
             if (fromSquareCapturingToRight != Square.NoSquare && (_bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.Pawn] & _helperBits.IndexMask[(int)fromSquareCapturingToRight]) != 0)
             {
-                AddCapture(BitPieceType.Pawn, fromSquareCapturingToRight, enpassantSquare, _bitboards.BoardAllPieces[(int)capturedPawnSquare], capturedPawnSquare, BitPieceType.Empty, color, 0);
+                AddCapture(BitPieceType.Pawn, fromSquareCapturingToRight, enpassantSquare, _bitboards.BoardAllPieces[(int)capturedPawnSquare], capturedPawnSquare, BitPieceType.Empty, color, pawnCaptureValue);
             }
         }
 
@@ -276,7 +286,7 @@ namespace MantaBitboardEngine
                 _bitboards.BoardAllPieces[(int)rookKingSquare] == BitPieceType.Rook && _bitboards.BoardColor[(int)rookKingSquare] == color && // rook is on original square. necessary ??? should be in right
                 !CastlingSquaresAttacked(color, CastlingType.KingSide))
             {
-                AddCastlingMove(color, CastlingType.KingSide, 0);
+                AddCastlingMove(color, CastlingType.KingSide, generalMoveValue);
             }
 
             if (castlingRightQueenSide && (_helperBits.BetweenMatrix[(int)kingSquare, (int)rookQueenSquare] & _bitboards.Bitboard_AllPieces) == 0 &&
@@ -284,7 +294,7 @@ namespace MantaBitboardEngine
                 _bitboards.BoardAllPieces[(int)rookQueenSquare] == BitPieceType.Rook && _bitboards.BoardColor[(int)rookQueenSquare] == color &&
                 !CastlingSquaresAttacked(color, CastlingType.QueenSide))
             {
-                AddCastlingMove(color, CastlingType.QueenSide, 0);
+                AddCastlingMove(color, CastlingType.QueenSide, generalMoveValue);
             }
         }
 

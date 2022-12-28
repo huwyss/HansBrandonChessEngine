@@ -50,14 +50,14 @@ namespace MantaChessEngineTest
         {
             var target = new BitEvaluator(new HelperBitboards());
             var board = new Bitboards();
-            board.SetPosition("..k..K.." +
+            board.SetPosition("....k..." +
                               "........" +
                               "........" +
                               "........" +
                               "........" +
                               "........" +
                               ".......N" +
-                              "........");
+                              "....K...");
 
             var score = target.Evaluate(board);
 

@@ -209,7 +209,7 @@ namespace MantaUCI
                 }
 
                 var duration = _stopwatch.ElapsedMilliseconds;
-                var nps = duration != 0 ? (int)(1000 * bestMove.EvaluatedPositions / duration) : 0;
+                var nps = duration != 0 ? (int)(1000 * (long)bestMove.EvaluatedPositions / duration) : 0;
 
                 Console.WriteLine("info depth " + bestMove.Depth + " seldepth " + bestMove.SelectiveDepth + " score cp " + scoreFromEngine + " nodes " + bestMove.EvaluatedPositions + " nps " + nps + " time " + duration + " pv " + principalVariation );
             }

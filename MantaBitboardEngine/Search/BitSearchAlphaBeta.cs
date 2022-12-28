@@ -9,7 +9,7 @@ namespace MantaBitboardEngine
 {
     public class BitSearchAlphaBeta
     {
-        private const int AspirationWindowHalfSizeInitial = 50;
+        private const int AspirationWindowHalfSizeInitial = 250; // 50;
 
         private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -162,8 +162,8 @@ namespace MantaBitboardEngine
             ////    return null;
             ////}
 
-            var movesToEvaluate = _moveGenerator.GetAllMoves(color).ToList();
             var hasLegalMoves = false; // we do not know yet if there are legal moves
+            var movesToEvaluate = _moveGenerator.GetAllMoves(color).ToArray();
 
             foreach (var currentMove in movesToEvaluate)
             {

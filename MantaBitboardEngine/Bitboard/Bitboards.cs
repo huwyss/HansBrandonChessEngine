@@ -191,9 +191,7 @@ namespace MantaBitboardEngine
                 ? (Square)(positionInfo.EnPassantFile - '0' - 1 + 8 * positionInfo.EnPassantRank)
                 : Square.NoSquare;
 
-            BoardState.Clear();
-            BoardState.Add(
-                BitMove.CreateEmptyMove(),
+            BoardState.SetState(
                 enpassantSquare,
                 positionInfo.CastlingRightWhiteQueenSide,
                 positionInfo.CastlingRightWhiteKingSide,
@@ -217,6 +215,7 @@ namespace MantaBitboardEngine
 
         public void SetPosition(string position)
         {
+            BoardState.SetState(Square.NoSquare, true, true, true, true, ChessColor.White);
             ClearAllPieces();
             var row = 7;
             var col = 0;

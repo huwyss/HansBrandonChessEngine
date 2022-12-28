@@ -20,42 +20,46 @@ namespace MantaBitboardEngine
 
         public BitBoardState()
         {
-            Clear();
-        }
-
-        public void Clear()
-        {
             Moves = new List<BitMove>();
-
             EnPassantSquare = new List<Square>();
-            EnPassantSquare.Add(Square.NoSquare);
-
             CastlingRightWhiteQueenSide = new List<bool>();
             CastlingRightWhiteKingSide = new List<bool>();
             CastlingRightBlackQueenSide = new List<bool>();
             CastlingRightBlackKingSide = new List<bool>();
 
-            CastlingRightWhiteQueenSide.Add(true);
-            CastlingRightWhiteKingSide.Add(true);
-            CastlingRightBlackQueenSide.Add(true);
-            CastlingRightBlackKingSide.Add(true);
-
-            SideToMove = ChessColor.White;
-            WhiteDidCastling = false;
-            BlackDidCastling = false;
-
-            MoveCountSincePawnOrCapture = 0;
+            SetState(Square.NoSquare, true, true, true, true, ChessColor.White);
         }
 
         public void Add(BitMove move, Square enPassantSquare, bool castlingRightWhiteQueenSide, bool castlingRightWhiteKingSide, bool castlingRightBlackQueenSide, bool castlingRightBlackKingSide, ChessColor sideToMove)
         {
             Moves.Add(move);
+            Add(enPassantSquare, castlingRightWhiteQueenSide, castlingRightWhiteKingSide, castlingRightBlackQueenSide, castlingRightBlackKingSide, sideToMove);
+        }
+
+        private void Add(Square enPassantSquare, bool castlingRightWhiteQueenSide, bool castlingRightWhiteKingSide, bool castlingRightBlackQueenSide, bool castlingRightBlackKingSide, ChessColor sideToMove)
+        { 
             EnPassantSquare.Add(enPassantSquare);
             CastlingRightWhiteQueenSide.Add(castlingRightWhiteQueenSide);
             CastlingRightWhiteKingSide.Add(castlingRightWhiteKingSide);
             CastlingRightBlackQueenSide.Add(castlingRightBlackQueenSide);
             CastlingRightBlackKingSide.Add(castlingRightBlackKingSide);
             SideToMove = sideToMove;
+        }
+
+        public void SetState(Square enPassantSquare, bool castlingRightWhiteQueenSide, bool castlingRightWhiteKingSide, bool castlingRightBlackQueenSide, bool castlingRightBlackKingSide, ChessColor sideToMove)
+        {
+            SideToMove = ChessColor.White;
+            WhiteDidCastling = false;
+            BlackDidCastling = false;
+            MoveCountSincePawnOrCapture = 0;
+            Moves.Clear();
+            EnPassantSquare.Clear();
+            CastlingRightWhiteQueenSide.Clear();
+            CastlingRightWhiteKingSide.Clear();
+            CastlingRightBlackQueenSide.Clear();
+            CastlingRightBlackKingSide.Clear();
+
+            Add(enPassantSquare, castlingRightWhiteQueenSide, castlingRightWhiteKingSide, castlingRightBlackQueenSide, castlingRightBlackKingSide, sideToMove);
         }
 
         public void Back()
@@ -80,26 +84,11 @@ namespace MantaBitboardEngine
         }
 
         public int Count { get { return Moves.Count; } }
-
-        public BitMove LastMove
-        {
-            get
-            {
-                if (Count > 0)
-                {
-                    return Moves[Count - 1];
-                }
-                else
-                {
-                    return BitMove.CreateEmptyMove();
-                }
-            }
-        }
-
-        public Square LastEnPassantSquare { get { return (Square)EnPassantSquare[Count]; } }
-        public bool LastCastlingRightWhiteQueenSide { get { return CastlingRightWhiteQueenSide[Count]; } }
-        public bool LastCastlingRightWhiteKingSide { get { return CastlingRightWhiteKingSide[Count]; } }
-        public bool LastCastlingRightBlackQueenSide { get { return CastlingRightBlackQueenSide[Count]; } }
-        public bool LastCastlingRightBlackKingSide { get { return CastlingRightBlackKingSide[Count]; } }
+        public BitMove LastMove => Count > 0 ? Moves[Count - 1] : BitMove.CreateEmptyMove();
+        public Square LastEnPassantSquare => (Square)EnPassantSquare[Count];
+        public bool LastCastlingRightWhiteQueenSide => CastlingRightWhiteQueenSide[Count];
+        public bool LastCastlingRightWhiteKingSide => CastlingRightWhiteKingSide[Count];
+        public bool LastCastlingRightBlackQueenSide => CastlingRightBlackQueenSide[Count];
+        public bool LastCastlingRightBlackKingSide => CastlingRightBlackKingSide[Count];
     }
 }

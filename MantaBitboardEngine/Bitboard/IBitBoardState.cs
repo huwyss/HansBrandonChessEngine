@@ -16,9 +16,9 @@ namespace MantaBitboardEngine
 
         int MoveCountSincePawnOrCapture { get; }
 
-        void Clear();
-
         void Add(BitMove move, Square enPassantSquare, bool castlingRightWhiteQueenSide, bool castlingRightWhiteKingSide, bool castlingRightBlackQueenSide, bool castlingRightBlackKingSide, ChessColor sideToMove);
+        
+        void SetState(Square enPassantSquare, bool castlingRightWhiteQueenSide, bool castlingRightWhiteKingSide, bool castlingRightBlackQueenSide, bool castlingRightBlackKingSide, ChessColor sideToMove);
 
         void Back();
 

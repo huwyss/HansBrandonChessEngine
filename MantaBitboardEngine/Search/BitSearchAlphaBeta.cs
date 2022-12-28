@@ -9,7 +9,7 @@ namespace MantaBitboardEngine
 {
     public class BitSearchAlphaBeta
     {
-        private const int AspirationWindowHalfSizeInitial = 250; // 50;
+        private const int AspirationWindowHalfSizeInitial = 10;
 
         private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -163,7 +163,20 @@ namespace MantaBitboardEngine
             ////}
 
             var hasLegalMoves = false; // we do not know yet if there are legal moves
-            var movesToEvaluate = _moveGenerator.GetAllMoves(color).ToArray();
+
+            var movesToEvaluate = _moveGenerator.GetAllMoves(color).ToList();
+
+            // Evaluate the previousPV of the current level first
+            if (_previousPV != null && _previousPV.PrincipalVariation.Count > level)
+            {
+                var currentPvMove = _previousPV.PrincipalVariation[level - 1];
+                if (currentPvMove != null && movesToEvaluate.Contains(currentPvMove))
+                {
+                    movesToEvaluate.Remove(currentPvMove);
+                    movesToEvaluate.Insert(0, currentPvMove); // we start with the stored pv from the last search (that was one ply less deep)
+                    _previousPV.PrincipalVariation[level - 1] = null; // we have used this move up.
+                }
+            }
 
             foreach (var currentMove in movesToEvaluate)
             {

@@ -46,11 +46,7 @@ namespace MantaBitboardEngine
             GenerateEnpassant(color);
             GenerateCastling(color);
 
-            //// return _moves;
-
-            return color == ChessColor.White
-                ? _moves.OrderBy(m => m.Value)
-                : _moves.OrderByDescending(m => m.Value);
+            return _moves.OrderByDescending(m => m.Value);
         }
 
         private void GeneratePawnMoves(ChessColor color)

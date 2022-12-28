@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Diagnostics;
 using MantaChessEngine;
 using MantaBitboardEngine;
@@ -13,9 +14,13 @@ position startpos moves e2e4
 go
 go depth 4
 
-debug this:
+debug this: Ok
 position startpos moves e2e4 c7c6 d2d4 d7d5 e4d5 c6d5 c1f4 e7e6 b1c3 b8c6 d1d2 f7f5 e1c1 g8f6 f1b5 c8d7 b5c6 b7c6 c1b1 f8b4 d2d3 f6e4 d3f1 b4c3 b2c3 e4c3 b1b2 c3d1 f1d1 a8c8 d1h5 g7g6 h5h6 d8b6 b2c3 c6c5 c3d3 c5d4 f4e5 b6b5 d3d2 b5b4 d2d1 h8f8 h6h7 b4b1 d1e2 c8c2 e2f3
 go movetime 120000
+
+debug this: crash
+position startpos moves e2e4 d7d5 e4d5 d8d5 d2d4 b8c6 g1f3 e7e6 a2a3 d5e4 c1e3 c8d7 b1c3 e4g6 e3g5 f7f5 g5f4 e8c8 c3b5 g6g4 f4c7 d8e8 d1d2 a7a6 e1c1 a6b5 h2h3 g4e4 f3g5 e4d5 g5f7 c8c7 f7h8 b5b4 h8f7 b4a3 d2f4 c7b6 c2c4 a3b2 c1b2 d5a5 c4c5 f8c5 d4c5 a5c5 d1d7 c6b8 d7d6 b8c6 f1e2 b6a5 h1a1 a5b6 f4d4 c5d4 d6d4 c6d4 f7d6 e8d8 d6f7 d8f8 f7e5 g8f6 e2c4 f5f4 a1d1 b6c5 c4b3
+go depth 5
 
 
 */
@@ -33,8 +38,14 @@ namespace MantaUCI
 
         static void Main(string[] args)
         {
-            var _running = true;
             CreateEngine();
+
+            var _running = true;
+
+            // accept longer input string from Console.ReadLine()
+            var inputLength = 1024;
+            Stream inputStream = Console.OpenStandardInput(inputLength);
+            Console.SetIn(new StreamReader(inputStream, Console.InputEncoding, false, inputLength));
 
             while (_running)
             {

@@ -5,6 +5,21 @@ using System.Runtime.CompilerServices;
 using Bitboard = System.UInt64;
 using MantaCommon;
 
+/*
+ * 
+ * todo Bitboard engine:
+ * - more differenciated move values
+ * - selective search depth
+ * - tests for search in bitboard
+ * - hashtable
+ * 
+ * 
+ * ok - Generate capture moves
+ * 
+ */
+
+
+
 [assembly: InternalsVisibleTo("MantaBitboardEngineTest")]
 namespace MantaBitboardEngine
 {

@@ -10,33 +10,33 @@ namespace MantaBitboardEngine
     public class BitMoveGenerator
     {
         private const int promotionValue = 200;
-        private const int pawnCaptureValue = 100;
-        private const int generalCaptureValue = 50;
-        private const int pawnMoveValue = 20;
+        private const int capturePromotionValue = 220;
+        private const int pawnMoveValue = 10;
         private const int generalMoveValue = 0;
+        private static byte[,] CaptureValues; // dimensions: capturing piece, captured piece
 
         private readonly Bitboards _bitboards;
         private List<BitMove> _moves;
         private HelperBitboards _helperBits;
-        ////private List<BitMove> _captures;
 
         public BitMoveGenerator(Bitboards bitboards, HelperBitboards helperBits)
         {
             _bitboards = bitboards;
             _moves = new List<BitMove>();
             _helperBits = helperBits;
-            ////_captures = new List<BitMove>();
+
+            CaptureValues = new byte[6, 6];
+            InitializeCaptureValues();
         }
 
-        private void ClearLists()
+        private void ClearMoves()
         {
             _moves.Clear();
-            ////_captures.Clear();
         }
 
         public IEnumerable<BitMove> GetAllMoves(ChessColor color)
         {
-            ClearLists();
+            ClearMoves();
 
             GenerateEnpassant(color);
             GeneratePawnMoves(color);
@@ -51,7 +51,7 @@ namespace MantaBitboardEngine
 
         public IEnumerable<BitMove> GetCaptures(ChessColor color)
         {
-            ClearLists();
+            ClearMoves();
 
             GenerateEnpassant(color);
             GeneratePawnMoves(color, true);
@@ -89,7 +89,7 @@ namespace MantaBitboardEngine
                 var capturedPiece = _bitboards.BoardAllPieces[(int)toSquare];
                 if (_helperBits.Rank[(int)color, (int)toSquare] < 7) // normal move
                 {
-                    AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, toSquare, capturedPiece, toSquare, BitPieceType.Empty, color, pawnCaptureValue);
+                    AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, toSquare, capturedPiece, toSquare, BitPieceType.Empty, color, CaptureValues[(int)BitPieceType.Pawn, (int)capturedPiece]);
                 }
                 else // promotion
                 {
@@ -108,13 +108,13 @@ namespace MantaBitboardEngine
                 var capturedPiece = _bitboards.BoardAllPieces[(int)toSquare];
                 if (_helperBits.Rank[(int)color, (int)toSquare] < 7) // normal move
                 {
-                    AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, toSquare, capturedPiece, toSquare, BitPieceType.Empty, color, pawnCaptureValue);
+                    AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, toSquare, capturedPiece, toSquare, BitPieceType.Empty, color, CaptureValues[(int)BitPieceType.Pawn, (int)capturedPiece]);
                 }
                 else // promotion
                 {
                     for (BitPieceType promotionPiece = BitPieceType.Queen; promotionPiece >= BitPieceType.Knight; promotionPiece--)
                     {
-                        AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, toSquare, capturedPiece, toSquare, promotionPiece, color, promotionValue);
+                        AddCapture(BitPieceType.Pawn, (Square)fromSquareMovingPawn, toSquare, capturedPiece, toSquare, promotionPiece, color, capturePromotionValue);
                     }
                 }
             }
@@ -172,7 +172,8 @@ namespace MantaBitboardEngine
                 {
                     var toSquare = BitHelper.BitScanForward(knightCaptures);
                     knightCaptures &= _helperBits.NotIndexMask[toSquare];
-                    AddCapture(BitPieceType.Knight, (Square)fromSquareMovingKnight, (Square)toSquare, _bitboards.BoardAllPieces[(int)toSquare] , (Square)toSquare, BitPieceType.Empty, color, generalCaptureValue);
+                    var capturedPiece = _bitboards.BoardAllPieces[(int)toSquare];
+                    AddCapture(BitPieceType.Knight, (Square)fromSquareMovingKnight, (Square)toSquare, capturedPiece, (Square)toSquare, BitPieceType.Empty, color, CaptureValues[(int)BitPieceType.Knight, (int)capturedPiece]);
                 }
 
                 if (capturesOnly)
@@ -214,7 +215,8 @@ namespace MantaBitboardEngine
                     pieceCaptures &= _helperBits.NotIndexMask[toSquare];
                     if ((_helperBits.BetweenMatrix[(int)fromSquareMovingPiece, (int)toSquare] & _bitboards.Bitboard_AllPieces) == 0)
                     {
-                        AddCapture(piece, (Square)fromSquareMovingPiece, (Square)toSquare, _bitboards.BoardAllPieces[(int)toSquare], (Square)toSquare, BitPieceType.Empty, color, generalCaptureValue);
+                        var capturedPiece = _bitboards.BoardAllPieces[(int)toSquare];
+                        AddCapture(piece, (Square)fromSquareMovingPiece, (Square)toSquare, capturedPiece, (Square)toSquare, BitPieceType.Empty, color, CaptureValues[(int)piece, (int)capturedPiece]);
                     }
                 }
 
@@ -250,7 +252,8 @@ namespace MantaBitboardEngine
             {
                 var toSquare = BitHelper.BitScanForward(kingCaptures);
                 kingCaptures &= _helperBits.NotIndexMask[toSquare];
-                AddCapture(BitPieceType.King, (Square)fromSquareMovingKing, (Square)toSquare, _bitboards.BoardAllPieces[(int)toSquare], (Square)toSquare, BitPieceType.Empty, color, generalCaptureValue);
+                var capturedPiece = _bitboards.BoardAllPieces[(int)toSquare];
+                AddCapture(BitPieceType.King, (Square)fromSquareMovingKing, (Square)toSquare, capturedPiece, (Square)toSquare, BitPieceType.Empty, color, CaptureValues[(int)BitPieceType.King, (int)capturedPiece]);
             }
 
             if (capturesOnly)
@@ -282,13 +285,15 @@ namespace MantaBitboardEngine
             // capture to the left
             if (fromSquareCapturingToLeft != Square.NoSquare && (_bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.Pawn] & _helperBits.IndexMask[(int)fromSquareCapturingToLeft]) != 0)
             {
-                AddCapture(BitPieceType.Pawn, fromSquareCapturingToLeft, enpassantSquare, _bitboards.BoardAllPieces[(int)capturedPawnSquare], capturedPawnSquare, BitPieceType.Empty, color, pawnCaptureValue);
+                var capturedPiece = _bitboards.BoardAllPieces[(int)capturedPawnSquare];
+                AddCapture(BitPieceType.Pawn, fromSquareCapturingToLeft, enpassantSquare, capturedPiece, capturedPawnSquare, BitPieceType.Empty, color, CaptureValues[(int)BitPieceType.Pawn, (int)capturedPiece]);
             }
 
             // capture to the right
             if (fromSquareCapturingToRight != Square.NoSquare && (_bitboards.Bitboard_Pieces[(int)color, (int)BitPieceType.Pawn] & _helperBits.IndexMask[(int)fromSquareCapturingToRight]) != 0)
             {
-                AddCapture(BitPieceType.Pawn, fromSquareCapturingToRight, enpassantSquare, _bitboards.BoardAllPieces[(int)capturedPawnSquare], capturedPawnSquare, BitPieceType.Empty, color, pawnCaptureValue);
+                var capturedPiece = _bitboards.BoardAllPieces[(int)capturedPawnSquare];
+                AddCapture(BitPieceType.Pawn, fromSquareCapturingToRight, enpassantSquare, capturedPiece, capturedPawnSquare, BitPieceType.Empty, color, CaptureValues[(int)BitPieceType.Pawn, (int)capturedPiece]);
             }
         }
 
@@ -470,62 +475,83 @@ namespace MantaBitboardEngine
             return move.MovingColor == _bitboards.BoardState.SideToMove;
         }
 
+        private void InitializeCaptureValues()
+        {
+            for (int i = (int)BitPieceType.Pawn; i <= (int)BitPieceType.King; i++)
+            {
+                CaptureValues[(int)BitPieceType.Pawn, i] = PawnCaptureValues[i];
+                CaptureValues[(int)BitPieceType.Knight, i] = KnightCaptureValues[i];
+                CaptureValues[(int)BitPieceType.Bishop, i] = BishopCaptureValues[i];
+                CaptureValues[(int)BitPieceType.Rook, i] = RookCaptureValues[i];
+                CaptureValues[(int)BitPieceType.Queen, i] = QueenCaptureValues[i];
+                CaptureValues[(int)BitPieceType.King, i] = KingCaptureValues[i];
+            }
+        }
+
+        // value := 100 + (value captured piece - value capturing piece)
+        private readonly byte[] PawnCaptureValues = new byte[6] { 100, 120, 120, 140, 180, 0 };
+        private readonly byte[] KnightCaptureValues = new byte[6] { 80, 100, 100, 120, 160, 0 };
+        private readonly byte[] BishopCaptureValues = new byte[6] { 80, 100, 100, 120, 160, 0 };
+        private readonly byte[] RookCaptureValues = new byte[6] { 60, 80, 80, 100, 140, 0 };
+        private readonly byte[] QueenCaptureValues = new byte[6] { 20, 40, 40, 60, 100, 0 };
+        private readonly byte[] KingCaptureValues = new byte[6] { 90, 90, 90, 90, 90, 0 };
+
         //////////////////////////////////////////////////////
         // Testing interface
         //////////////////////////////////////////////////////
 
         internal IEnumerable<BitMove> GetPawnMoves(ChessColor color)
         {
-            ClearLists();
+            ClearMoves();
             GeneratePawnMoves(color);
             return _moves;
         }
 
         internal IEnumerable<BitMove> GetKnightMoves(ChessColor color)
         {
-            ClearLists();
+            ClearMoves();
             GenerateKnightMoves(color);
             return _moves;
         }
 
         internal IEnumerable<BitMove> GetBishopMoves(ChessColor color)
         {
-            ClearLists();
+            ClearMoves();
             GenerateSlidingPieceMoves(color, BitPieceType.Bishop, false);
             return _moves;
         }
 
         internal IEnumerable<BitMove> GetRookMoves(ChessColor color)
         {
-            ClearLists();
+            ClearMoves();
             GenerateSlidingPieceMoves(color, BitPieceType.Rook, false);
             return _moves;
         }
 
         internal IEnumerable<BitMove> GetQueenMoves(ChessColor color)
         {
-            ClearLists();
+            ClearMoves();
             GenerateSlidingPieceMoves(color, BitPieceType.Queen, false);
             return _moves;
         }
 
         internal IEnumerable<BitMove> GetKingMoves(ChessColor color)
         {
-            ClearLists();
+            ClearMoves();
             GenerateKingMoves(color);
             return _moves;
         }
 
         internal IEnumerable<BitMove> GetEnPassant(ChessColor color)
         {
-            ClearLists();
+            ClearMoves();
             GenerateEnpassant(color);
             return _moves;
         }
 
         internal IEnumerable<BitMove> GetCastling(ChessColor color)
         {
-            ClearLists();
+            ClearMoves();
             GenerateCastling(color);
             return _moves;
         }

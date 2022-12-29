@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using MantaCommon;
 using log4net;
@@ -15,8 +16,6 @@ namespace MantaBitboardEngine
 
         private readonly BitMoveGenerator _moveGenerator;
         private readonly BitEvaluator _evaluator;
-        ////private readonly IMoveOrder _moveOrder;
-        ////private readonly IMoveFilter _moveFilter;
         private int _maxDepth;
         private int _additionalSelectiveDepth;
         private int _selectiveDepth;
@@ -61,8 +60,6 @@ namespace MantaBitboardEngine
             _evaluator = evaluator;
             _moveGenerator = moveGenerator;
             _maxDepth = maxDepth;
-            ////_moveOrder = moveOrder;
-            ////_moveFilter = moveFilter;
 
             UpdateSelectiveDepth();
         }
@@ -79,7 +76,6 @@ namespace MantaBitboardEngine
             _pruningCount = 0;
             evaluatedPositions = 0;
 
-            ////(_moveOrder as OrderPvAndImportance)?.SetMoveRatingPV(_previousPV);
             _pruningCount = 0;
             evaluatedPositions = 0;
 
@@ -139,32 +135,21 @@ namespace MantaBitboardEngine
             var bestRating = new BitMoveRating() { Score = InitWithWorstScorePossible(color) };
             var currentRating = new BitMoveRating();
 
-            ////var allLegalMovesUnsortedUnfiltered = _moveGenerator.GetAllMoves(color).ToList<BitMove>();
-
-            ////// no legal moves means the game is over. It is either stall mate or check mate.
-            ////if (allLegalMovesUnsortedUnfiltered.Count() == 0)
-            ////{
-            ////    return MakeMoveRatingForGameEnd(board, color, level);
-            ////}
-
-            ////var hasLegalMoves = false; // we do not know yet if there are legal moves
-
-            ////var allLegalMovesUnsorted = /* _moveFilter != null && level > _maxDepth
-            ////    ? _moveFilter.Filter(allLegalMovesUnsortedUnfiltered)
-            ////    : */ allLegalMovesUnsortedUnfiltered;
-
-            ////var possibleMoves = /* _moveOrder != null
-            ////    ? _moveOrder.OrderMoves(allLegalMovesUnsorted, color, level)
-            ////    : */ allLegalMovesUnsorted;
-
-            ////if (possibleMoves.Count() == 0)
-            ////{
-            ////    return null;
-            ////}
-
             var hasLegalMoves = false; // we do not know yet if there are legal moves
 
-            var movesToEvaluate = _moveGenerator.GetAllMoves(color).ToList();
+            List<BitMove> movesToEvaluate;
+            if (level <= _maxDepth)
+            {
+                movesToEvaluate = _moveGenerator.GetAllMoves(color).ToList();
+            }
+            else
+            {
+                movesToEvaluate = _moveGenerator.GetCaptures(color).ToList();
+                if (movesToEvaluate.Count() == 0)
+                {
+                    return null;
+                }
+            }
 
             // Evaluate the previousPV of the current level first
             if (_previousPV != null && _previousPV.PrincipalVariation.Count > level)
@@ -189,8 +174,8 @@ namespace MantaBitboardEngine
 
                 hasLegalMoves = true;
 
-                //// if (level < _maxDepth || (level < _selectiveDepth && currentMove.CapturedPiece != BitPieceType.Empty)) // we need to do more move levels...
-                if (level < _maxDepth)
+                if (level < _maxDepth || (level < _selectiveDepth && currentMove.CapturedPiece != BitPieceType.Empty)) // we need to do more move levels...
+                //// if (level < _maxDepth)
                 {
                     currentRating = SearchLevel(board, CommonHelper.OtherColor(color), level + 1, alpha, beta); // recursive...
 

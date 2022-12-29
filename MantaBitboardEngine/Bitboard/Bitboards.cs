@@ -8,13 +8,14 @@ using MantaCommon;
 /*
  * 
  * todo Bitboard engine:
- * - more differenciated move values
- * - selective search depth
+ * 
  * - tests for search in bitboard
  * - hashtable
  * 
  * 
  * ok - Generate capture moves
+ * ok - more differenciated move values
+ * ok - selective search depth
  * 
  */
 

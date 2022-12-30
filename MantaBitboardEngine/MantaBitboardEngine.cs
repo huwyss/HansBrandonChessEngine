@@ -24,7 +24,7 @@ namespace MantaBitboardEngine
             _helperBits = new HelperBitboards();
             _moveGenerator = new BitMoveGenerator(_board, _helperBits);
             _evaluator = new BitEvaluator(_helperBits);
-            _search = new BitSearchAlphaBeta(_evaluator, _moveGenerator, 4);
+            _search = new BitSearchAlphaBeta(_board, _evaluator, _moveGenerator, 4);
             _moveFactory = new BitMoveFactory(_helperBits);
         }
 
@@ -92,7 +92,7 @@ namespace MantaBitboardEngine
 
         public UciMoveRating DoBestMove(ChessColor color)
         {
-            BitMoveRating nextMove = _search.Search(_board, color);
+            BitMoveRating nextMove = _search.Search(color);
             _board.Move(nextMove.Move);
             _log.Debug("Score: " + nextMove.Score);
 
@@ -103,7 +103,7 @@ namespace MantaBitboardEngine
 
         public UciMoveRating DoBestMove()
         {
-            BitMoveRating nextMove = _search.Search(_board, _board.BoardState.SideToMove);
+            BitMoveRating nextMove = _search.Search(_board.BoardState.SideToMove);
             _board.Move(nextMove.Move);
             _log.Debug("Score: " + nextMove.Score);
 

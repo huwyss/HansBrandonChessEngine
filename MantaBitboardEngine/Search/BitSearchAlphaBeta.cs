@@ -14,6 +14,7 @@ namespace MantaBitboardEngine
 
         private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        private readonly Bitboards _board;
         private readonly BitMoveGenerator _moveGenerator;
         private readonly BitEvaluator _evaluator;
         private int _maxDepth;
@@ -54,8 +55,9 @@ namespace MantaBitboardEngine
             _previousPV = null;
         }
 
-        public BitSearchAlphaBeta(BitEvaluator evaluator, BitMoveGenerator moveGenerator, int maxDepth) ////, IMoveOrder moveOrder, IMoveFilter moveFilter)
+        public BitSearchAlphaBeta(Bitboards board, BitEvaluator evaluator, BitMoveGenerator moveGenerator, int maxDepth) ////, IMoveOrder moveOrder, IMoveFilter moveFilter)
         {
+            _board = board;
             _additionalSelectiveDepth = 0;
             _evaluator = evaluator;
             _moveGenerator = moveGenerator;
@@ -71,7 +73,7 @@ namespace MantaBitboardEngine
         /// <param name="color">Color of next move</param>
         /// <param name="score">Score of endposition of the returned move.</param>
         /// <returns>best move for color.</returns>
-        public BitMoveRating Search(Bitboards board, ChessColor color)
+        public BitMoveRating Search(ChessColor color)
         {
             _pruningCount = 0;
             evaluatedPositions = 0;
@@ -90,7 +92,7 @@ namespace MantaBitboardEngine
 
             while (!succeed)
             {
-                moveRating = SearchLevel(board, color, 1, alphaStart, betaStart);
+                moveRating = SearchLevel(color, 1, alphaStart, betaStart);
 
                 _log.Debug("evaluated positons: " + evaluatedPositions);
                 moveRating.EvaluatedPositions = evaluatedPositions;
@@ -130,7 +132,7 @@ namespace MantaBitboardEngine
         /// <param name="board">Board to be searched in</param>
         /// <param name="color">Color of next move</param>
         /// <param name="level">Start level of search </param>
-        internal virtual BitMoveRating SearchLevel(Bitboards board, ChessColor color, int level, int alpha, int beta)
+        internal virtual BitMoveRating SearchLevel(ChessColor color, int level, int alpha, int beta)
         {
             var bestRating = new BitMoveRating() { Score = InitWithWorstScorePossible(color) };
             var currentRating = new BitMoveRating();
@@ -165,10 +167,10 @@ namespace MantaBitboardEngine
 
             foreach (var currentMove in movesToEvaluate)
             {
-                board.Move(currentMove);
+                _board.Move(currentMove);
                 if (_moveGenerator.IsCheck(currentMove.MovingColor))
                 {
-                    board.Back();
+                    _board.Back();
                     continue;
                 }
 
@@ -177,22 +179,22 @@ namespace MantaBitboardEngine
                 if (level < _maxDepth || (level < _selectiveDepth && currentMove.CapturedPiece != BitPieceType.Empty)) // we need to do more move levels...
                 //// if (level < _maxDepth)
                 {
-                    currentRating = SearchLevel(board, CommonHelper.OtherColor(color), level + 1, alpha, beta); // recursive...
+                    currentRating = SearchLevel(CommonHelper.OtherColor(color), level + 1, alpha, beta); // recursive...
 
                     if (currentRating == null) // we are in a level > maxdepth and tried to find a capture move but there was no capture move.
                     {
-                        currentRating = new BitMoveRating() { Score = _evaluator.Evaluate(board), EvaluationLevel = level };
+                        currentRating = new BitMoveRating() { Score = _evaluator.Evaluate(_board), EvaluationLevel = level };
                         evaluatedPositions++;
                     }
 
-                    board.Back();
+                    _board.Back();
                 }
                 else // we reached the bottom of the tree and evaluate the position
                 {
-                    currentRating.Score = _evaluator.Evaluate(board);
+                    currentRating.Score = _evaluator.Evaluate(_board);
                     currentRating.EvaluationLevel = level;
                     evaluatedPositions++;
-                    board.Back();
+                    _board.Back();
                 }
 
                 // update the best move in the current level
@@ -229,7 +231,7 @@ namespace MantaBitboardEngine
 
             if (!hasLegalMoves)
             {
-                return MakeMoveRatingForGameEnd(board, color, level);
+                return MakeMoveRatingForGameEnd(_board, color, level);
             }
 
             bestRating.Alpha = alpha;

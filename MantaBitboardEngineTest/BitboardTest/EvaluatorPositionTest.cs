@@ -1,18 +1,27 @@
 ﻿using MantaBitboardEngine;
 using MantaCommon;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace MantaChessEngineTest
 {
     [TestClass]
     public class MantaBitboardEngineTest
     {
+        private BitEvaluator _target;
+        private Bitboards _board;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            _target = new BitEvaluator(new HelperBitboards());
+            _board = new Bitboards(new Mock<IHashtable>().Object);
+        }
+
         [TestMethod]
         public void EvaluateTest_WhenPawnInCenter_Then1_2()
         {
-            var target = new BitEvaluator(new HelperBitboards());
-            var board = new Bitboards();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "........" +
                               "........" +
@@ -21,7 +30,7 @@ namespace MantaChessEngineTest
                               "........" +
                               "........");
 
-            var score = target.Evaluate(board);
+            var score = _target.Evaluate(_board);
 
             Assert.AreEqual(115, score);
         }
@@ -29,9 +38,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenPawnIn3rdRank_Then1_1()
         {
-            var target = new BitEvaluator(new HelperBitboards());
-            var board = new Bitboards();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "........" +
                               "........" +
@@ -40,7 +47,7 @@ namespace MantaChessEngineTest
                               "........" +
                               "........");
 
-            var score = target.Evaluate(board);
+            var score = _target.Evaluate(_board);
 
             Assert.AreEqual(110, score);
         }
@@ -48,9 +55,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenKnightIsAtBorder_ThenItsAShame()
         {
-            var target = new BitEvaluator(new HelperBitboards());
-            var board = new Bitboards();
-            board.SetPosition("....k..." +
+            _board.SetPosition("....k..." +
                               "........" +
                               "........" +
                               "........" +
@@ -59,7 +64,7 @@ namespace MantaChessEngineTest
                               ".......N" +
                               "....K...");
 
-            var score = target.Evaluate(board);
+            var score = _target.Evaluate(_board);
 
             Assert.AreEqual(300 - 5, score);
         }
@@ -67,9 +72,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenKnightIsNotAtBorder_ThenItsOk()
         {
-            var target = new BitEvaluator(new HelperBitboards());
-            var board = new Bitboards();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "........" +
                               "........" +
@@ -78,7 +81,7 @@ namespace MantaChessEngineTest
                               "....N..." +
                               "........");
 
-            var score = target.Evaluate(board);
+            var score = _target.Evaluate(_board);
 
             Assert.AreEqual(300, score);
         }
@@ -86,9 +89,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenWhiteHasTwoBishopAndBlackHasBishopAndKnight_ThenWhiteBetter()
         {
-            var target = new BitEvaluator(new HelperBitboards());
-            var board = new Bitboards();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "..n..b.." +
                               "........" +
@@ -97,7 +98,7 @@ namespace MantaChessEngineTest
                               "........" +
                               "........");
 
-            var score = target.Evaluate(board);
+            var score = _target.Evaluate(_board);
 
             Assert.AreEqual(true, score > 0.1f, "Two bishops should be better than bishop and knight.");
         }
@@ -105,9 +106,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenBlackHasDoubleBishop_ThenBlackBetter()
         {
-            var target = new BitEvaluator(new HelperBitboards());
-            var board = new Bitboards();
-            board.SetPosition("........" +
+            _board.SetPosition("........" +
                               "........" +
                               "..b..b.." +
                               "........" +
@@ -116,7 +115,7 @@ namespace MantaChessEngineTest
                               "........" +
                               "........");
 
-            var score = target.Evaluate(board);
+            var score = _target.Evaluate(_board);
 
             Assert.AreEqual(true, score < -0.1f, "Two bishops should be better than bishop and knight.");
         }
@@ -124,9 +123,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenWhiteDidCastle_ThenWhiteBetter()
         {
-            var target = new BitEvaluator(new HelperBitboards());
-            var board = new Bitboards();
-            board.SetPosition("rnbqk..r" +
+            _board.SetPosition("rnbqk..r" +
                               "pppppppp" +
                               "........" +
                               "........" +
@@ -136,18 +133,18 @@ namespace MantaChessEngineTest
                               "RNBQK..R");
 
             // white castling
-            board.Move(BitMove.CreateCastling(ChessColor.White, CastlingType.KingSide, 0));
-            var score = target.Evaluate(board);
+            _board.Move(BitMove.CreateCastling(ChessColor.White, CastlingType.KingSide, 0));
+            var score = _target.Evaluate(_board);
             Assert.AreEqual(true, score > 0.1f, "White did castling. so white should be better.");
 
             // black castling
-            board.Move(BitMove.CreateCastling(ChessColor.Black, CastlingType.KingSide, 0));
-            score = target.Evaluate(board);
+            _board.Move(BitMove.CreateCastling(ChessColor.Black, CastlingType.KingSide, 0));
+            score = _target.Evaluate(_board);
             Assert.AreEqual(true, score == 0, "White and Black did castling. They are equal.");
 
             // take black move back
-            board.Back();
-            score = target.Evaluate(board);
+            _board.Back();
+            score = _target.Evaluate(_board);
             Assert.AreEqual(true, score > 0.1f, "Black castling was taken back. so white should be better.");
         }
     }

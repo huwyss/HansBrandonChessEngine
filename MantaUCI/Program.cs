@@ -140,8 +140,9 @@ namespace MantaUCI
                     if (inputWords.Length >= 2 && inputWords[1].Equals("depth")) // go depth x
                     {
                         var depth = int.Parse(input.Substring(input.IndexOf("depth") + "depth".Length + 1));
-                        AnswerBestMove(depth);
-                        ////AnswerBestMove(6);
+                        ////AnswerBestMove(depth);
+                        AnswerBestMove(7);
+                        _engine.SetAdditionalSelectiveDepth(3);
                     }
                     else
                     {
@@ -193,8 +194,7 @@ namespace MantaUCI
         {
             UciMoveRating bestMove = null;
             _engine.ClearPreviousPV();
-            _engine.SetAdditionalSelectiveDepth(1);
-
+            
             for (int currentDepth = 1; currentDepth <= depth; currentDepth++)
             {
                 SetStartPosition();

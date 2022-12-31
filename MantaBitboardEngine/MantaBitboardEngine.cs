@@ -20,12 +20,13 @@ namespace MantaBitboardEngine
 
         public MantaBitboardEngine()
         {
-            _board = new Bitboards();
+            var hashtable = new Hashtable();
+            _board = new Bitboards(hashtable);
             _helperBits = new HelperBitboards();
             _moveGenerator = new BitMoveGenerator(_board, _helperBits);
             _evaluator = new BitEvaluator(_helperBits);
-            _search = new BitSearchAlphaBeta(_board, _evaluator, _moveGenerator, 4);
-            _moveFactory = new BitMoveFactory(_helperBits);
+            _moveFactory = new BitMoveFactory(_board);
+            _search = new BitSearchAlphaBeta(_board, _evaluator, _moveGenerator, hashtable, _moveFactory, 4);
         }
 
         public void SetInitialPosition()
@@ -58,7 +59,7 @@ namespace MantaBitboardEngine
 
         public bool MoveUci(string moveStringUci)
         {
-            var move = _moveFactory.MakeMoveUci(_board, moveStringUci);
+            var move = _moveFactory.MakeMoveUci(moveStringUci);
             if (move.Equals(BitMove.CreateEmptyMove()))
             {
                 return false;
@@ -158,7 +159,7 @@ namespace MantaBitboardEngine
 
             UInt64 nodes = 0;
 
-            var moves = _moveGenerator.GetLegalMoves(SideToMove()).ToArray();
+            var moves = _moveGenerator.GetAllMoves(SideToMove()).ToArray();
 
             ////Console.Write(_board.GetPrintString);
             ////Console.WriteLine();

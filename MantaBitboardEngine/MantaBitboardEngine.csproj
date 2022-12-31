@@ -63,6 +63,7 @@
     <Compile Include="Search\BitMoveRatingConverter.cs" />
     <Compile Include="Search\BitSearchAlphaBeta.cs" />
     <Compile Include="Search\BitMoveRating.cs" />
+    <Compile Include="Search\Hashtable.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MantaChessEngine\MantaChessEngine.csproj">

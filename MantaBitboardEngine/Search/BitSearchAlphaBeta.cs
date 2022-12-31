@@ -10,13 +10,16 @@ namespace MantaBitboardEngine
 {
     public class BitSearchAlphaBeta
     {
-        private const int AspirationWindowHalfSizeInitial = 10;
+        private const int AspirationWindowHalfSizeInitial = 100;
 
         private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly Bitboards _board;
         private readonly BitMoveGenerator _moveGenerator;
         private readonly BitEvaluator _evaluator;
+        private readonly IHashtable _hashtable;
+        private readonly BitMoveFactory _moveFactory;
+
         private int _maxDepth;
         private int _additionalSelectiveDepth;
         private int _selectiveDepth;
@@ -25,6 +28,20 @@ namespace MantaBitboardEngine
 
         private int evaluatedPositions;
         private int _pruningCount;
+
+        public BitSearchAlphaBeta(Bitboards board, BitEvaluator evaluator, BitMoveGenerator moveGenerator, IHashtable hashtable, BitMoveFactory moveFactory, int maxDepth) ////, IMoveOrder moveOrder, IMoveFilter moveFilter)
+        {
+            _board = board;
+            _additionalSelectiveDepth = 0;
+            _evaluator = evaluator;
+            _moveGenerator = moveGenerator;
+            _hashtable = hashtable;
+            _moveFactory = moveFactory;
+
+            _maxDepth = maxDepth;
+
+            UpdateSelectiveDepth();
+        }
 
         /// <summary>
         /// Set the search depth in plys (half moves).
@@ -53,17 +70,6 @@ namespace MantaBitboardEngine
         public void ClearPreviousPV()
         {
             _previousPV = null;
-        }
-
-        public BitSearchAlphaBeta(Bitboards board, BitEvaluator evaluator, BitMoveGenerator moveGenerator, int maxDepth) ////, IMoveOrder moveOrder, IMoveFilter moveFilter)
-        {
-            _board = board;
-            _additionalSelectiveDepth = 0;
-            _evaluator = evaluator;
-            _moveGenerator = moveGenerator;
-            _maxDepth = maxDepth;
-
-            UpdateSelectiveDepth();
         }
 
         /// <summary>
@@ -153,17 +159,27 @@ namespace MantaBitboardEngine
                 }
             }
 
-            // Evaluate the previousPV of the current level first
-            if (_previousPV != null && _previousPV.PrincipalVariation.Count > level)
+            var movePVHash = _hashtable.LookupPvMove(color);
+            if (movePVHash != null)
             {
-                var currentPvMove = _previousPV.PrincipalVariation[level - 1];
-                if (currentPvMove != null && movesToEvaluate.Contains(currentPvMove))
+                var currentPvMove = _moveFactory.MakeMove(movePVHash.From, movePVHash.To, movePVHash.PromotionPiece);
+                if (movesToEvaluate.Remove(currentPvMove))
                 {
-                    movesToEvaluate.Remove(currentPvMove);
-                    movesToEvaluate.Insert(0, currentPvMove); // we start with the stored pv from the last search (that was one ply less deep)
-                    _previousPV.PrincipalVariation[level - 1] = null; // we have used this move up.
+                    movesToEvaluate.Insert(0, currentPvMove);
                 }
             }
+
+            // Evaluate the previousPV of the current level first
+            ////if (_previousPV != null && _previousPV.PrincipalVariation.Count > level)
+            ////{
+            ////    var currentPvMove = _previousPV.PrincipalVariation[level - 1];
+            ////    if (currentPvMove != null && movesToEvaluate.Contains(currentPvMove))
+            ////    {
+            ////        movesToEvaluate.Remove(currentPvMove);
+            ////        movesToEvaluate.Insert(0, currentPvMove); // we start with the stored pv from the last search (that was one ply less deep)
+            ////        _previousPV.PrincipalVariation[level - 1] = null; // we have used this move up.
+            ////    }
+            ////}
 
             foreach (var currentMove in movesToEvaluate)
             {
@@ -237,6 +253,9 @@ namespace MantaBitboardEngine
             bestRating.Alpha = alpha;
             bestRating.Beta = beta;
             bestRating.PrincipalVariation.Insert(0, bestRating.Move);
+
+            _hashtable.AddHash(color, level, bestRating.Score, HashEntryType.Exact, bestRating.Move.FromSquare, bestRating.Move.ToSquare, bestRating.Move.PromotionPiece);
+
             return bestRating;
         }
 

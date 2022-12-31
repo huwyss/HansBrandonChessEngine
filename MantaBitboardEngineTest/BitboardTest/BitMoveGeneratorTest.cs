@@ -17,7 +17,7 @@ namespace MantaBitboardEngineTest
         [TestInitialize]
         public void Setup()
         {
-            _board = new Bitboards();
+            _board = new Bitboards(new Mock<IHashtable>().Object);
             _helperBits = new HelperBitboards();
             _bitMoveGenerator = new BitMoveGenerator(_board, _helperBits);
         }
@@ -361,7 +361,7 @@ namespace MantaBitboardEngineTest
         {
             var stateMock = new Mock<IBitBoardState>();
             stateMock.Setup(s => s.LastEnPassantSquare).Returns(Square.A6);
-            _board = new Bitboards(stateMock.Object);
+            _board = new Bitboards(new Mock<IHashtable>().Object, stateMock.Object);
             _bitMoveGenerator = new BitMoveGenerator(_board, _helperBits);
             _board.SetPosition(".......k" +
                               "........" +
@@ -383,7 +383,7 @@ namespace MantaBitboardEngineTest
         {
             var stateMock = new Mock<IBitBoardState>();
             stateMock.Setup(s => s.LastEnPassantSquare).Returns(Square.D3);
-            _board = new Bitboards(stateMock.Object);
+            _board = new Bitboards(new Mock<IHashtable>().Object, stateMock.Object);
             _bitMoveGenerator = new BitMoveGenerator(_board, _helperBits);
             _board.SetPosition(".......k" +
                               "........" +
@@ -748,7 +748,7 @@ namespace MantaBitboardEngineTest
             var stateMock = new Mock<IBitBoardState>();
             stateMock.Setup(s => s.LastCastlingRightWhiteKingSide).Returns(true);
             stateMock.Setup(s => s.LastCastlingRightWhiteQueenSide).Returns(true);
-            _board = new Bitboards(stateMock.Object);
+            _board = new Bitboards(new Mock<IHashtable>().Object, stateMock.Object);
             _bitMoveGenerator = new BitMoveGenerator(_board, _helperBits);
             _board.SetPosition("r...k..r" +
                               "p......." +
@@ -772,7 +772,7 @@ namespace MantaBitboardEngineTest
             var stateMock = new Mock<IBitBoardState>();
             stateMock.Setup(s => s.LastCastlingRightWhiteKingSide).Returns(true);
             stateMock.Setup(s => s.LastCastlingRightWhiteQueenSide).Returns(true);
-            Bitboards board = new Bitboards(stateMock.Object);
+            Bitboards board = new Bitboards(new Mock<IHashtable>().Object, stateMock.Object);
             _bitMoveGenerator = new BitMoveGenerator(board, _helperBits);
             board.SetPosition("r...k..r" +
                               "p......." +
@@ -796,7 +796,7 @@ namespace MantaBitboardEngineTest
             var stateMock = new Mock<IBitBoardState>();
             stateMock.Setup(s => s.LastCastlingRightWhiteKingSide).Returns(true);
             stateMock.Setup(s => s.LastCastlingRightWhiteQueenSide).Returns(true);
-            Bitboards board = new Bitboards(stateMock.Object);
+            Bitboards board = new Bitboards(new Mock<IHashtable>().Object, stateMock.Object);
             _bitMoveGenerator = new BitMoveGenerator(board, _helperBits);
             board.SetPosition("r...k..r" +
                               "p......." +
@@ -820,7 +820,7 @@ namespace MantaBitboardEngineTest
             var stateMock = new Mock<IBitBoardState>();
             stateMock.Setup(s => s.LastCastlingRightWhiteKingSide).Returns(true);
             stateMock.Setup(s => s.LastCastlingRightWhiteQueenSide).Returns(true);
-            Bitboards board = new Bitboards(stateMock.Object);
+            Bitboards board = new Bitboards(new Mock<IHashtable>().Object, stateMock.Object);
             _bitMoveGenerator = new BitMoveGenerator(board, _helperBits);
             board.SetPosition("r...k..r" +
                               "p......." +
@@ -844,7 +844,7 @@ namespace MantaBitboardEngineTest
             var stateMock = new Mock<IBitBoardState>();
             stateMock.Setup(s => s.LastCastlingRightWhiteKingSide).Returns(true);
             stateMock.Setup(s => s.LastCastlingRightWhiteQueenSide).Returns(true);
-            Bitboards board = new Bitboards(stateMock.Object);
+            Bitboards board = new Bitboards(new Mock<IHashtable>().Object, stateMock.Object);
             _bitMoveGenerator = new BitMoveGenerator(board, _helperBits);
             board.SetPosition("r...k..r" +
                               "p......." +
@@ -908,7 +908,7 @@ namespace MantaBitboardEngineTest
             var stateMock = new Mock<IBitBoardState>();
             stateMock.Setup(s => s.LastCastlingRightBlackKingSide).Returns(true);
             stateMock.Setup(s => s.LastCastlingRightBlackQueenSide).Returns(true);
-            _board = new Bitboards(stateMock.Object);
+            _board = new Bitboards(new Mock<IHashtable>().Object, stateMock.Object);
             _bitMoveGenerator = new BitMoveGenerator(_board, _helperBits);
             _board.SetPosition("r...k..r" +
                               "p......." +
@@ -999,7 +999,8 @@ namespace MantaBitboardEngineTest
             var stateMock = new Mock<IBitBoardState>();
             stateMock.Setup(s => s.LastCastlingRightBlackKingSide).Returns(true);
             stateMock.Setup(s => s.LastCastlingRightBlackQueenSide).Returns(true);
-            _board = new Bitboards(stateMock.Object);
+
+            _board = new Bitboards(new Mock<IHashtable>().Object, stateMock.Object);
             _bitMoveGenerator = new BitMoveGenerator(_board, _helperBits);
             _board.SetPosition("r...k..r" +
                               "p......." +
@@ -1024,7 +1025,7 @@ namespace MantaBitboardEngineTest
             var stateMock = new Mock<IBitBoardState>();
             stateMock.Setup(s => s.LastCastlingRightBlackKingSide).Returns(true);
             stateMock.Setup(s => s.LastCastlingRightBlackQueenSide).Returns(true);
-            _board = new Bitboards(stateMock.Object);
+            _board = new Bitboards(new Mock<IHashtable>().Object, stateMock.Object);
             _bitMoveGenerator = new BitMoveGenerator(_board, _helperBits);
             _board.SetPosition("r..k...r" + // king moved!
                               "p......." +
@@ -1048,7 +1049,7 @@ namespace MantaBitboardEngineTest
             var stateMock = new Mock<IBitBoardState>();
             stateMock.Setup(s => s.LastCastlingRightBlackKingSide).Returns(true);
             stateMock.Setup(s => s.LastCastlingRightBlackQueenSide).Returns(true);
-            _board = new Bitboards(stateMock.Object);
+            _board = new Bitboards(new Mock<IHashtable>().Object, stateMock.Object);
             _bitMoveGenerator = new BitMoveGenerator(_board, _helperBits);
             _board.SetPosition(".r..k.r." + // rooks moved!
                               "p......." +
@@ -1072,7 +1073,7 @@ namespace MantaBitboardEngineTest
             var stateMock = new Mock<IBitBoardState>();
             stateMock.Setup(s => s.LastCastlingRightBlackKingSide).Returns(true);
             stateMock.Setup(s => s.LastCastlingRightBlackQueenSide).Returns(true);
-            _board = new Bitboards(stateMock.Object);
+            _board = new Bitboards(new Mock<IHashtable>().Object, stateMock.Object);
             _bitMoveGenerator = new BitMoveGenerator(_board, _helperBits);
             _board.SetPosition("r.b.k.nr" +
                               "p......." +

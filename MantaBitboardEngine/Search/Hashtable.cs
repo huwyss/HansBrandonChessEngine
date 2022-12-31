@@ -111,7 +111,7 @@ namespace MantaBitboardEngine
 
                 _collisions++;
 
-                Console.WriteLine($"info overwrite move. Collistion number: {_collisions}");
+                ////Console.WriteLine($"info overwrite move. Collistion number: {_collisions}");
 
                 return;
 			}

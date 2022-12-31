@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Diagnostics;
+using System.Threading;
 using MantaChessEngine;
 using MantaBitboardEngine;
 using MantaCommon;
@@ -152,7 +153,8 @@ namespace MantaUCI
                         //   go wtime w btime x winc y binc z (w, x, y, z in ms)
                         //   go wtime w btime x winc 0 binc movestogo y (w, x in ms, y number of moves ==> moves to do in time w)
 
-                        AnswerBestMove(6);
+                        AnswerBestMove(7);
+                        _engine.SetAdditionalSelectiveDepth(3);
                     }
                 }
                 else if (command.Equals("quit"))
@@ -213,10 +215,13 @@ namespace MantaUCI
                     principalVariation += move + " ";
                 }
 
+                var pvMoveString = ((MantaBitboardEngine.MantaBitboardEngine)_engine).GetPvMovesFromHashtable(bestMove.MovingColor);
+
                 var duration = _stopwatch.ElapsedMilliseconds;
                 var nps = duration != 0 ? (int)(1000 * (long)bestMove.EvaluatedPositions / duration) : 0;
 
-                Console.WriteLine("info depth " + bestMove.Depth + " seldepth " + bestMove.SelectiveDepth + " score cp " + scoreFromEngine + " nodes " + bestMove.EvaluatedPositions + " nps " + nps + " time " + duration + " pv " + principalVariation );
+                ////Console.WriteLine("info depth " + bestMove.Depth + " seldepth " + bestMove.SelectiveDepth + " score cp " + scoreFromEngine + " nodes " + bestMove.EvaluatedPositions + " nps " + nps + " time " + duration + " pv " + principalVariation);
+                Console.WriteLine("info depth " + bestMove.Depth + " seldepth " + bestMove.SelectiveDepth + " score cp " + scoreFromEngine + " nodes " + bestMove.EvaluatedPositions + " nps " + nps + " time " + duration + " pv " + pvMoveString);
             }
             
             Console.WriteLine("bestmove " + bestMove.Move);

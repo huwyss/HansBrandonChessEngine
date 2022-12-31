@@ -11,6 +11,7 @@ namespace MantaBitboardEngine
     {
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        private readonly IHashtable _hashtable;
         private readonly Bitboards _board;
         private readonly BitMoveGenerator _moveGenerator;
         private readonly HelperBitboards _helperBits;
@@ -20,13 +21,13 @@ namespace MantaBitboardEngine
 
         public MantaBitboardEngine()
         {
-            var hashtable = new Hashtable();
-            _board = new Bitboards(hashtable);
+            _hashtable = new Hashtable();
+            _board = new Bitboards(_hashtable);
             _helperBits = new HelperBitboards();
             _moveGenerator = new BitMoveGenerator(_board, _helperBits);
             _evaluator = new BitEvaluator(_helperBits);
             _moveFactory = new BitMoveFactory(_board);
-            _search = new BitSearchAlphaBeta(_board, _evaluator, _moveGenerator, hashtable, _moveFactory, 4);
+            _search = new BitSearchAlphaBeta(_board, _evaluator, _moveGenerator, _hashtable, _moveFactory, 4);
         }
 
         public void SetInitialPosition()
@@ -94,7 +95,6 @@ namespace MantaBitboardEngine
         public UciMoveRating DoBestMove(ChessColor color)
         {
             BitMoveRating nextMove = _search.Search(color);
-            _board.Move(nextMove.Move);
             _log.Debug("Score: " + nextMove.Score);
 
             UciMoveRating uciRating = BitMoveRatingConverter.NewFrom(nextMove);
@@ -105,12 +105,55 @@ namespace MantaBitboardEngine
         public UciMoveRating DoBestMove()
         {
             BitMoveRating nextMove = _search.Search(_board.BoardState.SideToMove);
-            _board.Move(nextMove.Move);
             _log.Debug("Score: " + nextMove.Score);
 
             UciMoveRating uciRating = BitMoveRatingConverter.NewFrom(nextMove);
 
             return uciRating;
+        }
+
+        public string GetPvMovesFromHashtable(ChessColor color)
+        {
+            var emptyMove = BitMove.CreateEmptyMove();
+            var currentColor = color;
+            HashEntry movePVHash = null;
+            BitMove currentPvMove = emptyMove;
+            string pvMoves = "";
+            var numberPly = 0;
+
+            do
+            {
+                movePVHash = _hashtable.LookupPvMove(currentColor);
+                if (movePVHash != null)
+                {
+                    currentPvMove = _moveFactory.MakeMove(movePVHash.From, movePVHash.To, movePVHash.PromotionPiece);
+                    var allMoves = _moveGenerator.GetAllMoves(currentColor);
+
+                    if (allMoves.Contains(currentPvMove))
+                    {
+                        _board.Move(currentPvMove);
+                        if (_moveGenerator.IsCheck(currentColor))
+                        {
+                            _board.Back();
+                            break;
+                        }
+                        pvMoves += currentPvMove.ToUciString() + " ";
+                        numberPly++;
+                        currentColor = CommonHelper.OtherColor(currentColor);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            } while (movePVHash != null && currentPvMove != emptyMove);
+
+            for (var i=0; i<numberPly; i++)
+            {
+                _board.Back();
+            }
+
+            return pvMoves;
         }
 
         public ChessColor SideToMove()
@@ -206,10 +249,16 @@ namespace MantaBitboardEngine
         {
             Console.WriteLine($"Divide depth {depth}");
 
-            var moves = _moveGenerator.GetLegalMoves(SideToMove());
+            var moves = _moveGenerator.GetAllMoves(SideToMove());
             foreach (var move in moves)
             {
                 Move(move);
+                if (IsCheck(move.MovingColor))
+                {
+                    UndoMove();
+                    continue;
+                }
+
                 var nodes = Perft(depth - 1);
                 UndoMove();
 

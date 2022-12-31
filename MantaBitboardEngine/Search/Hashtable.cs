@@ -33,7 +33,7 @@ namespace MantaBitboardEngine
 
 	public class Hashtable : IHashtable
 	{
-		int HashSize = 4 * 1024 * 1024;
+		int HashSize = 2 * 1024 * 1024;
 		uint[,,] Hash = new uint[2, 6, 64];
 		uint[,,] Lock = new uint[2, 6, 64];
 
@@ -95,13 +95,26 @@ namespace MantaBitboardEngine
 				_hashtab[(int)color, _currentkey].Level = level;
 				_hashtab[(int)color, _currentkey].Score = score;
 
-				////Console.WriteLine($"info overwrite move.");
+				////Console.WriteLine($"info update move.");
 
 				return;
             }
+			else
+            {
+				_hashtab[(int)color, _currentkey].HashLock = _currentlock;
+				_hashtab[(int)color, _currentkey].From = from;
+                _hashtab[(int)color, _currentkey].To = to;
+                _hashtab[(int)color, _currentkey].PromotionPiece = promotionPiece;
+                _hashtab[(int)color, _currentkey].HashEntryType = type;
+                _hashtab[(int)color, _currentkey].Level = level;
+                _hashtab[(int)color, _currentkey].Score = score;
 
-		    _collisions++;
-			////Console.WriteLine($"info encountered hashcollision number: {_collisions}");
+                _collisions++;
+
+                Console.WriteLine($"info overwrite move. Collistion number: {_collisions}");
+
+                return;
+			}
         }
 
 		public HashEntry LookupPvMove(ChessColor color)

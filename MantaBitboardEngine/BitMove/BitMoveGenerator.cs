@@ -49,7 +49,7 @@ namespace MantaBitboardEngine
             return _moves.OrderByDescending(m => m.Value);
         }
 
-        public IEnumerable<BitMove> GetCaptures(ChessColor color)
+        public IEnumerable<BitMove> GetAllCaptures(ChessColor color)
         {
             ClearMoves();
 
@@ -363,8 +363,7 @@ namespace MantaBitboardEngine
                 }
             }
         }
-
-
+        
         private void AddMove(BitPieceType movingPiece, Square fromSquare, Square toSquare, BitPieceType promotionPiece, ChessColor movingColor, byte value)
         {
             _moves.Add(BitMove.CreateMove(movingPiece, fromSquare, toSquare, promotionPiece, movingColor, value));
@@ -379,32 +378,6 @@ namespace MantaBitboardEngine
         private void AddCastlingMove(ChessColor movingColor, CastlingType castling, byte value)
         {
             _moves.Add(BitMove.CreateCastling(movingColor, castling, value));
-        }
-
-        public IEnumerable<BitMove> GetAllCaptures(IBitBoard board, ChessColor color)
-        {
-            // todo user _captures
-            return null;
-        }
-
-        public IEnumerable<BitMove> GetLegalMoves(ChessColor color)
-        {
-            return GetAllMoves(color);
-            ////var pseudolegalMoves = GetAllMoves(color);
-            ////var legalMoves = new List<BitMove>();
-
-            ////foreach (var move in pseudolegalMoves)
-            ////{
-            ////    _bitboards.Move(move);
-            ////    if (!IsCheck(color))
-            ////    {
-            ////        legalMoves.Add(move);
-            ////    }
-
-            ////    _bitboards.Back();
-            ////}
-
-            ////return legalMoves;
         }
 
         public bool IsAttacked(ChessColor color, Square square)

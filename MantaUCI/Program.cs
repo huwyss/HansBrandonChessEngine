@@ -27,6 +27,11 @@ debug this: ok
 position startpos moves e2e4 d7d5 e4d5 d8d5 d2d4 e7e5 c1e3 e5d4 d1d4 d5d4 e3d4 c8f5 b1d2 b8c6 f1b5 e8c8 b5c6 b7c6 d4a7 f8b4 c2c3 d8e8 g1e2 f5d3 a7e3 b4c5 e2f4 d3b5 a2a4 b5a6 e1d1 g7g5 e3c5 g5f4 c5d4 f7f6 d1c2 e8d8 d2e4 a6c4 h1e1 h7h6 b2b3 c4e6 e4f6 e6f5 f6e4 h8h7 c2b2 h7f7 e4c5 f7e7 e1e7 g8e7 d4f6 d8d2 b2c1 d2c2 c1d1 e7d5 f6d4 d5c3 d4c3 c2c3 a1c1 f5g4 f2f3 c3c1 d1c1 g4f5 c1b2 c8b8 b3b4 b8c8 a4a5 h6h5 h2h4 c8b8 b2c3 b8c8 c3d4
 go depth 6
 
+debug this: ok
+position startpos moves c2c4 e7e5 g2g3 g8f6 f1g2 f8c5 e2e3 e8g8 d2d4 e5d4 e3d4 c5b4 c1d2 b4d2 b1d2 d7d5 c4d5 f8e8 e1f1 f6d5 d1b3 d5b6 b3c3 c7c6 f2f4 c8g4 a1e1 e8e1 f1e1 b6d5 c3b3 d8e7
+go depth 7 -> ok
+go depth 7 -> ok
+
 
 */
 

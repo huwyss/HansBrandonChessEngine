@@ -26,6 +26,7 @@ namespace MantaBitboardEngine
 
 	public interface IHashtable
     {
+		Bitboard CurrentKey { get; }
 		void AddKey(ChessColor color, BitPieceType piece, Square square);
 		void AddHash(ChessColor color, int level, int score, HashEntryType type, Square from, Square to, BitPieceType promotionPiece);
 		HashEntry LookupPvMove(ChessColor color);
@@ -39,8 +40,8 @@ namespace MantaBitboardEngine
 
 		Random _rand = new Random();
 
-		Bitboard _currentkey;
-		Bitboard _currentlock;
+		Bitboard _currentKey;
+		Bitboard _currentLock;
 
 		HashEntry[,] _hashtab; // dimension: color, key
 		Bitboard[] _hashpositions;
@@ -49,8 +50,8 @@ namespace MantaBitboardEngine
 		public Hashtable()
 		{
 			InitializeHash();
-			_currentkey = 0;
-			_currentlock = 0;
+			_currentKey = 0;
+			_currentLock = 0;
 
 			_hashtab = new HashEntry[2, HashSize];
 			_hashpositions = new Bitboard[2];
@@ -62,23 +63,25 @@ namespace MantaBitboardEngine
 			}
 		}
 
+		public Bitboard CurrentKey => _currentKey;
+
 		public void AddKey(ChessColor color, BitPieceType piece, Square square)
 		{
-			_currentkey ^= Hash[(int)color, (int)piece, (int)square];
-			_currentlock ^= Lock[(int)color, (int)piece, (int)square];
+			_currentKey ^= Hash[(int)color, (int)piece, (int)square];
+			_currentLock ^= Lock[(int)color, (int)piece, (int)square];
 		}
 
 		public void AddHash(ChessColor color, int level, int score, HashEntryType type, Square from, Square to, BitPieceType promotionPiece)
         {
-            if (_hashtab[(int)color, _currentkey].HashLock == 0)
+            if (_hashtab[(int)color, _currentKey].HashLock == 0)
             {
-                _hashtab[(int)color, _currentkey].HashLock = _currentlock;
-				_hashtab[(int)color, _currentkey].From = from;
-				_hashtab[(int)color, _currentkey].To = to;
-				_hashtab[(int)color, _currentkey].PromotionPiece = promotionPiece;
-				_hashtab[(int)color, _currentkey].HashEntryType = type;
-				_hashtab[(int)color, _currentkey].Level = level;
-				_hashtab[(int)color, _currentkey].Score = score;
+                _hashtab[(int)color, _currentKey].HashLock = _currentLock;
+				_hashtab[(int)color, _currentKey].From = from;
+				_hashtab[(int)color, _currentKey].To = to;
+				_hashtab[(int)color, _currentKey].PromotionPiece = promotionPiece;
+				_hashtab[(int)color, _currentKey].HashEntryType = type;
+				_hashtab[(int)color, _currentKey].Level = level;
+				_hashtab[(int)color, _currentKey].Score = score;
 
 				_hashpositions[(int)color]++;
 
@@ -86,14 +89,14 @@ namespace MantaBitboardEngine
 
                 return;
             }
-			else if (_hashtab[(int)color, _currentkey].HashLock == _currentlock)
+			else if (_hashtab[(int)color, _currentKey].HashLock == _currentLock)
             {
-				_hashtab[(int)color, _currentkey].From = from;
-				_hashtab[(int)color, _currentkey].To = to;
-				_hashtab[(int)color, _currentkey].PromotionPiece = promotionPiece;
-				_hashtab[(int)color, _currentkey].HashEntryType = type;
-				_hashtab[(int)color, _currentkey].Level = level;
-				_hashtab[(int)color, _currentkey].Score = score;
+				_hashtab[(int)color, _currentKey].From = from;
+				_hashtab[(int)color, _currentKey].To = to;
+				_hashtab[(int)color, _currentKey].PromotionPiece = promotionPiece;
+				_hashtab[(int)color, _currentKey].HashEntryType = type;
+				_hashtab[(int)color, _currentKey].Level = level;
+				_hashtab[(int)color, _currentKey].Score = score;
 
 				////Console.WriteLine($"info update move.");
 
@@ -101,13 +104,13 @@ namespace MantaBitboardEngine
             }
 			else
             {
-				_hashtab[(int)color, _currentkey].HashLock = _currentlock;
-				_hashtab[(int)color, _currentkey].From = from;
-                _hashtab[(int)color, _currentkey].To = to;
-                _hashtab[(int)color, _currentkey].PromotionPiece = promotionPiece;
-                _hashtab[(int)color, _currentkey].HashEntryType = type;
-                _hashtab[(int)color, _currentkey].Level = level;
-                _hashtab[(int)color, _currentkey].Score = score;
+				_hashtab[(int)color, _currentKey].HashLock = _currentLock;
+				_hashtab[(int)color, _currentKey].From = from;
+                _hashtab[(int)color, _currentKey].To = to;
+                _hashtab[(int)color, _currentKey].PromotionPiece = promotionPiece;
+                _hashtab[(int)color, _currentKey].HashEntryType = type;
+                _hashtab[(int)color, _currentKey].Level = level;
+                _hashtab[(int)color, _currentKey].Score = score;
 
                 _collisions++;
 
@@ -119,12 +122,12 @@ namespace MantaBitboardEngine
 
 		public HashEntry LookupPvMove(ChessColor color)
         {
-			if (_hashtab[(int)color, _currentkey].HashLock != _currentlock)
+			if (_hashtab[(int)color, _currentKey].HashLock != _currentLock)
 			{
 				return null;
 			}
 
-			return _hashtab[(int)color, _currentkey];
+			return _hashtab[(int)color, _currentKey];
 		}
 
 		private void InitializeHash()

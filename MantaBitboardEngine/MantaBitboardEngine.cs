@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MantaCommon;
+using Bitboard = System.UInt64;
 
 namespace MantaBitboardEngine
 {
@@ -116,10 +117,11 @@ namespace MantaBitboardEngine
         {
             var emptyMove = BitMove.CreateEmptyMove();
             var currentColor = color;
-            HashEntry movePVHash = null;
+            HashEntry movePVHash;
             BitMove currentPvMove = emptyMove;
             string pvMoves = "";
             var numberPly = 0;
+            var encounteredPositions = new List<Bitboard>();
 
             do
             {
@@ -132,11 +134,16 @@ namespace MantaBitboardEngine
                     if (allMoves.Contains(currentPvMove))
                     {
                         _board.Move(currentPvMove);
-                        if (_moveGenerator.IsCheck(currentColor))
+                        var currentPosition = _hashtable.CurrentKey;
+
+                        if (_moveGenerator.IsCheck(currentColor) || 
+                            encounteredPositions.Contains(currentPosition)) // we have already been at this position so the moves are cyclic.
                         {
                             _board.Back();
                             break;
                         }
+
+                        encounteredPositions.Add(currentPosition);
                         pvMoves += currentPvMove.ToUciString() + " ";
                         numberPly++;
                         currentColor = CommonHelper.OtherColor(currentColor);

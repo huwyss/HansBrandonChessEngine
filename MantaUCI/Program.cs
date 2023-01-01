@@ -146,9 +146,7 @@ namespace MantaUCI
                     if (inputWords.Length >= 2 && inputWords[1].Equals("depth")) // go depth x
                     {
                         var depth = int.Parse(input.Substring(input.IndexOf("depth") + "depth".Length + 1));
-                        ////AnswerBestMove(depth);
-                        AnswerBestMove(7);
-                        _engine.SetAdditionalSelectiveDepth(3);
+                        AnswerBestMove(depth);
                     }
                     else
                     {
@@ -157,9 +155,7 @@ namespace MantaUCI
                         //   go movetime 1000 [ms]
                         //   go wtime w btime x winc y binc z (w, x, y, z in ms)
                         //   go wtime w btime x winc 0 binc movestogo y (w, x in ms, y number of moves ==> moves to do in time w)
-
                         AnswerBestMove(7);
-                        _engine.SetAdditionalSelectiveDepth(3);
                     }
                 }
                 else if (command.Equals("quit"))
@@ -206,7 +202,10 @@ namespace MantaUCI
             {
                 SetStartPosition();
                 DoMoves();
+                 
                 _engine.SetMaxSearchDepth(currentDepth);
+                _engine.SetAdditionalSelectiveDepth(3);
+
                 _stopwatch.Restart();
                 bestMove = _engine.DoBestMove();
                 _stopwatch.Stop();

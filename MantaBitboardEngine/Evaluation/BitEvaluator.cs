@@ -101,7 +101,7 @@ namespace MantaBitboardEngine
 
             for (var i = 0; i < 64; i++)
             {
-                _positionBonus[(int)ChessColor.White, (int)BitPieceType.Pawn, i] = PawnPositionBonus[i];
+                _positionBonus[(int)ChessColor.White, (int)BitPieceType.Pawn, i] = PawnPositionBonus[col + 8 * row];
                 _positionBonus[(int)ChessColor.Black, (int)BitPieceType.Pawn, i] = PawnPositionBonus[i];
 
                 _positionBonus[(int)ChessColor.White, (int)BitPieceType.Knight, i] = KnightPositionBonus[i];
@@ -130,26 +130,26 @@ namespace MantaBitboardEngine
 
         private readonly int[] PawnPositionBonus = new int[64] // pawn in center are more valuable (at least in opening)
         {
-            0,  0,  0,  0,  0,  0,  0,  0,
-            0,  0,  0,  0,  0,  0,  0,  0,
-            0,  0,  5, 10, 10,  5,  0,  0,
-            0,  0, 10, 15, 15, 10,  0,  0,
-            0,  0, 10, 15, 15, 10,  0,  0,
-            0,  0,  5, 10, 10,  5,  0,  0,
-            0,  0,  0,  0,  0,  0,  0,  0,
-            0,  0,  0,  0,  0,  0,  0,  0,
+            ////0,  0,  0,  0,  0,  0,  0,  0,
+            ////0,  0,  0,  0,  0,  0,  0,  0,
+            ////0,  0,  5, 10, 10,  5,  0,  0,
+            ////0,  0, 10, 15, 15, 10,  0,  0,
+            ////0,  0, 10, 15, 15, 10,  0,  0,
+            ////0,  0,  5, 10, 10,  5,  0,  0,
+            ////0,  0,  0,  0,  0,  0,  0,  0,
+            ////0,  0,  0,  0,  0,  0,  0,  0,
 
-        //// 0,  0,  0,  0,  0,  0,  0,  0,   // h
-        ////24, 28, 32, 35, 35, 32, 28, 24,   // g
-        //// 5, 10, 16, 25, 25, 16, 10,  5,   // f
-        //// 4,  8, 14, 19, 19, 14,  8,  4,   // e
-        //// 3,  5,  6, 12, 12,  6,  5,  3,   // d
-        //// 2,  4,  3,  7,  7,  3,  4,  2,   // c
-        //// 1,  2,  3, -8, -9,  3,  2,  1,   // b
-        //// 0,  0,  0,  0,  0,  0,  0,  0    // a
+            0,  0,  0,  0,  0,  0,  0,  0,   // h
+           24, 28, 32, 35, 35, 32, 28, 24,   // g
+            5, 10, 16, 25, 25, 16, 10,  5,   // f
+            4,  8, 14, 19, 19, 14,  8,  4,   // e
+            3,  5,  6, 12, 12,  6,  5,  3,   // d
+            2,  4,  3,  7,  7,  3,  4,  2,   // c
+            1,  2,  3, -8, -9,  3,  2,  1,   // b
+            0,  0,  0,  0,  0,  0,  0,  0    // a
         };
 
-        private readonly int[] KnightPositionBonus = new int[64] // Der Springer am Rande ist eine Schande
+        private readonly int[] KnightPositionBonus = new int[64] // Der Springer am Rande ist eine Schande (Tarrasch)
         {
             -10, -5, -5, -5, -5, -5, -5, -10,
              -5,  0,  0,  0,  0,  0,  0,  -5,
@@ -199,14 +199,26 @@ namespace MantaBitboardEngine
 
         private readonly int[] KingPositionBonus = new int[64]
         {
-            0,  0,  0,  0,  0,  0,  0,  0,  // h
-            0,  0,  0,  0,  0,  0,  0,  0,  // g
-            0,  0,  0,  0,  0,  0,  0,  0,  // f
-            0,  0,  0,  0,  0,  0,  0,  0,  // e
-            0,  0,  0,  0,  0,  0,  0,  0,  // d
-            0,  0,  0,  0,  0,  0,  0,  0,  // c
-            0,  0,  0,  0,  0,  0,  0,  0,  // b
-            0,  0,  5,  0,  0,  0,  5,  0   // a
+            -6, -6, -6, -6, -6, -6, -6, -6,  // h
+            -5, -5, -5, -5, -5, -5, -5, -5,  // g
+            -4, -4, -4, -4, -4, -4, -4, -4,  // f
+            -3, -3, -3, -3, -3, -3, -3, -3,  // e
+            -2, -2, -2, -2, -2, -2, -2, -2,  // d
+            -1, -1, -1, -1, -1, -1, -1, -1,  // c
+             0,  0,  0,  0,  0,  0,  0,  0,  // b
+             0,  5,  5,  0,  0,  5,  5,  0   // a
+        };
+
+        private readonly int[] KingPositionBonusEndgame = new int[64]
+        {
+            -3, -3, -3, -3, -3, -3, -3, -3,  // h
+            -3,  0,  0,  0,  0,  0,  0, -3,  // g
+            -3,  0,  3,  3,  3,  3,  0, -3,  // f
+            -3,  0,  3,  3,  3,  3,  0, -3,  // e
+            -3,  0,  3,  3,  3,  3,  0, -3,  // d
+            -3,  0,  3,  3,  3,  3,  0, -3,  // c
+            -3,  0,  0,  0,  0,  0,  0, -3,  // b
+            -3, -3, -3, -3, -3, -3, -3, -3   // a
         };
     }
 }

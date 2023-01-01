@@ -10,12 +10,18 @@ using MantaCommon;
  * todo Bitboard engine:
  * 
  * - tests for search in bitboard
- * - hashtable
- * 
+ * - use search for Bitboard and non-bitboard
+ * - hashtable for alpha, beta cutoff
+ * - evaluation: isolated pawns
+ * - evaluation: passed pawns
+ * - evaluation: rooks and open and semiopen lines
+ * - time management: can play moves in specified time
+ * - move repetition
  * 
  * ok - Generate capture moves
  * ok - more differenciated move values
  * ok - selective search depth
+ * ok - hashtable for PV
  * 
  */
 

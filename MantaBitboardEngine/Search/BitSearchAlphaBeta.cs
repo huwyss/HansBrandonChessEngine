@@ -194,7 +194,7 @@ namespace MantaBitboardEngine
 
                 if (level < _maxDepth || (level < _selectiveDepth && currentMove.CapturedPiece != BitPieceType.Empty)) // we need to do more move levels...
                 //// if (level < _maxDepth)
-                ////if (level < _selectiveDepth)
+                //// if (level < _selectiveDepth)
                 {
                     currentRating = SearchLevel(CommonHelper.OtherColor(color), level + 1, alpha, beta); // recursive...
 

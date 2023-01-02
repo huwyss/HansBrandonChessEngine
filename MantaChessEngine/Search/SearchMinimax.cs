@@ -15,7 +15,8 @@ namespace MantaChessEngine
     public class SearchMinimax : ISearchService
     {
         private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        
+
+        private IBoard _board;
         private IMoveGenerator _moveGenerator;
         private IEvaluator _evaluator;
         private int _maxDepth;
@@ -35,8 +36,9 @@ namespace MantaChessEngine
         {
         }
 
-        public SearchMinimax(IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth = Definitions.DEFAULT_MAXLEVEL)
+        public SearchMinimax(IBoard board, IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth = Definitions.DEFAULT_MAXLEVEL)
         {
+            _board = board;
             _evaluator = evaluator;
             _moveGenerator = moveGenerator;
             _maxDepth = maxDepth;
@@ -50,10 +52,10 @@ namespace MantaChessEngine
         /// <param name="color">Color of next move</param>
         /// <param name="score">Score of endposition of the returned move.</param>
         /// <returns>best move for color.</returns>
-        public MoveRating Search(IBoard board, ChessColor color)
+        public MoveRating Search(ChessColor color)
         {
             evaluatedPositions = 0;
-            IEnumerable<MoveRating> moveRatings = SearchLevel(board, color, 1);
+            IEnumerable<MoveRating> moveRatings = SearchLevel(color, 1);
             var count = moveRatings.Count();
             var randomIndex = _rand.Next(0, count);
             MoveRating rating = moveRatings.ElementAt(randomIndex);
@@ -74,35 +76,35 @@ namespace MantaChessEngine
         /// <param name="level">Number of levels to be searched (1=ie whites move, 2=moves of white, black, 3=move of white,black,white...</param>
         /// <param name="score">Score of position on current level</param>
         /// <returns></returns>
-        internal virtual IEnumerable<MoveRating> SearchLevel(IBoard board, ChessColor color, int level)
+        internal virtual IEnumerable<MoveRating> SearchLevel(ChessColor color, int level)
         {
             var bestRating = new MoveRating() { Score = InitWithWorstScorePossible(color) };
             MoveRating currentRating = new MoveRating();
             List<MoveRating> bestMoveRatings = new List<MoveRating>();
 
-            var possibleMoves = _moveGenerator.GetLegalMoves(board, color).ToList<IMove>();
+            var possibleMoves = _moveGenerator.GetLegalMoves(_board, color).ToList<IMove>();
 
             // no legal moves means the game is over. It is either stall mate or check mate.
             if (possibleMoves.Count == 0)
             {
-                return MakeMoveRatingForGameEnd(board, color, level);
+                return MakeMoveRatingForGameEnd(_board, color, level);
             }
 
             foreach (IMove currentMove in possibleMoves)
             {
-                board.Move(currentMove);
+                _board.Move(currentMove);
 
                 if (level < _maxDepth) // we need to do more move levels...
                 {
                     // we are only interested in the first score. all scores are the same.
-                    currentRating = SearchLevel(board, Helper.GetOppositeColor(color), level + 1).First(); // recursive...
-                    board.Back();
+                    currentRating = SearchLevel(Helper.GetOppositeColor(color), level + 1).First(); // recursive...
+                    _board.Back();
                 }
                 else // we reached the bottom of the tree and evaluate the position
                 {
-                    currentRating.Score = _evaluator.Evaluate(board);
+                    currentRating.Score = _evaluator.Evaluate();
                     evaluatedPositions++;
-                    board.Back();
+                    _board.Back();
                 }
 
                 // update the best move in the current level

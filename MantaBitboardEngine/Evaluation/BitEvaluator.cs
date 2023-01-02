@@ -2,7 +2,7 @@
 
 namespace MantaBitboardEngine
 {
-    public class BitEvaluator
+    public class BitEvaluator : IEvaluator
     {
         private readonly Bitboards _board;
         private readonly HelperBitboards _helperBits;

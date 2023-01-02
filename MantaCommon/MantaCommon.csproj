@@ -43,7 +43,8 @@
   <ItemGroup>
     <Compile Include="CommonHelper.cs" />
     <Compile Include="FenParser.cs" />
-    <Compile Include="IMantaEngine.cs" />
+    <Compile Include="Interfaces\IEvaluator.cs" />
+    <Compile Include="Interfaces\IMantaEngine.cs" />
     <Compile Include="MantaEngineException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UciMoveRating.cs" />

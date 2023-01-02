@@ -30,25 +30,25 @@ namespace MantaChessEngine
             switch (engineType)
             {
                 case EngineType.Random:
-                    _search = new SearchRandom(_moveGenerator);
+                    _search = new SearchRandom(_board, _moveGenerator);
                     break;
 
                 case EngineType.Minimax:
-                    _evaluator = new EvaluatorSimple();
-                    _search = new SearchMinimax(_evaluator, _moveGenerator);
+                    _evaluator = new EvaluatorSimple(_board);
+                    _search = new SearchMinimax(_board, _evaluator, _moveGenerator);
                     break;
                 
                 case EngineType.MinimaxPosition:
-                    _evaluator = new EvaluatorPosition();
-                    _search = new SearchMinimax(_evaluator, _moveGenerator);
+                    _evaluator = new EvaluatorPosition(_board);
+                    _search = new SearchMinimax(_board, _evaluator, _moveGenerator);
                     break;
                 
                 // strongest --------------------------------
                 case EngineType.AlphaBeta:
-                    _evaluator = new EvaluatorPosition();
+                    _evaluator = new EvaluatorPosition(_board);
                     var moveOrder = new OrderPvAndImportance();
                     var captureOnly = new FilterCapturesOnly();
-                    _search = new SearchAlphaBeta(_evaluator, _moveGenerator, 4, moveOrder, captureOnly);
+                    _search = new SearchAlphaBeta(_board, _evaluator, _moveGenerator, 4, moveOrder, captureOnly);
                     break;
                 // -------------------------------------------
 
@@ -135,7 +135,7 @@ namespace MantaChessEngine
 
         public UciMoveRating DoBestMove(ChessColor color)
         {
-            MoveRating nextMove = _search.Search(_board, color);
+            MoveRating nextMove = _search.Search(color);
             _board.Move(nextMove.Move);
             _log.Debug("Score: " + nextMove.Score);
 
@@ -146,7 +146,7 @@ namespace MantaChessEngine
 
         public UciMoveRating DoBestMove()
         {
-            MoveRating nextMove = _search.Search(_board, _board.BoardState.SideToMove);
+            MoveRating nextMove = _search.Search(_board.BoardState.SideToMove);
             _board.Move(nextMove.Move);
             _log.Debug("Score: " + nextMove.Score);
 

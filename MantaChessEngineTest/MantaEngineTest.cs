@@ -13,7 +13,6 @@ namespace MantaChessEngineTest
         {
             var engine = new MantaEngine(EngineType.Minimax);
             engine.SetMaxSearchDepth(1);
-            engine.SetBoard(new Board());
             string boardString = "rnb.kbnr" +
                                  "ppp.pppp" +
                                  "........" +
@@ -43,7 +42,6 @@ namespace MantaChessEngineTest
         {
             var engine = new MantaEngine(EngineType.Minimax);
             engine.SetMaxSearchDepth(1);
-            engine.SetBoard(new Board());
             string boardString = "rnbqkbnr" +
                                  "pppp.ppp" +
                                  "........" +
@@ -156,7 +154,6 @@ namespace MantaChessEngineTest
         public void DoBestMoveTest_WhenCheck_ThenKingMustEscapeCheck()
         {
             var engine = new MantaEngine(EngineType.MinimaxPosition);
-            engine.SetBoard(new Board());
             string boardString = "........" +
                                  "........" +
                                  "........" +

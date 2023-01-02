@@ -12,13 +12,13 @@ namespace MantaChessEngineTest.Doubles
     {
         private MoveAndScore[] _moveAndRating;
 
-        public SearchMinimaxDouble_SearchLevelOverwritten(IEvaluator evaluator, IMoveGenerator moveGenerator, MoveAndScore[] scoresAndMoves) 
-            : base(evaluator, moveGenerator)
+        public SearchMinimaxDouble_SearchLevelOverwritten(IBoard board, IEvaluator evaluator, IMoveGenerator moveGenerator, MoveAndScore[] scoresAndMoves) 
+            : base(board, evaluator, moveGenerator)
         {
             _moveAndRating = scoresAndMoves;
         }
 
-        internal override IEnumerable<MoveRating> SearchLevel(IBoard board, ChessColor color, int level)
+        internal override IEnumerable<MoveRating> SearchLevel(ChessColor color, int level)
         {
             //rating = _moveAndRating[level].Rating;
             //return _moveAndRating[level].Move;

@@ -21,8 +21,8 @@ namespace MantaChessEngineTest
                               "P.......";
             board.SetPosition(position);
 
-            var target = new EvaluatorSimple();
-            var score = target.Evaluate(board);
+            var target = new EvaluatorSimple(board);
+            var score = target.Evaluate();
 
             Assert.AreEqual(100, score);
         }
@@ -41,8 +41,8 @@ namespace MantaChessEngineTest
                               "P......P";
             board.SetPosition(position);
 
-            var target = new EvaluatorSimple();
-            var score = target.Evaluate(board);
+            var target = new EvaluatorSimple(board);
+            var score = target.Evaluate();
 
             Assert.AreEqual(0, score);
         }
@@ -61,8 +61,8 @@ namespace MantaChessEngineTest
                               "RNBQKBNR"; // white a1-h1
             board.SetPosition(position);
 
-            var target = new EvaluatorSimple();
-            var score = target.Evaluate(board);
+            var target = new EvaluatorSimple(board);
+            var score = target.Evaluate();
 
             var expectedScore = 8 * Definitions.ValuePawn +
                                 2 * Definitions.ValueKnight +

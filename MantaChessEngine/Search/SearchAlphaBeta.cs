@@ -13,7 +13,8 @@ namespace MantaChessEngine
         private const int AspirationWindowHalfSizeInitial = 50;
 
         private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        
+
+        private readonly IBoard _board;
         private readonly IMoveGenerator _moveGenerator;
         private readonly IEvaluator _evaluator;
         private readonly IMoveOrder _moveOrder;
@@ -56,8 +57,9 @@ namespace MantaChessEngine
             _previousPV = null;
         }
 
-        public SearchAlphaBeta(IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth, IMoveOrder moveOrder, IMoveFilter moveFilter)
+        public SearchAlphaBeta(IBoard board, IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth, IMoveOrder moveOrder, IMoveFilter moveFilter)
         {
+            _board = board;
             _additionalSelectiveDepth = 0;
             _evaluator = evaluator;
             _moveGenerator = moveGenerator;
@@ -75,7 +77,7 @@ namespace MantaChessEngine
         /// <param name="color">Color of next move</param>
         /// <param name="score">Score of endposition of the returned move.</param>
         /// <returns>best move for color.</returns>
-        public MoveRating Search(IBoard board, ChessColor color)
+        public MoveRating Search(ChessColor color)
         {
             _pruningCount = 0;
             evaluatedPositions = 0;
@@ -95,7 +97,7 @@ namespace MantaChessEngine
 
             while (!succeed)
             {
-                moveRating = SearchLevel(board, color, 1, alphaStart, betaStart);
+                moveRating = SearchLevel(color, 1, alphaStart, betaStart);
 
                 _log.Debug("evaluated positons: " + evaluatedPositions);
                 moveRating.EvaluatedPositions = evaluatedPositions;
@@ -135,17 +137,17 @@ namespace MantaChessEngine
         /// <param name="board">Board to be searched in</param>
         /// <param name="color">Color of next move</param>
         /// <param name="level">Start level of search </param>
-        internal virtual MoveRating SearchLevel(IBoard board, ChessColor color, int level, int alpha, int beta)
+        internal virtual MoveRating SearchLevel(ChessColor color, int level, int alpha, int beta)
         {
             var bestRating = new MoveRating() { Score = InitWithWorstScorePossible(color) };
             MoveRating currentRating = new MoveRating();
 
-            var allLegalMovesUnsortedUnfiltered = _moveGenerator.GetLegalMoves(board, color).ToList<IMove>();
+            var allLegalMovesUnsortedUnfiltered = _moveGenerator.GetLegalMoves(_board, color).ToList<IMove>();
 
             // no legal moves means the game is over. It is either stall mate or check mate.
             if (allLegalMovesUnsortedUnfiltered.Count() == 0)
             {
-                return MakeMoveRatingForGameEnd(board, color, level);
+                return MakeMoveRatingForGameEnd(_board, color, level);
             }
 
             var allLegalMovesUnsorted = _moveFilter != null && level > _maxDepth
@@ -163,27 +165,27 @@ namespace MantaChessEngine
 
             foreach (IMove currentMove in possibleMoves)
             {
-                board.Move(currentMove);
+                _board.Move(currentMove);
 
                 if (level < _maxDepth || (level < _selectiveDepth && currentMove.CapturedPiece != null)) // we need to do more move levels...
                 //// if (level < _maxDepth)
                 {
-                    currentRating = SearchLevel(board, Helper.GetOppositeColor(color), level + 1, alpha, beta); // recursive...
+                    currentRating = SearchLevel(Helper.GetOppositeColor(color), level + 1, alpha, beta); // recursive...
 
                     if (currentRating == null) // we are in a level > maxdepth and tried to find a capture move but there was no capture move.
                     {
-                        currentRating = new MoveRating() { Score = _evaluator.Evaluate(board), EvaluationLevel = level };
+                        currentRating = new MoveRating() { Score = _evaluator.Evaluate(), EvaluationLevel = level };
                         evaluatedPositions++;
                     }
 
-                    board.Back();
+                    _board.Back();
                 }
                 else // we reached the bottom of the tree and evaluate the position
                 {
-                    currentRating.Score = _evaluator.Evaluate(board);
+                    currentRating.Score = _evaluator.Evaluate();
                     currentRating.EvaluationLevel = level;
                     evaluatedPositions++;
-                    board.Back();
+                    _board.Back();
                 }
 
                 // update the best move in the current level

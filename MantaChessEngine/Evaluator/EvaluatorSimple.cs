@@ -4,16 +4,23 @@ namespace MantaChessEngine
 {
     public class EvaluatorSimple : IEvaluator
     {
+        private readonly IBoard _board;
+
         private static readonly int ValuePawn = Definitions.ValuePawn;
         private static readonly int ValueKnight = Definitions.ValueKnight;
         private static readonly int ValueBishop = Definitions.ValueBishop;
         private static readonly int ValueRook = Definitions.ValueRook;
         private static readonly int ValueQueen = Definitions.ValueQueen;
 
+        public EvaluatorSimple(IBoard board)
+        {
+            _board = board;
+        }
+
         /// <summary>
         /// Calculates the score from white's point. + --> white is better, - --> black is better.
         /// </summary>
-        public int Evaluate(IBoard board)
+        public int Evaluate()
         {
             var scoreWhite = 0;
             var scoreBlack = 0;
@@ -22,9 +29,9 @@ namespace MantaChessEngine
             {
                 for (int rank = 1; rank <= 8; rank++)
                 {
-                    Piece piece = board.GetPiece(file, rank);
+                    Piece piece = _board.GetPiece(file, rank);
                     int pieceScore = GetPieceScore(piece);
-                    if (board.GetColor(file, rank) == ChessColor.White)
+                    if (_board.GetColor(file, rank) == ChessColor.White)
                     {
                         scoreWhite += pieceScore;
                     }

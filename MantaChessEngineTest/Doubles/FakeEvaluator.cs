@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MantaChessEngine;
+using MantaCommon;
 
 namespace MantaChessEngineTest.Doubles
 {
@@ -17,7 +18,7 @@ namespace MantaChessEngineTest.Doubles
             EvaluateCalledCounter = 0;
         }
 
-        public int Evaluate(IBoard board)
+        public int Evaluate()
         {
             EvaluateCalledCounter++;
             _enumerator.MoveNext();

@@ -52,7 +52,6 @@
     <Compile Include="Evaluator\EvaluatorPosition.cs" />
     <Compile Include="Evaluator\EvaluatorSimple.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="Interfaces\IEvaluator.cs" />
     <Compile Include="BoardState.cs" />
     <Compile Include="Interfaces\IMoveFilter.cs" />
     <Compile Include="Interfaces\IMoveOrder.cs" />

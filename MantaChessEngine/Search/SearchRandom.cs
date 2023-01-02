@@ -9,8 +9,9 @@ namespace MantaChessEngine
 {
     public class SearchRandom : ISearchService
     {
+        private readonly IBoard _board;
+        private readonly IMoveGenerator _moveGenerator;
         private Random _rand;
-        private IMoveGenerator _moveGenerator;
 
         public void SetMaxDepth(int maxLevel) { }
 
@@ -18,16 +19,17 @@ namespace MantaChessEngine
 
         public void SetPreviousPV(MoveRating previousPV) { }
 
-        public SearchRandom(IMoveGenerator moveGenerator)
+        public SearchRandom(IBoard board, IMoveGenerator moveGenerator)
         {
+            _board = board;
             _moveGenerator = moveGenerator;
             _rand = new Random();
         }
 
-        public MoveRating Search(IBoard board, ChessColor color)
+        public MoveRating Search(ChessColor color)
         {
             IMove nextMove = null;
-            var possibleMovesComputer = _moveGenerator.GetLegalMoves(board, color).ToList<IMove>();
+            var possibleMovesComputer = _moveGenerator.GetLegalMoves(_board, color).ToList<IMove>();
             int numberPossibleMoves = possibleMovesComputer.Count;
 
             if (numberPossibleMoves > 0)

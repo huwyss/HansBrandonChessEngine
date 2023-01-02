@@ -22,8 +22,8 @@ namespace MantaChessEngineTest
                               "........";
             board.SetPosition(position);
 
-            var target = new EvaluatorPosition();
-            var score = target.Evaluate(board);
+            var target = new EvaluatorPosition(board);
+            var score = target.Evaluate();
 
             Assert.AreEqual(115, score);
         }
@@ -42,8 +42,8 @@ namespace MantaChessEngineTest
                               "........";
             board.SetPosition(position);
 
-            var target = new EvaluatorPosition();
-            var score = target.Evaluate(board);
+            var target = new EvaluatorPosition(board);
+            var score = target.Evaluate();
 
             Assert.AreEqual(110, score);
         }
@@ -62,8 +62,8 @@ namespace MantaChessEngineTest
                               "........";
             board.SetPosition(position);
 
-            var target = new EvaluatorPosition();
-            var score = target.Evaluate(board);
+            var target = new EvaluatorPosition(board);
+            var score = target.Evaluate();
 
             Assert.AreEqual(300 - 5, score);
         }
@@ -82,8 +82,8 @@ namespace MantaChessEngineTest
                               "........";
             board.SetPosition(position);
 
-            var target = new EvaluatorPosition();
-            var score = target.Evaluate(board);
+            var target = new EvaluatorPosition(board);
+            var score = target.Evaluate();
 
             Assert.AreEqual(300, score);
         }
@@ -102,8 +102,8 @@ namespace MantaChessEngineTest
                               "........";
             board.SetPosition(position);
 
-            var target = new EvaluatorPosition();
-            var score = target.Evaluate(board);
+            var target = new EvaluatorPosition(board);
+            var score = target.Evaluate();
 
             Assert.AreEqual(true, score > 0.1f, "Two bishops should be better than bishop and knight.");
         }
@@ -122,8 +122,8 @@ namespace MantaChessEngineTest
                               "........";
             board.SetPosition(position);
 
-            var target = new EvaluatorPosition();
-            var score = target.Evaluate(board);
+            var target = new EvaluatorPosition(board);
+            var score = target.Evaluate();
 
             Assert.AreEqual(true, score < -0.1f, "Two bishops should be better than bishop and knight.");
         }
@@ -144,18 +144,18 @@ namespace MantaChessEngineTest
 
             // white castling
             board.Move(new CastlingMove(CastlingType.WhiteKingSide, new King(ChessColor.White)));
-            var target = new EvaluatorPosition();
-            var score = target.Evaluate(board);
+            var target = new EvaluatorPosition(board);
+            var score = target.Evaluate();
             Assert.AreEqual(true, score > 0.1f, "White did castling. so white should be better.");
 
             // black castling
             board.Move(new CastlingMove(CastlingType.BlackKingSide, new King(ChessColor.Black)));
-            score = target.Evaluate(board);
+            score = target.Evaluate();
             Assert.AreEqual(true, score == 0, "White and Black did castling. They are equal.");
 
             // take black move back
             board.Back();
-            score = target.Evaluate(board);
+            score = target.Evaluate();
             Assert.AreEqual(true, score > 0.1f, "Black castling was taken back. so white should be better.");
         }
     }

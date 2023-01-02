@@ -2,7 +2,7 @@
 
 namespace MantaChessEngine
 {
-    public interface IBoard
+    public interface IBoard : ISearchableBoard<IMove>
     {
         BoardState BoardState { get; }
         
@@ -40,12 +40,12 @@ namespace MantaChessEngine
         /// <summary>
         /// Do a move and update the board
         /// </summary>
-        void Move(IMove nextMove);
+        ////void Move(IMove nextMove);
 
         /// <summary>
         /// Takes the last move back
         /// </summary>
-        void Back();
+        ////void Back();
 
         ChessColor GetColor(int file, int rank);
 

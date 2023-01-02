@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace MantaChessEngine
 {
-    public class MoveRating
+    public class MoveRating : IMoveRating<IMove>
     {
         private const int Tolerance = 5;
 
@@ -45,7 +45,7 @@ namespace MantaChessEngine
             EvaluationLevel = 0;
         }
 
-        public MoveRating Clone()
+        public IMoveRating<IMove> Clone()
         {
             return new MoveRating()
             {
@@ -74,7 +74,7 @@ namespace MantaChessEngine
         /// <summary>
         /// True if current score is as good as best within tolerance.
         /// </summary>
-        public bool IsEquallyGood(MoveRating otherRating)
+        public bool IsEquallyGood(IMoveRating<IMove> otherRating)
         {
             bool sameScore = this.Score <= otherRating.Score + Tolerance &&
                              this.Score >= otherRating.Score - Tolerance;
@@ -85,7 +85,7 @@ namespace MantaChessEngine
         /// <summary>
         /// True if current score is better or wins earlier or looses later.
         /// </summary>
-        public bool IsBetter(ChessColor color, MoveRating otherRating)
+        public bool IsBetter(ChessColor color, IMoveRating<IMove> otherRating)
         {
             return color == ChessColor.White ? Score > otherRating.Score : Score < otherRating.Score;
         }

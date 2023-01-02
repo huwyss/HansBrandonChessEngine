@@ -8,46 +8,64 @@ using MantaCommon;
 [assembly: InternalsVisibleTo("MantaBitboardEngineTest")]
 namespace MantaChessEngine
 {
-    public class MoveGenerator : IMoveGenerator
+    public class MoveGenerator : IMoveGenerator<IMove>
     {
-        public MoveGenerator()
+        public IEnumerable<IMove> GetAllCaptures(ChessColor color)
         {
+            throw new System.NotImplementedException();
+        }
+
+        public bool IsAttacked(ChessColor color, Square square)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private readonly IBoard _board;
+
+        public MoveGenerator(IBoard board)
+        {
+            _board = board;
         }
 
         /// <summary>
         /// Manta has grown up and now is able to return the legal moves only
         /// </summary>
-        public IEnumerable<IMove> GetLegalMoves(IBoard board, ChessColor color)
+        public IEnumerable<IMove> GetLegalMoves(ChessColor color)
         {
-            var pseudolegalMoves = GetAllMoves(board, color);
+            var pseudolegalMoves = GetAllMoves(color);
             var legalMoves = new List<IMove>();
 
             foreach (var move in pseudolegalMoves)
             {
-                board.Move(move);
-                var kingPosition = board.GetKing(color);
-                if (!IsAttacked(board, color, kingPosition.File, kingPosition.Rank))
+                _board.Move(move);
+                var kingPosition = _board.GetKing(color);
+                if (!IsAttacked(color, kingPosition.File, kingPosition.Rank))
                 {
                     legalMoves.Add(move);
                 }
 
-                board.Back();
+                _board.Back();
             }
 
             return legalMoves;
+        }
+
+        public IEnumerable<IMove> GetAllMoves(ChessColor color)
+        {
+            return GetAllMoves(color, true, true);
         }
 
         /// <summary>
         /// Returns all pseudo legal moves of that piece. Pseudo means the king is allowed to be under attack but
         /// otherwise the move must be legal.
         /// </summary>
-        internal IEnumerable<IMove> GetAllMoves(IBoard board, ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
+        public IEnumerable<IMove> GetAllMoves(ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
         {
-            var allMovesUnchecked = GetAllMovesUnchecked(board, color, includeCastling, includePawnMoves);
+            var allMovesUnchecked = GetAllMovesUnchecked(color, includeCastling, includePawnMoves);
             return allMovesUnchecked;
         }
 
-        private IEnumerable<IMove> GetAllMovesUnchecked(IBoard board, ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
+        private IEnumerable<IMove> GetAllMovesUnchecked(ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
         {
             bool kingFound = false;
             List<IMove> allMoves = new List<IMove>();
@@ -56,9 +74,9 @@ namespace MantaChessEngine
             {
                 for (int rank = 1; rank <= 8; rank++)
                 {
-                    if (board.GetColor(file, rank) == color)
+                    if (_board.GetColor(file, rank) == color)
                     {
-                        Piece piece = board.GetPiece(file, rank);
+                        Piece piece = _board.GetPiece(file, rank);
                         
                         if (piece is King)
                         {
@@ -70,7 +88,7 @@ namespace MantaChessEngine
                             continue;
                         }
 
-                        allMoves.AddRange(piece.GetMoves(this, board, file, rank, includeCastling));
+                        allMoves.AddRange(piece.GetMoves(this, _board, file, rank, includeCastling));
                     }
                 }
             }
@@ -78,21 +96,21 @@ namespace MantaChessEngine
             return kingFound ? allMoves : new List<IMove>();
         }
 
-        public bool IsMoveValid(IBoard board, IMove move)
+        public bool IsMoveValid(IMove move)
         {
-            bool valid = HasCorrectColorMoved(board, move);
-            valid &= move.MovingPiece.GetMoves(this, board, move.SourceFile, move.SourceRank).Contains(move);
+            bool valid = HasCorrectColorMoved(move);
+            valid &= move.MovingPiece.GetMoves(this, _board, move.SourceFile, move.SourceRank).Contains(move);
 
-            board.Move(move);
-            var king = board.GetKing(move.Color);
-            valid &= !IsAttacked(board, move.Color, king.File, king.Rank);
-            board.Back();
+            _board.Move(move);
+            var king = _board.GetKing(move.MovingColor);
+            valid &= !IsAttacked(move.MovingColor, king.File, king.Rank);
+            _board.Back();
             return valid;
         }
 
-        private bool HasCorrectColorMoved(IBoard board, IMove move)
+        private bool HasCorrectColorMoved(IMove move)
         {
-            return (move.MovingPiece.Color == board.BoardState.SideToMove);
+            return (move.MovingPiece.Color == _board.BoardState.SideToMove);
         }
 
         // unit tests need access.
@@ -128,13 +146,13 @@ namespace MantaChessEngine
                     targetRank >= 1 && targetRank <= 8;
         }
 
-        private bool IsFieldsEmpty(IBoard board, int sourceFile, int sourceRank, int targetFile)
+        private bool IsFieldsEmpty(int sourceFile, int sourceRank, int targetFile)
         {
             bool empty = true;
 
             for (int file = sourceFile; file <= targetFile; file++)
             {
-                empty &= board.GetPiece(file, sourceRank) == null; //Definitions.EmptyField;
+                empty &= _board.GetPiece(file, sourceRank) == null; //Definitions.EmptyField;
             }
 
             return empty;
@@ -143,10 +161,10 @@ namespace MantaChessEngine
         /// <summary>
         /// Is the field of color ist attacked by opposite color.
         /// </summary>
-        public bool IsAttacked(IBoard board, ChessColor color, int file, int rank)
+        public bool IsAttacked(ChessColor color, int file, int rank)
         {
             // find all oponent moves, without pawn moves
-            var moves = GetAllMoves(board, Helper.GetOppositeColor(color), false, false);
+            var moves = GetAllMoves(Helper.GetOppositeColor(color), false, false);
 
             foreach (IMove move in moves)
             {
@@ -159,21 +177,21 @@ namespace MantaChessEngine
             // check if there is an attacking pawn diagonal to the position
             if (color == ChessColor.White)
             {
-                var piece = file - 1 >= 1 && rank + 1 <= 8 ? board.GetPiece(file - 1, rank + 1) : null;
+                var piece = file - 1 >= 1 && rank + 1 <= 8 ? _board.GetPiece(file - 1, rank + 1) : null;
                 if (piece is Pawn && piece.Color == ChessColor.Black)
                     return true;
 
-                piece = file + 1 <= 8 && rank + 1 <= 8 ? board.GetPiece(file + 1, rank + 1) : null;
+                piece = file + 1 <= 8 && rank + 1 <= 8 ? _board.GetPiece(file + 1, rank + 1) : null;
                 if (piece is Pawn && piece.Color == ChessColor.Black)
                     return true;
             }
             else
             {
-                var piece = file - 1 >= 1 && rank - 1 >= 1 ? board.GetPiece(file - 1, rank - 1) : null;
+                var piece = file - 1 >= 1 && rank - 1 >= 1 ? _board.GetPiece(file - 1, rank - 1) : null;
                 if (piece is Pawn && piece.Color == ChessColor.White)
                     return true;
 
-                piece = file + 1 <= 8 && rank - 1 >= 1 ? board.GetPiece(file + 1, rank - 1) : null;
+                piece = file + 1 <= 8 && rank - 1 >= 1 ? _board.GetPiece(file + 1, rank - 1) : null;
                 if (piece is Pawn && piece.Color == ChessColor.White)
                     return true;
             }
@@ -181,10 +199,10 @@ namespace MantaChessEngine
             return false;
         }
 
-        public bool IsCheck(IBoard board, ChessColor color)
+        public bool IsCheck(ChessColor color)
         {
             // find all oponent moves
-            var moves = GetAllMoves(board, Helper.GetOppositeColor(color), false);
+            var moves = GetAllMoves(Helper.GetOppositeColor(color), false);
 
             // if a move ends in king's position then king is in check
             foreach (IMove move in moves)
@@ -197,5 +215,7 @@ namespace MantaChessEngine
 
             return false;
         }
+
+        
     }
 }

@@ -5,6 +5,28 @@ namespace MantaChessEngine
 {
     public abstract class MoveBase : IMove
     {
+        public Square FromSquare {
+            get
+            {
+                return (Square)(SourceFile - 1 + 8 * (SourceRank - 1));
+            } 
+        }
+
+        public Square ToSquare
+        {
+            get
+            {
+                return (Square)(TargetFile - 1 + 8 * (TargetRank - 1));
+            }
+        }
+
+        public virtual BitPieceType PromotionPiece => BitPieceType.Empty;
+
+        public bool IsCapture()
+        {
+            return CapturedPiece != null;
+        }
+
         public Piece MovingPiece { get; set; }
         public int SourceFile { get; set; }
         public int SourceRank { get; set; }
@@ -12,7 +34,7 @@ namespace MantaChessEngine
         public int TargetRank { get; set; }
         public Piece CapturedPiece { get; set; }
 
-        public ChessColor Color
+        public ChessColor MovingColor
         {
             get
             {

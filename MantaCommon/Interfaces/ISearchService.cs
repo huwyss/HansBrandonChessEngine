@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MantaCommon;
 
-namespace MantaChessEngine
+namespace MantaCommon
 {
-    public interface ISearchService
+    public interface ISearchService<TMove> where TMove : IGenericMove
     {
-        MoveRating Search(ChessColor color);
+        IMoveRating<TMove> Search(ChessColor color);
 
         void SetMaxDepth(int maxDepth);
 

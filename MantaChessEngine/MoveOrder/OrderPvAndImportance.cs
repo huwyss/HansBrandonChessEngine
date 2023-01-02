@@ -6,9 +6,9 @@ namespace MantaChessEngine
 {
     public class OrderPvAndImportance : IMoveOrder
     {
-        private MoveRating _previousMoveRatingPV = null;
+        private IMoveRating<IMove> _previousMoveRatingPV = null;
 
-        public void SetMoveRatingPV(MoveRating previousMoveRatingPV)
+        public void SetMoveRatingPV(IMoveRating<IMove> previousMoveRatingPV)
         {
             _previousMoveRatingPV = previousMoveRatingPV;
         }

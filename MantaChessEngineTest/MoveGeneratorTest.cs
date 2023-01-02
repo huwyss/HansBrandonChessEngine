@@ -116,8 +116,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMoves_WhenKing_ThenAllMoves()
         {
-            MoveGenerator target = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             string position = "........" +
                               "........" +
                               "........" +
@@ -401,8 +401,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetAllMoves_WhenTwoPieces_ThenShowMovesOfBothPieces()
         {
-            MoveGenerator target = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             string position = "........" +
                               "........" +
                               "....p..." +
@@ -413,7 +413,7 @@ namespace MantaChessEngineTest
                               "....K...";
             board.SetPosition(position);
            
-            var moves = target.GetAllMoves(board, ChessColor.White).ToList<IMove>();
+            var moves = target.GetAllMoves(ChessColor.White).ToList<IMove>();
 
             Assert.AreEqual(6, moves.Count);
             Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('P'), 'e', 2, 'e', 3, null)), "e2e3. missing");
@@ -424,26 +424,6 @@ namespace MantaChessEngineTest
             Assert.AreEqual(true, moves.Contains(new NormalMove(Piece.MakePiece('K'), 'e', 1, 'f', 1, null)), "e1f1. missing");
         }
 
-        [TestMethod]
-        public void GetAllMoves_WhenNoWhiteKing_ThenNoMovesReturned_White()
-        {
-            MoveGenerator target = new MoveGenerator();
-            Board board = new Board();
-            string position = "........" +
-                              "........" +
-                              "........" +
-                              "........" +
-                              "........" +
-                              ".......k" +
-                              ".......r" +
-                              ".......R"; // No white King
-            board.SetPosition(position);
-
-            var moves = target.GetAllMoves(board, ChessColor.White).ToList<IMove>();
-
-            Assert.AreEqual(0, moves.Count, "white has no king. so no white moves possible.");
-        }
-        
         // ----------------------------------------------------------------------------------------------------
         // Is Move Valid Tests
         // ----------------------------------------------------------------------------------------------------
@@ -451,8 +431,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void IsMoveValidTest_WhenValidMoveWhite_ThenTrue()
         {
-            MoveGenerator target = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             string position = ".......k" +
                               "........" +
                               "........" +
@@ -463,15 +443,15 @@ namespace MantaChessEngineTest
                               ".......K";
             board.SetPosition(position);
             
-            bool valid = target.IsMoveValid(board, new NormalMove(Piece.MakePiece('P'), 'c', 2, 'c', 3, null)); // pawn
+            bool valid = target.IsMoveValid(new NormalMove(Piece.MakePiece('P'), 'c', 2, 'c', 3, null)); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
         }
 
         [TestMethod]
         public void IsMoveValidTest_WhenInvalidMoveWhite_ThenFalse()
         {
-            MoveGenerator target = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             string position = ".......k" +
                               "........" +
                               "........" +
@@ -482,15 +462,15 @@ namespace MantaChessEngineTest
                               ".......K";
             board.SetPosition(position);
             
-            bool valid = target.IsMoveValid(board, new NormalMove(Piece.MakePiece('P'), 'c', 2, 'c', 4, null)); // pawn
+            bool valid = target.IsMoveValid(new NormalMove(Piece.MakePiece('P'), 'c', 2, 'c', 4, null)); // pawn
             Assert.AreEqual(false, valid, "Move should be invalid.");
         }
 
         [TestMethod]
         public void IsMoveValidTest_WhenValidMoveBlack_ThenTrue()
         {
-            MoveGenerator target = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             string position = ".......k" +
                               "..p....." +
                               ".R.B...." +
@@ -502,21 +482,21 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
             board.BoardState.SideToMove = ChessColor.Black;
             
-            bool valid = target.IsMoveValid(board, new NormalMove(Piece.MakePiece('p'), 'c', 7, 'c', 5, null)); // pawn
+            bool valid = target.IsMoveValid(new NormalMove(Piece.MakePiece('p'), 'c', 7, 'c', 5, null)); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
 
-            valid = target.IsMoveValid(board, new NormalMove(Piece.MakePiece('p'), 'c', 7, 'c', 6, null)); // pawn
+            valid = target.IsMoveValid(new NormalMove(Piece.MakePiece('p'), 'c', 7, 'c', 6, null)); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
         }
 
         [TestMethod]
         public void IsMoveValidTest_WhenWrongSideMoves_ThenFalse()
         {
-            MoveGenerator target = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             board.SetInitialPosition();
 
-            bool valid = target.IsMoveValid(board, new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 5, null)); // BLACK pawn
+            bool valid = target.IsMoveValid(new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 5, null)); // BLACK pawn
             Assert.AreEqual(false, valid, "This is white's move. Black must not move.");
         }
 
@@ -529,7 +509,8 @@ namespace MantaChessEngineTest
         {
             string knightSequence = "uul";
 
-            var target = new MoveGenerator();
+            Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             target.GetEndPosition(Helper.FileCharToFile('b'), 1, knightSequence, out int targetFile, out int targetRank, out bool valid);
 
             Assert.AreEqual(Helper.FileCharToFile('a'), targetFile);
@@ -542,7 +523,8 @@ namespace MantaChessEngineTest
         {
             string knightSequence = "ddr";
 
-            var target = new MoveGenerator();
+            Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             target.GetEndPosition(Helper.FileCharToFile('c'), 3, knightSequence, out int targetFile, out int targetRank, out bool valid);
 
             Assert.AreEqual(Helper.FileCharToFile('d'), targetFile);
@@ -555,7 +537,8 @@ namespace MantaChessEngineTest
         {
             string knightSequence = "ddl";
 
-            var target = new MoveGenerator();
+            Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             target.GetEndPosition(Helper.FileCharToFile('a'), 1, knightSequence, out int targetFile, out int targetRank, out bool valid);
 
             Assert.AreEqual(false, valid);
@@ -565,8 +548,8 @@ namespace MantaChessEngineTest
         public void GetCorrectMoveTest_Whene2e4_ThenAddDot()
         {
             var factory = new MoveFactory();
-            MoveGenerator target = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             board.SetInitialPosition();
 
             IMove actualMove = factory.MakeMove(board, "e2e4");
@@ -577,7 +560,6 @@ namespace MantaChessEngineTest
         public void GetCorrectMoveTest_WhenCaptureNormal_ThenAddCapturedPiece()
         {
             var factory = new MoveFactory();
-            MoveGenerator target = new MoveGenerator();
             Board board = new Board();
             string position = "...k...." +
                               "........" +
@@ -597,7 +579,6 @@ namespace MantaChessEngineTest
         public void GetCorrectMoveTest_WhenCaptureEnPassant_ThenAddCapturedPiece()
         {
             var factory = new MoveFactory();
-            MoveGenerator target = new MoveGenerator();
             Board board = new Board();
             string position = "...k...." +
                               "..p....." +
@@ -618,7 +599,6 @@ namespace MantaChessEngineTest
         public void GetCorrectMoveTest_WhenPromotion_ThenReturnPromotionMove()
         {
             var factory = new MoveFactory();
-            MoveGenerator target = new MoveGenerator();
             Board board = new Board();
             string position = ".......k" +
                               "P......." +
@@ -646,8 +626,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMovesTest_WhenCastlingRightOk_ThenCastling()
         {
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator generator = new MoveGenerator(board);
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -668,8 +648,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMovesTest_WhenKingMoved_ThenNoCastling()
         {
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator generator = new MoveGenerator(board);
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -689,8 +669,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMovesTest_WhenRookMoved_ThenNoCastling()
         {
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator generator = new MoveGenerator(board);
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -710,8 +690,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMovesTest_WhenCastlingBlockedKingSide_ThenNoCastlingOnKingSide()
         {
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -723,15 +703,15 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             var king = new King(ChessColor.White);
-            List<IMove> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 1, true);
+            List<IMove> kingMoves = king.GetMoves(target, board, Helper.FileCharToFile('e'), 1, true);
             Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.WhiteKingSide, new King(ChessColor.White))), "e1g1. 0-0 castling not possible");
         }
 
         [TestMethod]
         public void GetMovesTest_WhenCastlingBlockedQueenSide_ThenNoCastlingOnQueenSide()
         {
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -743,15 +723,15 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             var king = new King(ChessColor.White);
-            List<IMove> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 1, true);
+            List<IMove> kingMoves = king.GetMoves(target, board, Helper.FileCharToFile('e'), 1, true);
             Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.WhiteQueenSide, new King(ChessColor.White))), "0-0-0 castling not possible");
         }
 
         [TestMethod]
         public void GetMovesTest_WhenFieldNextToKingIsAttacked_ThenNoCastling()
         {
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             string position = "....k..." +
                               "p..r.r.." +
                               "........" +
@@ -763,7 +743,7 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             var king = new King(ChessColor.White);
-            List<IMove> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 1, true);
+            List<IMove> kingMoves = king.GetMoves(target, board, Helper.FileCharToFile('e'), 1, true);
             Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.WhiteKingSide, new King(ChessColor.White))), "e1g1. 0-0 castling not possible");
             Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.WhiteQueenSide, new King(ChessColor.White))), "e1c1. 0-0-0 castling not possible");
         }
@@ -771,8 +751,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMovesTest_WhenNewKingFieldIsAttacked_ThenNoCastling()
         {
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             string position = "....k..." +
                               "p.r...r." +
                               "........" +
@@ -784,7 +764,7 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
 
             var king = new King(ChessColor.White);
-            List<IMove> kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 1, true);
+            List<IMove> kingMoves = king.GetMoves(target, board, Helper.FileCharToFile('e'), 1, true);
             Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.WhiteKingSide, new King(ChessColor.White))), "e1g1. 0-0 castling not possible. g1 is attacked.");
             Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.WhiteQueenSide, new King(ChessColor.White))), "e1c1. 0-0-0 castling not possible. c1 is attacked.");
         }
@@ -796,8 +776,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMovesTest_WhenwhiteKingMoved_ThenCastlingRightLost()
         {
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -820,7 +800,7 @@ namespace MantaChessEngineTest
             board.Move(pawnMove);
 
             // get legal moves of king. should not include castling.
-            var kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 1, true);
+            var kingMoves = king.GetMoves(target, board, Helper.FileCharToFile('e'), 1, true);
 
             Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.WhiteKingSide, new King(ChessColor.White))), "e1g1. 0-0 castling missing");
             Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.WhiteQueenSide, new King(ChessColor.White))), "e1c1. 0-0-0 castling missing");
@@ -829,8 +809,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMovesTest_WhenWhiteKingRookMoved_ThenCastlingRightKingSideLost()
         {
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -854,7 +834,7 @@ namespace MantaChessEngineTest
 
             // get legal moves of king. should not include castling.
             var king = new King(ChessColor.White);
-            var kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 1, true);
+            var kingMoves = king.GetMoves(target, board, Helper.FileCharToFile('e'), 1, true);
 
             Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.WhiteKingSide, new King(ChessColor.White))), "e1g1. 0-0 castling missing");
             Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.WhiteQueenSide, new King(ChessColor.White))), "e1c1. 0-0-0 castling missing");
@@ -863,8 +843,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMovesTest_WhenWhiteQueenRookMoved_ThenCastlingRightQueenSideLost()
         {
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -888,7 +868,7 @@ namespace MantaChessEngineTest
 
             // get legal moves of king. should not include castling.
             var king = new King(ChessColor.White);
-            var kingMoves = king.GetMoves(generator, board, Helper.FileCharToFile('e'), 1, true);
+            var kingMoves = king.GetMoves(target, board, Helper.FileCharToFile('e'), 1, true);
 
             Assert.AreEqual(true, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.WhiteKingSide, new King(ChessColor.White))), "e1g1. 0-0 castling missing");
             Assert.AreEqual(false, kingMoves.Contains(new CastlingMove(MantaChessEngine.CastlingType.WhiteQueenSide, new King(ChessColor.White))), "e1c1. 0-0-0 castling missing");
@@ -899,8 +879,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMovesTest_WhenCastlingRightOk_ThenCastling_Black()
         {
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator generator = new MoveGenerator(board);
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -920,8 +900,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMovesTest_WhenKingMoved_ThenNoCastling_Black()
         {
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator generator = new MoveGenerator(board);
             string position = "r..k...r" + // king moved!
                               "p......." +
                               "........" +
@@ -941,8 +921,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMovesTest_WhenRookMoved_ThenNoCastling_Black()
         {
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator generator = new MoveGenerator(board);
             string position = ".r..k..r." + // rooks moved!
                               "p......." +
                               "........" +
@@ -962,8 +942,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMovesTest_WhenCastlingBlocked_ThenNoCastling_Black()
         {
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator generator = new MoveGenerator(board);
             string position = "r.b.k.nr" +
                               "p......." +
                               "........" +
@@ -983,8 +963,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMovesTest_WhenFieldNextToKingAttacked_ThenNoCastling_Black()
         {
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator generator = new MoveGenerator(board);
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -1004,8 +984,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMovesTest_WhenNewKingFieldAttacked_ThenNoCastling_Black()
         {
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator generator = new MoveGenerator(board);
             string position = "r...k..r" +
                               "p......." +
                               "........" +
@@ -1029,8 +1009,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMovesTest_WhenBlackKingMoved_ThenCastlingRightLost()
         {
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator generator = new MoveGenerator(board);
             string position = "r......r" +
                               "p...k..." +
                               "........" +
@@ -1062,8 +1042,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMovesTest_WhenBlackKingRookMoved_ThenCastlingRightKingSideLost()
         {
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator generator = new MoveGenerator(board);
             string position = "r...k..." +
                               "p......r" +
                               "........" +
@@ -1096,8 +1076,8 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void GetMovesTest_WhenBlackQueenRookMoved_ThenCastlingRightQueenSideLost()
         {
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator generator = new MoveGenerator(board);
             string position = "....k..r" +
                               "r......." +
                               "p......." +
@@ -1135,8 +1115,8 @@ namespace MantaChessEngineTest
             // and move d5 x e6     d7-d5
             //          e6 x f7
 
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator generator = new MoveGenerator(board);
             string position = "r...k..r" +
                               "p.ppqpb." +
                               "bn..pnp." +
@@ -1175,9 +1155,9 @@ namespace MantaChessEngineTest
         {
             // Kiwipete position
             // position fen r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 0 moves d5e6 e7c5 e6e7
-            
-            MoveGenerator generator = new MoveGenerator();
+
             Board board = new Board();
+            MoveGenerator generator = new MoveGenerator(board);
             string position = "r...k..r" +
                               "p.ppP.b." +
                               "bn...np." +
@@ -1206,7 +1186,6 @@ namespace MantaChessEngineTest
         public void IsCheckTest_WhenKingAttacked_ThenTrue()
         {
             MantaEngine engine = new MantaEngine(EngineType.MinimaxPosition);
-            Board board = new Board();
             string position = "....rk.." +
                               "........" +
                               "........" +
@@ -1215,8 +1194,7 @@ namespace MantaChessEngineTest
                               "........" +
                               "........" +
                               "....K...";
-            board.SetPosition(position);
-            engine.SetBoard(board);
+            engine.SetPosition(position);
 
             Assert.AreEqual(true, engine.IsCheck(ChessColor.White), "king is attacked by rook! IsCheck should return true.");
         }
@@ -1266,8 +1244,9 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void IsAttackedTest_FieldDiagonalOfPawnIsAttacked()
         {
-            MoveGenerator generator = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator generator = new MoveGenerator(board);
+            
             string position = "r...k..." +
                               "...p...." +
                               "........" +
@@ -1279,18 +1258,18 @@ namespace MantaChessEngineTest
             board.SetPosition(position);
            
             // field in front of pawn
-            Assert.AreEqual(false, generator.IsAttacked(board, ChessColor.Black, 5, 3), "Field in front of pawn is not attacked");
+            Assert.AreEqual(false, generator.IsAttacked(ChessColor.Black, 5, 3), "Field in front of pawn is not attacked");
             // field diagonal in front of pawn
-            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 4, 3), "Field diagonal in front of pawn is attacked");
-            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 6, 3), "Field diagonal in front of pawn is attacked");
+            Assert.AreEqual(true, generator.IsAttacked(ChessColor.Black, 4, 3), "Field diagonal in front of pawn is attacked");
+            Assert.AreEqual(true, generator.IsAttacked(ChessColor.Black, 6, 3), "Field diagonal in front of pawn is attacked");
 
             // black rook is attacked
-            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 8, 5), "Black rook is attacked");
+            Assert.AreEqual(true, generator.IsAttacked(ChessColor.Black, 8, 5), "Black rook is attacked");
             // fields between the rooks is attacked by white rook
-            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 8, 5), "Fields between the rooks is attacked by the white rook");
-            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 8, 4), "Fields between the rooks is attacked by the white rook");
-            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 8, 3), "Fields between the rooks is attacked by the white rook");
-            Assert.AreEqual(true, generator.IsAttacked(board, ChessColor.Black, 8, 2), "Fields between the rooks is attacked by the white rook");
+            Assert.AreEqual(true, generator.IsAttacked(ChessColor.Black, 8, 5), "Fields between the rooks is attacked by the white rook");
+            Assert.AreEqual(true, generator.IsAttacked(ChessColor.Black, 8, 4), "Fields between the rooks is attacked by the white rook");
+            Assert.AreEqual(true, generator.IsAttacked(ChessColor.Black, 8, 3), "Fields between the rooks is attacked by the white rook");
+            Assert.AreEqual(true, generator.IsAttacked(ChessColor.Black, 8, 2), "Fields between the rooks is attacked by the white rook");
         }
     }
 }

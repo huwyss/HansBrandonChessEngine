@@ -588,8 +588,8 @@ namespace MantaBitboardEngineTest
         [TestMethod, Ignore]
         public void IsMoveValidTest_WhenValidMoveWhite_ThenTrue()
         {
-            MoveGenerator target = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             string position = ".......k" +
                               "........" +
                               "........" +
@@ -600,15 +600,15 @@ namespace MantaBitboardEngineTest
                               ".......K";
             board.SetPosition(position);
 
-            bool valid = target.IsMoveValid(board, new NormalMove(Piece.MakePiece('P'), 'c', 2, 'c', 3, null)); // pawn
+            bool valid = target.IsMoveValid(new NormalMove(Piece.MakePiece('P'), 'c', 2, 'c', 3, null)); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
         }
 
         [TestMethod, Ignore]
         public void IsMoveValidTest_WhenInvalidMoveWhite_ThenFalse()
         {
-            MoveGenerator target = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             string position = ".......k" +
                               "........" +
                               "........" +
@@ -619,15 +619,15 @@ namespace MantaBitboardEngineTest
                               ".......K";
             board.SetPosition(position);
 
-            bool valid = target.IsMoveValid(board, new NormalMove(Piece.MakePiece('P'), 'c', 2, 'c', 4, null)); // pawn
+            bool valid = target.IsMoveValid(new NormalMove(Piece.MakePiece('P'), 'c', 2, 'c', 4, null)); // pawn
             Assert.AreEqual(false, valid, "Move should be invalid.");
         }
 
         [TestMethod, Ignore]
         public void IsMoveValidTest_WhenValidMoveBlack_ThenTrue()
         {
-            MoveGenerator target = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             string position = ".......k" +
                               "..p....." +
                               ".R.B...." +
@@ -639,21 +639,21 @@ namespace MantaBitboardEngineTest
             board.SetPosition(position);
             board.BoardState.SideToMove = ChessColor.Black;
 
-            bool valid = target.IsMoveValid(board, new NormalMove(Piece.MakePiece('p'), 'c', 7, 'c', 5, null)); // pawn
+            bool valid = target.IsMoveValid(new NormalMove(Piece.MakePiece('p'), 'c', 7, 'c', 5, null)); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
 
-            valid = target.IsMoveValid(board, new NormalMove(Piece.MakePiece('p'), 'c', 7, 'c', 6, null)); // pawn
+            valid = target.IsMoveValid(new NormalMove(Piece.MakePiece('p'), 'c', 7, 'c', 6, null)); // pawn
             Assert.AreEqual(true, valid, "Move should be valid.");
         }
 
         [TestMethod, Ignore]
         public void IsMoveValidTest_WhenWrongSideMoves_ThenFalse()
         {
-            MoveGenerator target = new MoveGenerator();
             Board board = new Board();
+            MoveGenerator target = new MoveGenerator(board);
             board.SetInitialPosition();
 
-            bool valid = target.IsMoveValid(board, new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 5, null)); // BLACK pawn
+            bool valid = target.IsMoveValid(new NormalMove(Piece.MakePiece('p'), 'e', 7, 'e', 5, null)); // BLACK pawn
             Assert.AreEqual(false, valid, "This is white's move. Black must not move.");
         }
 
@@ -676,7 +676,6 @@ namespace MantaBitboardEngineTest
         public void GetCorrectMoveTest_WhenCaptureNormal_ThenAddCapturedPiece()
         {
             var factory = new MoveFactory();
-            MoveGenerator target = new MoveGenerator();
             Board board = new Board();
             string position = "...k...." +
                               "........" +
@@ -696,7 +695,6 @@ namespace MantaBitboardEngineTest
         public void GetCorrectMoveTest_WhenCaptureEnPassant_ThenAddCapturedPiece()
         {
             var factory = new MoveFactory();
-            MoveGenerator target = new MoveGenerator();
             Board board = new Board();
             string position = "...k...." +
                               "..p....." +
@@ -717,7 +715,6 @@ namespace MantaBitboardEngineTest
         public void GetCorrectMoveTest_WhenPromotion_ThenReturnPromotionMove()
         {
             var factory = new MoveFactory();
-            MoveGenerator target = new MoveGenerator();
             Board board = new Board();
             string position = ".......k" +
                               "P......." +

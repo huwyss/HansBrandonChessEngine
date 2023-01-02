@@ -12,12 +12,12 @@ namespace MantaChessEngine
     /// <summary>
     /// Full search until level _maxDepth.
     /// </summary>
-    public class SearchMinimax : ISearchService
+    public class SearchMinimax : ISearchService<IMove>
     {
         private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private IBoard _board;
-        private IMoveGenerator _moveGenerator;
+        private IMoveGenerator<IMove> _moveGenerator;
         private IEvaluator _evaluator;
         private int _maxDepth;
 
@@ -36,7 +36,7 @@ namespace MantaChessEngine
         {
         }
 
-        public SearchMinimax(IBoard board, IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth = Definitions.DEFAULT_MAXLEVEL)
+        public SearchMinimax(IBoard board, IEvaluator evaluator, IMoveGenerator<IMove> moveGenerator, int maxDepth = Definitions.DEFAULT_MAXLEVEL)
         {
             _board = board;
             _evaluator = evaluator;
@@ -52,13 +52,13 @@ namespace MantaChessEngine
         /// <param name="color">Color of next move</param>
         /// <param name="score">Score of endposition of the returned move.</param>
         /// <returns>best move for color.</returns>
-        public MoveRating Search(ChessColor color)
+        public IMoveRating<IMove> Search(ChessColor color)
         {
             evaluatedPositions = 0;
-            IEnumerable<MoveRating> moveRatings = SearchLevel(color, 1);
+            IEnumerable<IMoveRating<IMove>> moveRatings = SearchLevel(color, 1);
             var count = moveRatings.Count();
             var randomIndex = _rand.Next(0, count);
-            MoveRating rating = moveRatings.ElementAt(randomIndex);
+            IMoveRating<IMove> rating = moveRatings.ElementAt(randomIndex);
             rating.EvaluatedPositions = evaluatedPositions;
             rating.Depth = _maxDepth;
             _log.Debug("evaluated positons: " + evaluatedPositions);
@@ -76,13 +76,13 @@ namespace MantaChessEngine
         /// <param name="level">Number of levels to be searched (1=ie whites move, 2=moves of white, black, 3=move of white,black,white...</param>
         /// <param name="score">Score of position on current level</param>
         /// <returns></returns>
-        internal virtual IEnumerable<MoveRating> SearchLevel(ChessColor color, int level)
+        internal virtual IEnumerable<IMoveRating<IMove>> SearchLevel(ChessColor color, int level)
         {
-            var bestRating = new MoveRating() { Score = InitWithWorstScorePossible(color) };
-            MoveRating currentRating = new MoveRating();
-            List<MoveRating> bestMoveRatings = new List<MoveRating>();
+            IMoveRating<IMove> bestRating = new MoveRating() { Score = InitWithWorstScorePossible(color) };
+            IMoveRating<IMove> currentRating = new MoveRating();
+            List<IMoveRating<IMove>> bestMoveRatings = new List<IMoveRating<IMove>>();
 
-            var possibleMoves = _moveGenerator.GetLegalMoves(_board, color).ToList<IMove>();
+            var possibleMoves = _moveGenerator.GetAllMoves(color).ToList<IMove>(); // todo only legal moves
 
             // no legal moves means the game is over. It is either stall mate or check mate.
             if (possibleMoves.Count == 0)
@@ -93,6 +93,10 @@ namespace MantaChessEngine
             foreach (IMove currentMove in possibleMoves)
             {
                 _board.Move(currentMove);
+                if (_moveGenerator.IsCheck(currentMove.MovingColor))
+                {
+                    _board.Back();
+                }
 
                 if (level < _maxDepth) // we need to do more move levels...
                 {
@@ -118,7 +122,7 @@ namespace MantaChessEngine
                 {
                     currentRating.Move = currentMove;
                     bestRating = currentRating.Clone();
-                    bestMoveRatings = new List<MoveRating> { currentRating.Clone() };
+                    bestMoveRatings = new List<IMoveRating<IMove>> { currentRating.Clone() };
                 }
             }
 
@@ -146,7 +150,7 @@ namespace MantaChessEngine
             bool blackWins = false;
             bool stallmate = false;
 
-            if (_moveGenerator.IsCheck(board, color))
+            if (_moveGenerator.IsCheck(color))
             {
                 if (color == ChessColor.White)
                 {

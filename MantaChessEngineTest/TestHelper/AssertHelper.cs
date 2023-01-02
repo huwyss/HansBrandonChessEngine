@@ -1,11 +1,12 @@
 ﻿using MantaChessEngine;
+using MantaCommon;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace MantaChessEngineTest
 {
     class AssertHelper
     {
-        public static void WhiteWins(MoveRating rating)
+        public static void WhiteWins(IMoveRating<IMove> rating)
         {
             Assert.IsTrue(rating.Score > 9900);
             Assert.IsTrue(rating.WhiteWins);
@@ -13,7 +14,7 @@ namespace MantaChessEngineTest
             Assert.IsFalse(rating.Stallmate);
         }
 
-        public static void BlackWins(MoveRating rating)
+        public static void BlackWins(IMoveRating<IMove> rating)
         {
             Assert.IsTrue(rating.Score < -9900);
             Assert.IsFalse(rating.WhiteWins);
@@ -21,7 +22,7 @@ namespace MantaChessEngineTest
             Assert.IsFalse(rating.Stallmate);
         }
 
-        public static void StallMate(MoveRating rating)
+        public static void StallMate(IMoveRating<IMove> rating)
         {
             Assert.IsTrue(rating.Score == 0);
             Assert.IsFalse(rating.WhiteWins);

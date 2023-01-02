@@ -2,7 +2,7 @@
 
 namespace MantaChessEngine
 {
-    public class MoveFactory
+    public class MoveFactory : IMoveFactory<IMove>
     {
         public static NormalMove MakeNormalMove(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, Piece capturedPiece)
         {
@@ -165,6 +165,16 @@ namespace MantaChessEngine
         {
             return ((movingPiece is Pawn && movingPiece.Color == ChessColor.White && targetRank == 8) || // white promotion
                     (movingPiece is Pawn && movingPiece.Color == ChessColor.Black && targetRank == 1));  // black promotion
+        }
+
+        public IMove MakeMove(Square fromSquare, Square toSquare, BitPieceType promotionPiece)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IMove MakeMoveUci(string moveStringUci)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

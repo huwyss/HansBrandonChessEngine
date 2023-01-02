@@ -88,7 +88,6 @@ namespace MantaChessEngineTest
         {
             var engine = new MantaEngine(EngineType.MinimaxPosition);
             engine.SetMaxSearchDepth(depth);
-            engine.SetBoard(new Board());
             string boardString = "........" +
                                  "........" +
                                  "........" +

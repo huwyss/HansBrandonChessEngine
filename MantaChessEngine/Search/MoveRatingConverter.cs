@@ -5,11 +5,11 @@ namespace MantaChessEngine
 {
     public class MoveRatingConverter
     {
-        public static UciMoveRating NewFrom(MoveRating moveRating)
+        public static UciMoveRating NewFrom(IMoveRating<IMove> moveRating)
         {
             var uciMoveRating = new UciMoveRating();
             uciMoveRating.Move = moveRating.Move.ToUciString();
-            uciMoveRating.MovingColor = moveRating.Move.Color;
+            uciMoveRating.MovingColor = moveRating.Move.MovingColor;
             uciMoveRating.PrincipalVariation = new List<string>();
             foreach (var move in moveRating.PrincipalVariation)
             {

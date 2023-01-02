@@ -8,14 +8,14 @@ using log4net;
 [assembly: InternalsVisibleTo("MantaChessEngineTest")]
 namespace MantaChessEngine
 {
-    public class SearchAlphaBeta : ISearchService
+    public class SearchAlphaBeta : ISearchService<IMove>
     {
         private const int AspirationWindowHalfSizeInitial = 50;
 
         private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly IBoard _board;
-        private readonly IMoveGenerator _moveGenerator;
+        private readonly IMoveGenerator<IMove> _moveGenerator;
         private readonly IEvaluator _evaluator;
         private readonly IMoveOrder _moveOrder;
         private readonly IMoveFilter _moveFilter;
@@ -23,7 +23,7 @@ namespace MantaChessEngine
         private int _additionalSelectiveDepth;
         private int _selectiveDepth;
 
-        private MoveRating _previousPV;
+        private IMoveRating<IMove> _previousPV;
 
         private int evaluatedPositions;
         private int _pruningCount;
@@ -57,7 +57,7 @@ namespace MantaChessEngine
             _previousPV = null;
         }
 
-        public SearchAlphaBeta(IBoard board, IEvaluator evaluator, IMoveGenerator moveGenerator, int maxDepth, IMoveOrder moveOrder, IMoveFilter moveFilter)
+        public SearchAlphaBeta(IBoard board, IEvaluator evaluator, IMoveGenerator<IMove> moveGenerator, int maxDepth, IMoveOrder moveOrder, IMoveFilter moveFilter)
         {
             _board = board;
             _additionalSelectiveDepth = 0;
@@ -77,7 +77,7 @@ namespace MantaChessEngine
         /// <param name="color">Color of next move</param>
         /// <param name="score">Score of endposition of the returned move.</param>
         /// <returns>best move for color.</returns>
-        public MoveRating Search(ChessColor color)
+        public IMoveRating<IMove> Search(ChessColor color)
         {
             _pruningCount = 0;
             evaluatedPositions = 0;
@@ -88,7 +88,7 @@ namespace MantaChessEngine
 
             var succeed = false;
 
-            MoveRating moveRating = null;
+            IMoveRating<IMove> moveRating = null;
 
             var windowHalfSize = AspirationWindowHalfSizeInitial;
 
@@ -137,12 +137,12 @@ namespace MantaChessEngine
         /// <param name="board">Board to be searched in</param>
         /// <param name="color">Color of next move</param>
         /// <param name="level">Start level of search </param>
-        internal virtual MoveRating SearchLevel(ChessColor color, int level, int alpha, int beta)
+        internal virtual IMoveRating<IMove> SearchLevel(ChessColor color, int level, int alpha, int beta)
         {
-            var bestRating = new MoveRating() { Score = InitWithWorstScorePossible(color) };
-            MoveRating currentRating = new MoveRating();
+            IMoveRating<IMove> bestRating = new MoveRating() { Score = InitWithWorstScorePossible(color) };
+            IMoveRating<IMove> currentRating = new MoveRating();
 
-            var allLegalMovesUnsortedUnfiltered = _moveGenerator.GetLegalMoves(_board, color).ToList<IMove>();
+            var allLegalMovesUnsortedUnfiltered = _moveGenerator.GetAllMoves(color).ToList<IMove>(); // todo should be only legal moves
 
             // no legal moves means the game is over. It is either stall mate or check mate.
             if (allLegalMovesUnsortedUnfiltered.Count() == 0)
@@ -246,7 +246,7 @@ namespace MantaChessEngine
             bool blackWins = false;
             bool stallmate = false;
 
-            if (_moveGenerator.IsCheck(board, color))
+            if (_moveGenerator.IsCheck(color))
             {
                 if (color == ChessColor.White)
                 {

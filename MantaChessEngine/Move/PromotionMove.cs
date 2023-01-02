@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MantaCommon;
 
 namespace MantaChessEngine
 {
@@ -26,9 +27,41 @@ namespace MantaChessEngine
             MakePromotionPiece(promotionPiece);
         }
 
+        public override BitPieceType PromotionPiece
+        {
+            get
+            {
+                return GePieceType(_promotionPiece.Symbol);
+            }
+        }
+
+        private static BitPieceType GePieceType(char symbol)
+        {
+            switch (symbol)
+            {
+                case 'P':
+                case 'p':
+                    return BitPieceType.Pawn;
+                case 'N':
+                case 'n':
+                    return BitPieceType.Knight;
+                case 'B':
+                case 'b':
+                    return BitPieceType.Bishop;
+                case 'R':
+                case 'r':
+                    return BitPieceType.Rook;
+                case 'Q':
+                case 'q':
+                    return BitPieceType.Queen;
+                default:
+                    return BitPieceType.Empty;
+            }
+        }
+
         private void MakePromotionPiece(char promotionPiece)
         {
-            _promotionPiece = Piece.MakePiece(promotionPiece, Color);
+            _promotionPiece = Piece.MakePiece(promotionPiece, MovingColor);
         }
 
         public override bool Equals(System.Object obj)

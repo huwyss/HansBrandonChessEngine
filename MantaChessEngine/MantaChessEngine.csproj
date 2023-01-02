@@ -73,12 +73,12 @@
     <Compile Include="Piece\Pawn.cs" />
     <Compile Include="Piece\Piece.cs" />
     <Compile Include="Piece\SingleStepPiece.cs" />
-    <Compile Include="Interfaces\ISearchService.cs" />
     <Compile Include="Move\MoveBase.cs" />
     <Compile Include="MoveGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Search\MoveRating.cs" />
     <Compile Include="Search\MoveRatingConverter.cs" />
+    <Compile Include="Search\MoveRatingFactory.cs" />
     <Compile Include="Search\SearchAlphaBeta.cs" />
     <Compile Include="Search\SearchMinimax.cs" />
     <Compile Include="Search\SearchRandom.cs" />

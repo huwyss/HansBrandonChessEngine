@@ -2,13 +2,13 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using MantaCommon;
 using log4net;
 
 ////[assembly: InternalsVisibleTo("MantaChessEngineTest")]
 namespace MantaCommon
 {
-    public class GenericSearchAlphaBeta<TMove> where TMove : IGenericMove
+    public class GenericSearchAlphaBeta<TMove> : ISearchService<TMove>
+        where TMove : IGenericMove
     {
         private const int AspirationWindowHalfSizeInitial = 100;
 

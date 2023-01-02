@@ -2,12 +2,12 @@
 
 namespace MantaChessEngine
 {
-    public interface IMove
+    public interface IMove : IGenericMove
     {
         Piece CapturedPiece { get; }
         int CapturedFile { get; }
         int CapturedRank { get; }
-        ChessColor Color { get; }
+        ////ChessColor MovingColor { get; }
         Piece MovingPiece { get; }
         int SourceFile { get; }
         int SourceRank { get; }

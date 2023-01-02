@@ -56,9 +56,11 @@
     <Compile Include="Interfaces\IMoveRating.cs" />
     <Compile Include="Interfaces\IMoveRatingFactory.cs" />
     <Compile Include="Interfaces\ISearchableBoard.cs" />
+    <Compile Include="Interfaces\ISearchService.cs" />
     <Compile Include="MantaEngineException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Search\GenericSearchAlphaBeta.cs" />
+    <Compile Include="Search\Hashtable.cs" />
     <Compile Include="UciMoveRating.cs" />
   </ItemGroup>
   <ItemGroup>

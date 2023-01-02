@@ -30,7 +30,7 @@ namespace MantaChessEngineTest
         {
             _board = new Board();
             _evaluator = new EvaluatorSimple(_board);
-            _gen = new MoveGenerator();
+            _gen = new MoveGenerator(_board);
         }
         [TestMethod]
         public void SearchLevelTest_WhenLevelOne_ThenCapturePawn_White()

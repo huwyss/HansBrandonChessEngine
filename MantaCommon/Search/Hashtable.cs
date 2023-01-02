@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Bitboard = System.UInt64;
-using MantaCommon;
 
-namespace MantaBitboardEngine
+namespace MantaCommon
 {
-	
-
 	public class Hashtable : IHashtable
 	{
 		int HashSize = 2 * 1024 * 1024;

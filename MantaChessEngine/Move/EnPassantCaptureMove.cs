@@ -23,7 +23,7 @@ namespace MantaChessEngine
         {
             get
             {
-                if (Color == ChessColor.White)
+                if (MovingColor == ChessColor.White)
                 {
                     return TargetRank - 1;
                 }

@@ -15,22 +15,26 @@ namespace MantaChessEngine
     {
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private IMoveGenerator _moveGenerator;
-        private MoveFactory _moveFactory;
-        private ISearchService _search;
+        private IMoveGenerator<IMove> _moveGenerator;
+        private IMoveFactory<IMove> _moveFactory;
+        private IMoveRatingFactory<IMove> _moveRatingFactory;
+        private ISearchService<IMove> _search;
         private IEvaluator _evaluator;
         private IBoard _board;
+        private IHashtable _hashtable;
 
         public MantaEngine(EngineType engineType)
         {
             _moveFactory = new MoveFactory();
-            _moveGenerator = new MoveGenerator();
             _board = new Board();
+            _moveGenerator = new MoveGenerator(_board);
+            _moveRatingFactory = new MoveRatingFactory(_moveGenerator);
+            _hashtable = new Hashtable();
 
             switch (engineType)
             {
                 case EngineType.Random:
-                    _search = new SearchRandom(_board, _moveGenerator);
+                    _search = new SearchRandom(_moveGenerator);
                     break;
 
                 case EngineType.Minimax:
@@ -48,7 +52,8 @@ namespace MantaChessEngine
                     _evaluator = new EvaluatorPosition(_board);
                     var moveOrder = new OrderPvAndImportance();
                     var captureOnly = new FilterCapturesOnly();
-                    _search = new SearchAlphaBeta(_board, _evaluator, _moveGenerator, 4, moveOrder, captureOnly);
+                    //// _search = new SearchAlphaBeta(_board, _evaluator, _moveGenerator, 4, moveOrder, captureOnly);
+                    _search = new GenericSearchAlphaBeta<IMove>(_board, _evaluator, _moveGenerator, _hashtable, _moveFactory, _moveRatingFactory, 4);
                     break;
                 // -------------------------------------------
 
@@ -89,13 +94,13 @@ namespace MantaChessEngine
 
         public bool MoveUci(string moveStringUci)
         {
-            IMove move = _moveFactory.MakeMoveUci(_board, moveStringUci);
+            IMove move = _moveFactory.MakeMoveUci(moveStringUci);
             if (move == null)
             {
                 return false;
             }
 
-            bool valid = _moveGenerator.IsMoveValid(_board, move);
+            bool valid = _moveGenerator.IsMoveValid(move);
             if (valid)
             {
                 _board.Move(move);
@@ -106,13 +111,13 @@ namespace MantaChessEngine
 
         public bool Move(string moveStringUser)
         {
-            IMove move = _moveFactory.MakeMove(_board, moveStringUser);
+            IMove move = _moveFactory.MakeMoveUci(moveStringUser); // todo should be for user string
             if (move == null)
             {
                 return false;
             }
 
-            bool valid = _moveGenerator.IsMoveValid(_board, move);
+            bool valid = _moveGenerator.IsMoveValid(move);
             if (valid)
             {
                 _board.Move(move);
@@ -135,7 +140,7 @@ namespace MantaChessEngine
 
         public UciMoveRating DoBestMove(ChessColor color)
         {
-            MoveRating nextMove = _search.Search(color);
+            IMoveRating<IMove> nextMove = _search.Search(color);
             _board.Move(nextMove.Move);
             _log.Debug("Score: " + nextMove.Score);
 
@@ -146,7 +151,7 @@ namespace MantaChessEngine
 
         public UciMoveRating DoBestMove()
         {
-            MoveRating nextMove = _search.Search(_board.BoardState.SideToMove);
+            IMoveRating<IMove> nextMove = _search.Search(_board.BoardState.SideToMove);
             _board.Move(nextMove.Move);
             _log.Debug("Score: " + nextMove.Score);
 
@@ -162,7 +167,7 @@ namespace MantaChessEngine
 
         public bool IsCheck(ChessColor color)
         {
-            return _moveGenerator.IsCheck(_board, color);
+            return _moveGenerator.IsCheck(color);
         }
 
         public void Back()
@@ -201,7 +206,7 @@ namespace MantaChessEngine
 
             UInt64 nodes = 0;
 
-            var moves = _moveGenerator.GetLegalMoves(_board, SideToMove());
+            var moves = _moveGenerator.GetAllMoves(SideToMove()); // todo correct: only legal moves
             foreach (var move in moves)
             {
                 Move(move);
@@ -221,7 +226,7 @@ namespace MantaChessEngine
 
             UInt64 nodes = 0;
 
-            var moves = _moveGenerator.GetLegalMoves(_board, SideToMove());
+            var moves = _moveGenerator.GetAllMoves(SideToMove()); // todo correct: only legal moves
             foreach (var move in moves)
             {
                 Move(move);
@@ -236,7 +241,7 @@ namespace MantaChessEngine
         {
             Console.WriteLine($"Divide depth {depth}");
 
-            var moves = _moveGenerator.GetLegalMoves(_board, SideToMove());
+            var moves = _moveGenerator.GetAllMoves(SideToMove()); // todo correct: only legal moves
             foreach (var move in moves)
             {
                 Move(move);

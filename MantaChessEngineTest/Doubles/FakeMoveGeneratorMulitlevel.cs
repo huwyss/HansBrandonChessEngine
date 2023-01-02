@@ -8,7 +8,7 @@ using MantaCommon;
 
 namespace MantaChessEngineTest.Doubles
 {
-    public class FakeMoveGeneratorMulitlevel : IMoveGenerator
+    public class FakeMoveGeneratorMulitlevel : IMoveGenerator<IMove>
     {
         private List<IEnumerable<IMove>> _listOfListOfMoves = new List<IEnumerable<IMove>>();
         private IEnumerator<IEnumerable<IMove>> _iteratorMoves;
@@ -31,7 +31,7 @@ namespace MantaChessEngineTest.Doubles
             _iteratorIsChecks = isChecksToReturn.GetEnumerator();
         }
 
-        public IEnumerable<IMove> GetAllMoves(IBoard board, ChessColor color, bool includeCastling = true, bool includePawnMoves = true)
+        public IEnumerable<IMove> GetAllMoves(ChessColor color) ////, bool includeCastling = true, bool includePawnMoves = true)
         {
             _iteratorMoves.MoveNext();
 
@@ -40,7 +40,7 @@ namespace MantaChessEngineTest.Doubles
                 return new List<IMove>();
             }
 
-            if (_iteratorMoves.Current.First().Color != color)
+            if (_iteratorMoves.Current.First().MovingColor != color)
             {
                 throw new Exception("Expected move of different color!");
             }
@@ -66,21 +66,41 @@ namespace MantaChessEngineTest.Doubles
             return _iteratorIsChecks.Current;
         }
 
-        public IEnumerable<IMove> GetLegalMoves(IBoard board, ChessColor color)
+        public IEnumerable<IMove> GetAllCaptures(ChessColor color)
         {
-            _iteratorMoves.MoveNext();
-
-            if (_iteratorMoves.Current.Count() == 0)
-            {
-                return new List<IMove>();
-            }
-
-            if (_iteratorMoves.Current.First().Color != color)
-            {
-                throw new Exception("Expected move of different color!");
-            }
-
-            return (List<IMove>)_iteratorMoves.Current;
+            throw new NotImplementedException();
         }
+
+        public bool IsAttacked(ChessColor color, Square square)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsCheck(ChessColor color)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsMoveValid(IMove move)
+        {
+            throw new NotImplementedException();
+        }
+
+        ////public IEnumerable<IMove> GetLegalMoves(IBoard board, ChessColor color)
+        ////{
+        ////    _iteratorMoves.MoveNext();
+
+        ////    if (_iteratorMoves.Current.Count() == 0)
+        ////    {
+        ////        return new List<IMove>();
+        ////    }
+
+        ////    if (_iteratorMoves.Current.First().MovingColor != color)
+        ////    {
+        ////        throw new Exception("Expected move of different color!");
+        ////    }
+
+        ////    return (List<IMove>)_iteratorMoves.Current;
+        ////}
     }
 }

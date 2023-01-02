@@ -3,15 +3,6 @@ using System.Text;
 
 namespace MantaBitboardEngine
 {
-    public interface IGenericMove
-    {
-        ChessColor MovingColor { get; }
-        Square FromSquare { get; }
-        Square ToSquare { get; }
-        BitPieceType PromotionPiece {get;}
-        bool IsCapture();
-    }
-
     public class BitMove : IGenericMove
     {
         // capture constructor

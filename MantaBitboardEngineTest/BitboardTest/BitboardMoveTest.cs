@@ -486,7 +486,7 @@ namespace MantaBitboardEngineTest
                               "R...K..R";
             _target.SetPosition(position);
 
-            _target.Move(BitMove.CreateCastling(ChessColor.White, MantaBitboardEngine.CastlingType.KingSide, 0));
+            _target.Move(BitMove.CreateCastling(ChessColor.White, MantaCommon.CastlingType.KingSide, 0));
             string expecPos = "r...k..r" +
                               "p......." +
                               "........" +
@@ -517,7 +517,7 @@ namespace MantaBitboardEngineTest
                               "R...K..R";
             _target.SetPosition(position);
 
-            _target.Move(BitMove.CreateCastling(ChessColor.White, MantaBitboardEngine.CastlingType.QueenSide, 0));
+            _target.Move(BitMove.CreateCastling(ChessColor.White, MantaCommon.CastlingType.QueenSide, 0));
 
             string expecPos = "r...k..r" +
                               "p......." +
@@ -549,7 +549,7 @@ namespace MantaBitboardEngineTest
                               "R...K..R";
             _target.SetPosition(position);
 
-            _target.Move(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.KingSide, 0));
+            _target.Move(BitMove.CreateCastling(ChessColor.Black, MantaCommon.CastlingType.KingSide, 0));
 
             string expecPos = "r....rk." +
                               "p......." +
@@ -581,7 +581,7 @@ namespace MantaBitboardEngineTest
                               "R...K..R";
             _target.SetPosition(position);
 
-            _target.Move(BitMove.CreateCastling(ChessColor.Black, MantaBitboardEngine.CastlingType.QueenSide, 0));
+            _target.Move(BitMove.CreateCastling(ChessColor.Black, MantaCommon.CastlingType.QueenSide, 0));
 
             string expecPos = "..kr...r" +
                               "p......." +

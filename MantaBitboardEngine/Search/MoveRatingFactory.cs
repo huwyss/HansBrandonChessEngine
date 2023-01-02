@@ -7,18 +7,6 @@ using MantaCommon;
 
 namespace MantaBitboardEngine
 {
-    public interface IMoveRatingFactory<TMove> where TMove : IGenericMove
-    {
-        IMoveRating<TMove> CreateMoveRating();
-
-        IMoveRating<TMove> CreateMoveRating(int score, int evaluationLevel);
-
-        IMoveRating<TMove> CreateMoveRatingWithWorstScore(ChessColor color);
-
-        IMoveRating<TMove> CreateMoveRatingForGameEnd(ChessColor color, int curentLevel);
-    }
-
-
     public class BitMoveRatingFactory : IMoveRatingFactory<BitMove>
     {
         private readonly BitMoveGenerator _moveGenerator;

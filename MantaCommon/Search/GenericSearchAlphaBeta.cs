@@ -6,9 +6,9 @@ using MantaCommon;
 using log4net;
 
 ////[assembly: InternalsVisibleTo("MantaChessEngineTest")]
-namespace MantaBitboardEngine
+namespace MantaCommon
 {
-    public class BitSearchAlphaBeta<TMove> where TMove : IGenericMove
+    public class GenericSearchAlphaBeta<TMove> where TMove : IGenericMove
     {
         private const int AspirationWindowHalfSizeInitial = 100;
 
@@ -16,7 +16,7 @@ namespace MantaBitboardEngine
 
         private readonly ISearchableBoard<TMove> _board;
         private readonly IMoveGenerator<TMove> _moveGenerator;
-        private readonly BitEvaluator _evaluator;
+        private readonly IEvaluator _evaluator;
         private readonly IHashtable _hashtable;
         private readonly IMoveFactory<TMove> _moveFactory;
         private readonly IMoveRatingFactory<TMove> _moveRatingFactory;
@@ -30,7 +30,7 @@ namespace MantaBitboardEngine
         private int evaluatedPositions;
         private int _pruningCount;
 
-        public BitSearchAlphaBeta(ISearchableBoard<TMove> board, BitEvaluator evaluator, IMoveGenerator<TMove> moveGenerator, IHashtable hashtable, IMoveFactory<TMove> moveFactory, IMoveRatingFactory<TMove> moveRatingFactory, int maxDepth)
+        public GenericSearchAlphaBeta(ISearchableBoard<TMove> board, IEvaluator evaluator, IMoveGenerator<TMove> moveGenerator, IHashtable hashtable, IMoveFactory<TMove> moveFactory, IMoveRatingFactory<TMove> moveRatingFactory, int maxDepth)
         {
             _board = board;
             _additionalSelectiveDepth = 0;

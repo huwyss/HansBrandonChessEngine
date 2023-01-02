@@ -49,11 +49,4 @@ namespace MantaBitboardEngine
         /// </summary>
         //// void Back();
     }
-
-    public interface ISearchableBoard<TMove>
-    {
-        void Move(TMove nextMove);
-
-        void Back();
-    }
 }

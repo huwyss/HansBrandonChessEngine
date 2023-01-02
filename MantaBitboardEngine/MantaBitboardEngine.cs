@@ -17,7 +17,7 @@ namespace MantaBitboardEngine
         private readonly BitMoveGenerator _moveGenerator;
         private readonly HelperBitboards _helperBits;
         private readonly BitEvaluator _evaluator;
-        private readonly BitSearchAlphaBeta<BitMove> _search;
+        private readonly GenericSearchAlphaBeta<BitMove> _search;
         private readonly BitMoveFactory _moveFactory;
         private readonly BitMoveRatingFactory _moveRatingFactory;
 
@@ -30,7 +30,7 @@ namespace MantaBitboardEngine
             _evaluator = new BitEvaluator(_board, _helperBits);
             _moveFactory = new BitMoveFactory(_board);
             _moveRatingFactory = new BitMoveRatingFactory(_moveGenerator);
-            _search = new BitSearchAlphaBeta<BitMove>(_board, _evaluator, _moveGenerator, _hashtable, _moveFactory, _moveRatingFactory, 4);
+            _search = new GenericSearchAlphaBeta<BitMove>(_board, _evaluator, _moveGenerator, _hashtable, _moveFactory, _moveRatingFactory, 4);
         }
 
         public void SetInitialPosition()

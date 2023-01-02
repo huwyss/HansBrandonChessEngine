@@ -1,4 +1,4 @@
-﻿namespace MantaBitboardEngine
+﻿namespace MantaCommon
 {
     public enum Square 
     {

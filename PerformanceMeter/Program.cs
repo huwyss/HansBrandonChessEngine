@@ -77,7 +77,7 @@ namespace PerformanceMeter
         private static void CreateEngine()
         {
             _board = new Board();
-            var engine = new MantaEngine(EngineType.AlphaBeta);
+            var engine = new MantaEngine();
             ////_engine = new MantaEngine(EngineType.AlphaBeta);
             ////_engine = new MantaEngine(EngineType.MinimaxPosition);
             ////_engine = new MantaEngine(EngineType.Random);

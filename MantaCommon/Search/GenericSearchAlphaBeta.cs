@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using log4net;
 
-////[assembly: InternalsVisibleTo("MantaChessEngineTest")]
+[assembly: InternalsVisibleTo("MantaBitboardEngineTest")]
 namespace MantaCommon
 {
     public class GenericSearchAlphaBeta<TMove> : ISearchService<TMove>
@@ -83,9 +83,6 @@ namespace MantaCommon
         /// <returns>best move for color.</returns>
         public IMoveRating<TMove> Search(ChessColor color)
         {
-            _pruningCount = 0;
-            evaluatedPositions = 0;
-
             _pruningCount = 0;
             evaluatedPositions = 0;
 
@@ -248,6 +245,7 @@ namespace MantaCommon
                 }
             }
 
+            // no legal moves means the game is over. It is either stall mate or check mate.
             if (!hasLegalMoves)
             {
                 return _moveRatingFactory.CreateMoveRatingForGameEnd(color, level);

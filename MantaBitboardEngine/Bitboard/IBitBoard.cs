@@ -2,7 +2,11 @@
 
 namespace MantaBitboardEngine
 {
-    public interface IBitBoard : ISearchableBoard<BitMove>
+    public interface ISearchableBitboard : ISearchableBoard<BitMove>
+    {
+    }
+
+    public interface IBitBoard : ISearchableBitboard
     {
         IBitBoardState BoardState { get; }
         

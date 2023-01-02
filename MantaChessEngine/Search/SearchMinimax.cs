@@ -82,13 +82,9 @@ namespace MantaChessEngine
             IMoveRating<IMove> currentRating = new MoveRating();
             List<IMoveRating<IMove>> bestMoveRatings = new List<IMoveRating<IMove>>();
 
-            var possibleMoves = _moveGenerator.GetAllMoves(color).ToList<IMove>(); // todo only legal moves
+            var hasLegalMoves = false;
 
-            // no legal moves means the game is over. It is either stall mate or check mate.
-            if (possibleMoves.Count == 0)
-            {
-                return MakeMoveRatingForGameEnd(_board, color, level);
-            }
+            var possibleMoves = _moveGenerator.GetAllMoves(color).ToList<IMove>(); // todo only legal moves
 
             foreach (IMove currentMove in possibleMoves)
             {
@@ -96,7 +92,10 @@ namespace MantaChessEngine
                 if (_moveGenerator.IsCheck(currentMove.MovingColor))
                 {
                     _board.Back();
+                    continue;
                 }
+
+                hasLegalMoves = true;
 
                 if (level < _maxDepth) // we need to do more move levels...
                 {
@@ -124,6 +123,12 @@ namespace MantaChessEngine
                     bestRating = currentRating.Clone();
                     bestMoveRatings = new List<IMoveRating<IMove>> { currentRating.Clone() };
                 }
+            }
+
+            // no legal moves means the game is over. It is either stall mate or check mate.
+            if (!hasLegalMoves)
+            {
+                return MakeMoveRatingForGameEnd(_board, color, level);
             }
 
             bestRating.PrincipalVariation.Insert(0, bestRating.Move);

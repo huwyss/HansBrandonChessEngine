@@ -142,13 +142,9 @@ namespace MantaChessEngine
             IMoveRating<IMove> bestRating = new MoveRating() { Score = InitWithWorstScorePossible(color) };
             IMoveRating<IMove> currentRating = new MoveRating();
 
-            var allLegalMovesUnsortedUnfiltered = _moveGenerator.GetAllMoves(color).ToList<IMove>(); // todo should be only legal moves
+            var allLegalMovesUnsortedUnfiltered = _moveGenerator.GetAllMoves(color).ToList<IMove>();
 
-            // no legal moves means the game is over. It is either stall mate or check mate.
-            if (allLegalMovesUnsortedUnfiltered.Count() == 0)
-            {
-                return MakeMoveRatingForGameEnd(_board, color, level);
-            }
+            var hasLegalMoves = false; // we do not know yet if there are legal moves
 
             var allLegalMovesUnsorted = _moveFilter != null && level > _maxDepth
                 ? _moveFilter.Filter(allLegalMovesUnsortedUnfiltered)
@@ -158,14 +154,16 @@ namespace MantaChessEngine
                 ? _moveOrder.OrderMoves(allLegalMovesUnsorted, color, level)
                 : allLegalMovesUnsorted;
 
-            if (possibleMoves.Count() == 0)
-            {
-                return null;
-            }
-
             foreach (IMove currentMove in possibleMoves)
             {
                 _board.Move(currentMove);
+                if (_moveGenerator.IsCheck(currentMove.MovingColor))
+                {
+                    _board.Back();
+                    continue;
+                }
+
+                hasLegalMoves = true;
 
                 if (level < _maxDepth || (level < _selectiveDepth && currentMove.CapturedPiece != null)) // we need to do more move levels...
                 //// if (level < _maxDepth)
@@ -218,6 +216,12 @@ namespace MantaChessEngine
                         break;
                     }
                 }
+            }
+
+            // no legal moves means the game is over. It is either stall mate or check mate.
+            if (!hasLegalMoves)
+            {
+                return MakeMoveRatingForGameEnd(_board, color, level);
             }
 
             bestRating.Alpha = alpha;

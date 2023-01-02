@@ -3,24 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MantaChessEngine;
+using MantaBitboardEngine;
 using MantaCommon;
 
-namespace MantaChessEngineTest.Doubles
-{
-    public class FakeMoveGeneratorMulitlevel : IMoveGenerator<IMove>
+namespace MantaBitboardEngineTest{
+    public class FakeBitMoveGeneratorMulitlevel : IMoveGenerator<BitMove>
     {
-        private List<IEnumerable<IMove>> _listOfListOfMoves = new List<IEnumerable<IMove>>();
-        private IEnumerator<IEnumerable<IMove>> _iteratorMoves;
+        private List<IEnumerable<BitMove>> _listOfListOfMoves = new List<IEnumerable<BitMove>>();
+        private IEnumerator<IEnumerable<BitMove>> _iteratorMoves;
         private IEnumerator<bool> _iteratorIsChecks;
 
-        public FakeMoveGeneratorMulitlevel()
+        public FakeBitMoveGeneratorMulitlevel()
         {
             ReturnsIsValid = true;
             ReturnsIsAttacked = false;
         }
 
-        public void AddGetAllMoves(IEnumerable<IMove> moves)
+        public void AddGetAllMoves(IEnumerable<BitMove> moves)
         {
             _listOfListOfMoves.Add(moves);
             _iteratorMoves = _listOfListOfMoves.GetEnumerator();
@@ -31,13 +30,13 @@ namespace MantaChessEngineTest.Doubles
             _iteratorIsChecks = isChecksToReturn.GetEnumerator();
         }
 
-        public IEnumerable<IMove> GetAllMoves(ChessColor color) ////, bool includeCastling = true, bool includePawnMoves = true)
+        public IEnumerable<BitMove> GetAllMoves(ChessColor color) ////, bool includeCastling = true, bool includePawnMoves = true)
         {
             _iteratorMoves.MoveNext();
 
             if (_iteratorMoves.Current.Count() == 0)
             {
-                return new List<IMove>();
+                return new List<BitMove>();
             }
 
             if (_iteratorMoves.Current.First().MovingColor != color)
@@ -45,17 +44,17 @@ namespace MantaChessEngineTest.Doubles
                 throw new Exception("Expected move of different color!");
             }
 
-            return (List<IMove>)_iteratorMoves.Current;
+            return (List<BitMove>)_iteratorMoves.Current;
         }
 
         public bool ReturnsIsValid { get; set; }
-        public bool IsMoveValid(IBoard board, IMove move)
+        public bool IsMoveValid(BitMove move)
         {
             return ReturnsIsValid;
         }
 
         public bool ReturnsIsAttacked { get; set; }
-        public bool IsAttacked(ChessColor color, int file, int rank)
+        public bool IsAttacked(ChessColor color, Square square)
         {
             return ReturnsIsAttacked;
         }
@@ -68,17 +67,7 @@ namespace MantaChessEngineTest.Doubles
             return _iteratorIsChecks.Current;
         }
 
-        public IEnumerable<IMove> GetAllCaptures(ChessColor color)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsAttacked(ChessColor color, Square square)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsMoveValid(IMove move)
+        public IEnumerable<BitMove> GetAllCaptures(ChessColor color)
         {
             throw new NotImplementedException();
         }

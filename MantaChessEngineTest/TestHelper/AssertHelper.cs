@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace MantaChessEngineTest
 {
-    class AssertHelper
+    public class AssertHelper
     {
         public static void WhiteWins(IMoveRating<IMove> rating)
         {

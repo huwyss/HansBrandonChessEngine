@@ -13,6 +13,8 @@ namespace MantaChessEngine
 
     public class MantaEngine : IMantaEngine
     {
+        private const int StandardHashSize = 2 * 1024 * 1024;
+
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private IMoveGenerator<IMove> _moveGenerator;
@@ -23,13 +25,18 @@ namespace MantaChessEngine
         private IBoard _board;
         private IHashtable _hashtable;
 
-        public MantaEngine(EngineType engineType)
+        public MantaEngine()
+            : this(EngineType.AlphaBeta, StandardHashSize)
+        {
+        }
+
+        public MantaEngine(EngineType engineType, int hashSize)
         {
             _moveFactory = new MoveFactory();
             _board = new Board();
             _moveGenerator = new MoveGenerator(_board);
             _moveRatingFactory = new MoveRatingFactory(_moveGenerator);
-            _hashtable = new Hashtable();
+            _hashtable = new Hashtable(hashSize);
 
             switch (engineType)
             {

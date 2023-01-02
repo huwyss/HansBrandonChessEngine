@@ -1185,7 +1185,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void IsCheckTest_WhenKingAttacked_ThenTrue()
         {
-            MantaEngine engine = new MantaEngine(EngineType.MinimaxPosition);
+            MantaEngine engine = new MantaEngine(EngineType.MinimaxPosition, 256);
             string position = "....rk.." +
                               "........" +
                               "........" +
@@ -1202,7 +1202,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void IsCheckTest_WhenKingNotAttacked_ThenFalse()
         {
-            MantaEngine engine = new MantaEngine(EngineType.MinimaxPosition);
+            MantaEngine engine = new MantaEngine(EngineType.MinimaxPosition, 256);
             Board board = new Board();
             string position = ".....k.." +
                               ".....p.." +
@@ -1221,7 +1221,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void IsCheckTest_WhenPawnInRank7CanPromote_ThenKingNotInCheck()
         {
-            MantaEngine engine = new MantaEngine(EngineType.MinimaxPosition);
+            MantaEngine engine = new MantaEngine(EngineType.MinimaxPosition, 256);
             Board board = new Board();
             string position = "r...k..." +
                               "pppp...P" +

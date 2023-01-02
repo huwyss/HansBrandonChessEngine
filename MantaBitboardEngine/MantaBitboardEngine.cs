@@ -10,6 +10,7 @@ namespace MantaBitboardEngine
 {
     public class MantaBitboardEngine : IMantaEngine
     {
+        private const int StandardHashSize = 2 * 1024 * 1024;
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly IHashtable _hashtable;
@@ -21,9 +22,9 @@ namespace MantaBitboardEngine
         private readonly BitMoveFactory _moveFactory;
         private readonly BitMoveRatingFactory _moveRatingFactory;
 
-        public MantaBitboardEngine()
+        public MantaBitboardEngine(int hashSize)
         {
-            _hashtable = new Hashtable();
+            _hashtable = new Hashtable(hashSize);
             _board = new Bitboards(_hashtable);
             _helperBits = new HelperBitboards();
             _moveGenerator = new BitMoveGenerator(_board, _helperBits);
@@ -31,6 +32,11 @@ namespace MantaBitboardEngine
             _moveFactory = new BitMoveFactory(_board);
             _moveRatingFactory = new BitMoveRatingFactory(_moveGenerator);
             _search = new GenericSearchAlphaBeta<BitMove>(_board, _evaluator, _moveGenerator, _hashtable, _moveFactory, _moveRatingFactory, 4);
+        }
+
+        public MantaBitboardEngine()
+            : this(StandardHashSize)
+        {
         }
 
         public void SetInitialPosition()

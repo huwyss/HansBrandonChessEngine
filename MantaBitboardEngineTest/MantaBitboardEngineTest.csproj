@@ -55,6 +55,13 @@
     <Compile Include="BitboardTest\EvaluatorPositionTest.cs" />
     <Compile Include="BitboardTest\HelperBitboardsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Search\FakeBitMoveGeneratorMulitlevel.cs" />
+    <Compile Include="Search\BitMoveMaker.cs" />
+    <Compile Include="Search\GenericSearchAlphaBetaLegalTestsWithMocks.cs" />
+    <Compile Include="Search\GenericSearchAlphaBetaTestWithRealBoard.cs" />
+    <Compile Include="Search\GenericSearchMinimaxLegalTestsWithMocks.cs" />
+    <Compile Include="Search\GenericSearchMinimaxTestWithRealBoard.cs" />
+    <Compile Include="Search\GenericSelectiveDepthSearchTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -63,6 +70,10 @@
     <ProjectReference Include="..\MantaBitboardEngine\MantaBitboardEngine.csproj">
       <Project>{c52486da-4c3f-4431-a99c-9c9191d47f51}</Project>
       <Name>MantaBitboardEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MantaChessEngineTest\MantaChessEngineTest.csproj">
+      <Project>{941a9d2f-91fe-41c6-beca-42d70ad34afa}</Project>
+      <Name>MantaChessEngineTest</Name>
     </ProjectReference>
     <ProjectReference Include="..\MantaChessEngine\MantaChessEngine.csproj">
       <Project>{64c19389-904b-4c0b-8dfb-8a907931c056}</Project>

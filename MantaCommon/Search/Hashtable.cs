@@ -9,7 +9,7 @@ namespace MantaCommon
 {
 	public class Hashtable : IHashtable
 	{
-		int HashSize = 2 * 1024 * 1024;
+		private int _hashSize;
 		uint[,,] Hash = new uint[2, 6, 64];
 		uint[,,] Lock = new uint[2, 6, 64];
 
@@ -22,16 +22,18 @@ namespace MantaCommon
 		Bitboard[] _hashpositions;
 		int _collisions = 0;
 
-		public Hashtable()
-		{
-			InitializeHash();
+		public Hashtable(int hashsize)
+        {
 			_currentKey = 0;
 			_currentLock = 0;
+			_hashSize = hashsize;
 
-			_hashtab = new HashEntry[2, HashSize];
+			InitializeHash();
+
+			_hashtab = new HashEntry[2, _hashSize];
 			_hashpositions = new Bitboard[2];
 
-			for (int i = 0; i < HashSize; i++)
+			for (int i = 0; i < _hashSize; i++)
             {
 				_hashtab[0, i] = new HashEntry();
 				_hashtab[1, i] = new HashEntry();
@@ -111,10 +113,10 @@ namespace MantaCommon
 			{
 				for (int square = 0; square < 64; square++)
 				{
-					Hash[0, (int)pieceType, square] = GetRandom(HashSize);
-					Hash[1, (int)pieceType, square] = GetRandom(HashSize);
-					Lock[0, (int)pieceType, square] = GetRandom(HashSize);
-					Lock[1, (int)pieceType, square] = GetRandom(HashSize);
+					Hash[0, (int)pieceType, square] = GetRandom(_hashSize);
+					Hash[1, (int)pieceType, square] = GetRandom(_hashSize);
+					Lock[0, (int)pieceType, square] = GetRandom(_hashSize);
+					Lock[1, (int)pieceType, square] = GetRandom(_hashSize);
 				}
 			}
 		}

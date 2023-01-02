@@ -9,9 +9,9 @@ namespace MantaBitboardEngine
 {
     public class BitMoveRatingFactory : IMoveRatingFactory<BitMove>
     {
-        private readonly BitMoveGenerator _moveGenerator;
+        private readonly IMoveGenerator<BitMove> _moveGenerator;
 
-        public BitMoveRatingFactory(BitMoveGenerator moveGenerator)
+        public BitMoveRatingFactory(IMoveGenerator<BitMove> moveGenerator)
         {
             _moveGenerator = moveGenerator;
         }

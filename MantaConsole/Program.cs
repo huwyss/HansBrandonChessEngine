@@ -60,9 +60,9 @@ namespace MantaConsole
                     break;
             }
 
-            MantaEngine whiteEngine = new MantaEngine(EngineType.MinimaxPosition);
+            MantaEngine whiteEngine = new MantaEngine(EngineType.MinimaxPosition, 256);
             whiteEngine.SetMaxSearchDepth(whiteLevel);
-            MantaEngine blackEngine = new MantaEngine(EngineType.MinimaxPosition);
+            MantaEngine blackEngine = new MantaEngine(EngineType.MinimaxPosition, 256);
             blackEngine.SetMaxSearchDepth(blackLevel);
 
             DefineLogLevel(quiet);

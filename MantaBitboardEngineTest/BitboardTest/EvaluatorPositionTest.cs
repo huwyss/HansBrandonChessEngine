@@ -3,7 +3,7 @@ using MantaCommon;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace MantaChessEngineTest
+namespace MantaBitboardEngineTest
 {
     [TestClass]
     public class MantaBitboardEngineTest

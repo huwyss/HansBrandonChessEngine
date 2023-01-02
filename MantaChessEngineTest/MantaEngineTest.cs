@@ -11,7 +11,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void DoBestMove_DepthOneSearch_WhenQueenCanBeCaptured_ThenQueenIsCaptured_WhiteMoves()
         {
-            var engine = new MantaEngine(EngineType.Minimax);
+            var engine = new MantaEngine(EngineType.Minimax, 256);
             engine.SetMaxSearchDepth(1);
             string boardString = "rnb.kbnr" +
                                  "ppp.pppp" +
@@ -40,7 +40,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void DoBestMove_DepthOneSearch_WhenQueenCanBeCaptured_ThenQueenIsCaptured_BlackMoves()
         {
-            var engine = new MantaEngine(EngineType.Minimax);
+            var engine = new MantaEngine(EngineType.Minimax, 256);
             engine.SetMaxSearchDepth(1);
             string boardString = "rnbqkbnr" +
                                  "pppp.ppp" +
@@ -86,7 +86,7 @@ namespace MantaChessEngineTest
 
         public void DoBestMoveTest_WhenWhiteIsCheckMate_ThenNoLegalMove_WhiteMoves(int depth)
         {
-            var engine = new MantaEngine(EngineType.MinimaxPosition);
+            var engine = new MantaEngine(EngineType.MinimaxPosition, 256);
             engine.SetMaxSearchDepth(depth);
             string boardString = "........" +
                                  "........" +
@@ -127,7 +127,7 @@ namespace MantaChessEngineTest
 
         public void DoBestMoveTest_WhenWhiteIsStallMate_ThenNoLegalMove_WhiteMoves(int depth)
         {
-            var engine = new MantaEngine(EngineType.MinimaxPosition);
+            var engine = new MantaEngine(EngineType.MinimaxPosition, 256);
             engine.SetMaxSearchDepth(depth);
             engine.SetBoard(new Board());
             string boardString = "........" +
@@ -152,7 +152,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void DoBestMoveTest_WhenCheck_ThenKingMustEscapeCheck()
         {
-            var engine = new MantaEngine(EngineType.MinimaxPosition);
+            var engine = new MantaEngine(EngineType.MinimaxPosition, 256);
             string boardString = "........" +
                                  "........" +
                                  "........" +

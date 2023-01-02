@@ -1267,7 +1267,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void IsCheckTest_WhenKingAttacked_ThenTrue()
         {
-            var engine = new MantaBitboardEngine.MantaBitboardEngine();
+            var engine = new MantaBitboardEngine.MantaBitboardEngine(256);
             string position = "....rk.." +
                               "........" +
                               "........" +
@@ -1284,7 +1284,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void IsCheckTest_WhenKingNotAttacked_ThenFalse()
         {
-            var engine = new MantaBitboardEngine.MantaBitboardEngine();
+            var engine = new MantaBitboardEngine.MantaBitboardEngine(256);
             string position = ".....k.." +
                               ".....p.." +
                               "........" +
@@ -1301,7 +1301,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void IsCheckTest_WhenPawnInRank7CanPromote_ThenKingNotInCheck()
         {
-            var engine = new MantaBitboardEngine.MantaBitboardEngine();
+            var engine = new MantaBitboardEngine.MantaBitboardEngine(256);
             string position = "r...k..." +
                               "pppp...P" +
                               "........" +
@@ -1318,7 +1318,7 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void IsCheckTest_WhenKingAttacksKing_IsCheck()
         {
-            var engine = new MantaBitboardEngine.MantaBitboardEngine();
+            var engine = new MantaBitboardEngine.MantaBitboardEngine(256);
             string position = ".....k.." +
                               ".....K.." +
                               "........" +

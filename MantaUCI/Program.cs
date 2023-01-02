@@ -248,7 +248,7 @@ namespace MantaUCI
 
         private static IMantaEngine GetMantaEngine()
         {
-            var engine = new MantaEngine(EngineType.AlphaBeta);
+            var engine = new MantaEngine();
             ////_engine = new MantaEngine(EngineType.MinimaxPosition);
             ////_engine = new MantaEngine(EngineType.Random);
             engine.SetMaxSearchDepth(3);

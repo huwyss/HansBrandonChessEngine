@@ -25,6 +25,7 @@ namespace MantaChessEngineTest
             moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveWhite, MoveMaker.White(1, 2) }); // first level
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 1), bestMoveBlack }); // second level 1.
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 3), MoveMaker.Black(2, 4) }); // second level 2.
+            moveGenFake.SetIsChecks(new List<bool>() { false, false, false, false, false, false });
 
             IBoard boardFake = new FakeBoard();
 
@@ -64,6 +65,7 @@ namespace MantaChessEngineTest
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 1) }); // (0)
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // (0)
             moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveBlack, MoveMaker.Black(2, 4) }); // 2. level b (black)
+            moveGenFake.SetIsChecks(new List<bool>() { false, false, false, false, false, false, false, false });
 
             IBoard boardFake = new FakeBoard();
 
@@ -102,6 +104,7 @@ namespace MantaChessEngineTest
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 1) }); // (0)
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // (0)
             moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveBlack, MoveMaker.Black(2, 4) }); // 2. level b (black)
+            moveGenFake.SetIsChecks(new List<bool>() { false, false, false, false, false, false, false, false });
 
             IBoard boardFake = new FakeBoard();
 
@@ -140,6 +143,7 @@ namespace MantaChessEngineTest
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.WhiteCapture(3, 1), MoveMaker.WhiteCapture(3, 2) }); // 3. level a (white)
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 1) }); // (0)
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // (0)
+            moveGenFake.SetIsChecks(new List<bool>() { false, false, false, false, false, false, false, false });
 
             IBoard boardFake = new FakeBoard();
 
@@ -179,6 +183,7 @@ namespace MantaChessEngineTest
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.WhiteCapture(3, 1), bestMoveWhite2 }); // 3. level a (white)
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 1) }); // (0)
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // (0)
+            moveGenFake.SetIsChecks(new List<bool>() { false, false, false, false, false, false, false, false });
 
             IBoard boardFake = new FakeBoard();
 
@@ -221,6 +226,7 @@ namespace MantaChessEngineTest
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.WhiteCapture(3, 2), bestMoveWhite2 }); // 3. level a (white)
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // (0)
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 3) }); // (0)
+            moveGenFake.SetIsChecks(new List<bool>() { false, false, false, false, false, false, false, false });
 
             IBoard boardFake = new FakeBoard();
 
@@ -263,6 +269,7 @@ namespace MantaChessEngineTest
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.WhiteCapture(3, 2), bestMoveWhite2 }); // 3. level a (white)
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // (0)
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 3) }); // (0)
+            moveGenFake.SetIsChecks(new List<bool>() { false, false, false, false, false, false, false, false });
 
             IBoard boardFake = new FakeBoard();
 

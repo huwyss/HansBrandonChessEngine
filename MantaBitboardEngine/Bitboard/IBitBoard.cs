@@ -2,7 +2,7 @@
 
 namespace MantaBitboardEngine
 {
-    public interface IBitBoard
+    public interface IBitBoard : ISearchableBoard<BitMove>
     {
         IBitBoardState BoardState { get; }
         
@@ -42,11 +42,18 @@ namespace MantaBitboardEngine
         /// <summary>
         /// Do a move and update the board
         /// </summary>
-        void Move(BitMove nextMove);
+        //// void Move(BitMove nextMove);
 
         /// <summary>
         /// Takes the last move back
         /// </summary>
+        //// void Back();
+    }
+
+    public interface ISearchableBoard<TMove>
+    {
+        void Move(TMove nextMove);
+
         void Back();
     }
 }

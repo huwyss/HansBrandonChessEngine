@@ -4,13 +4,15 @@ namespace MantaBitboardEngine
 {
     public class BitEvaluator
     {
+        private readonly Bitboards _board;
         private readonly HelperBitboards _helperBits;
 
         private readonly int[] _value;
         private readonly int[,,] _positionBonus; // dimension: color, pieceType, square
 
-        public BitEvaluator(HelperBitboards helperBits)
+        public BitEvaluator(Bitboards board, HelperBitboards helperBits)
         {
+            _board = board;
             _helperBits = helperBits;
             _value = new int[(int)BitPieceType.King + 1];
             _value[(int)BitPieceType.Pawn] = 100;
@@ -25,7 +27,7 @@ namespace MantaBitboardEngine
             Initialize();
         }
 
-        public int Evaluate(Bitboards board)
+        public int Evaluate()
         {
             var score = 0;
             var whiteBishops = 0;
@@ -37,7 +39,7 @@ namespace MantaBitboardEngine
             {
                 for (int piece = (int)BitPieceType.Pawn; piece <= (int)BitPieceType.King; piece++)
                 {
-                    var whitePieceBit = board.Bitboard_Pieces[color, piece];
+                    var whitePieceBit = _board.Bitboard_Pieces[color, piece];
                     while (whitePieceBit != 0)
                     {
                         var square = BitHelper.BitScanForward(whitePieceBit);

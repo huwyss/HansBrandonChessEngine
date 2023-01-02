@@ -2,7 +2,12 @@
 
 namespace MantaBitboardEngine
 {
-    public class BitMoveFactory
+    public interface IMoveFactory<TMove> where TMove : IGenericMove
+    {
+        TMove MakeMove(Square fromSquare, Square toSquare, BitPieceType promotionPiece);
+    }
+
+    public class BitMoveFactory :  IMoveFactory<BitMove>
     {
         private readonly Bitboards _board;
 

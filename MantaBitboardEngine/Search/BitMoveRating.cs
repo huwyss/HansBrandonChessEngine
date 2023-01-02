@@ -4,7 +4,27 @@ using System.Linq;
 
 namespace MantaBitboardEngine
 {
-    public class BitMoveRating
+    public interface IMoveRating<TMove> where TMove : IGenericMove
+    {
+        TMove Move { get; set; }
+        IList<TMove> PrincipalVariation { get; set; }
+        int Alpha { get; set; }
+        int Beta { get; set; }
+        int Score { get; set; }
+        int EvaluationLevel { get; set; }
+        bool WhiteWins { get; set; }
+        bool BlackWins { get; set; }
+        bool Stallmate { get; set; }
+        IMoveRating<TMove> Clone();
+        int EvaluatedPositions { get; set; }
+        int Depth { get; set; }
+        int SelectiveDepth { get; set; }
+        int PruningCount { get; set; }
+        bool IsEquallyGood(IMoveRating<TMove> otherRating);
+        bool IsBetter(ChessColor color, IMoveRating<TMove> otherRating);
+    }
+
+    public class BitMoveRating : IMoveRating<BitMove>
     {
         private const int Tolerance = 5;
 
@@ -45,7 +65,7 @@ namespace MantaBitboardEngine
             EvaluationLevel = 0;
         }
 
-        public BitMoveRating Clone()
+        public IMoveRating<BitMove> Clone()
         {
             return new BitMoveRating()
             {
@@ -74,7 +94,7 @@ namespace MantaBitboardEngine
         /// <summary>
         /// True if current score is as good as best within tolerance.
         /// </summary>
-        public bool IsEquallyGood(BitMoveRating otherRating)
+        public bool IsEquallyGood(IMoveRating<BitMove> otherRating)
         {
             bool sameScore = this.Score <= otherRating.Score + Tolerance &&
                              this.Score >= otherRating.Score - Tolerance;
@@ -85,7 +105,7 @@ namespace MantaBitboardEngine
         /// <summary>
         /// True if current score is better or wins earlier or looses later.
         /// </summary>
-        public bool IsBetter(ChessColor color, BitMoveRating otherRating)
+        public bool IsBetter(ChessColor color, IMoveRating<BitMove> otherRating)
         {
             return color == ChessColor.White ? Score > otherRating.Score : Score < otherRating.Score;
         }

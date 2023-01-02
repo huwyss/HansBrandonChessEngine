@@ -7,7 +7,16 @@ using System.Diagnostics;
 
 namespace MantaBitboardEngine
 {
-    public class BitMoveGenerator
+    public interface IMoveGenerator<TMove> where TMove : IGenericMove
+    {
+        IEnumerable<TMove> GetAllMoves(ChessColor color);
+        IEnumerable<TMove> GetAllCaptures(ChessColor color);
+        bool IsAttacked(ChessColor color, Square square);
+        bool IsCheck(ChessColor color);
+        bool IsMoveValid(BitMove move);
+    }
+
+    public class BitMoveGenerator : IMoveGenerator<BitMove>
     {
         private const int promotionValue = 200;
         private const int capturePromotionValue = 220;

@@ -8,28 +8,29 @@ using log4net;
 ////[assembly: InternalsVisibleTo("MantaChessEngineTest")]
 namespace MantaBitboardEngine
 {
-    public class BitSearchAlphaBeta
+    public class BitSearchAlphaBeta<TMove> where TMove : IGenericMove
     {
         private const int AspirationWindowHalfSizeInitial = 100;
 
         private static readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly Bitboards _board;
-        private readonly BitMoveGenerator _moveGenerator;
+        private readonly ISearchableBoard<TMove> _board;
+        private readonly IMoveGenerator<TMove> _moveGenerator;
         private readonly BitEvaluator _evaluator;
         private readonly IHashtable _hashtable;
-        private readonly BitMoveFactory _moveFactory;
+        private readonly IMoveFactory<TMove> _moveFactory;
+        private readonly IMoveRatingFactory<TMove> _moveRatingFactory;
 
         private int _maxDepth;
         private int _additionalSelectiveDepth;
         private int _selectiveDepth;
 
-        private BitMoveRating _previousPV;
+        private IMoveRating<TMove> _previousPV;
 
         private int evaluatedPositions;
         private int _pruningCount;
 
-        public BitSearchAlphaBeta(Bitboards board, BitEvaluator evaluator, BitMoveGenerator moveGenerator, IHashtable hashtable, BitMoveFactory moveFactory, int maxDepth) ////, IMoveOrder moveOrder, IMoveFilter moveFilter)
+        public BitSearchAlphaBeta(ISearchableBoard<TMove> board, BitEvaluator evaluator, IMoveGenerator<TMove> moveGenerator, IHashtable hashtable, IMoveFactory<TMove> moveFactory, IMoveRatingFactory<TMove> moveRatingFactory, int maxDepth)
         {
             _board = board;
             _additionalSelectiveDepth = 0;
@@ -37,6 +38,7 @@ namespace MantaBitboardEngine
             _moveGenerator = moveGenerator;
             _hashtable = hashtable;
             _moveFactory = moveFactory;
+            _moveRatingFactory = moveRatingFactory;
 
             _maxDepth = maxDepth;
 
@@ -79,7 +81,7 @@ namespace MantaBitboardEngine
         /// <param name="color">Color of next move</param>
         /// <param name="score">Score of endposition of the returned move.</param>
         /// <returns>best move for color.</returns>
-        public BitMoveRating Search(ChessColor color)
+        public IMoveRating<TMove> Search(ChessColor color)
         {
             _pruningCount = 0;
             evaluatedPositions = 0;
@@ -89,7 +91,7 @@ namespace MantaBitboardEngine
 
             var succeed = false;
 
-            BitMoveRating moveRating = null;
+            IMoveRating<TMove> moveRating = null;
 
             var windowHalfSize = AspirationWindowHalfSizeInitial;
 
@@ -138,14 +140,14 @@ namespace MantaBitboardEngine
         /// <param name="board">Board to be searched in</param>
         /// <param name="color">Color of next move</param>
         /// <param name="level">Start level of search </param>
-        internal virtual BitMoveRating SearchLevel(ChessColor color, int level, int alpha, int beta)
+        internal virtual IMoveRating<TMove> SearchLevel(ChessColor color, int level, int alpha, int beta)
         {
-            var bestRating = new BitMoveRating() { Score = InitWithWorstScorePossible(color) };
-            var currentRating = new BitMoveRating();
+            IMoveRating<TMove> bestRating = _moveRatingFactory.CreateMoveRatingWithWorstScore(color);
+            IMoveRating<TMove> currentRating = _moveRatingFactory.CreateMoveRating();
 
             var hasLegalMoves = false; // we do not know yet if there are legal moves
 
-            List<BitMove> movesToEvaluate;
+            List<TMove> movesToEvaluate;
             if (level <= _maxDepth)
             {
                 movesToEvaluate = _moveGenerator.GetAllMoves(color).ToList();
@@ -192,7 +194,7 @@ namespace MantaBitboardEngine
 
                 hasLegalMoves = true;
 
-                if (level < _maxDepth || (level < _selectiveDepth && currentMove.CapturedPiece != BitPieceType.Empty)) // we need to do more move levels...
+                if (level < _maxDepth || (level < _selectiveDepth && currentMove.IsCapture())) // we need to do more move levels...
                 //// if (level < _maxDepth)
                 //// if (level < _selectiveDepth)
                 {
@@ -200,7 +202,7 @@ namespace MantaBitboardEngine
 
                     if (currentRating == null) // we are in a level > maxdepth and tried to find a capture move but there was no capture move.
                     {
-                        currentRating = new BitMoveRating() { Score = _evaluator.Evaluate(_board), EvaluationLevel = level };
+                        currentRating = _moveRatingFactory.CreateMoveRating(_evaluator.Evaluate(), level);
                         evaluatedPositions++;
                     }
 
@@ -208,7 +210,7 @@ namespace MantaBitboardEngine
                 }
                 else // we reached the bottom of the tree and evaluate the position
                 {
-                    currentRating.Score = _evaluator.Evaluate(_board);
+                    currentRating.Score = _evaluator.Evaluate();
                     currentRating.EvaluationLevel = level;
                     evaluatedPositions++;
                     _board.Back();
@@ -248,7 +250,7 @@ namespace MantaBitboardEngine
 
             if (!hasLegalMoves)
             {
-                return MakeMoveRatingForGameEnd(_board, color, level);
+                return _moveRatingFactory.CreateMoveRatingForGameEnd(color, level);
             }
 
             bestRating.Alpha = alpha;
@@ -259,59 +261,6 @@ namespace MantaBitboardEngine
 
             return bestRating;
         }
-
-        // Must return a worse score than the score for a lost game so that losing is better than the initialized best score.
-        private int InitWithWorstScorePossible(ChessColor color)
-        {
-            if (color == ChessColor.White)
-            {
-                return int.MinValue;
-            }
-            else
-            {
-                return int.MaxValue;
-            }
-        }
-
-        private BitMoveRating MakeMoveRatingForGameEnd(Bitboards board, ChessColor color, int curentLevel)
-        {
-            int score;
-            bool whiteWins = false;
-            bool blackWins = false;
-            bool stallmate = false;
-
-            if (_moveGenerator.IsCheck(color))
-            {
-                if (color == ChessColor.White)
-                {
-                    score = ScoreBlackWins + curentLevel * SignificantFactor;
-                    blackWins = true;
-                }
-                else
-                {
-                    score = ScoreWhiteWins - curentLevel * SignificantFactor;
-                    whiteWins = true;
-                }
-            }
-            else
-            {
-                score = 0;
-                stallmate = true;
-            }
-
-            return new BitMoveRating()
-            {
-                Score = score,
-                WhiteWins = whiteWins,
-                BlackWins = blackWins,
-                Stallmate = stallmate,
-                Move = BitMove.CreateEmptyMove(), /// new NoLegalMove(),
-            };
-        }
-
-        public const int ScoreWhiteWins = 10000;
-        public const int ScoreBlackWins = -10000;
-        public const int SignificantFactor = 8; // fast multiplier
     }
 }
 

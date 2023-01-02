@@ -17,8 +17,9 @@ namespace MantaBitboardEngine
         private readonly BitMoveGenerator _moveGenerator;
         private readonly HelperBitboards _helperBits;
         private readonly BitEvaluator _evaluator;
-        private readonly BitSearchAlphaBeta _search;
+        private readonly BitSearchAlphaBeta<BitMove> _search;
         private readonly BitMoveFactory _moveFactory;
+        private readonly BitMoveRatingFactory _moveRatingFactory;
 
         public MantaBitboardEngine()
         {
@@ -26,9 +27,10 @@ namespace MantaBitboardEngine
             _board = new Bitboards(_hashtable);
             _helperBits = new HelperBitboards();
             _moveGenerator = new BitMoveGenerator(_board, _helperBits);
-            _evaluator = new BitEvaluator(_helperBits);
+            _evaluator = new BitEvaluator(_board, _helperBits);
             _moveFactory = new BitMoveFactory(_board);
-            _search = new BitSearchAlphaBeta(_board, _evaluator, _moveGenerator, _hashtable, _moveFactory, 4);
+            _moveRatingFactory = new BitMoveRatingFactory(_moveGenerator);
+            _search = new BitSearchAlphaBeta<BitMove>(_board, _evaluator, _moveGenerator, _hashtable, _moveFactory, _moveRatingFactory, 4);
         }
 
         public void SetInitialPosition()
@@ -95,7 +97,7 @@ namespace MantaBitboardEngine
 
         public UciMoveRating DoBestMove(ChessColor color)
         {
-            BitMoveRating nextMove = _search.Search(color);
+            IMoveRating<BitMove> nextMove = _search.Search(color);
             _log.Debug("Score: " + nextMove.Score);
 
             UciMoveRating uciRating = BitMoveRatingConverter.NewFrom(nextMove);
@@ -105,7 +107,7 @@ namespace MantaBitboardEngine
 
         public UciMoveRating DoBestMove()
         {
-            BitMoveRating nextMove = _search.Search(_board.BoardState.SideToMove);
+            IMoveRating<BitMove> nextMove = _search.Search(_board.BoardState.SideToMove);
             _log.Debug("Score: " + nextMove.Score);
 
             UciMoveRating uciRating = BitMoveRatingConverter.NewFrom(nextMove);

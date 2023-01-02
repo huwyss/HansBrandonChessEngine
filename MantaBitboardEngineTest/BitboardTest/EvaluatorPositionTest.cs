@@ -14,8 +14,8 @@ namespace MantaChessEngineTest
         [TestInitialize]
         public void Setup()
         {
-            _target = new BitEvaluator(new HelperBitboards());
             _board = new Bitboards(new Mock<IHashtable>().Object);
+            _target = new BitEvaluator(_board, new HelperBitboards());
         }
 
         [TestMethod]
@@ -30,9 +30,9 @@ namespace MantaChessEngineTest
                               "........" +
                               "........");
 
-            var score = _target.Evaluate(_board);
+            var score = _target.Evaluate();
 
-            Assert.AreEqual(115, score);
+            Assert.AreEqual(112, score);
         }
 
         [TestMethod]
@@ -47,9 +47,9 @@ namespace MantaChessEngineTest
                               "........" +
                               "........");
 
-            var score = _target.Evaluate(_board);
+            var score = _target.Evaluate();
 
-            Assert.AreEqual(110, score);
+            Assert.AreEqual(107, score);
         }
 
         [TestMethod]
@@ -64,7 +64,7 @@ namespace MantaChessEngineTest
                               ".......N" +
                               "....K...");
 
-            var score = _target.Evaluate(_board);
+            var score = _target.Evaluate();
 
             Assert.AreEqual(300 - 5, score);
         }
@@ -81,7 +81,7 @@ namespace MantaChessEngineTest
                               "....N..." +
                               "........");
 
-            var score = _target.Evaluate(_board);
+            var score = _target.Evaluate();
 
             Assert.AreEqual(300, score);
         }
@@ -98,7 +98,7 @@ namespace MantaChessEngineTest
                               "........" +
                               "........");
 
-            var score = _target.Evaluate(_board);
+            var score = _target.Evaluate();
 
             Assert.AreEqual(true, score > 0.1f, "Two bishops should be better than bishop and knight.");
         }
@@ -115,7 +115,7 @@ namespace MantaChessEngineTest
                               "........" +
                               "........");
 
-            var score = _target.Evaluate(_board);
+            var score = _target.Evaluate();
 
             Assert.AreEqual(true, score < -0.1f, "Two bishops should be better than bishop and knight.");
         }
@@ -134,17 +134,17 @@ namespace MantaChessEngineTest
 
             // white castling
             _board.Move(BitMove.CreateCastling(ChessColor.White, CastlingType.KingSide, 0));
-            var score = _target.Evaluate(_board);
+            var score = _target.Evaluate();
             Assert.AreEqual(true, score > 0.1f, "White did castling. so white should be better.");
 
             // black castling
             _board.Move(BitMove.CreateCastling(ChessColor.Black, CastlingType.KingSide, 0));
-            score = _target.Evaluate(_board);
+            score = _target.Evaluate();
             Assert.AreEqual(true, score == 0, "White and Black did castling. They are equal.");
 
             // take black move back
             _board.Back();
-            score = _target.Evaluate(_board);
+            score = _target.Evaluate();
             Assert.AreEqual(true, score > 0.1f, "Black castling was taken back. so white should be better.");
         }
     }

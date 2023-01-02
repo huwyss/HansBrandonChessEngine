@@ -6,7 +6,7 @@ namespace MantaBitboardEngine
 {
     public class BitMoveRatingConverter
     {
-        public static UciMoveRating NewFrom(BitMoveRating moveRating)
+        public static UciMoveRating NewFrom(IMoveRating<BitMove> moveRating)
         {
             var uciMoveRating = new UciMoveRating();
             uciMoveRating.Move = moveRating.Move.ToUciString();

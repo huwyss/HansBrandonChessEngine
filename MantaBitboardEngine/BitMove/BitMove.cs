@@ -3,7 +3,16 @@ using System.Text;
 
 namespace MantaBitboardEngine
 {
-    public class BitMove
+    public interface IGenericMove
+    {
+        ChessColor MovingColor { get; }
+        Square FromSquare { get; }
+        Square ToSquare { get; }
+        BitPieceType PromotionPiece {get;}
+        bool IsCapture();
+    }
+
+    public class BitMove : IGenericMove
     {
         // capture constructor
         private BitMove(
@@ -121,6 +130,11 @@ namespace MantaBitboardEngine
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public bool IsCapture()
+        {
+            return CapturedPiece != BitPieceType.Empty;
         }
     }
 

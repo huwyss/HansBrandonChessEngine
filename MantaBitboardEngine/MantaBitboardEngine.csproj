@@ -56,6 +56,7 @@
     <Compile Include="Bitboard\IBitBoard.cs" />
     <Compile Include="Bitboard\IBitBoardState.cs" />
     <Compile Include="BitMove\BitMoveFactory.cs" />
+    <Compile Include="Evaluation\BitEvaluatorSimple.cs" />
     <Compile Include="Evaluation\BitEvaluator.cs" />
     <Compile Include="MantaBitboardEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

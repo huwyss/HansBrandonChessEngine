@@ -1,25 +1,28 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
-using MantaChessEngine;
+using MantaBitboardEngine;
 using MantaCommon;
 using MantaChessEngineTest.Doubles;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace MantaBitboardEngineTest
 {
     /// <summary>
     /// Tests for SearchAlphaBeta with real board.
     /// </summary>
-    /*
+    
     [TestClass]
     public class GenericSearchAlphaBetaTestWithRealBoard
     {
         const int AlphaStart = int.MinValue;
         const int BetaStart = int.MaxValue;
 
-        Board _board;
+        IHashtable _hashMock;
+        Bitboards _board;
         IEvaluator _evaluator;
-        MoveGenerator _gen;
+        BitMoveGenerator _gen;
+        BitMoveRatingFactory _ratingFactory;
 
         // ---------------------------------------------------------------------------------------------
         // White is first mover
@@ -28,14 +31,19 @@ namespace MantaBitboardEngineTest
         [TestInitialize]
         public void Setup()
         {
-            _board = new Board();
-            _evaluator = new EvaluatorSimple(_board);
-            _gen = new MoveGenerator(_board);
+            var helperBits = new HelperBitboards();
+            _hashMock = new Mock<IHashtable>().Object;
+            _board = new Bitboards(_hashMock);
+            _evaluator = new BitEvaluatorSimple(_board, helperBits);
+            _gen = new BitMoveGenerator(_board, helperBits);
+            _ratingFactory = new BitMoveRatingFactory(_gen);
         }
+
+       
         [TestMethod]
         public void SearchLevelTest_WhenLevelOne_ThenCapturePawn_White()
         {
-            var target = new SearchAlphaBeta(_board, _evaluator, _gen, 1, null, null);
+            var target = new GenericSearchAlphaBeta<BitMove>(_board, _evaluator, _gen, _hashMock, null, _ratingFactory, 1);
             string boardString = "k......." +
                                  "........" +
                                  "...p...." +
@@ -47,16 +55,16 @@ namespace MantaBitboardEngineTest
             _board.SetPosition(boardString);
 
             var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart); // level 1
-            IMove goodMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
+            var goodMove = BitMove.CreateCapture(BitPieceType.Bishop, Square.F4, Square.E5, BitPieceType.Pawn, Square.E5, BitPieceType.Empty, ChessColor.White, 0);
 
             Assert.AreEqual(goodMove, bestRatingActual.Move, "White bishop should capture pawn. We are on level 1");
             Assert.AreEqual(200, bestRatingActual.Score);
         }
-
+        
         [TestMethod]
         public void SearchBestMoveOneLevelTest_WhenLevel2_ThenDoNotCapturePawn_White()
         {
-            var target = new SearchAlphaBeta(_board, _evaluator, _gen, 2, null, null);
+            var target = new GenericSearchAlphaBeta<BitMove>(_board, _evaluator, _gen, _hashMock, null, _ratingFactory, 2);
             string boardString = "k......." +
                                  "........" +
                                  "...p...." +
@@ -68,16 +76,16 @@ namespace MantaBitboardEngineTest
             _board.SetPosition(boardString);
 
             var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart); // level 2
-            IMove badMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
+            var badMove = BitMove.CreateCapture(BitPieceType.Bishop, Square.F4, Square.E5, BitPieceType.Pawn, Square.E5, BitPieceType.Empty, ChessColor.White, 0);
 
             Assert.AreNotEqual(badMove, bestRatingActual.Move, "White bishop should not capture pawn.");
             Assert.AreEqual(100, bestRatingActual.Score);
         }
-
+        
         [TestMethod]
         public void SearchBestMoveTest_WhenLevel3_ThenCapturePawn_White()
         {
-            var target = new SearchAlphaBeta(_board, _evaluator, _gen, 3, null, null);
+            var target = new GenericSearchAlphaBeta<BitMove>(_board, _evaluator, _gen, _hashMock, null, _ratingFactory, 3);
             string boardString = "k......." +
                                  "...n...." +
                                  "...b...." +
@@ -98,8 +106,9 @@ namespace MantaBitboardEngineTest
                                  //"K.......";
 
             var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart); // level 3
-            IMove expectedMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
-            IMove expectedMove2 = new NormalMove(Piece.MakePiece('N'), 'f', 3, 'e', 5, Piece.MakePiece('p'));
+
+            var expectedMove = BitMove.CreateCapture(BitPieceType.Bishop, Square.F4, Square.E5, BitPieceType.Pawn, Square.E5, BitPieceType.Empty, ChessColor.White, 0);
+            var expectedMove2 = BitMove.CreateCapture(BitPieceType.Knight, Square.F3, Square.E5, BitPieceType.Pawn, Square.E5, BitPieceType.Empty, ChessColor.White, 0);
 
             bool passed = bestRatingActual.Move.Equals(expectedMove) ||
                           bestRatingActual.Move.Equals(expectedMove2);
@@ -107,11 +116,11 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(true, passed, "White bishop or knight should capture black pawn. It is actually bad but we test level 3.");
             Assert.AreEqual(0, bestRatingActual.Score);
         }
-
+        
         [TestMethod]
         public void SearchBestMoveOneLevelTest_WhenLevel4_ThenDoNotCapturePawn_White()
         {
-            var target = new SearchAlphaBeta(_board, _evaluator, _gen, 4, null, null);
+            var target = new GenericSearchAlphaBeta<BitMove>(_board, _evaluator, _gen, _hashMock, null, _ratingFactory, 4);
             string boardString = "k......." +
                                  "...n...." +
                                  "...b...." +
@@ -123,18 +132,18 @@ namespace MantaBitboardEngineTest
             _board.SetPosition(boardString);
 
             var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart); // level 4
-            IMove badMove = new NormalMove(Piece.MakePiece('B'), 'f', 4, 'e', 5, Piece.MakePiece('p'));
-            IMove badMove2 = new NormalMove(Piece.MakePiece('N'), 'f', 3, 'e', 5, Piece.MakePiece('p'));
+            var badMove = BitMove.CreateCapture(BitPieceType.Bishop, Square.F4, Square.E5, BitPieceType.Pawn, Square.E5, BitPieceType.Empty, ChessColor.White, 0);
+            var badMove2 = BitMove.CreateCapture(BitPieceType.Knight, Square.F3, Square.E5, BitPieceType.Pawn, Square.E5, BitPieceType.Empty, ChessColor.White, 0);
 
             Assert.AreNotEqual(badMove, bestRatingActual.Move, "White bishop or knight should not capture black pawn.");
             Assert.AreNotEqual(badMove2, bestRatingActual.Move, "White bishop or knight should not capture black pawn.");
             Assert.AreEqual(-100, bestRatingActual.Score);
         }
-
+        
         [TestMethod]
         public void SearchLevelTest_WhenWhiteInCheck_ThenDoNotAttackBlackKing_White()
         {
-            var target = new SearchAlphaBeta(_board, _evaluator, _gen, 3, null, null);
+            var target = new GenericSearchAlphaBeta<BitMove>(_board, _evaluator, _gen, _hashMock, null, _ratingFactory, 3);
             string boardString = "....q..R" +
                                  "........" +
                                  "....k..." +
@@ -146,13 +155,14 @@ namespace MantaBitboardEngineTest
             _board.SetPosition(boardString);
 
             var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart); // level 3
-            IMove wrongMove = new NormalMove(Piece.MakePiece('R'), 'h', 8, 'e', 8, Piece.MakePiece('q'));
-            IMove wrongMove2 = new NormalMove(Piece.MakePiece('K'), 'e', 4, 'd', 5, Piece.MakePiece('b'));
+
+            var wrongMove = BitMove.CreateCapture(BitPieceType.Rook, Square.H8, Square.E8, BitPieceType.Queen, Square.E8, BitPieceType.Empty, ChessColor.White, 0);
+            var wrongMove2 = BitMove.CreateCapture(BitPieceType.King, Square.E4, Square.D5, BitPieceType.Bishop, Square.E8, BitPieceType.Empty, ChessColor.White, 0);
 
             Assert.AreNotEqual(wrongMove, bestRatingActual.Move, "White must escape check.");
             Assert.AreNotEqual(wrongMove2, bestRatingActual.Move, "White must escape check.");
         }
-
+        /*
         [TestMethod]
         public void SearchLevelTest_WhenWhiteIsCheckMate_ThenNoLegalMove_White()
         {
@@ -362,6 +372,6 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(expectedMove, bestRatingActual.Move, "Should be find checkmate for black: ... Qh2b2 #");
             AssertHelper.BlackWins(bestRatingActual);
         }
-   
-    } */
+   */
+    }
 }

@@ -1,16 +1,33 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
-using MantaChessEngine;
+using MantaBitboardEngine;
 using MantaChessEngineTest.Doubles;
 using MantaCommon;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace MantaBitboardEngineTest
 {
     [TestClass]
     public class GenericSelectiveDepthSearchTest
     {
-        /*
+        const int AlphaStart = int.MinValue;
+        const int BetaStart = int.MaxValue;
+
+        FakeBitMoveGeneratorMulitlevel moveGenFake;
+        IHashtable hashMock;
+        IBitBoard boardMock;
+        BitMoveRatingFactory moveRatingFactory;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            moveGenFake = new FakeBitMoveGeneratorMulitlevel();
+            hashMock = new Mock<IHashtable>().Object;
+            boardMock = new Mock<IBitBoard>().Object;
+            moveRatingFactory = new BitMoveRatingFactory(moveGenFake);
+        }
+
         [TestMethod]
         public void SearchAlphaBetaTest_NoPruningForWhite_PrincipalVariationMovesInRating()
         {
@@ -20,16 +37,16 @@ namespace MantaBitboardEngineTest
             //  /  \     /  \   
             // 1   -3x  -2  -5    black move -> lowest selected (x)
             var evalFake = new FakeEvaluator(new List<int>() { 100, -300, -200, -500 });
-            var moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMoveWhite = MoveMaker.White(1, 1);
-            var bestMoveBlack = MoveMaker.Black(2, 2);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveWhite, MoveMaker.White(1, 2) }); // first level
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 1), bestMoveBlack }); // second level 1.
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 3), MoveMaker.Black(2, 4) }); // second level 2.
 
-            IBoard boardFake = new FakeBoard();
+            var bestMoveWhite = BitMoveMaker.White(1, 1);
+            var bestMoveBlack = BitMoveMaker.Black(2, 2);
+            moveGenFake.AddGetAllMoves(new List<BitMove>() { bestMoveWhite, BitMoveMaker.White(1, 2) }); // first level
+            moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.Black(2, 1), bestMoveBlack }); // second level 1.
+            moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.Black(2, 3), BitMoveMaker.Black(2, 4) }); // second level 2.
+            moveGenFake.SetIsChecks(new List<bool>() { false, false, false, false, false, false });
 
-            var target = new SearchAlphaBeta(boardFake, evalFake, moveGenFake, 2, null, null);
+            ////var target = new SearchAlphaBeta(boardFake, evalFake, moveGenFake, 2, null, null);
+            var target = new GenericSearchAlphaBeta<BitMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 2);
             var bestRatingActual = target.SearchLevel(ChessColor.White, 1, -100000, 100000);
 
             Assert.AreEqual(-300, bestRatingActual.Score);
@@ -42,7 +59,7 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(4, evalFake.EvaluateCalledCounter);
         }
 
-
+        /*
         [TestMethod]
         public void SelectivSearchTest_PrincipalVariationOfDeeperSearchDeleted()
         {
@@ -57,14 +74,14 @@ namespace MantaBitboardEngineTest
             // 0    0                        (no capture move, will not be evaluated)
             var evalFake = new FakeEvaluator(new List<int>() { 100, 200, 300, 400, 500 }); // lowest level evaluation
             var moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMoveWhite = MoveMaker.White(1, 2);
-            var bestMoveBlack = MoveMaker.Black(2, 3);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), bestMoveWhite }); // 1. level (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.BlackCapture(2, 1), MoveMaker.Black(2, 2) }); // 2. level a (black)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.WhiteCapture(3, 1), MoveMaker.WhiteCapture(3, 2) }); // 3. level a (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 1) }); // (0)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // (0)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveBlack, MoveMaker.Black(2, 4) }); // 2. level b (black)
+            var bestMoveWhite = BitMoveMaker.White(1, 2);
+            var bestMoveBlack = BitMoveMaker.Black(2, 3);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.White(1, 1), bestMoveWhite }); // 1. level (white)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.BlackCapture(2, 1), BitMoveMaker.Black(2, 2) }); // 2. level a (black)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.WhiteCapture(3, 1), BitMoveMaker.WhiteCapture(3, 2) }); // 3. level a (white)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.Black(4, 1) }); // (0)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.Black(4, 2) }); // (0)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveBlack, BitMoveMaker.Black(2, 4) }); // 2. level b (black)
 
             IBoard boardFake = new FakeBoard();
 
@@ -95,14 +112,14 @@ namespace MantaBitboardEngineTest
             //       0    0                  (no capture move, will not be evaluated)
             var evalFake = new FakeEvaluator(new List<int>() { 100, -200, -300, 400, 500 }); // lowest level evaluation
             var moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMoveWhite = MoveMaker.White(1, 2);
-            var bestMoveBlack = MoveMaker.Black(2, 3);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), bestMoveWhite }); // 1. level (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 1), MoveMaker.BlackCapture(2, 2) }); // 2. level a (black)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.WhiteCapture(3, 1), MoveMaker.WhiteCapture(3, 2) }); // 3. level a (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 1) }); // (0)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // (0)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveBlack, MoveMaker.Black(2, 4) }); // 2. level b (black)
+            var bestMoveWhite = BitMoveMaker.White(1, 2);
+            var bestMoveBlack = BitMoveMaker.Black(2, 3);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.White(1, 1), bestMoveWhite }); // 1. level (white)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.Black(2, 1), BitMoveMaker.BlackCapture(2, 2) }); // 2. level a (black)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.WhiteCapture(3, 1), BitMoveMaker.WhiteCapture(3, 2) }); // 3. level a (white)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.Black(4, 1) }); // (0)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.Black(4, 2) }); // (0)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveBlack, BitMoveMaker.Black(2, 4) }); // 2. level b (black)
 
             IBoard boardFake = new FakeBoard();
 
@@ -133,14 +150,14 @@ namespace MantaBitboardEngineTest
             //                     0    0     (no capture move, will not be evaluated)
             var evalFake = new FakeEvaluator(new List<int>() { 100, 200, 400, 200, 500 }); // lowest level evaluation
             var moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMoveWhite = MoveMaker.White(1, 2);
-            var bestMoveBlack = MoveMaker.Black(2, 3);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), bestMoveWhite }); // 1. level (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 1), MoveMaker.Black(2, 2) }); // 2. level a (black)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveBlack, MoveMaker.BlackCapture(2, 4) }); // 3. level a (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.WhiteCapture(3, 1), MoveMaker.WhiteCapture(3, 2) }); // 3. level a (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 1) }); // (0)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // (0)
+            var bestMoveWhite = BitMoveMaker.White(1, 2);
+            var bestMoveBlack = BitMoveMaker.Black(2, 3);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.White(1, 1), bestMoveWhite }); // 1. level (white)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.Black(2, 1), BitMoveMaker.Black(2, 2) }); // 2. level a (black)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveBlack, BitMoveMaker.BlackCapture(2, 4) }); // 3. level a (white)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.WhiteCapture(3, 1), BitMoveMaker.WhiteCapture(3, 2) }); // 3. level a (white)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.Black(4, 1) }); // (0)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.Black(4, 2) }); // (0)
 
             IBoard boardFake = new FakeBoard();
 
@@ -171,15 +188,15 @@ namespace MantaBitboardEngineTest
             //               0    0        (no capture move, will not be evaluated)
             var evalFake = new FakeEvaluator(new List<int>() { 100, 200, 300, 400, 500 }); // lowest level evaluation
             var moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMoveWhite = MoveMaker.White(1, 2);
-            var bestMoveBlack = MoveMaker.BlackCapture(2, 3);
-            var bestMoveWhite2 = MoveMaker.WhiteCapture(3, 2);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), bestMoveWhite }); // 1. level (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 1), MoveMaker.Black(2, 2) }); // 2. level a (black)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveBlack, MoveMaker.Black(2, 4) }); // 3. level a (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.WhiteCapture(3, 1), bestMoveWhite2 }); // 3. level a (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 1) }); // (0)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // (0)
+            var bestMoveWhite = BitMoveMaker.White(1, 2);
+            var bestMoveBlack = BitMoveMaker.BlackCapture(2, 3);
+            var bestMoveWhite2 = BitMoveMaker.WhiteCapture(3, 2);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.White(1, 1), bestMoveWhite }); // 1. level (white)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.Black(2, 1), BitMoveMaker.Black(2, 2) }); // 2. level a (black)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveBlack, BitMoveMaker.Black(2, 4) }); // 3. level a (white)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.WhiteCapture(3, 1), bestMoveWhite2 }); // 3. level a (white)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.Black(4, 1) }); // (0)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.Black(4, 2) }); // (0)
 
             IBoard boardFake = new FakeBoard();
 
@@ -211,17 +228,17 @@ namespace MantaBitboardEngineTest
             //  0            0    0        (no capture move, will not be evaluated)
             var evalFake = new FakeEvaluator(new List<int>() { 100, 200, 300, 400, 500 }); // lowest level evaluation
             var moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMoveWhite = MoveMaker.White(1, 2);
-            var bestMoveBlack = MoveMaker.BlackCapture(2, 3);
-            var bestMoveWhite2 = MoveMaker.WhiteCapture(3, 3);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), bestMoveWhite }); // 1. level (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 1), MoveMaker.BlackCapture(2, 2) }); // 2. level a (black)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.WhiteCapture(3, 1) });
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 1) }); // (0)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveBlack, MoveMaker.Black(2, 4) }); // 3. level a (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.WhiteCapture(3, 2), bestMoveWhite2 }); // 3. level a (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // (0)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 3) }); // (0)
+            var bestMoveWhite = BitMoveMaker.White(1, 2);
+            var bestMoveBlack = BitMoveMaker.BlackCapture(2, 3);
+            var bestMoveWhite2 = BitMoveMaker.WhiteCapture(3, 3);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.White(1, 1), bestMoveWhite }); // 1. level (white)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.Black(2, 1), BitMoveMaker.BlackCapture(2, 2) }); // 2. level a (black)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.WhiteCapture(3, 1) });
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.Black(4, 1) }); // (0)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveBlack, BitMoveMaker.Black(2, 4) }); // 3. level a (white)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.WhiteCapture(3, 2), bestMoveWhite2 }); // 3. level a (white)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.Black(4, 2) }); // (0)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.Black(4, 3) }); // (0)
 
             IBoard boardFake = new FakeBoard();
 
@@ -253,17 +270,17 @@ namespace MantaBitboardEngineTest
             //  1            0    0        (no capture move, will not be evaluated)
             var evalFake = new FakeEvaluator(new List<int>() { 100, 200, 300, 400, 500 }); // lowest level evaluation
             var moveGenFake = new FakeMoveGeneratorMulitlevel();
-            var bestMoveWhite = MoveMaker.White(1, 2);
-            var bestMoveBlack = MoveMaker.BlackCapture(2, 3);
-            var bestMoveWhite2 = MoveMaker.WhiteCapture(3, 3);
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), bestMoveWhite }); // 1. level (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 1), MoveMaker.BlackCapture(2, 2) }); // 2. level a (black)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.WhiteCapture(3, 1) });
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.BlackCapture(4, 1) }); // (0)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveBlack, MoveMaker.Black(2, 4) }); // 3. level a (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.WhiteCapture(3, 2), bestMoveWhite2 }); // 3. level a (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // (0)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 3) }); // (0)
+            var bestMoveWhite = BitMoveMaker.White(1, 2);
+            var bestMoveBlack = BitMoveMaker.BlackCapture(2, 3);
+            var bestMoveWhite2 = BitMoveMaker.WhiteCapture(3, 3);
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.White(1, 1), bestMoveWhite }); // 1. level (white)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.Black(2, 1), BitMoveMaker.BlackCapture(2, 2) }); // 2. level a (black)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.WhiteCapture(3, 1) });
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.BlackCapture(4, 1) }); // (0)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveBlack, BitMoveMaker.Black(2, 4) }); // 3. level a (white)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.WhiteCapture(3, 2), bestMoveWhite2 }); // 3. level a (white)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.Black(4, 2) }); // (0)
+            moveGenFake.AddGetAllMoves(new List<IMove>() { BitMoveMaker.Black(4, 3) }); // (0)
 
             IBoard boardFake = new FakeBoard();
 

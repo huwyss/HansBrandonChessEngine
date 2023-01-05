@@ -46,7 +46,7 @@ namespace MantaBitboardEngineTest
             //    1       2x    white move -> highest selected (x) 
             IEvaluator evalFake = new FakeEvaluator(new List<int>() { 100, 200 });
             
-            BitMove bestMove = BitMoveMaker.White(1, 2);
+            var bestMove = BitMoveMaker.White(1, 2);
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.White(1, 1), bestMove }); // first level
             moveGenFake.SetIsChecks(new List<bool>() { false, false });
 
@@ -65,7 +65,7 @@ namespace MantaBitboardEngineTest
             //    1x       2    black move -> lowest selected (x) 
             IEvaluator evalFake = new FakeEvaluator(new List<int>() { 100, 200 });
             
-            BitMove bestMove = BitMoveMaker.Black(1, 1);
+            var bestMove = BitMoveMaker.Black(1, 1);
             moveGenFake.AddGetAllMoves(new List<BitMove>() { bestMove, BitMoveMaker.Black(1, 2) }); // first level
             moveGenFake.SetIsChecks(new List<bool>() { false, false });
 
@@ -88,7 +88,7 @@ namespace MantaBitboardEngineTest
             // 1x   2   3x   4  black move -> lowest selected (x)
             IEvaluator evalFake = new FakeEvaluator(new List<int>() { 100, 200, 300, 400});
             
-            BitMove bestMove = BitMoveMaker.White(1, 2);
+            var bestMove = BitMoveMaker.White(1, 2);
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.White(1, 1), bestMove }); // first level
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.Black(2, 1), BitMoveMaker.Black(2, 2) }); // second level 1.
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.Black(2, 3), BitMoveMaker.Black(2, 4) }); // second level 2.
@@ -111,7 +111,7 @@ namespace MantaBitboardEngineTest
             // 1    2x  3    4x  white move -> highest selected (x)
             IEvaluator evalFake = new FakeEvaluator(new List<int>() { 100, 200, 300, 400 });
 
-            BitMove bestMove = BitMoveMaker.Black(1, 1);
+            var bestMove = BitMoveMaker.Black(1, 1);
             moveGenFake.AddGetAllMoves(new List<BitMove>() { bestMove, BitMoveMaker.Black(1, 2) }); // first level
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.White(2, 1), BitMoveMaker.White(2, 2) }); // second level 1.
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.White(2, 3), BitMoveMaker.White(2, 4) }); // second level 2.

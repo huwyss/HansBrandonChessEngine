@@ -60,8 +60,6 @@
     <Compile Include="Search\BitMoveMaker.cs" />
     <Compile Include="Search\GenericSearchAlphaBetaLegalTestsWithMocks.cs" />
     <Compile Include="Search\GenericSearchAlphaBetaTestWithRealBoard.cs" />
-    <Compile Include="Search\GenericSearchMinimaxLegalTestsWithMocks.cs" />
-    <Compile Include="Search\GenericSearchMinimaxTestWithRealBoard.cs" />
     <Compile Include="Search\GenericSelectiveDepthSearchTest.cs" />
   </ItemGroup>
   <ItemGroup>

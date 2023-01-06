@@ -11,7 +11,10 @@ namespace MantaBitboardEngineTest{
     {
         private List<IEnumerable<BitMove>> _listOfListOfMoves = new List<IEnumerable<BitMove>>();
         private IEnumerator<IEnumerable<BitMove>> _iteratorMoves;
+        private List<IEnumerable<BitMove>> _listOfListOfCaptures = new List<IEnumerable<BitMove>>();
+        private IEnumerator<IEnumerable<BitMove>> _iteratorCaptures;
         private IEnumerator<bool> _iteratorIsChecks;
+        private IEnumerator<bool> _iteratorIsChecksBlack;
 
         public FakeBitMoveGeneratorMulitlevel()
         {
@@ -25,12 +28,25 @@ namespace MantaBitboardEngineTest{
             _iteratorMoves = _listOfListOfMoves.GetEnumerator();
         }
 
-        public void SetIsChecks(IEnumerable<bool> isChecksToReturn)
+        public void AddGetAllCaptures(IEnumerable<BitMove> captures)
         {
-            _iteratorIsChecks = isChecksToReturn.GetEnumerator();
+            _listOfListOfCaptures.Add(captures);
+            _iteratorCaptures = _listOfListOfCaptures.GetEnumerator();
         }
 
-        public IEnumerable<BitMove> GetAllMoves(ChessColor color) ////, bool includeCastling = true, bool includePawnMoves = true)
+        public void SetIsChecks(ChessColor color, IEnumerable<bool> isChecksToReturn)
+        {
+            if (color == ChessColor.White)
+            {
+                _iteratorIsChecks = isChecksToReturn.GetEnumerator();
+            }
+            else
+            {
+                _iteratorIsChecksBlack = isChecksToReturn.GetEnumerator();
+            }
+        }
+
+        public IEnumerable<BitMove> GetAllMoves(ChessColor color)
         {
             _iteratorMoves.MoveNext();
 
@@ -63,30 +79,33 @@ namespace MantaBitboardEngineTest{
         
         public bool IsCheck(ChessColor color)
         {
-            _iteratorIsChecks.MoveNext();
-            return _iteratorIsChecks.Current;
+            if (color == ChessColor.White)
+            {
+                _iteratorIsChecks.MoveNext();
+                return _iteratorIsChecks.Current;
+            }
+            else
+            {
+                _iteratorIsChecksBlack.MoveNext();
+                return _iteratorIsChecksBlack.Current;
+            }
         }
 
         public IEnumerable<BitMove> GetAllCaptures(ChessColor color)
         {
-            throw new NotImplementedException();
+            _iteratorCaptures.MoveNext();
+
+            if (_iteratorCaptures.Current.Count() == 0)
+            {
+                return new List<BitMove>();
+            }
+
+            if (_iteratorCaptures.Current.First().MovingColor != color)
+            {
+                throw new Exception("Expected capture move of different color!");
+            }
+
+            return (List<BitMove>)_iteratorCaptures.Current;
         }
-
-        ////public IEnumerable<IMove> GetLegalMoves(IBoard board, ChessColor color)
-        ////{
-        ////    _iteratorMoves.MoveNext();
-
-        ////    if (_iteratorMoves.Current.Count() == 0)
-        ////    {
-        ////        return new List<IMove>();
-        ////    }
-
-        ////    if (_iteratorMoves.Current.First().MovingColor != color)
-        ////    {
-        ////        throw new Exception("Expected move of different color!");
-        ////    }
-
-        ////    return (List<IMove>)_iteratorMoves.Current;
-        ////}
     }
 }

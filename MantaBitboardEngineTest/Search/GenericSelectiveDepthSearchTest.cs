@@ -43,7 +43,7 @@ namespace MantaBitboardEngineTest
             moveGenFake.AddGetAllMoves(new List<BitMove>() { bestMoveWhite, BitMoveMaker.White(1, 2) }); // first level
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.Black(2, 1), bestMoveBlack }); // second level 1.
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.Black(2, 3), BitMoveMaker.Black(2, 4) }); // second level 2.
-            moveGenFake.SetIsChecks(new List<bool>() { false, false, false, false, false, false });
+            moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false, false, false, false, false, false });
 
             var target = new GenericSearchAlphaBeta<BitMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 2);
             var bestRatingActual = target.SearchLevel(ChessColor.White, 1, -100000, 100000);
@@ -80,7 +80,7 @@ namespace MantaBitboardEngineTest
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.Black(4, 1) }); // (0)
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.Black(4, 2) }); // (0)
             moveGenFake.AddGetAllMoves(new List<BitMove>() { bestMoveBlack, BitMoveMaker.Black(2, 4) }); // 2. level b (black)
-            moveGenFake.SetIsChecks(new List<bool>() { false, false, false, false, false, false }); // todo
+            moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false, false, false, false, false, false }); // todo
 
             var target = new GenericSearchAlphaBeta<BitMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 2);
             target.SetAdditionalSelectiveDepth(1); // selectiveDepth = 4
@@ -117,7 +117,7 @@ namespace MantaBitboardEngineTest
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.Black(4, 1) }); // (0)
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.Black(4, 2) }); // (0)
             moveGenFake.AddGetAllMoves(new List<BitMove>() { bestMoveBlack, BitMoveMaker.Black(2, 4) }); // 2. level b (black)
-            moveGenFake.SetIsChecks(new List<bool>() { false, false, false, false, false, false }); // todo
+            moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false, false, false, false, false, false }); // todo
 
             var target = new GenericSearchAlphaBeta<BitMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 2);
             target.SetAdditionalSelectiveDepth(1); // selectiveDepth = 4
@@ -154,7 +154,7 @@ namespace MantaBitboardEngineTest
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.WhiteCapture(3, 1), BitMoveMaker.WhiteCapture(3, 2) }); // 3. level a (white)
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.Black(4, 1) }); // (0)
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.Black(4, 2) }); // (0)
-            moveGenFake.SetIsChecks(new List<bool>() { false, false, false, false, false, false }); // todo
+            moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false, false, false, false, false, false }); // todo
 
             var target = new GenericSearchAlphaBeta<BitMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 2);
             target.SetAdditionalSelectiveDepth(1); // selectiveDepth = 4
@@ -192,7 +192,7 @@ namespace MantaBitboardEngineTest
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.WhiteCapture(3, 1), bestMoveWhite2 }); // 3. level a (white)
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.Black(4, 1) }); // (0)
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.Black(4, 2) }); // (0)
-            moveGenFake.SetIsChecks(new List<bool>() { false, false, false, false, false, false }); // todo
+            moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false, false, false, false, false, false }); // todo
 
             var target = new GenericSearchAlphaBeta<BitMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 2);
             target.SetAdditionalSelectiveDepth(1); // selectiveDepth = 4
@@ -233,7 +233,7 @@ namespace MantaBitboardEngineTest
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.WhiteCapture(3, 2), bestMoveWhite2 }); // 3. level a (white)
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.Black(4, 2) }); // (0)
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.Black(4, 3) }); // (0)
-            moveGenFake.SetIsChecks(new List<bool>() { false, false, false, false, false, false }); // todo
+            moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false, false, false, false, false, false }); // todo
 
             var target = new GenericSearchAlphaBeta<BitMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 2);
             target.SetAdditionalSelectiveDepth(1); // selectiveDepth = 4
@@ -274,7 +274,7 @@ namespace MantaBitboardEngineTest
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.WhiteCapture(3, 2), bestMoveWhite2 }); // 3. level a (white)
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.Black(4, 2) }); // (0)
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.Black(4, 3) }); // (0)
-            moveGenFake.SetIsChecks(new List<bool>() { false, false, false, false, false, false }); // todo
+            moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false, false, false, false, false, false }); // todo
 
             var target = new GenericSearchAlphaBeta<BitMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 2);
             target.SetAdditionalSelectiveDepth(1); // selectiveDepth = 4

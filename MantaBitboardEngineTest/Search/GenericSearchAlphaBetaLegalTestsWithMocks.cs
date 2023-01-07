@@ -465,9 +465,10 @@ namespace MantaBitboardEngineTest
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.White(1, 1), bestMove }); // 1a 1b
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.Black(2) }); // 2a
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.White(3) }); // 3a
-            moveGenFake.AddGetAllMoves(new List<BitMove>() { }); // 4a
-            moveGenFake.AddGetAllMoves(new List<BitMove>() { }); // 2b
-            moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false, false, false, true/*4a*/, false, true/*2b*/ });
+            moveGenFake.AddGetAllMoves(new List<BitMove>() { illegalMoveBlack }); // 4a
+            moveGenFake.AddGetAllMoves(new List<BitMove>() { illegalMoveBlack }); // 2b
+            moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false/*1a*/, false/*1b*/, false/*3a*/  });
+            moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { false/*2a*/, true/*4a illegal*/, true/*4a check*/, true/*2b illegal*/, true/*2b check*/ });
 
             var target = new GenericSearchAlphaBeta<BitMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 4);
             var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart);

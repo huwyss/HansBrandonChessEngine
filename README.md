@@ -13,6 +13,8 @@ Manta Chess Engine is reasonably playing. It beats Nelson from chess.com.
 - Aspiration Window
 - PVS search
 - Keep searching after max depth for capture moves to selective depth
+- Bitboard
+- Transposition Table
 
 ### Missing features:
 - draw after 50 moves without capture of pawn move
@@ -20,10 +22,7 @@ Manta Chess Engine is reasonably playing. It beats Nelson from chess.com.
 
 ### Features for a stronger game
 - Opening book
-- Bitboard
 - Endgame tables
-- Transposition Table
 
 ### Next Tasks
-- Bitboard
 - UCI asynchronous

@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using log4net;
 
 [assembly: InternalsVisibleTo("MantaBitboardEngineTest")]
+[assembly: InternalsVisibleTo("MantaChessEngineTest")]
 namespace MantaCommon
 {
     public class GenericSearchAlphaBeta<TMove> : ISearchService<TMove>

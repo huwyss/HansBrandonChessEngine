@@ -299,6 +299,7 @@ namespace MantaBitboardEngineTest
             moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false, false });
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { true/*2a illegal*/, true/*2a check*/, false }); // 2a
             moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false });
+            // todo only one white  and one black
 
             var target = new GenericSearchAlphaBeta<BitMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 3);
             var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart);
@@ -328,6 +329,7 @@ namespace MantaBitboardEngineTest
             moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false, false });
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { true/*2a illegal*/, false/*2a stallmate*/, false }); // 2a
             moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false });
+            // todo only one white and one black!
 
             var target = new GenericSearchAlphaBeta<BitMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 3);
             var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart);
@@ -357,6 +359,7 @@ namespace MantaBitboardEngineTest
             moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false, false });
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { true/*2a illegal*/, false/*2a stallmate*/, false }); // 2a
             moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false });
+            // todo only one white and one black!
 
             var target = new GenericSearchAlphaBeta<BitMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 3);
             var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart);
@@ -434,8 +437,6 @@ namespace MantaBitboardEngineTest
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.Black(2) }); // 2b
             moveGenFake.AddGetAllMoves(new List<BitMove>() { BitMoveMaker.White(3) }); // 3b
             moveGenFake.AddGetAllMoves(new List<BitMove>() { illegalMoveBlack }); // 4b
-            moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false, true/*2a*/, false, false, false, true/*4b*/ });
-
             moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false/*1a*/, false/*1b*/, false/*3a*/});
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { true/*2a-illegalMove*/, true/*2a-black check*/, false/*2b*/, true/*4b-illegal*/, true/*4b check*/});
 

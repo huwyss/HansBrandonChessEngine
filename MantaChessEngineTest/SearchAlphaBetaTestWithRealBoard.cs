@@ -4,6 +4,7 @@ using MantaChessEngine;
 using MantaCommon;
 using MantaChessEngineTest.Doubles;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace MantaChessEngineTest
 {
@@ -17,9 +18,11 @@ namespace MantaChessEngineTest
         const int AlphaStart = int.MinValue;
         const int BetaStart = int.MaxValue;
 
-        Board _board;
+        IHashtable _hashMock;
+        IBoard _board;
         IEvaluator _evaluator;
         MoveGenerator _gen;
+        MoveRatingFactory _ratingFactory;
 
         // ---------------------------------------------------------------------------------------------
         // White is first mover
@@ -29,13 +32,16 @@ namespace MantaChessEngineTest
         public void Setup()
         {
             _board = new Board();
+            _hashMock = new Mock<IHashtable>().Object;
             _evaluator = new EvaluatorSimple(_board);
             _gen = new MoveGenerator(_board);
+            _ratingFactory = new MoveRatingFactory(_gen);
         }
+
         [TestMethod]
         public void SearchLevelTest_WhenLevelOne_ThenCapturePawn_White()
         {
-            var target = new SearchAlphaBeta(_board, _evaluator, _gen, 1, null, null);
+            var target = new GenericSearchAlphaBeta<IMove>(_board, _evaluator, _gen, _hashMock, null, _ratingFactory, 1);
             string boardString = "k......." +
                                  "........" +
                                  "...p...." +
@@ -56,7 +62,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void SearchBestMoveOneLevelTest_WhenLevel2_ThenDoNotCapturePawn_White()
         {
-            var target = new SearchAlphaBeta(_board, _evaluator, _gen, 2, null, null);
+            var target = new GenericSearchAlphaBeta<IMove>(_board, _evaluator, _gen, _hashMock, null, _ratingFactory, 2);
             string boardString = "k......." +
                                  "........" +
                                  "...p...." +
@@ -77,7 +83,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void SearchBestMoveTest_WhenLevel3_ThenCapturePawn_White()
         {
-            var target = new SearchAlphaBeta(_board, _evaluator, _gen, 3, null, null);
+            var target = new GenericSearchAlphaBeta<IMove>(_board, _evaluator, _gen, _hashMock, null, _ratingFactory, 3);
             string boardString = "k......." +
                                  "...n...." +
                                  "...b...." +
@@ -111,7 +117,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void SearchBestMoveOneLevelTest_WhenLevel4_ThenDoNotCapturePawn_White()
         {
-            var target = new SearchAlphaBeta(_board, _evaluator, _gen, 4, null, null);
+            var target = new GenericSearchAlphaBeta<IMove>(_board, _evaluator, _gen, _hashMock, null, _ratingFactory, 4);
             string boardString = "k......." +
                                  "...n...." +
                                  "...b...." +
@@ -134,7 +140,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void SearchLevelTest_WhenWhiteInCheck_ThenDoNotAttackBlackKing_White()
         {
-            var target = new SearchAlphaBeta(_board, _evaluator, _gen, 3, null, null);
+            var target = new GenericSearchAlphaBeta<IMove>(_board, _evaluator, _gen, _hashMock, null, _ratingFactory, 3);
             string boardString = "....q..R" +
                                  "........" +
                                  "....k..." +
@@ -156,7 +162,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void SearchLevelTest_WhenWhiteIsCheckMate_ThenNoLegalMove_White()
         {
-            var target = new SearchAlphaBeta(_board, _evaluator, _gen, 3, null, null);
+            var target = new GenericSearchAlphaBeta<IMove>(_board, _evaluator, _gen, _hashMock, null, _ratingFactory, 3);
             string boardString = "........" +
                                  "........" +
                                  "........" +
@@ -180,7 +186,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void SearchLevelTest_WhenLevelOne_ThenCapturePawn_Black()
         {
-            var target = new SearchAlphaBeta(_board, _evaluator, _gen, 1, null, null);
+            var target = new GenericSearchAlphaBeta<IMove>(_board, _evaluator, _gen, _hashMock, null, _ratingFactory, 1);
             string boardString = "k......." +
                                  "........" +
                                  ".....b.." +
@@ -201,7 +207,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void SearchBestMoveOneLevelTest_WhenLevel2_ThenDoNotCapturePawn_Black()
         {
-            var target = new SearchAlphaBeta(_board, _evaluator, _gen, 2, null, null);
+            var target = new GenericSearchAlphaBeta<IMove>(_board, _evaluator, _gen, _hashMock, null, _ratingFactory, 2);
             string boardString = "k......." +
                                  "........" +
                                  ".....b.." +
@@ -222,7 +228,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void SearchBestMoveOneLevelTest_WhenLevel3_ThenCapturePawn_Black()
         {
-            var target = new SearchAlphaBeta(_board, _evaluator, _gen, 3, null, null);
+            var target = new GenericSearchAlphaBeta<IMove>(_board, _evaluator, _gen, _hashMock, null, _ratingFactory, 3);
             string boardString = "k......." +
                                  "...n...." +
                                  "...b...." +
@@ -256,7 +262,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void SearchBestMoveOneLevelTest_WhenLevel4_ThenDoNotCapturePawn_Black()
         {
-            var target = new SearchAlphaBeta(_board, _evaluator, _gen, 4, null, null);
+            var target = new GenericSearchAlphaBeta<IMove>(_board, _evaluator, _gen, _hashMock, null, _ratingFactory, 4);
             string boardString = "k......." +
                                  "...n...." +
                                  "...b...." +
@@ -283,7 +289,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void SearchBestMoveTest_WhenWhiteStallmate_ThenNoLegalMoveAndBestScore0()
         {
-            var target = new SearchAlphaBeta(_board, _evaluator, _gen, 2, null, null);
+            var target = new GenericSearchAlphaBeta<IMove>(_board, _evaluator, _gen, _hashMock, null, _ratingFactory, 2);
             string boardString = "........" +
                                  "........" +
                                  "........" +
@@ -303,7 +309,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void SearchBestMoveTest_WhenWhiteCheckmate_ThenNoLegalMoveAndBestScoreMinusThousand()
         {
-            var target = new SearchAlphaBeta(_board, _evaluator, _gen, 2, null, null);
+            var target = new GenericSearchAlphaBeta<IMove>(_board, _evaluator, _gen, _hashMock, null, _ratingFactory, 2);
             string boardString = "........" +
                                  "........" +
                                  "........" +
@@ -323,7 +329,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void SearchBestMoveTest_WhenBlackIsCheckmate_ThenNoLegalMoveAndBestScoreThousand()
         {
-            var target = new SearchAlphaBeta(_board, _evaluator, _gen, 2, null, null);
+            var target = new GenericSearchAlphaBeta<IMove>(_board, _evaluator, _gen, _hashMock, null, _ratingFactory, 2);
             string boardString = ".rbqkb.r" +
                                  "pppppBpp" +
                                  "..n....." +
@@ -343,7 +349,7 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void SearchBestMoveTest_WhenWhiteIsCheckmateIn2_ThenWinningMove()
         {
-            var target = new SearchAlphaBeta(_board, _evaluator, _gen, 4, null, null);
+            var target = new GenericSearchAlphaBeta<IMove>(_board, _evaluator, _gen, _hashMock, null, _ratingFactory, 4);
             target.SetMaxDepth(4);
             string boardString = "........" +
                                  "........" +

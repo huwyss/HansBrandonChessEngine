@@ -12,7 +12,10 @@ namespace MantaChessEngineTest.Doubles
     {
         private List<IEnumerable<IMove>> _listOfListOfMoves = new List<IEnumerable<IMove>>();
         private IEnumerator<IEnumerable<IMove>> _iteratorMoves;
+        private List<IEnumerable<IMove>> _listOfListOfCaptures = new List<IEnumerable<IMove>>();
+        private IEnumerator<IEnumerable<IMove>> _iteratorCaptures;
         private IEnumerator<bool> _iteratorIsChecks;
+        private IEnumerator<bool> _iteratorIsChecksBlack;
 
         public FakeMoveGeneratorMulitlevel()
         {
@@ -26,12 +29,19 @@ namespace MantaChessEngineTest.Doubles
             _iteratorMoves = _listOfListOfMoves.GetEnumerator();
         }
 
-        public void SetIsChecks(IEnumerable<bool> isChecksToReturn)
+        public void SetIsChecks(ChessColor color, IEnumerable<bool> isChecksToReturn)
         {
-            _iteratorIsChecks = isChecksToReturn.GetEnumerator();
+            if (color == ChessColor.White)
+            {
+                _iteratorIsChecks = isChecksToReturn.GetEnumerator();
+            }
+            else
+            {
+                _iteratorIsChecksBlack = isChecksToReturn.GetEnumerator();
+            }
         }
 
-        public IEnumerable<IMove> GetAllMoves(ChessColor color) ////, bool includeCastling = true, bool includePawnMoves = true)
+        public IEnumerable<IMove> GetAllMoves(ChessColor color)
         {
             _iteratorMoves.MoveNext();
 
@@ -64,13 +74,33 @@ namespace MantaChessEngineTest.Doubles
         
         public bool IsCheck(ChessColor color)
         {
-            _iteratorIsChecks.MoveNext();
-            return _iteratorIsChecks.Current;
+            if (color == ChessColor.White)
+            {
+                _iteratorIsChecks.MoveNext();
+                return _iteratorIsChecks.Current;
+            }
+            else
+            {
+                _iteratorIsChecksBlack.MoveNext();
+                return _iteratorIsChecksBlack.Current;
+            }
         }
 
         public IEnumerable<IMove> GetAllCaptures(ChessColor color)
         {
-            throw new NotImplementedException();
+            _iteratorCaptures.MoveNext();
+
+            if (_iteratorCaptures.Current.Count() == 0)
+            {
+                return new List<IMove>();
+            }
+
+            if (_iteratorCaptures.Current.First().MovingColor != color)
+            {
+                throw new Exception("Expected capture move of different color!");
+            }
+
+            return (List<IMove>)_iteratorCaptures.Current;
         }
 
         public bool IsAttacked(ChessColor color, Square square)
@@ -82,22 +112,5 @@ namespace MantaChessEngineTest.Doubles
         {
             throw new NotImplementedException();
         }
-
-        ////public IEnumerable<IMove> GetLegalMoves(IBoard board, ChessColor color)
-        ////{
-        ////    _iteratorMoves.MoveNext();
-
-        ////    if (_iteratorMoves.Current.Count() == 0)
-        ////    {
-        ////        return new List<IMove>();
-        ////    }
-
-        ////    if (_iteratorMoves.Current.First().MovingColor != color)
-        ////    {
-        ////        throw new Exception("Expected move of different color!");
-        ////    }
-
-        ////    return (List<IMove>)_iteratorMoves.Current;
-        ////}
     }
 }

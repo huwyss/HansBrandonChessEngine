@@ -23,11 +23,7 @@ namespace MantaBitboardEngineTest
         IEvaluator _evaluator;
         BitMoveGenerator _gen;
         BitMoveRatingFactory _ratingFactory;
-
-        // ---------------------------------------------------------------------------------------------
-        // White is first mover
-        // ---------------------------------------------------------------------------------------------
-
+        
         [TestInitialize]
         public void Setup()
         {
@@ -39,7 +35,10 @@ namespace MantaBitboardEngineTest
             _ratingFactory = new BitMoveRatingFactory(_gen);
         }
 
-       
+        // ---------------------------------------------------------------------------------------------
+        // White is first mover
+        // ---------------------------------------------------------------------------------------------
+
         [TestMethod]
         public void SearchLevelTest_WhenLevelOne_ThenCapturePawn_White()
         {

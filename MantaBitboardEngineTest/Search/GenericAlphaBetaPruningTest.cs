@@ -22,8 +22,6 @@ namespace MantaBitboardEngineTest
         IHashtable hashMock;
         IBitBoard boardMock;
         BitMoveRatingFactory moveRatingFactory;
-        BitMove illegalMoveWhite;
-        BitMove illegalMoveBlack;
 
         [TestInitialize]
         public void Setup()
@@ -32,8 +30,6 @@ namespace MantaBitboardEngineTest
             hashMock = new Mock<IHashtable>().Object;
             boardMock = new Mock<IBitBoard>().Object;
             moveRatingFactory = new BitMoveRatingFactory(moveGenFake);
-            illegalMoveWhite = BitMove.CreateMove(BitPieceType.Pawn, Square.A1, Square.A1, BitPieceType.Empty, ChessColor.White, 0);
-            illegalMoveBlack = BitMove.CreateMove(BitPieceType.Pawn, Square.A1, Square.A1, BitPieceType.Empty, ChessColor.Black, 0);
         }
 
         [TestMethod]

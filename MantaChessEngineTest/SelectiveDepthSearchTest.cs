@@ -79,14 +79,12 @@ namespace MantaChessEngineTest
             var bestMoveBlack = MoveMaker.Black(2, 3);
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), bestMoveWhite }); // 1. level (white)
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.BlackCapture(2, 1), MoveMaker.Black(2, 2) }); // 2. level a (black)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.WhiteCapture(3, 1), MoveMaker.WhiteCapture(3, 2) }); // 3. level a (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 1) }); // (0)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // (0)
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { MoveMaker.WhiteCapture(3, 1), MoveMaker.WhiteCapture(3, 2) }); // 3. level a (white)
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { }); // no capture moves, will not be evaluated (0)
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { }); // no capture moves, will not be evaluated (0)
             moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveBlack, MoveMaker.Black(2, 4) }); // 2. level b (black)
             moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false/*1a*/, false/*1b*/, false/*3a*/, false/*3b*/ });
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { false/*2a*/, false/*2b*/, false/*2c*/, false/*2d*/ });
-
-            IBoard boardFake = new FakeBoard();
 
             var target = new GenericSearchAlphaBeta<IMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 2);
             target.SetAdditionalSelectiveDepth(1); // selectiveDepth = 4
@@ -119,9 +117,9 @@ namespace MantaChessEngineTest
             var bestMoveBlack = MoveMaker.Black(2, 3);
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), bestMoveWhite }); // 1. level (white)
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 1), MoveMaker.BlackCapture(2, 2) }); // 2. level a (black)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.WhiteCapture(3, 1), MoveMaker.WhiteCapture(3, 2) }); // 3. level a (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 1) }); // (0)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // (0)
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { MoveMaker.WhiteCapture(3, 1), MoveMaker.WhiteCapture(3, 2) }); // 3. level a (white)
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { }); // no capture moves, will not be evaluated (0)
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { }); // no capture moves, will not be evaluated (0)
             moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveBlack, MoveMaker.Black(2, 4) }); // 2. level b (black)
             moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false/*1a*/, false/*1b*/, false/*3a*/, false/*3b*/ });
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { false/*2a*/, false/*2b*/, false/*2c*/, false/*2d*/ });
@@ -158,9 +156,9 @@ namespace MantaChessEngineTest
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), bestMoveWhite }); // 1. level (white)
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 1), MoveMaker.Black(2, 2) }); // 2. level a (black)
             moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveBlack, MoveMaker.BlackCapture(2, 4) }); // 3. level a (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.WhiteCapture(3, 1), MoveMaker.WhiteCapture(3, 2) }); // 3. level a (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 1) }); // (0)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // (0)
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { MoveMaker.WhiteCapture(3, 1), MoveMaker.WhiteCapture(3, 2) }); // 3. level a (white)
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { }); // no capture moves, will not be evaluated (0)
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { }); // no capture moves, will not be evaluated (0)
             moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false/*1a*/, false/*1b*/, false/*3a*/, false/*3b*/ });
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { false/*2a*/, false/*2b*/, false/*2c*/, false/*2d*/ });
 
@@ -197,9 +195,9 @@ namespace MantaChessEngineTest
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), bestMoveWhite }); // 1. level (white)
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 1), MoveMaker.Black(2, 2) }); // 2. level a (black)
             moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveBlack, MoveMaker.Black(2, 4) }); // 3. level a (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.WhiteCapture(3, 1), bestMoveWhite2 }); // 3. level a (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 1) }); // (0)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // (0)
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { MoveMaker.WhiteCapture(3, 1), bestMoveWhite2 }); // 3. level a (white)
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { }); // no capture moves, will not be evaluated (0)
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { }); // no capture moves, will not be evaluated (0)
             moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false/*1a*/, false/*1b*/, false/*3a*/, false/*3b*/ });
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { false/*2a*/, false/*2b*/, false/*2c*/, false/*2d*/ });
 
@@ -236,12 +234,12 @@ namespace MantaChessEngineTest
             var bestMoveWhite2 = MoveMaker.WhiteCapture(3, 3);
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), bestMoveWhite }); // 1. level (white)
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 1), MoveMaker.BlackCapture(2, 2) }); // 2. level a (black)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.WhiteCapture(3, 1) });
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 1) }); // (0)
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { MoveMaker.WhiteCapture(3, 1) });
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { }); // no capture moves, will not be evaluated (0)
             moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveBlack, MoveMaker.Black(2, 4) }); // 3. level a (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.WhiteCapture(3, 2), bestMoveWhite2 }); // 3. level a (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // (0)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 3) }); // (0)
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { MoveMaker.WhiteCapture(3, 2), bestMoveWhite2 }); // 3. level a (white)
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { }); // no capture moves, will not be evaluated (0)
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { }); // no capture moves, will not be evaluated (0)
             moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false/*1a*/, false/*1b*/, false/*3a*/, false/*3b*/, false/*3c*/ });
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { false/*2a*/, false/*2b*/, false/*2c*/, false/*2d*/ });
 
@@ -278,12 +276,12 @@ namespace MantaChessEngineTest
             var bestMoveWhite2 = MoveMaker.WhiteCapture(3, 3);
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.White(1, 1), bestMoveWhite }); // 1. level (white)
             moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(2, 1), MoveMaker.BlackCapture(2, 2) }); // 2. level a (black)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.WhiteCapture(3, 1) });
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.BlackCapture(4, 1) }); // (0)
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { MoveMaker.WhiteCapture(3, 1) });
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { }); // no capture moves, will not be evaluated (0)
             moveGenFake.AddGetAllMoves(new List<IMove>() { bestMoveBlack, MoveMaker.Black(2, 4) }); // 3. level a (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.WhiteCapture(3, 2), bestMoveWhite2 }); // 3. level a (white)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 2) }); // (0)
-            moveGenFake.AddGetAllMoves(new List<IMove>() { MoveMaker.Black(4, 3) }); // (0)
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { MoveMaker.WhiteCapture(3, 2), bestMoveWhite2 }); // 3. level a (white)
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { }); // no capture moves, will not be evaluated (0)
+            moveGenFake.AddGetAllCaptures(new List<IMove>() { }); // no capture moves, will not be evaluated (0)
             moveGenFake.SetIsChecks(ChessColor.White, new List<bool>() { false/*1a*/, false/*1b*/, false/*3a*/, false/*3b*/, false/*3c*/ });
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { false/*2a*/, false/*2b*/, false/*2c*/, false/*2d*/ });
 

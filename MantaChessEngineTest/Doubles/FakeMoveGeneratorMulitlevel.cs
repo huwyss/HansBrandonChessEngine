@@ -29,6 +29,12 @@ namespace MantaChessEngineTest.Doubles
             _iteratorMoves = _listOfListOfMoves.GetEnumerator();
         }
 
+        public void AddGetAllCaptures(IEnumerable<IMove> captures)
+        {
+            _listOfListOfCaptures.Add(captures);
+            _iteratorCaptures = _listOfListOfCaptures.GetEnumerator();
+        }
+
         public void SetIsChecks(ChessColor color, IEnumerable<bool> isChecksToReturn)
         {
             if (color == ChessColor.White)

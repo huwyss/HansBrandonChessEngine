@@ -55,6 +55,7 @@
     <Compile Include="BitboardTest\EvaluatorPositionTest.cs" />
     <Compile Include="BitboardTest\HelperBitboardsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Search\GenericAlphaBetaPruningTest.cs" />
     <Compile Include="Search\AssertHelperBitboard.cs" />
     <Compile Include="Search\FakeBitMoveGeneratorMulitlevel.cs" />
     <Compile Include="Search\BitMoveMaker.cs" />

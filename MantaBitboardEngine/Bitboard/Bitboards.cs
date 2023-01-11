@@ -9,8 +9,6 @@ using MantaCommon;
  * 
  * todo Bitboard engine:
  * 
- * - tests for search in bitboard
- * - use search for Bitboard and non-bitboard
  * - hashtable for alpha, beta cutoff
  * - evaluation: isolated pawns
  * - evaluation: passed pawns
@@ -22,7 +20,8 @@ using MantaCommon;
  * ok - more differenciated move values
  * ok - selective search depth
  * ok - hashtable for PV
- * 
+ * ok - tests for search in bitboard
+ * ok - use search for Bitboard and non-bitboard
  */
 
 

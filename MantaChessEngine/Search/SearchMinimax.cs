@@ -84,7 +84,7 @@ namespace MantaChessEngine
 
             var hasLegalMoves = false;
 
-            var possibleMoves = _moveGenerator.GetAllMoves(color).ToList<IMove>(); // todo only legal moves
+            var possibleMoves = _moveGenerator.GetAllMoves(color).ToList<IMove>();
 
             foreach (IMove currentMove in possibleMoves)
             {

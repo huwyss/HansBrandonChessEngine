@@ -57,9 +57,6 @@ namespace MantaChessEngine
                 // strongest --------------------------------
                 case EngineType.AlphaBeta:
                     _evaluator = new EvaluatorPosition(_board);
-                    var moveOrder = new OrderPvAndImportance();
-                    var captureOnly = new FilterCapturesOnly();
-                    //// _search = new SearchAlphaBeta(_board, _evaluator, _moveGenerator, 4, moveOrder, captureOnly);
                     _search = new GenericSearchAlphaBeta<IMove>(_board, _evaluator, _moveGenerator, _hashtable, _moveFactory, _moveRatingFactory, 4);
                     break;
                 // -------------------------------------------
@@ -118,7 +115,7 @@ namespace MantaChessEngine
 
         public bool Move(string moveStringUser)
         {
-            IMove move = _moveFactory.MakeMoveUci(moveStringUser); // todo should be for user string
+            IMove move = _moveFactory.MakeMoveUci(moveStringUser); // todo should be for user string. remove user string in all parts of the MantaEngine. it should work with uci strings.
             if (move == null)
             {
                 return false;

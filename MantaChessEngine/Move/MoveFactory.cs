@@ -169,12 +169,12 @@ namespace MantaChessEngine
 
         public IMove MakeMove(Square fromSquare, Square toSquare, BitPieceType promotionPiece)
         {
-            throw new System.NotImplementedException();
+            throw new System.NotImplementedException(); 
         }
 
         public IMove MakeMoveUci(string moveStringUci)
         {
-            throw new System.NotImplementedException();
+            throw new System.NotImplementedException(); // todo implement this. In 
         }
     }
 }

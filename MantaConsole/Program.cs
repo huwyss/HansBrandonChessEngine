@@ -20,7 +20,7 @@ namespace MantaConsole
         {
             _log.Info("ManteChessEngine started");
 
-            var gameType = GameType.ComputerVsComputerOnce;
+            var gameType = GameType.HumanVsComputer;
             var whiteLevel = 2;
             var blackLevel = 2;
             

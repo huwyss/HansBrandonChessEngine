@@ -213,10 +213,16 @@ namespace MantaChessEngine
 
             UInt64 nodes = 0;
 
-            var moves = _moveGenerator.GetAllMoves(SideToMove()); // todo correct: only legal moves
+            var moves = _moveGenerator.GetAllMoves(SideToMove());
             foreach (var move in moves)
             {
                 Move(move);
+                if (IsCheck(move.MovingColor))
+                {
+                    UndoMove();
+                    continue;
+                }
+
                 nodes += Perft(depth - 1);
                 UndoMove();
             }
@@ -233,10 +239,16 @@ namespace MantaChessEngine
 
             UInt64 nodes = 0;
 
-            var moves = _moveGenerator.GetAllMoves(SideToMove()); // todo correct: only legal moves
+            var moves = _moveGenerator.GetAllMoves(SideToMove());
             foreach (var move in moves)
             {
                 Move(move);
+                if (IsCheck(move.MovingColor))
+                {
+                    UndoMove();
+                    continue;
+                }
+
                 nodes += PerftCastling(depth - 1, move);
                 UndoMove();
             }
@@ -248,10 +260,16 @@ namespace MantaChessEngine
         {
             Console.WriteLine($"Divide depth {depth}");
 
-            var moves = _moveGenerator.GetAllMoves(SideToMove()); // todo correct: only legal moves
+            var moves = _moveGenerator.GetAllMoves(SideToMove());
             foreach (var move in moves)
             {
                 Move(move);
+                if (IsCheck(move.MovingColor))
+                {
+                    UndoMove();
+                    continue;
+                }
+
                 var nodes = Perft(depth - 1);
                 UndoMove();
                 

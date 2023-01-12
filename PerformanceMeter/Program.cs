@@ -9,7 +9,6 @@ namespace PerformanceMeter
     class Program
     {
         static IMantaEngine _engine = null;
-        static Board _board = null;
         static Stopwatch _stopwatch = new Stopwatch();
         static Stopwatch _stopwatchTotal = new Stopwatch();
 
@@ -76,13 +75,11 @@ namespace PerformanceMeter
 
         private static void CreateEngine()
         {
-            _board = new Board();
             var engine = new MantaEngine();
             ////_engine = new MantaEngine(EngineType.AlphaBeta);
             ////_engine = new MantaEngine(EngineType.MinimaxPosition);
             ////_engine = new MantaEngine(EngineType.Random);
             engine.SetMaxSearchDepth(3);
-            engine.SetBoard(_board);
 
             _engine = engine as IMantaEngine;
         }

@@ -273,5 +273,10 @@ namespace MantaChessEngine
                 Console.WriteLine($"Move {move.ToUciString()} : {nodes}");
             }
         }
+
+        public string GetPvMovesFromHashtable(ChessColor color)
+        {
+            return "";
+        }
     }
 }

@@ -26,5 +26,6 @@ namespace MantaCommon
         ////UInt64 PerftCastling(int depth, IMove moveParam);
         void Divide(int depth);
 
+        string GetPvMovesFromHashtable(ChessColor color);
     }
 }

@@ -219,7 +219,7 @@ namespace MantaUCI
                     principalVariation += move + " ";
                 }
 
-                var pvMoveString = ((MantaBitboardEngine.MantaBitboardEngine)_engine).GetPvMovesFromHashtable(bestMove.MovingColor);
+                var pvMoveString = _engine.GetPvMovesFromHashtable(bestMove.MovingColor);
 
                 var duration = _stopwatch.ElapsedMilliseconds;
                 var nps = duration != 0 ? (int)(1000 * (long)bestMove.EvaluatedPositions / duration) : 0;

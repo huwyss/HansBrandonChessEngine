@@ -77,7 +77,7 @@
         NoSquare = 0xFF
     }
 
-    public enum BitPieceType
+    public enum PieceType
     {
         Pawn = 0,
         Knight = 1,

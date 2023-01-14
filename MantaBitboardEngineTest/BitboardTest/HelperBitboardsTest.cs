@@ -296,11 +296,11 @@ namespace MantaBitboardEngineTest
         {
             var target = new HelperBitboards();
 
-            var boardE5 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.Knight, (int)Square.E5]);
-            var boardD1 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.Knight, (int)Square.D1]);
-            var boardD2 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.Knight, (int)Square.D2]);
-            var boardB1 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.Knight, (int)Square.B1]);
-            var boardG1 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.Knight, (int)Square.G1]);
+            var boardE5 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.Knight, (int)Square.E5]);
+            var boardD1 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.Knight, (int)Square.D1]);
+            var boardD2 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.Knight, (int)Square.D2]);
+            var boardB1 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.Knight, (int)Square.B1]);
+            var boardG1 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.Knight, (int)Square.G1]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
             {//(A1)     (D1)
@@ -313,7 +313,7 @@ namespace MantaBitboardEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //                  (H8)
-            }), target.MovesPieces[(int)BitPieceType.Knight, (int)Square.D1]);
+            }), target.MovesPieces[(int)PieceType.Knight, (int)Square.D1]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
             {//(A1)     (D2)
@@ -326,7 +326,7 @@ namespace MantaBitboardEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 //                  (H8)
-            }), target.MovesPieces[(int)BitPieceType.Knight, (int)Square.D2]);
+            }), target.MovesPieces[(int)PieceType.Knight, (int)Square.D2]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
             {//(A1)         
@@ -339,7 +339,7 @@ namespace MantaBitboardEngineTest
                 0, 0, 0, 1, 0, 1, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //                  (H8)
-            }), target.MovesPieces[(int)BitPieceType.Knight, (int)Square.E5]);
+            }), target.MovesPieces[(int)PieceType.Knight, (int)Square.E5]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
             {//(A1)         
@@ -352,7 +352,7 @@ namespace MantaBitboardEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //                  (H8)
-            }), target.MovesPieces[(int)BitPieceType.Knight, (int)Square.B1]);
+            }), target.MovesPieces[(int)PieceType.Knight, (int)Square.B1]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
             {//(A1)         
@@ -365,7 +365,7 @@ namespace MantaBitboardEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //                  (H8)
-            }), target.MovesPieces[(int)BitPieceType.Knight, (int)Square.G1]);
+            }), target.MovesPieces[(int)PieceType.Knight, (int)Square.G1]);
         }
 
         [TestMethod]
@@ -373,10 +373,10 @@ namespace MantaBitboardEngineTest
         {
             var target = new HelperBitboards();
 
-            var boardE5 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.King, (int)Square.E5]);
-            var boardD1 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.King, (int)Square.D1]);
-            var boardH1 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.King, (int)Square.H1]);
-            var boardB1 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.King, (int)Square.B1]);
+            var boardE5 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.King, (int)Square.E5]);
+            var boardD1 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.King, (int)Square.D1]);
+            var boardH1 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.King, (int)Square.H1]);
+            var boardB1 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.King, (int)Square.B1]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
             {//(A1)     (D1)
@@ -389,7 +389,7 @@ namespace MantaBitboardEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //                  (H8)
-            }), target.MovesPieces[(int)BitPieceType.King, (int)Square.D1]);
+            }), target.MovesPieces[(int)PieceType.King, (int)Square.D1]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
            {//(A1)         
@@ -402,7 +402,7 @@ namespace MantaBitboardEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                //                  (H8)
-           }), target.MovesPieces[(int)BitPieceType.King, (int)Square.H1]);
+           }), target.MovesPieces[(int)PieceType.King, (int)Square.H1]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
             {//(A1)         
@@ -415,7 +415,7 @@ namespace MantaBitboardEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //                  (H8)
-            }), target.MovesPieces[(int)BitPieceType.King, (int)Square.E5]);
+            }), target.MovesPieces[(int)PieceType.King, (int)Square.E5]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
             {//(A1)         
@@ -428,7 +428,7 @@ namespace MantaBitboardEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //                  (H8)
-            }), target.MovesPieces[(int)BitPieceType.King, (int)Square.B1]);
+            }), target.MovesPieces[(int)PieceType.King, (int)Square.B1]);
         }
 
         [TestMethod]
@@ -436,11 +436,11 @@ namespace MantaBitboardEngineTest
         {
             var target = new HelperBitboards();
 
-            var boardE5 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.Rook, (int)Square.E5]);
-            var boardD1 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.Rook, (int)Square.D1]);
-            var boardH1 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.Rook, (int)Square.H1]);
-            var boardB7 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.Rook, (int)Square.B7]);
-            var boardB2 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.Rook, (int)Square.B2]);
+            var boardE5 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.Rook, (int)Square.E5]);
+            var boardD1 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.Rook, (int)Square.D1]);
+            var boardH1 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.Rook, (int)Square.H1]);
+            var boardB7 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.Rook, (int)Square.B7]);
+            var boardB2 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.Rook, (int)Square.B2]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
             {//(A1)     (D1)
@@ -453,7 +453,7 @@ namespace MantaBitboardEngineTest
                 0, 0, 0, 1, 0, 0, 0, 0,
                 0, 0, 0, 1, 0, 0, 0, 0
                 //                  (H8)
-            }), target.MovesPieces[(int)BitPieceType.Rook, (int)Square.D1]);
+            }), target.MovesPieces[(int)PieceType.Rook, (int)Square.D1]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
            {//(A1)         
@@ -466,7 +466,7 @@ namespace MantaBitboardEngineTest
                 0, 0, 0, 0, 0, 0, 0, 1,
                 0, 0, 0, 0, 0, 0, 0, 1
                //                  (H8)
-           }), target.MovesPieces[(int)BitPieceType.Rook, (int)Square.H1]);
+           }), target.MovesPieces[(int)PieceType.Rook, (int)Square.H1]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
             {//(A1)         
@@ -479,7 +479,7 @@ namespace MantaBitboardEngineTest
                 0, 0, 0, 0, 1, 0, 0, 0,
                 0, 0, 0, 0, 1, 0, 0, 0
                 //                  (H8)
-            }), target.MovesPieces[(int)BitPieceType.Rook, (int)Square.E5]);
+            }), target.MovesPieces[(int)PieceType.Rook, (int)Square.E5]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
             {//(A1)         
@@ -492,7 +492,7 @@ namespace MantaBitboardEngineTest
                 0, 1, 0, 0, 0, 0, 0, 0,
                 0, 1, 0, 0, 0, 0, 0, 0
                 //                  (H8)
-            }), target.MovesPieces[(int)BitPieceType.Rook, (int)Square.B2]);
+            }), target.MovesPieces[(int)PieceType.Rook, (int)Square.B2]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
             {//(A1)         
@@ -505,7 +505,7 @@ namespace MantaBitboardEngineTest
                 1, 0, 1, 1, 1, 1, 1, 1,
                 0, 1, 0, 0, 0, 0, 0, 0
                 //                  (H8)
-            }), target.MovesPieces[(int)BitPieceType.Rook, (int)Square.B7]);
+            }), target.MovesPieces[(int)PieceType.Rook, (int)Square.B7]);
         }
 
         [TestMethod]
@@ -513,9 +513,9 @@ namespace MantaBitboardEngineTest
         {
             var target = new HelperBitboards();
 
-            var boardE5 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.Bishop, (int)Square.E5]);
-            var boardD1 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.Bishop, (int)Square.D1]);
-            var boardH1 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.Bishop, (int)Square.H1]);
+            var boardE5 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.Bishop, (int)Square.E5]);
+            var boardD1 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.Bishop, (int)Square.D1]);
+            var boardH1 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.Bishop, (int)Square.H1]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
             {//(A1)     (D1)
@@ -528,7 +528,7 @@ namespace MantaBitboardEngineTest
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
                 //                  (H8)
-            }), target.MovesPieces[(int)BitPieceType.Bishop, (int)Square.D1]);
+            }), target.MovesPieces[(int)PieceType.Bishop, (int)Square.D1]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
            {//(A1)         
@@ -541,7 +541,7 @@ namespace MantaBitboardEngineTest
                 0, 1, 0, 0, 0, 0, 0, 0,
                 1, 0, 0, 0, 0, 0, 0, 0
                //                  (H8)
-           }), target.MovesPieces[(int)BitPieceType.Bishop, (int)Square.H1]);
+           }), target.MovesPieces[(int)PieceType.Bishop, (int)Square.H1]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
             {//(A1)         
@@ -554,7 +554,7 @@ namespace MantaBitboardEngineTest
                 0, 0, 1, 0, 0, 0, 1, 0,
                 0, 1, 0, 0, 0, 0, 0, 1
                 //                  (H8)
-            }), target.MovesPieces[(int)BitPieceType.Bishop, (int)Square.E5]);
+            }), target.MovesPieces[(int)PieceType.Bishop, (int)Square.E5]);
         }
 
         [TestMethod]
@@ -562,11 +562,11 @@ namespace MantaBitboardEngineTest
         {
             var target = new HelperBitboards();
 
-            var boardE5 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.Queen, (int)Square.E5]);
-            var boardD1 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.Queen, (int)Square.D1]);
-            var boardH1 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.Queen, (int)Square.H1]);
-            var boardB2 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.Queen, (int)Square.B2]);
-            var boardB7 = Bitboards.PrintBitboard(target.MovesPieces[(int)BitPieceType.Queen, (int)Square.B7]);
+            var boardE5 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.Queen, (int)Square.E5]);
+            var boardD1 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.Queen, (int)Square.D1]);
+            var boardH1 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.Queen, (int)Square.H1]);
+            var boardB2 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.Queen, (int)Square.B2]);
+            var boardB7 = Bitboards.PrintBitboard(target.MovesPieces[(int)PieceType.Queen, (int)Square.B7]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
             {//(A1)     (D1)
@@ -579,7 +579,7 @@ namespace MantaBitboardEngineTest
                 0, 0, 0, 1, 0, 0, 0, 0,
                 0, 0, 0, 1, 0, 0, 0, 0
                 //                  (H8)
-            }), target.MovesPieces[(int)BitPieceType.Queen, (int)Square.D1]);
+            }), target.MovesPieces[(int)PieceType.Queen, (int)Square.D1]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
            {//(A1)         
@@ -592,7 +592,7 @@ namespace MantaBitboardEngineTest
                 0, 1, 0, 0, 0, 0, 0, 1,
                 1, 0, 0, 0, 0, 0, 0, 1
                //                  (H8)
-           }), target.MovesPieces[(int)BitPieceType.Queen, (int)Square.H1]);
+           }), target.MovesPieces[(int)PieceType.Queen, (int)Square.H1]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
             {//(A1)         
@@ -605,7 +605,7 @@ namespace MantaBitboardEngineTest
                 0, 0, 1, 0, 1, 0, 1, 0,
                 0, 1, 0, 0, 1, 0, 0, 1
                 //                  (H8)
-            }), target.MovesPieces[(int)BitPieceType.Queen, (int)Square.E5]);
+            }), target.MovesPieces[(int)PieceType.Queen, (int)Square.E5]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
             {//(A1)         
@@ -618,7 +618,7 @@ namespace MantaBitboardEngineTest
                 1, 0, 1, 1, 1, 1, 1, 1,
                 1, 1, 1, 0, 0, 0, 0, 0
                 //                  (H8)
-            }), target.MovesPieces[(int)BitPieceType.Queen, (int)Square.B7]);
+            }), target.MovesPieces[(int)PieceType.Queen, (int)Square.B7]);
 
             Assert.AreEqual(BitHelper.ConvertToUInt64(new byte[64]
             {//(A1)         
@@ -631,7 +631,7 @@ namespace MantaBitboardEngineTest
                 0, 1, 0, 0, 0, 0, 1, 0,
                 0, 1, 0, 0, 0, 0, 0, 1
                 //                  (H8)
-            }), target.MovesPieces[(int)BitPieceType.Queen, (int)Square.B2]);
+            }), target.MovesPieces[(int)PieceType.Queen, (int)Square.B2]);
         }
 
         [TestMethod]

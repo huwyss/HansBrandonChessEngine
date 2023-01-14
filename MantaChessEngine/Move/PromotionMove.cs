@@ -15,19 +15,13 @@ namespace MantaChessEngine
         private Piece _pawn = null;
         private Piece _promotionPiece = null;
 
-        public PromotionMove(Piece movingPiece, char sourceFile, int sourceRank, char targetFile, int targetRank, Piece capturedPiece, char promotionPiece)
-            : base(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece)
+        public PromotionMove(Piece movingPiece, Square fromSquare, Square toSquare, Piece capturedPiece, PieceType promotionPiece)
+            : base(movingPiece, fromSquare, toSquare, capturedPiece)
         {
             MakePromotionPiece(promotionPiece);
         }
 
-        public PromotionMove(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, Piece capturedPiece, char promotionPiece)
-            : base(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece)
-        {
-            MakePromotionPiece(promotionPiece);
-        }
-
-        public override BitPieceType PromotionPiece
+        public override PieceType PromotionPiece
         {
             get
             {
@@ -35,31 +29,31 @@ namespace MantaChessEngine
             }
         }
 
-        private static BitPieceType GePieceType(char symbol)
+        private static PieceType GePieceType(char symbol)
         {
             switch (symbol)
             {
                 case 'P':
                 case 'p':
-                    return BitPieceType.Pawn;
+                    return PieceType.Pawn;
                 case 'N':
                 case 'n':
-                    return BitPieceType.Knight;
+                    return PieceType.Knight;
                 case 'B':
                 case 'b':
-                    return BitPieceType.Bishop;
+                    return PieceType.Bishop;
                 case 'R':
                 case 'r':
-                    return BitPieceType.Rook;
+                    return PieceType.Rook;
                 case 'Q':
                 case 'q':
-                    return BitPieceType.Queen;
+                    return PieceType.Queen;
                 default:
-                    return BitPieceType.Empty;
+                    return PieceType.Empty;
             }
         }
 
-        private void MakePromotionPiece(char promotionPiece)
+        private void MakePromotionPiece(PieceType promotionPiece)
         {
             _promotionPiece = Piece.MakePiece(promotionPiece, MovingColor);
         }
@@ -103,13 +97,13 @@ namespace MantaChessEngine
             base.ExecuteMove(board);
 
             // replace pawn with promotion piece (queen, rook, bishop or knight)
-            _pawn = board.GetPiece(TargetFile, TargetRank);
-            board.SetPiece(_promotionPiece, TargetFile, TargetRank); 
+            _pawn = board.GetPiece(FromSquare);
+            board.SetPiece(_promotionPiece, ToSquare); 
         }
 
         public override void UndoMove(IBoard board)
         {
-            board.SetPiece(_pawn, TargetFile, TargetRank);
+            board.SetPiece(_pawn, ToSquare);
             base.UndoMove(board);
         }
     }

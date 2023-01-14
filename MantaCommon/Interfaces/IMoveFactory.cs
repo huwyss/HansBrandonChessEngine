@@ -8,7 +8,7 @@ namespace MantaCommon
 {
     public interface IMoveFactory<TMove> where TMove : IGenericMove
     {
-        TMove MakeMove(Square fromSquare, Square toSquare, BitPieceType promotionPiece);
+        TMove MakeMove(Square fromSquare, Square toSquare, PieceType promotionPiece);
 
         TMove MakeMoveUci(string moveStringUci);
     }

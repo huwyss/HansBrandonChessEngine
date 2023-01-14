@@ -21,10 +21,10 @@ namespace MantaBitboardEngineTest
         [TestMethod]
         public void GetSetPieceTest_WhenSetPieceRookToD8_ThenGetPieceD8ShouldReturnRook()
         {
-            _target.SetPiece(ChessColor.White, BitPieceType.Rook, Square.D8);
+            _target.SetPiece(ChessColor.White, PieceType.Rook, Square.D8);
             
             var piece = _target.GetPiece(Square.D8);
-            Assert.AreEqual(BitPieceType.Rook, piece.Piece);
+            Assert.AreEqual(PieceType.Rook, piece.Piece);
             Assert.AreEqual(ChessColor.White, piece.Color);
         }
 
@@ -32,7 +32,7 @@ namespace MantaBitboardEngineTest
         public void GetPiece_WhenNewBoard_ThenAllPositionsEmpty()
         {
             var piece = _target.GetPiece(Square.D8);
-            Assert.AreEqual(BitPieceType.Empty, piece.Piece);
+            Assert.AreEqual(PieceType.Empty, piece.Piece);
             Assert.AreEqual(ChessColor.Empty, piece.Color);
         }
 
@@ -41,72 +41,72 @@ namespace MantaBitboardEngineTest
         {
             _target.SetInitialPosition();
 
-            Assert.AreEqual(BitPieceType.Rook,  _target.GetPiece(Square.A1).Piece);
+            Assert.AreEqual(PieceType.Rook,  _target.GetPiece(Square.A1).Piece);
             Assert.AreEqual(ChessColor.White, _target.GetPiece(Square.A1).Color);
 
-            Assert.AreEqual(BitPieceType.Knight, _target.GetPiece(Square.B1).Piece);
+            Assert.AreEqual(PieceType.Knight, _target.GetPiece(Square.B1).Piece);
             Assert.AreEqual(ChessColor.White, _target.GetPiece(Square.B1).Color);
 
-            Assert.AreEqual(BitPieceType.Bishop, _target.GetPiece(Square.C1).Piece);
+            Assert.AreEqual(PieceType.Bishop, _target.GetPiece(Square.C1).Piece);
             Assert.AreEqual(ChessColor.White, _target.GetPiece(Square.C1).Color);
 
-            Assert.AreEqual(BitPieceType.Queen, _target.GetPiece(Square.D1).Piece);
+            Assert.AreEqual(PieceType.Queen, _target.GetPiece(Square.D1).Piece);
             Assert.AreEqual(ChessColor.White, _target.GetPiece(Square.D1).Color);
 
-            Assert.AreEqual(BitPieceType.King, _target.GetPiece(Square.E1).Piece);
+            Assert.AreEqual(PieceType.King, _target.GetPiece(Square.E1).Piece);
             Assert.AreEqual(ChessColor.White, _target.GetPiece(Square.E1).Color);
 
-            Assert.AreEqual(BitPieceType.Bishop, _target.GetPiece(Square.F1).Piece);
+            Assert.AreEqual(PieceType.Bishop, _target.GetPiece(Square.F1).Piece);
             Assert.AreEqual(ChessColor.White, _target.GetPiece(Square.F1).Color);
 
-            Assert.AreEqual(BitPieceType.Knight, _target.GetPiece(Square.G1).Piece);
+            Assert.AreEqual(PieceType.Knight, _target.GetPiece(Square.G1).Piece);
             Assert.AreEqual(ChessColor.White, _target.GetPiece(Square.G1).Color);
 
-            Assert.AreEqual(BitPieceType.Rook, _target.GetPiece(Square.H1).Piece);
+            Assert.AreEqual(PieceType.Rook, _target.GetPiece(Square.H1).Piece);
             Assert.AreEqual(ChessColor.White, _target.GetPiece(Square.H1).Color);
 
-            Assert.AreEqual(BitPieceType.Pawn, _target.GetPiece(Square.B2).Piece); // white pawn
+            Assert.AreEqual(PieceType.Pawn, _target.GetPiece(Square.B2).Piece); // white pawn
             Assert.AreEqual(ChessColor.White, _target.GetPiece(Square.B2).Color);
 
 
-            Assert.AreEqual(BitPieceType.Empty, _target.GetPiece(Square.C3).Piece); // empty
+            Assert.AreEqual(PieceType.Empty, _target.GetPiece(Square.C3).Piece); // empty
             Assert.AreEqual(ChessColor.Empty, _target.GetPiece(Square.C3).Color);
 
-            Assert.AreEqual(BitPieceType.Empty, _target.GetPiece(Square.D4).Piece); // empty
+            Assert.AreEqual(PieceType.Empty, _target.GetPiece(Square.D4).Piece); // empty
             Assert.AreEqual(ChessColor.Empty, _target.GetPiece(Square.D4).Color);
 
-            Assert.AreEqual(BitPieceType.Empty, _target.GetPiece(Square.E5).Piece); // empty
+            Assert.AreEqual(PieceType.Empty, _target.GetPiece(Square.E5).Piece); // empty
             Assert.AreEqual(ChessColor.Empty, _target.GetPiece(Square.E5).Color);
 
-            Assert.AreEqual(BitPieceType.Empty, _target.GetPiece(Square.F6).Piece); // empty
+            Assert.AreEqual(PieceType.Empty, _target.GetPiece(Square.F6).Piece); // empty
             Assert.AreEqual(ChessColor.Empty, _target.GetPiece(Square.F6).Color);
 
 
-            Assert.AreEqual(BitPieceType.Pawn, _target.GetPiece(Square.G7).Piece); // black pawn
+            Assert.AreEqual(PieceType.Pawn, _target.GetPiece(Square.G7).Piece); // black pawn
             Assert.AreEqual(ChessColor.Black, _target.GetPiece(Square.G7).Color);
 
-            Assert.AreEqual(BitPieceType.Rook, _target.GetPiece(Square.A8).Piece);
+            Assert.AreEqual(PieceType.Rook, _target.GetPiece(Square.A8).Piece);
             Assert.AreEqual(ChessColor.Black, _target.GetPiece(Square.A8).Color);
 
-            Assert.AreEqual(BitPieceType.Knight, _target.GetPiece(Square.B8).Piece);
+            Assert.AreEqual(PieceType.Knight, _target.GetPiece(Square.B8).Piece);
             Assert.AreEqual(ChessColor.Black, _target.GetPiece(Square.B8).Color);
 
-            Assert.AreEqual(BitPieceType.Bishop, _target.GetPiece(Square.C8).Piece);
+            Assert.AreEqual(PieceType.Bishop, _target.GetPiece(Square.C8).Piece);
             Assert.AreEqual(ChessColor.Black, _target.GetPiece(Square.C8).Color);
 
-            Assert.AreEqual(BitPieceType.Queen, _target.GetPiece(Square.D8).Piece);
+            Assert.AreEqual(PieceType.Queen, _target.GetPiece(Square.D8).Piece);
             Assert.AreEqual(ChessColor.Black, _target.GetPiece(Square.D8).Color);
 
-            Assert.AreEqual(BitPieceType.King, _target.GetPiece(Square.E8).Piece);
+            Assert.AreEqual(PieceType.King, _target.GetPiece(Square.E8).Piece);
             Assert.AreEqual(ChessColor.Black, _target.GetPiece(Square.E8).Color);
 
-            Assert.AreEqual(BitPieceType.Bishop, _target.GetPiece(Square.F8).Piece);
+            Assert.AreEqual(PieceType.Bishop, _target.GetPiece(Square.F8).Piece);
             Assert.AreEqual(ChessColor.Black, _target.GetPiece(Square.F8).Color);
 
-            Assert.AreEqual(BitPieceType.Knight, _target.GetPiece(Square.G8).Piece);
+            Assert.AreEqual(PieceType.Knight, _target.GetPiece(Square.G8).Piece);
             Assert.AreEqual(ChessColor.Black, _target.GetPiece(Square.G8).Color);
 
-            Assert.AreEqual(BitPieceType.Rook, _target.GetPiece(Square.H8).Piece);
+            Assert.AreEqual(PieceType.Rook, _target.GetPiece(Square.H8).Piece);
             Assert.AreEqual(ChessColor.Black, _target.GetPiece(Square.H8).Color);
 
             Assert.AreEqual(Square.NoSquare, _target.BoardState.LastEnPassantSquare);
@@ -121,12 +121,12 @@ namespace MantaBitboardEngineTest
         {
             _target.SetInitialPosition();
 
-            _target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.E2, Square.E4, BitPieceType.Empty, ChessColor.White, 0));
+            _target.Move(BitMove.CreateMove(PieceType.Pawn, Square.E2, Square.E4, PieceType.Empty, ChessColor.White, 0));
             
-            Assert.AreEqual(BitPieceType.Empty, _target.GetPiece(Square.E2).Piece);
+            Assert.AreEqual(PieceType.Empty, _target.GetPiece(Square.E2).Piece);
             Assert.AreEqual(ChessColor.Empty, _target.GetPiece(Square.E2).Color);
 
-            Assert.AreEqual(BitPieceType.Pawn, _target.GetPiece(Square.E4).Piece);
+            Assert.AreEqual(PieceType.Pawn, _target.GetPiece(Square.E4).Piece);
             Assert.AreEqual(ChessColor.White, _target.GetPiece(Square.E4).Color);
 
             Assert.AreEqual(ChessColor.Black, _target.BoardState.SideToMove);
@@ -138,13 +138,13 @@ namespace MantaBitboardEngineTest
             _target.SetInitialPosition();
             _target.RemovePiece(Square.D2);
 
-            var capture = BitMove.CreateCapture(BitPieceType.Queen, Square.D1, Square.D7, BitPieceType.Pawn, Square.D7, BitPieceType.Empty, ChessColor.White, 0);
+            var capture = BitMove.CreateCapture(PieceType.Queen, Square.D1, Square.D7, PieceType.Pawn, Square.D7, PieceType.Empty, ChessColor.White, 0);
             _target.Move(capture);
             
-            Assert.AreEqual(BitPieceType.Empty, _target.GetPiece(Square.D1).Piece);
+            Assert.AreEqual(PieceType.Empty, _target.GetPiece(Square.D1).Piece);
             Assert.AreEqual(ChessColor.Empty, _target.GetPiece(Square.D1).Color);
 
-            Assert.AreEqual(BitPieceType.Queen, _target.GetPiece(Square.D7).Piece);
+            Assert.AreEqual(PieceType.Queen, _target.GetPiece(Square.D7).Piece);
             Assert.AreEqual(ChessColor.White, _target.GetPiece(Square.D7).Color);
 
             Assert.AreEqual(ChessColor.Black, _target.BoardState.SideToMove);
@@ -165,7 +165,7 @@ namespace MantaBitboardEngineTest
                                "........" +
                                "...K....");
 
-            _target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A7, Square.A5, BitPieceType.Empty, ChessColor.Black, 0));
+            _target.Move(BitMove.CreateMove(PieceType.Pawn, Square.A7, Square.A5, PieceType.Empty, ChessColor.Black, 0));
 
             Assert.AreEqual(Square.A6, _target.BoardState.LastEnPassantSquare);
         }
@@ -182,7 +182,7 @@ namespace MantaBitboardEngineTest
                                ".P......" +
                                "...K....");
 
-            _target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.B2, Square.B4, BitPieceType.Empty, ChessColor.White, 0));
+            _target.Move(BitMove.CreateMove(PieceType.Pawn, Square.B2, Square.B4, PieceType.Empty, ChessColor.White, 0));
 
             Assert.AreEqual(Square.B3, _target.BoardState.LastEnPassantSquare);
         }
@@ -199,9 +199,9 @@ namespace MantaBitboardEngineTest
                                ".P......" +
                                "...K....");
 
-            _target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.B2, Square.B4, BitPieceType.Empty, ChessColor.White, 0));
+            _target.Move(BitMove.CreateMove(PieceType.Pawn, Square.B2, Square.B4, PieceType.Empty, ChessColor.White, 0));
 
-            var enPassantCapture = BitMove.CreateCapture(BitPieceType.Pawn, Square.A4, Square.B3, BitPieceType.Pawn, Square.B4, BitPieceType.Empty, ChessColor.Black, 0);
+            var enPassantCapture = BitMove.CreateCapture(PieceType.Pawn, Square.A4, Square.B3, PieceType.Pawn, Square.B4, PieceType.Empty, ChessColor.Black, 0);
             _target.Move(enPassantCapture);
 
             string expPosit = ".......k" +
@@ -228,9 +228,9 @@ namespace MantaBitboardEngineTest
                                "........" +
                                "...K....");
 
-            _target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.B7, Square.B5, BitPieceType.Empty, ChessColor.Black, 0));
+            _target.Move(BitMove.CreateMove(PieceType.Pawn, Square.B7, Square.B5, PieceType.Empty, ChessColor.Black, 0));
 
-            var enpassantCapture = BitMove.CreateCapture(BitPieceType.Pawn, Square.A5, Square.B6, BitPieceType.Pawn, Square.B5, BitPieceType.Empty, ChessColor.White, 0);
+            var enpassantCapture = BitMove.CreateCapture(PieceType.Pawn, Square.A5, Square.B6, PieceType.Pawn, Square.B5, PieceType.Empty, ChessColor.White, 0);
             _target.Move(enpassantCapture); // capture en passant
 
             string expPosit = ".......k" +
@@ -311,8 +311,8 @@ namespace MantaBitboardEngineTest
         public void BackTest_WhenWhiteAndBlackMovesDone_ThenGoBackToInitPosition()
         {
             _target.SetInitialPosition();
-            _target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.E2, Square.E4, BitPieceType.Empty, ChessColor.White, 0));
-            _target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.E7, Square.E5, BitPieceType.Empty, ChessColor.Black, 0));
+            _target.Move(BitMove.CreateMove(PieceType.Pawn, Square.E2, Square.E4, PieceType.Empty, ChessColor.White, 0));
+            _target.Move(BitMove.CreateMove(PieceType.Pawn, Square.E7, Square.E5, PieceType.Empty, ChessColor.Black, 0));
 
 
             _target.Back();
@@ -356,8 +356,8 @@ namespace MantaBitboardEngineTest
                            "...K....";
             _target.SetPosition(position);
 
-            _target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.B2, Square.B4, BitPieceType.Empty, ChessColor.White, 0));
-            _target.Move(BitMove.CreateCapture(BitPieceType.Pawn, Square.A4, Square.B3, BitPieceType.Pawn, Square.B4, BitPieceType.Empty, ChessColor.Black, 0));
+            _target.Move(BitMove.CreateMove(PieceType.Pawn, Square.B2, Square.B4, PieceType.Empty, ChessColor.White, 0));
+            _target.Move(BitMove.CreateCapture(PieceType.Pawn, Square.A4, Square.B3, PieceType.Pawn, Square.B4, PieceType.Empty, ChessColor.Black, 0));
 
             string expPosit = ".......k" + // position after capture en passant
                               "........" +
@@ -391,9 +391,9 @@ namespace MantaBitboardEngineTest
         public void BackOfCaptureMoveTest()
         {
             _target.SetInitialPosition();
-            _target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.E2, Square.E4, BitPieceType.Empty, ChessColor.White, 0));
-            _target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.D7, Square.D5, BitPieceType.Empty, ChessColor.Black, 0));
-            _target.Move(BitMove.CreateCapture(BitPieceType.Pawn, Square.E4, Square.D5, BitPieceType.Pawn, Square.D5, BitPieceType.Empty, ChessColor.White, 0));
+            _target.Move(BitMove.CreateMove(PieceType.Pawn, Square.E2, Square.E4, PieceType.Empty, ChessColor.White, 0));
+            _target.Move(BitMove.CreateMove(PieceType.Pawn, Square.D7, Square.D5, PieceType.Empty, ChessColor.Black, 0));
+            _target.Move(BitMove.CreateCapture(PieceType.Pawn, Square.E4, Square.D5, PieceType.Pawn, Square.D5, PieceType.Empty, ChessColor.White, 0));
 
 
             _target.Back();
@@ -457,16 +457,16 @@ namespace MantaBitboardEngineTest
             Assert.AreEqual(true, _target.BoardState.LastCastlingRightBlackQueenSide);
             Assert.AreEqual(true, _target.BoardState.LastCastlingRightBlackKingSide);
 
-            _target.Move(BitMove.CreateMove(BitPieceType.Rook, Square.H1, Square.G1, BitPieceType.Empty, ChessColor.White, 0));
+            _target.Move(BitMove.CreateMove(PieceType.Rook, Square.H1, Square.G1, PieceType.Empty, ChessColor.White, 0));
 
             Assert.AreEqual(true, _target.BoardState.LastCastlingRightWhiteQueenSide);
             Assert.AreEqual(false, _target.BoardState.LastCastlingRightWhiteKingSide);
 
-            _target.Move(BitMove.CreateMove(BitPieceType.Rook, Square.A1, Square.C1, BitPieceType.Empty, ChessColor.White, 0));
+            _target.Move(BitMove.CreateMove(PieceType.Rook, Square.A1, Square.C1, PieceType.Empty, ChessColor.White, 0));
             Assert.AreEqual(false, _target.BoardState.LastCastlingRightWhiteQueenSide);
             Assert.AreEqual(false, _target.BoardState.LastCastlingRightWhiteKingSide);
 
-            _target.Move(BitMove.CreateMove(BitPieceType.King, Square.E8, Square.F8, BitPieceType.Empty, ChessColor.Black, 0));
+            _target.Move(BitMove.CreateMove(PieceType.King, Square.E8, Square.F8, PieceType.Empty, ChessColor.Black, 0));
             Assert.AreEqual(false, _target.BoardState.LastCastlingRightWhiteQueenSide);
             Assert.AreEqual(false, _target.BoardState.LastCastlingRightWhiteKingSide);
             Assert.AreEqual(false, _target.BoardState.LastCastlingRightBlackQueenSide);
@@ -617,7 +617,7 @@ namespace MantaBitboardEngineTest
                               "....K...";
             _target.SetPosition(position);
 
-            _target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A7, Square.A8, BitPieceType.Queen, ChessColor.White, 0));
+            _target.Move(BitMove.CreateMove(PieceType.Pawn, Square.A7, Square.A8, PieceType.Queen, ChessColor.White, 0));
 
             string expecPos = "Q...k..." +
                               "........" +
@@ -647,7 +647,7 @@ namespace MantaBitboardEngineTest
                               "....K...";
             _target.SetPosition(position);
 
-            _target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A7, Square.A8, BitPieceType.Rook, ChessColor.White, 0));
+            _target.Move(BitMove.CreateMove(PieceType.Pawn, Square.A7, Square.A8, PieceType.Rook, ChessColor.White, 0));
 
             string expecPos = "R...k..." +
                               "........" +
@@ -677,7 +677,7 @@ namespace MantaBitboardEngineTest
                               "....K...";
             _target.SetPosition(position);
 
-            _target.Move(BitMove.CreateCapture(BitPieceType.Pawn, Square.A7, Square.B8, BitPieceType.Rook, Square.B8, BitPieceType.Queen, ChessColor.White, 0));
+            _target.Move(BitMove.CreateCapture(PieceType.Pawn, Square.A7, Square.B8, PieceType.Rook, Square.B8, PieceType.Queen, ChessColor.White, 0));
 
             string expecPos = ".Q..k..." +
                               "........" +
@@ -707,7 +707,7 @@ namespace MantaBitboardEngineTest
                               "....K...";
             _target.SetPosition(position);
 
-            _target.Move(BitMove.CreateMove(BitPieceType.Pawn, Square.A2, Square.A1, BitPieceType.Queen, ChessColor.Black, 0));
+            _target.Move(BitMove.CreateMove(PieceType.Pawn, Square.A2, Square.A1, PieceType.Queen, ChessColor.Black, 0));
 
             string expecPos = "....k..." +
                               "........" +
@@ -737,7 +737,7 @@ namespace MantaBitboardEngineTest
                               ".R..K...";
             _target.SetPosition(position);
 
-            _target.Move(BitMove.CreateCapture(BitPieceType.Pawn, Square.A2, Square.B1, BitPieceType.Rook, Square.B1, BitPieceType.Queen, ChessColor.Black, 0));
+            _target.Move(BitMove.CreateCapture(PieceType.Pawn, Square.A2, Square.B1, PieceType.Rook, Square.B1, PieceType.Queen, ChessColor.Black, 0));
 
             string expecPos = "....k..." +
                               "........" +

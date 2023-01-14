@@ -15,11 +15,6 @@ namespace MantaChessEngine
             throw new System.NotImplementedException();
         }
 
-        public bool IsAttacked(ChessColor color, Square square)
-        {
-            throw new System.NotImplementedException();
-        }
-
         private readonly IBoard _board;
 
         public MoveGenerator(IBoard board)
@@ -39,7 +34,7 @@ namespace MantaChessEngine
             {
                 _board.Move(move);
                 var kingPosition = _board.GetKing(color);
-                if (!IsAttacked(color, kingPosition.File, kingPosition.Rank))
+                if (!IsAttacked(color, kingPosition))
                 {
                     legalMoves.Add(move);
                 }
@@ -70,26 +65,23 @@ namespace MantaChessEngine
             bool kingFound = false;
             List<IMove> allMoves = new List<IMove>();
 
-            for (int file = 1; file <= 8; file++)
+            for (var square = Square.A1; square <= Square.H8; square++)
             {
-                for (int rank = 1; rank <= 8; rank++)
+                if (_board.GetColor(square) == color)
                 {
-                    if (_board.GetColor(file, rank) == color)
-                    {
-                        Piece piece = _board.GetPiece(file, rank);
+                    Piece piece = _board.GetPiece(square);
                         
-                        if (piece is King)
-                        {
-                            kingFound = true;
-                        }
-
-                        if (piece is Pawn && !includePawnMoves)
-                        {
-                            continue;
-                        }
-
-                        allMoves.AddRange(piece.GetMoves(this, _board, file, rank, includeCastling));
+                    if (piece is King)
+                    {
+                        kingFound = true;
                     }
+
+                    if (piece is Pawn && !includePawnMoves)
+                    {
+                        continue;
+                    }
+
+                    allMoves.AddRange(piece.GetMoves(this, _board, square, includeCastling));
                 }
             }
 
@@ -99,11 +91,11 @@ namespace MantaChessEngine
         public bool IsMoveValid(IMove move)
         {
             bool valid = HasCorrectColorMoved(move);
-            valid &= move.MovingPiece.GetMoves(this, _board, move.SourceFile, move.SourceRank).Contains(move);
+            valid &= move.MovingPiece.GetMoves(this, _board, move.FromSquare).Contains(move);
 
             _board.Move(move);
             var king = _board.GetKing(move.MovingColor);
-            valid &= !IsAttacked(move.MovingColor, king.File, king.Rank);
+            valid &= !IsAttacked(move.MovingColor, king);
             _board.Back();
             return valid;
         }
@@ -146,29 +138,29 @@ namespace MantaChessEngine
                     targetRank >= 1 && targetRank <= 8;
         }
 
-        private bool IsFieldsEmpty(int sourceFile, int sourceRank, int targetFile)
-        {
-            bool empty = true;
+        ////private bool IsFieldsEmpty(int sourceFile, int sourceRank, int targetFile)
+        ////{
+        ////    bool empty = true;
 
-            for (int file = sourceFile; file <= targetFile; file++)
-            {
-                empty &= _board.GetPiece(file, sourceRank) == null; //Definitions.EmptyField;
-            }
+        ////    for (int file = sourceFile; file <= targetFile; file++)
+        ////    {
+        ////        empty &= _board.GetPiece(file, sourceRank) == null; //Definitions.EmptyField;
+        ////    }
 
-            return empty;
-        }
+        ////    return empty;
+        ////}
 
         /// <summary>
         /// Is the field of color ist attacked by opposite color.
         /// </summary>
-        public bool IsAttacked(ChessColor color, int file, int rank)
+        public bool IsAttacked(ChessColor color, Square square)
         {
             // find all oponent moves, without pawn moves
             var moves = GetAllMoves(Helper.GetOppositeColor(color), false, false);
 
             foreach (IMove move in moves)
             {
-                if (move.TargetFile == file && move.TargetRank == rank)
+                if (move.ToSquare == square)
                 {
                     return true;
                 }
@@ -177,21 +169,21 @@ namespace MantaChessEngine
             // check if there is an attacking pawn diagonal to the position
             if (color == ChessColor.White)
             {
-                var piece = file - 1 >= 1 && rank + 1 <= 8 ? _board.GetPiece(file - 1, rank + 1) : null;
+                var piece = Helper.GetFile(square) - 1 >= 1 && Helper.GetRank(square) + 1 <= 8 ? _board.GetPiece(square + 7) : null;
                 if (piece is Pawn && piece.Color == ChessColor.Black)
                     return true;
 
-                piece = file + 1 <= 8 && rank + 1 <= 8 ? _board.GetPiece(file + 1, rank + 1) : null;
+                piece = Helper.GetFile(square) + 1 <= 8 && Helper.GetRank(square) + 1 <= 8 ? _board.GetPiece(square + 9) : null;
                 if (piece is Pawn && piece.Color == ChessColor.Black)
                     return true;
             }
             else
             {
-                var piece = file - 1 >= 1 && rank - 1 >= 1 ? _board.GetPiece(file - 1, rank - 1) : null;
+                var piece = Helper.GetFile(square) - 1 >= 1 && Helper.GetRank(square) - 1 >= 1 ? _board.GetPiece(square - 9) : null;
                 if (piece is Pawn && piece.Color == ChessColor.White)
                     return true;
 
-                piece = file + 1 <= 8 && rank - 1 >= 1 ? _board.GetPiece(file + 1, rank - 1) : null;
+                piece = Helper.GetFile(square) + 1 <= 8 && Helper.GetRank(square) - 1 >= 1 ? _board.GetPiece(square - 7) : null;
                 if (piece is Pawn && piece.Color == ChessColor.White)
                     return true;
             }

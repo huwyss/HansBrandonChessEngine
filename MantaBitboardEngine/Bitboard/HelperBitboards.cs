@@ -368,42 +368,42 @@ namespace MantaBitboardEngine
             {
                 if (Col[i] < 6 && Row[i] < 7)
                 {
-                    BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Knight, i], i + 10);
+                    BitHelper.SetBit(ref MovesPieces[(int)PieceType.Knight, i], i + 10);
                 }
 
                 if (Col[i] < 7 && Row[i] < 6)
                 {
-                    BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Knight, i], i + 17);
+                    BitHelper.SetBit(ref MovesPieces[(int)PieceType.Knight, i], i + 17);
                 }
 
                 if (Col[i] > 0 && Row[i] < 6)
                 {
-                    BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Knight, i], i + 15);
+                    BitHelper.SetBit(ref MovesPieces[(int)PieceType.Knight, i], i + 15);
                 }
 
                 if (Col[i] > 1 && Row[i] < 7)
                 {
-                    BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Knight, i], i + 6);
+                    BitHelper.SetBit(ref MovesPieces[(int)PieceType.Knight, i], i + 6);
                 }
 
                 if (Col[i] > 0 && Row[i] > 1)
                 {
-                    BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Knight, i], i - 17);
+                    BitHelper.SetBit(ref MovesPieces[(int)PieceType.Knight, i], i - 17);
                 }
 
                 if (Col[i] > 1 && Row[i] > 0)
                 {
-                    BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Knight, i], i - 10);
+                    BitHelper.SetBit(ref MovesPieces[(int)PieceType.Knight, i], i - 10);
                 }
 
                 if (Col[i] < 7 && Row[i] > 1)
                 {
-                    BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Knight, i], i - 15);
+                    BitHelper.SetBit(ref MovesPieces[(int)PieceType.Knight, i], i - 15);
                 }
 
                 if (Col[i] < 6 && Row[i] > 0)
                 {
-                    BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Knight, i], i - 6);
+                    BitHelper.SetBit(ref MovesPieces[(int)PieceType.Knight, i], i - 6);
                 }
             }
         }
@@ -418,30 +418,30 @@ namespace MantaBitboardEngine
             {
                 if (Col[i] > 0 && Row[i] > 0)
                 {
-                    BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.King, i], i - 1);
-                    BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.King, i], i - 8);
-                    BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.King, i], i - 9);
+                    BitHelper.SetBit(ref MovesPieces[(int)PieceType.King, i], i - 1);
+                    BitHelper.SetBit(ref MovesPieces[(int)PieceType.King, i], i - 8);
+                    BitHelper.SetBit(ref MovesPieces[(int)PieceType.King, i], i - 9);
                 }
 
                 if (Col[i] < 7 && Row[i] > 0)
                 {
-                    BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.King, i], i - 7);
-                    BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.King, i], i - 8);
-                    BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.King, i], i + 1);
+                    BitHelper.SetBit(ref MovesPieces[(int)PieceType.King, i], i - 7);
+                    BitHelper.SetBit(ref MovesPieces[(int)PieceType.King, i], i - 8);
+                    BitHelper.SetBit(ref MovesPieces[(int)PieceType.King, i], i + 1);
                 }
 
                 if (Col[i] > 0 && Row[i] < 7)
                 {
-                    BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.King, i], i - 1);
-                    BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.King, i], i + 7);
-                    BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.King, i], i + 8);
+                    BitHelper.SetBit(ref MovesPieces[(int)PieceType.King, i], i - 1);
+                    BitHelper.SetBit(ref MovesPieces[(int)PieceType.King, i], i + 7);
+                    BitHelper.SetBit(ref MovesPieces[(int)PieceType.King, i], i + 8);
                 }
 
                 if (Col[i] < 7 && Row[i] < 7)
                 {
-                    BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.King, i], i + 1);
-                    BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.King, i], i + 8);
-                    BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.King, i], i + 9);
+                    BitHelper.SetBit(ref MovesPieces[(int)PieceType.King, i], i + 1);
+                    BitHelper.SetBit(ref MovesPieces[(int)PieceType.King, i], i + 8);
+                    BitHelper.SetBit(ref MovesPieces[(int)PieceType.King, i], i + 9);
                 }
             }
         }
@@ -459,8 +459,8 @@ namespace MantaBitboardEngine
                     var edge = GetEdge(i, 8);
                     for (int z = i + 8; z <= edge; z += 8)
                     {
-                        BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Rook, i], z);
-                        BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Queen, i], z);
+                        BitHelper.SetBit(ref MovesPieces[(int)PieceType.Rook, i], z);
+                        BitHelper.SetBit(ref MovesPieces[(int)PieceType.Queen, i], z);
                     }
                 }
 
@@ -469,8 +469,8 @@ namespace MantaBitboardEngine
                     var edge = GetEdge(i, -8);
                     for (int z = i - 8; z >= edge; z -= 8)
                     {
-                        BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Rook, i], z);
-                        BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Queen, i], z);
+                        BitHelper.SetBit(ref MovesPieces[(int)PieceType.Rook, i], z);
+                        BitHelper.SetBit(ref MovesPieces[(int)PieceType.Queen, i], z);
                     }
                 }
 
@@ -479,8 +479,8 @@ namespace MantaBitboardEngine
                     var edge = GetEdge(i, 1);
                     for (int z = i + 1; z <= edge; z++)
                     {
-                        BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Rook, i], z);
-                        BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Queen, i], z);
+                        BitHelper.SetBit(ref MovesPieces[(int)PieceType.Rook, i], z);
+                        BitHelper.SetBit(ref MovesPieces[(int)PieceType.Queen, i], z);
                     }
                 }
 
@@ -489,8 +489,8 @@ namespace MantaBitboardEngine
                     var edge = GetEdge(i, -1);
                     for (int z = i - 1; z >= edge; z--)
                     {
-                        BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Rook, i], z);
-                        BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Queen, i], z);
+                        BitHelper.SetBit(ref MovesPieces[(int)PieceType.Rook, i], z);
+                        BitHelper.SetBit(ref MovesPieces[(int)PieceType.Queen, i], z);
                     }
                 }
 
@@ -499,8 +499,8 @@ namespace MantaBitboardEngine
                     var edge = GetEdge(i, 7);
                     for (int z = i + 7; z <= edge; z += 7)
                     {
-                        BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Bishop, i], z);
-                        BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Queen, i], z);
+                        BitHelper.SetBit(ref MovesPieces[(int)PieceType.Bishop, i], z);
+                        BitHelper.SetBit(ref MovesPieces[(int)PieceType.Queen, i], z);
                     }
                 }
 
@@ -509,8 +509,8 @@ namespace MantaBitboardEngine
                     var edge = GetEdge(i, 9);
                     for (int z = i + 9; z <= edge; z += 9)
                     {
-                        BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Bishop, i], z);
-                        BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Queen, i], z);
+                        BitHelper.SetBit(ref MovesPieces[(int)PieceType.Bishop, i], z);
+                        BitHelper.SetBit(ref MovesPieces[(int)PieceType.Queen, i], z);
                     }
                 }
 
@@ -519,8 +519,8 @@ namespace MantaBitboardEngine
                     var edge = GetEdge(i, -7);
                     for (int z = i - 7; z >= edge; z -= 7)
                     {
-                        BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Bishop, i], z);
-                        BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Queen, i], z);
+                        BitHelper.SetBit(ref MovesPieces[(int)PieceType.Bishop, i], z);
+                        BitHelper.SetBit(ref MovesPieces[(int)PieceType.Queen, i], z);
                     }
                 }
 
@@ -529,8 +529,8 @@ namespace MantaBitboardEngine
                     var edge = GetEdge(i, -9);
                     for (int z = i - 9; z >= edge; z -= 9)
                     {
-                        BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Bishop, i], z);
-                        BitHelper.SetBit(ref MovesPieces[(int)BitPieceType.Queen, i], z);
+                        BitHelper.SetBit(ref MovesPieces[(int)PieceType.Bishop, i], z);
+                        BitHelper.SetBit(ref MovesPieces[(int)PieceType.Queen, i], z);
                     }
                 }
             }

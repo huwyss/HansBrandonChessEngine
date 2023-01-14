@@ -21,31 +21,31 @@ namespace MantaChessEngine
 
         public abstract IEnumerable<string> GetMoveDirectionSequences();
 
-        public virtual List<IMove> GetMoves(MoveGenerator moveGen, IBoard board, int file, int rank, bool includeCastling = true)
+        public virtual List<IMove> GetMoves(MoveGenerator moveGen, IBoard board, Square fromSquare, bool includeCastling = true)
         { 
             return null;
         }
-       
-        public static Piece MakePiece(char pieceChar)
-        {
-            return MakePiece(pieceChar, Helper.GetPieceColor(pieceChar));
-        }
 
-        public static Piece MakePiece(char pieceChar, ChessColor color)
+        public static Piece MakePiece(PieceType pieceType, ChessColor color)
         {
-            switch (pieceChar.ToString().ToLower()[0])
+            switch (pieceType)
             {
-                case CommonDefinitions.KING:
+                case PieceType.King:
                     return new King(color);
-                case CommonDefinitions.QUEEN:
+
+                case PieceType.Queen:
                     return new Queen(color);
-                case CommonDefinitions.ROOK:
+
+                case PieceType.Rook:
                     return new Rook(color);
-                case CommonDefinitions.BISHOP:
+
+                case PieceType.Bishop:
                     return new Bishop(color);
-                case CommonDefinitions.KNIGHT:
+
+                case PieceType.Knight:
                     return new Knight(color);
-                case CommonDefinitions.PAWN:
+
+                case PieceType.Pawn:
                     return new Pawn(color);
 
                 default:
@@ -60,44 +60,53 @@ namespace MantaChessEngine
 
         // unit tests need access.
         // valid means move is within board. 
-        internal void GetEndPosition(int file, int rank, string sequence, out int targetFile, out int targetRank, out bool valid)
+        internal void GetEndPosition(Square fromSquare, string sequence, out Square toSquare, out bool valid)
         {
-            targetFile = file;
-            targetRank = rank;
+            toSquare = fromSquare;
+            valid = false;
 
             for (int i = 0; i < sequence.Length; i++)
             {
+                var currentFile = Helper.GetFile(toSquare);
+                var currentRank = Helper.GetRank(toSquare);
+
                 char direction = sequence[i];
                 switch (direction)
                 {
                     case Definitions.UP:
-                        targetRank++;
+                        valid = currentRank < 8;
+                        toSquare += 8;
                         break;
                     case Definitions.RIGHT:
-                        targetFile++;
+                        valid = currentFile < 8;
+                        toSquare++;
                         break;
                     case Definitions.DOWN:
-                        targetRank--;
+                        valid = currentRank > 1;
+                        toSquare -=8;
                         break;
                     case Definitions.LEFT:
-                        targetFile--;
+                        valid = currentFile > 1;
+                        toSquare--;
                         break;
                     default:
                         break;
                 }
-            }
 
-            valid = targetFile >= 1 && targetFile <= 8 &&
-                    targetRank >= 1 && targetRank <= 8;
+                if (!valid)
+                {
+                    return;
+                }
+            }
         }
 
-        internal bool IsFieldsEmpty(IBoard board, int sourceFile, int sourceRank, int targetFile)
+        internal bool IsFieldsEmpty(IBoard board, Square fromSquare, Square toSquare)
         {
             bool empty = true;
 
-            for (int file = sourceFile; file <= targetFile; file++)
+            for (var square = fromSquare; square <= toSquare; square++)
             {
-                empty &= board.GetPiece(file, sourceRank) == null;
+                empty &= board.GetPiece(square) == null;
             }
 
             return empty;

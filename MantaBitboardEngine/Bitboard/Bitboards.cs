@@ -35,7 +35,7 @@ namespace MantaBitboardEngine
         private readonly BitMoveExecutor _moveExecutor;
         private readonly IHashtable _hashtable;
 
-        public BitPieceType[] BoardAllPieces;
+        public PieceType[] BoardAllPieces;
         public ChessColor[] BoardColor;
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace MantaBitboardEngine
             BoardState = new BitBoardState();
 
             Bitboard_Pieces = new Bitboard[2, 7]; // todo: what is the 7th son of a seventh son?
-            BoardAllPieces = new BitPieceType[64];
+            BoardAllPieces = new PieceType[64];
             BoardColor = new ChessColor[64];
             Bitboard_ColoredPieces = new Bitboard[2];
 
@@ -163,7 +163,7 @@ namespace MantaBitboardEngine
         {
             for (var i = 0; i < 64; i++)
             {
-                BoardAllPieces[i] = BitPieceType.Empty;
+                BoardAllPieces[i] = PieceType.Empty;
                 BoardColor[i] = ChessColor.Empty;
             }
 
@@ -247,7 +247,7 @@ namespace MantaBitboardEngine
                 var square = (Square)(col + 8 * row);
 
                 var bitPiece = BitHelper.GetBitPiece(position[i]);
-                if (bitPiece.Color != ChessColor.Empty && bitPiece.Piece != BitPieceType.Empty)
+                if (bitPiece.Color != ChessColor.Empty && bitPiece.Piece != PieceType.Empty)
                 {
                     SetPiece(bitPiece.Color, bitPiece.Piece, square);
                 }
@@ -266,7 +266,7 @@ namespace MantaBitboardEngine
             return new BitPiece(BoardColor[(int)square], BoardAllPieces[(int)square]);
         }
 
-        public void SetPiece(ChessColor color, BitPieceType piece, Square square)
+        public void SetPiece(ChessColor color, PieceType piece, Square square)
         {
             BoardAllPieces[(int)square] = piece;
             BoardColor[(int)square] = color;
@@ -286,7 +286,7 @@ namespace MantaBitboardEngine
             BitHelper.ClearBit(ref Bitboard_AllPieces, (int)square); // todo test this
             BitHelper.ClearBit(ref Bitboard_ColoredPieces[(int)color], (int)square); // todo test this
 
-            BoardAllPieces[(int)square] = BitPieceType.Empty;
+            BoardAllPieces[(int)square] = PieceType.Empty;
             BoardColor[(int)square] = ChessColor.Empty;
 
             _hashtable.AddKey(color, piece, square);

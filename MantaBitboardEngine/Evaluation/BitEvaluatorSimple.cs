@@ -13,13 +13,13 @@ namespace MantaBitboardEngine
         {
             _board = board;
             _helperBits = helperBits;
-            _value = new int[(int)BitPieceType.King + 1];
-            _value[(int)BitPieceType.Pawn] = 100;
-            _value[(int)BitPieceType.Knight] = 300;
-            _value[(int)BitPieceType.Bishop] = 300;
-            _value[(int)BitPieceType.Rook] = 500;
-            _value[(int)BitPieceType.Queen] = 900;
-            _value[(int)BitPieceType.King] = 0; // king has only position bonus
+            _value = new int[(int)PieceType.King + 1];
+            _value[(int)PieceType.Pawn] = 100;
+            _value[(int)PieceType.Knight] = 300;
+            _value[(int)PieceType.Bishop] = 300;
+            _value[(int)PieceType.Rook] = 500;
+            _value[(int)PieceType.Queen] = 900;
+            _value[(int)PieceType.King] = 0; // king has only position bonus
         }
 
         public int Evaluate()
@@ -28,7 +28,7 @@ namespace MantaBitboardEngine
 
             for (int color = (int)ChessColor.White; color <= (int)ChessColor.Black; color++)
             {
-                for (int piece = (int)BitPieceType.Pawn; piece <= (int)BitPieceType.King; piece++)
+                for (int piece = (int)PieceType.Pawn; piece <= (int)PieceType.King; piece++)
                 {
                     var whitePieceBit = _board.Bitboard_Pieces[color, piece];
                     while (whitePieceBit != 0)

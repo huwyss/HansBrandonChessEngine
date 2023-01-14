@@ -25,20 +25,17 @@ namespace MantaChessEngine
             var scoreWhite = 0;
             var scoreBlack = 0;
 
-            for (int file = 1; file <= 8; file++)
+            for (var square = Square.A1; square <= Square.H8; square++)
             {
-                for (int rank = 1; rank <= 8; rank++)
+                Piece piece = _board.GetPiece(square);
+                int pieceScore = GetPieceScore(piece);
+                if (_board.GetColor(square) == ChessColor.White)
                 {
-                    Piece piece = _board.GetPiece(file, rank);
-                    int pieceScore = GetPieceScore(piece);
-                    if (_board.GetColor(file, rank) == ChessColor.White)
-                    {
-                        scoreWhite += pieceScore;
-                    }
-                    else
-                    {
-                        scoreBlack += pieceScore;
-                    }
+                    scoreWhite += pieceScore;
+                }
+                else
+                {
+                    scoreBlack += pieceScore;
                 }
             }
 

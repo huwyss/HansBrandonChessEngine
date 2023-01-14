@@ -22,8 +22,8 @@ namespace MantaChessEngineTest
         IHashtable hashMock;
         IBoard boardMock;
         MoveRatingFactory moveRatingFactory;
-        IMove illegalMoveWhite = MoveFactory.MakeNormalMove(Piece.MakePiece('B', ChessColor.White), 1, 1, 2, 2, null);
-        IMove illegalMoveBlack = MoveFactory.MakeNormalMove(Piece.MakePiece('b', ChessColor.Black), 1, 1, 2, 2, null);
+        IMove illegalMoveWhite = MoveFactory.MakeNormalMove(Piece.MakePiece(PieceType.Bishop, ChessColor.White), Square.A1, Square.B2, null);
+        IMove illegalMoveBlack = MoveFactory.MakeNormalMove(Piece.MakePiece(PieceType.Bishop, ChessColor.Black), Square.A1, Square.B2, null);
 
         [TestInitialize]
         public void Setup()

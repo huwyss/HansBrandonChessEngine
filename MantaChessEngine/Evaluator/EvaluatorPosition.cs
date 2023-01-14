@@ -34,20 +34,17 @@ namespace MantaChessEngine
             numberWhiteBishop = 0;
             numberBlackBishop = 0;
 
-            for (int file = 1; file <= 8; file++)
+            for (var square = Square.A1; square <= Square.H8; square++)
             {
-                for (int rank = 1; rank <= 8; rank++)
+                Piece piece = _board.GetPiece(square);
+                int pieceScore = GetPieceScore(piece, square);
+                if (_board.GetColor(square) == ChessColor.White)
                 {
-                    Piece piece = _board.GetPiece(file, rank);
-                    int pieceScore = GetPieceScore(piece, file, rank);
-                    if (_board.GetColor(file, rank) == ChessColor.White)
-                    {
-                        scoreWhite += pieceScore;
-                    }
-                    else
-                    {
-                        scoreBlack += pieceScore;
-                    }
+                    scoreWhite += pieceScore;
+                }
+                else
+                {
+                    scoreBlack += pieceScore;
                 }
             }
 
@@ -76,9 +73,9 @@ namespace MantaChessEngine
             return score;
         }
 
-        private int GetPieceScore(Piece piece, int file, int rank)
+        private int GetPieceScore(Piece piece, Square square)
         {
-            int index = 8 * (rank - 1) + file - 1;
+            var index = (int)square;
 
             if (piece is Pawn)
                 return ValuePawn + PawnPositionBonus[index];

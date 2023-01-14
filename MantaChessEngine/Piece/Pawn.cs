@@ -22,7 +22,7 @@ namespace MantaChessEngine
             return new List<string>() { "u", "uu", "ul", "ur" }; // up, up up, up left, up right
         }
 
-        public override List<IMove> GetMoves(MoveGenerator moveGen, IBoard board, int file, int rank, bool includeCastling = true)
+        public override List<IMove> GetMoves(MoveGenerator moveGen, IBoard board, Square fromSquare, bool includeCastling = true)
         {
             var moves = new List<IMove>();
             var directionSequences = GetMoveDirectionSequences();
@@ -36,61 +36,61 @@ namespace MantaChessEngine
                     twoFieldMoveInitRank = 7;
                 }
 
-                GetEndPosition(file, rank, currentSequence, out int targetFile, out int targetRank, out bool valid);
+                GetEndPosition(fromSquare, currentSequence, out Square toSquare, out bool valid);
                 if (currentSequence == "u" || currentSequence == "d") // walk straight one field
                 {
-                    if (valid && board.GetColor(targetFile, targetRank) == ChessColor.Empty) // empty field
+                    if (valid && board.GetColor(toSquare) == ChessColor.Empty) // empty field
                     {
-                        if ((currentSequence == "u" && targetRank < 8) ||  // white normal pawn move straight
-                            (currentSequence == "d" && targetRank > 1))    // black normal pawn move straight
+                        if ((currentSequence == "u" && toSquare < Square.A8) ||  // white normal pawn move straight
+                            (currentSequence == "d" && toSquare > Square.H1))    // black normal pawn move straight
                         {
-                            moves.Add(MoveFactory.MakeNormalMove(this, file, rank, targetFile, targetRank, null));
+                            moves.Add(MoveFactory.MakeNormalMove(this, fromSquare, toSquare, null));
                         }
                         else // pawn is promoted
                         {
-                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, null, CommonDefinitions.QUEEN));
-                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, null, CommonDefinitions.ROOK));
-                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, null, CommonDefinitions.BISHOP));
-                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, null, CommonDefinitions.KNIGHT));
+                            moves.Add(MoveFactory.MakePromotionMove(this, fromSquare, toSquare, null, PieceType.Queen));
+                            moves.Add(MoveFactory.MakePromotionMove(this, fromSquare, toSquare, null, PieceType.Rook));
+                            moves.Add(MoveFactory.MakePromotionMove(this, fromSquare, toSquare, null, PieceType.Bishop));
+                            moves.Add(MoveFactory.MakePromotionMove(this, fromSquare, toSquare, null, PieceType.Knight));
                         }
                     }
                 }
-                else if ((currentSequence == "uu" || currentSequence == "dd") && rank == twoFieldMoveInitRank) // walk straight two fields
+                else if ((currentSequence == "uu" || currentSequence == "dd") && Helper.GetRank(fromSquare) == twoFieldMoveInitRank) // walk straight two fields
                 {
                     string currentSequence2 = currentSequence == "uu" ? "u" : "d";
-                    GetEndPosition(file, rank, currentSequence2, out int targetFile2, out int targetRank2, out bool valid2);
-                    if ((valid && board.GetColor(targetFile, targetRank) == ChessColor.Empty) && // end field is empty
-                        (valid2 && board.GetColor(targetFile2, targetRank2) == ChessColor.Empty)) // field between current and end field is also empty
+                    GetEndPosition(fromSquare, currentSequence2, out Square toSquare2,  out bool valid2);
+                    if ((valid && board.GetColor(toSquare) == ChessColor.Empty) && // end field is empty
+                        (valid2 && board.GetColor(toSquare2) == ChessColor.Empty)) // field between current and end field is also empty
                     {
-                        moves.Add(MoveFactory.MakeNormalMove(this, file, rank, targetFile, targetRank, null));
+                        moves.Add(MoveFactory.MakeNormalMove(this, fromSquare, toSquare, null));
                     }
                 }
                 else if (currentSequence == "ul" || currentSequence == "ur" ||
                          currentSequence == "dl" || currentSequence == "dr") // capture
                 {
                     // normal capture
-                    if (valid && Color == Helper.GetOppositeColor(board.GetColor(targetFile, targetRank)))
+                    if (valid && Color == Helper.GetOppositeColor(board.GetColor(toSquare)))
                     {
-                        if ((currentSequence == "ul" || currentSequence == "ur") && targetRank < 8 || // white normal pawn move capture
-                            (currentSequence == "dl" || currentSequence == "dr") && targetRank > 1 )  // black normal pawn move capture
+                        if ((currentSequence == "ul" || currentSequence == "ur") && Helper.GetRank(toSquare) < 8 || // white normal pawn move capture
+                            (currentSequence == "dl" || currentSequence == "dr") && Helper.GetRank(toSquare) > 1 )  // black normal pawn move capture
                         {
-                            moves.Add(MoveFactory.MakeNormalMove(this, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank)));
+                            moves.Add(MoveFactory.MakeNormalMove(this, fromSquare, toSquare, board.GetPiece(toSquare)));
                         }
                         else // pawn is promoted
                         {
-                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank), CommonDefinitions.QUEEN));
-                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank), CommonDefinitions.ROOK));
-                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank), CommonDefinitions.BISHOP));
-                            moves.Add(MoveFactory.MakePromotionMove(this, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank), CommonDefinitions.KNIGHT));
+                            moves.Add(MoveFactory.MakePromotionMove(this, fromSquare, toSquare, board.GetPiece(toSquare), PieceType.Queen));
+                            moves.Add(MoveFactory.MakePromotionMove(this, fromSquare, toSquare, board.GetPiece(toSquare), PieceType.Rook));
+                            moves.Add(MoveFactory.MakePromotionMove(this, fromSquare, toSquare, board.GetPiece(toSquare), PieceType.Bishop));
+                            moves.Add(MoveFactory.MakePromotionMove(this, fromSquare, toSquare, board.GetPiece(toSquare), PieceType.Knight));
                         }
                     }
                     // en passant capture
-                    else if (valid && targetFile == board.BoardState.LastEnPassantFile && targetRank == board.BoardState.LastEnPassantRank)
+                    else if (valid && toSquare == board.BoardState.LastEnPassantSquare)
                     {
                         Piece capturedPawn = Color == ChessColor.White // moving pawn is white
-                            ? board.GetPiece(targetFile, targetRank - 1)  
-                            : board.GetPiece(targetFile, targetRank + 1); 
-                        moves.Add(MoveFactory.MakeEnPassantCaptureMove(this, file, rank, targetFile, targetRank, capturedPawn));
+                            ? board.GetPiece(toSquare - 8)  
+                            : board.GetPiece(toSquare + 8); 
+                        moves.Add(MoveFactory.MakeEnPassantCaptureMove(this, fromSquare, toSquare, capturedPawn));
                     }
                 }
             }

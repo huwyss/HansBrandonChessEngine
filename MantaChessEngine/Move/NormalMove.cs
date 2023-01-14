@@ -3,18 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MantaCommon;
 
 namespace MantaChessEngine
 {
     public class NormalMove : MoveBase
     {
-        public NormalMove(Piece movingPiece, char sourceFile, int sourceRank, char targetFile, int targetRank, Piece capturedPiece)
-            : base(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece)
-        {
-        }
-
-        public NormalMove(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, Piece capturedPiece)
-            : base(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece)
+        public NormalMove(Piece movingPiece, Square fromSquare, Square toSquare, Piece capturedPiece)
+            : base(movingPiece, fromSquare, toSquare, capturedPiece)
         {
         }
 

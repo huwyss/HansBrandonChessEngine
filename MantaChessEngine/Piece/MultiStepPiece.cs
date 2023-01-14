@@ -16,37 +16,35 @@ namespace MantaChessEngine
         {
         }
 
-        public override List<IMove> GetMoves(MoveGenerator moveGen, IBoard board, int file, int rank, bool includeCastling = true)
+        public override List<IMove> GetMoves(MoveGenerator moveGen, IBoard board, Square fromSquare, bool includeCastling = true)
         {
             List<IMove> moves = new List<IMove>();
             var directionSequences = GetMoveDirectionSequences();
             foreach (string sequence in directionSequences)
             {
-                int currentFile = file;
-                int currentRank = rank;
+                var currentSquare = fromSquare;
                 for (int i = 1; i < 8; i++) // walk in the direction until off board or captured or next is own piece
                 {
-                    GetEndPosition(currentFile, currentRank, sequence, out int targetFile, out int targetRank, out bool valid);
+                    GetEndPosition(currentSquare, sequence, out Square toSquare, out bool valid);
                     if (!valid)
                     {
                         break;
                     }
-                    ChessColor targetColor = board.GetColor(targetFile, targetRank);
+                    ChessColor targetColor = board.GetColor(toSquare);
                     if (Color == targetColor)
                     {
                         break;
                     }
 
-                    Piece targetPiece = board.GetPiece(targetFile, targetRank);
-                    moves.Add(MoveFactory.MakeNormalMove(this, file, rank, targetFile, targetRank, targetPiece));
+                    Piece targetPiece = board.GetPiece(toSquare);
+                    moves.Add(MoveFactory.MakeNormalMove(this, fromSquare, toSquare, targetPiece));
 
                     if (ChessColor.Empty != targetColor)
                     {
                         break;
                     }
 
-                    currentFile = targetFile;
-                    currentRank = targetRank;
+                    currentSquare = toSquare;
                 }
             }
 

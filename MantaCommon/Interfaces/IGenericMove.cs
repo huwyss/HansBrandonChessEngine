@@ -11,7 +11,7 @@ namespace MantaCommon
         ChessColor MovingColor { get; }
         Square FromSquare { get; }
         Square ToSquare { get; }
-        BitPieceType PromotionPiece { get; }
+        PieceType PromotionPiece { get; }
         bool IsCapture();
     }
 }

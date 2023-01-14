@@ -41,5 +41,23 @@ namespace MantaChessEngine
         {
             return piece < 'a' ? ChessColor.White : ChessColor.Black;
         }
+
+        /// <summary>
+        /// Returns Rank 1 .. 8
+        /// </summary>
+        public static int GetRank(Square square)
+        {
+            var file = (int)(square) % 8;
+            return (int)(square - file) / 8 + 1;
+        }
+
+        /// <summary>
+        /// Returns File 1 .. 8
+        /// </summary>
+        public static int GetFile(Square square)
+        {
+            var file = (int)(square) % 8;
+            return file + 1;
+        }
     }
 }

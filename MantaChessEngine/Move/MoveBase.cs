@@ -5,22 +5,7 @@ namespace MantaChessEngine
 {
     public abstract class MoveBase : IMove
     {
-        public Square FromSquare {
-            get
-            {
-                return (Square)(SourceFile - 1 + 8 * (SourceRank - 1));
-            } 
-        }
-
-        public Square ToSquare
-        {
-            get
-            {
-                return (Square)(TargetFile - 1 + 8 * (TargetRank - 1));
-            }
-        }
-
-        public virtual BitPieceType PromotionPiece => BitPieceType.Empty;
+        public virtual PieceType PromotionPiece => PieceType.Empty;
 
         public bool IsCapture()
         {
@@ -28,10 +13,8 @@ namespace MantaChessEngine
         }
 
         public Piece MovingPiece { get; set; }
-        public int SourceFile { get; set; }
-        public int SourceRank { get; set; }
-        public int TargetFile { get; set; }
-        public int TargetRank { get; set; }
+        public Square FromSquare { get; set; }
+        public Square ToSquare { get; set; }
         public Piece CapturedPiece { get; set; }
 
         public ChessColor MovingColor
@@ -42,33 +25,21 @@ namespace MantaChessEngine
             }
         }
 
-        public int CapturedFile // same as target file
+        public virtual Square CapturedSquare // same as target file
         {
-            get { return TargetFile; }
+            get
+            {
+                return CapturedPiece != null
+                    ? ToSquare
+                    : Square.NoSquare;
+            }
         } 
 
-        public virtual int CapturedRank // mostly this is the same as target rank but for en passant capture it is different
-        {
-            get { return TargetRank; }
-        }
-
-        public MoveBase(Piece movingPiece, char sourceFile, int sourceRank, char targetFile, int targetRank, Piece capturedPiece)
-        {
-            InitializeMove(movingPiece, Helper.FileCharToFile(sourceFile), sourceRank, Helper.FileCharToFile(targetFile), targetRank, capturedPiece);
-        }
-
-        public MoveBase(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, Piece capturedPiece)
-        {
-            InitializeMove(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece);
-        }
-
-        private void InitializeMove(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, Piece capturedPiece)
+        public MoveBase(Piece movingPiece, Square fromSquare, Square toSquare, Piece capturedPiece)
         {
             MovingPiece = movingPiece;
-            SourceFile = sourceFile;
-            SourceRank = sourceRank;
-            TargetFile = targetFile;
-            TargetRank = targetRank;
+            FromSquare = fromSquare;
+            ToSquare = toSquare;
             CapturedPiece = capturedPiece;
         }
 
@@ -87,10 +58,8 @@ namespace MantaChessEngine
                 return false;
             }
 
-            bool equal = SourceFile == other.SourceFile;
-            equal &= SourceRank == other.SourceRank;
-            equal &= TargetFile == other.TargetFile;
-            equal &= TargetRank == other.TargetRank;
+            bool equal = FromSquare == other.FromSquare;
+            equal &= ToSquare == other.ToSquare;
             if (CapturedPiece != null)
             {
                 equal &= CapturedPiece.Equals(other.CapturedPiece);
@@ -115,12 +84,10 @@ namespace MantaChessEngine
         public override string ToString()
         {
             string moveString = "";
-            moveString += Helper.FileToFileChar(SourceFile);
-            moveString += SourceRank.ToString();
-            moveString += Helper.FileToFileChar(TargetFile);
-            moveString += TargetRank;
+            moveString += FromSquare;
+            moveString += ToSquare.ToString();
             moveString += CapturedPiece != null ? CapturedPiece.Symbol : CommonDefinitions.EmptyField;
-            return moveString;
+            return moveString.ToLower();
         }
 
         public virtual string ToPrintString()
@@ -130,8 +97,7 @@ namespace MantaChessEngine
             {
                 moveString += MovingPiece.UniversalSymbol;
             }
-            moveString += Helper.FileToFileChar(SourceFile);
-            moveString += SourceRank.ToString();
+            moveString += FromSquare;
 
             if (CapturedPiece == null)
             {
@@ -142,8 +108,7 @@ namespace MantaChessEngine
                 moveString += "x";
             }
 
-            moveString += Helper.FileToFileChar(TargetFile);
-            moveString += TargetRank;
+            moveString += ToSquare;
             
             return moveString;
         }
@@ -151,11 +116,9 @@ namespace MantaChessEngine
         public virtual string ToUciString()
         {
             string moveString = "";
-            moveString += Helper.FileToFileChar(SourceFile);
-            moveString += SourceRank.ToString();
-            moveString += Helper.FileToFileChar(TargetFile);
-            moveString += TargetRank;
-            return moveString;
+            moveString += FromSquare;
+            moveString += ToSquare;
+            return moveString.ToLower();
         }
 
         public override int GetHashCode()
@@ -165,10 +128,10 @@ namespace MantaChessEngine
         
         public virtual void ExecuteMove(IBoard board)
         {
-            board.SetPiece(MovingPiece, TargetFile, TargetRank); // set MovingPiece to new position (and overwrite captured piece)
-            board.SetPiece(null, SourceFile, SourceRank); // empty MovingPiece's old position
+            board.SetPiece(MovingPiece, ToSquare); // set MovingPiece to new position (and overwrite captured piece)
+            board.SetPiece(null, FromSquare); // empty MovingPiece's old position
 
-            SetEnPassantFields(this, out int enPassantFile, out int enPassantRank);
+            SetEnPassantFields(this, out Square enPassantSquare);
 
             // Set Castling rights
             // if white king moved --> castling right white both sides = false
@@ -177,10 +140,10 @@ namespace MantaChessEngine
             // same for black
             bool blackKingMoved = MovingPiece is King && MovingPiece.Color == ChessColor.Black;
             bool whiteKingMoved = MovingPiece is King && MovingPiece.Color == ChessColor.White;
-            bool blackRookKingSideMoved = MovingPiece is Rook && MovingPiece.Color == ChessColor.Black && SourceFile == 8;
-            bool whiteRookKingSideMoved = MovingPiece is Rook && MovingPiece.Color == ChessColor.White && SourceFile == 8;
-            bool blackRookQueenSideMoved = MovingPiece is Rook && MovingPiece.Color == ChessColor.Black && SourceFile == 1;
-            bool whiteRookQueenSideMoved = MovingPiece is Rook && MovingPiece.Color == ChessColor.White && SourceFile == 1;
+            bool blackRookKingSideMoved = MovingPiece is Rook && MovingPiece.Color == ChessColor.Black && FromSquare == Square.H8;
+            bool whiteRookKingSideMoved = MovingPiece is Rook && MovingPiece.Color == ChessColor.White && FromSquare == Square.H1;
+            bool blackRookQueenSideMoved = MovingPiece is Rook && MovingPiece.Color == ChessColor.Black && FromSquare == Square.A8;
+            bool whiteRookQueenSideMoved = MovingPiece is Rook && MovingPiece.Color == ChessColor.White && FromSquare == Square.A1;
             bool castlingRightWhiteQueenSide = board.BoardState.LastCastlingRightWhiteQueenSide & !whiteKingMoved & !whiteRookQueenSideMoved;
             bool castlingRightWhiteKingSide = board.BoardState.LastCastlingRightWhiteKingSide & !whiteKingMoved & !whiteRookKingSideMoved;
             bool castlingRightBlackQueenSide = board.BoardState.LastCastlingRightBlackQueenSide & !blackKingMoved & !blackRookQueenSideMoved;
@@ -188,8 +151,7 @@ namespace MantaChessEngine
 
             board.BoardState.Add(
                 this,
-                enPassantFile,
-                enPassantRank,
+                enPassantSquare,
                 castlingRightWhiteQueenSide,
                 castlingRightWhiteKingSide,
                 castlingRightBlackQueenSide,
@@ -199,28 +161,28 @@ namespace MantaChessEngine
 
         public virtual void UndoMove(IBoard board)
         {
-            board.SetPiece(MovingPiece, SourceFile, SourceRank);
-            board.SetPiece(null, /*Definitions.EmptyField,*/ TargetFile, TargetRank);     // TargetFile is equal to CapturedFile
-            board.SetPiece(CapturedPiece, CapturedFile, CapturedRank); // TargetRank differs from TargetRank for en passant capture
+            board.SetPiece(MovingPiece, FromSquare);
+            board.SetPiece(null, /*Definitions.EmptyField,*/ ToSquare);     // TargetFile is equal to CapturedFile
+            if (CapturedPiece != null)
+            {
+                board.SetPiece(CapturedPiece, CapturedSquare); // TargetRank differs from TargetRank for en passant capture
+            }
 
             board.BoardState.Back();
             board.BoardState.SideToMove = Helper.GetOppositeColor(board.BoardState.SideToMove);
         }
 
-        private void SetEnPassantFields(MoveBase move, out int enPassantFile, out int enPassantRank)
+        private void SetEnPassantFields(MoveBase move, out Square enPassantSquare)
         {
-            enPassantFile = 0;
-            enPassantRank = 0;
+            enPassantSquare = Square.NoSquare;
 
             // set black en passant field
             if (move.MovingPiece is Pawn && move.MovingPiece.Color == ChessColor.Black) // black pawn
             {
                 // set en passant field
-                if (move.SourceRank - 2 == move.TargetRank && // if 2 fields move
-                    move.SourceFile == move.TargetFile)       // and straight move 
+                if (move.FromSquare - 16 == move.ToSquare) // if 2 fields move and straight move 
                 {
-                    enPassantRank = move.SourceRank - 1;
-                    enPassantFile = move.SourceFile;
+                    enPassantSquare = move.ToSquare + 8;
                 }
             }
 
@@ -228,11 +190,9 @@ namespace MantaChessEngine
             if (move.MovingPiece is Pawn && move.MovingPiece.Color == ChessColor.White) // white pawn
             {
                 // set en passant field
-                if (move.SourceRank + 2 == move.TargetRank && // if 2 fields move
-                    move.SourceFile == move.TargetFile)       // and straight move 
+                if (move.FromSquare + 16 == move.ToSquare) // if 2 fields move and straight move 
                 {
-                    enPassantRank = move.SourceRank + 1;
-                    enPassantFile = move.SourceFile;
+                    enPassantSquare = move.ToSquare - 8;
                 }
             }
         }

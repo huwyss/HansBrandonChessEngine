@@ -35,7 +35,7 @@ namespace MantaBitboardEngine
         /// <summary>
         /// Sets a chess piece to the field.
         /// </summary>
-        void SetPiece(ChessColor color, BitPieceType piece, Square square);
+        void SetPiece(ChessColor color, PieceType piece, Square square);
 
         /// <summary>
         /// Removes the piece from the square.

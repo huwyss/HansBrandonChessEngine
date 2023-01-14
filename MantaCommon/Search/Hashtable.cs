@@ -42,13 +42,13 @@ namespace MantaCommon
 
 		public Bitboard CurrentKey => _currentKey;
 
-		public void AddKey(ChessColor color, BitPieceType piece, Square square)
+		public void AddKey(ChessColor color, PieceType piece, Square square)
 		{
 			_currentKey ^= Hash[(int)color, (int)piece, (int)square];
 			_currentLock ^= Lock[(int)color, (int)piece, (int)square];
 		}
 
-		public void AddHash(ChessColor color, int level, int score, HashEntryType type, Square from, Square to, BitPieceType promotionPiece)
+		public void AddHash(ChessColor color, int level, int score, HashEntryType type, Square from, Square to, PieceType promotionPiece)
         {
             if (_hashtab[(int)color, _currentKey].HashLock == 0)
             {
@@ -109,7 +109,7 @@ namespace MantaCommon
 
 		private void InitializeHash()
 		{
-			for (int pieceType = (int)BitPieceType.Pawn; pieceType <= (int)BitPieceType.King; pieceType++)
+			for (int pieceType = (int)PieceType.Pawn; pieceType <= (int)PieceType.King; pieceType++)
 			{
 				for (int square = 0; square < 64; square++)
 				{

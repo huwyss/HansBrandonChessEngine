@@ -59,57 +59,57 @@ namespace MantaBitboardEngine
             return MultiplyDeBruijnBitPosition[((ulong)((long)b & -(long)b) * DeBruijnSequence) >> 58];
         }
 
-        public static string GetSymbol(ChessColor color, BitPieceType piece)
+        public static string GetSymbol(ChessColor color, PieceType piece)
         {
-            if (color == ChessColor.White && piece == BitPieceType.Pawn)
+            if (color == ChessColor.White && piece == PieceType.Pawn)
             {
                 return "P";
             }
-            else if (color == ChessColor.White && piece == BitPieceType.Knight)
+            else if (color == ChessColor.White && piece == PieceType.Knight)
             {
                 return "N";
             }
-            else if (color == ChessColor.White && piece == BitPieceType.Bishop)
+            else if (color == ChessColor.White && piece == PieceType.Bishop)
             {
                 return "B";
             }
-            else if (color == ChessColor.White && piece == BitPieceType.Rook)
+            else if (color == ChessColor.White && piece == PieceType.Rook)
             {
                 return "R";
             }
-            else if (color == ChessColor.White && piece == BitPieceType.Queen)
+            else if (color == ChessColor.White && piece == PieceType.Queen)
             {
                 return "Q";
             }
-            else if (color == ChessColor.White && piece == BitPieceType.King)
+            else if (color == ChessColor.White && piece == PieceType.King)
             {
                 return "K";
             }
-            else if (color == ChessColor.Black && piece == BitPieceType.Pawn)
+            else if (color == ChessColor.Black && piece == PieceType.Pawn)
             {
                 return "p";
             }
-            else if (color == ChessColor.Black && piece == BitPieceType.Knight)
+            else if (color == ChessColor.Black && piece == PieceType.Knight)
             {
                 return "n";
             }
-            else if (color == ChessColor.Black && piece == BitPieceType.Bishop)
+            else if (color == ChessColor.Black && piece == PieceType.Bishop)
             {
                 return "b";
             }
-            else if (color == ChessColor.Black && piece == BitPieceType.Rook)
+            else if (color == ChessColor.Black && piece == PieceType.Rook)
             {
                 return "r";
             }
-            else if (color == ChessColor.Black && piece == BitPieceType.Queen)
+            else if (color == ChessColor.Black && piece == PieceType.Queen)
             {
                 return "q";
             }
-            else if (color == ChessColor.Black && piece == BitPieceType.King)
+            else if (color == ChessColor.Black && piece == PieceType.King)
             {
                 return "k";
             }
-            else if (color == ChessColor.Empty && piece == BitPieceType.Empty)
+            else if (color == ChessColor.Empty && piece == PieceType.Empty)
             {
                 return ".";
             }
@@ -117,7 +117,7 @@ namespace MantaBitboardEngine
             return ".";
         }
 
-        public static BitPieceType GetBitPieceType(char symbol)
+        public static PieceType GetBitPieceType(char symbol)
         {
             return GetBitPiece(symbol).Piece;
         }
@@ -129,44 +129,44 @@ namespace MantaBitboardEngine
             switch (symbol)
             {
                 case 'P':
-                    bitPiece = new BitPiece(ChessColor.White, BitPieceType.Pawn);
+                    bitPiece = new BitPiece(ChessColor.White, PieceType.Pawn);
                     break;
                 case 'N':
-                    bitPiece = new BitPiece(ChessColor.White, BitPieceType.Knight);
+                    bitPiece = new BitPiece(ChessColor.White, PieceType.Knight);
                     break;
                 case 'B':
-                    bitPiece = new BitPiece(ChessColor.White, BitPieceType.Bishop);
+                    bitPiece = new BitPiece(ChessColor.White, PieceType.Bishop);
                     break;
                 case 'R':
-                    bitPiece = new BitPiece(ChessColor.White, BitPieceType.Rook);
+                    bitPiece = new BitPiece(ChessColor.White, PieceType.Rook);
                     break;
                 case 'Q':
-                    bitPiece = new BitPiece(ChessColor.White, BitPieceType.Queen);
+                    bitPiece = new BitPiece(ChessColor.White, PieceType.Queen);
                     break;
                 case 'K':
-                    bitPiece = new BitPiece(ChessColor.White, BitPieceType.King);
+                    bitPiece = new BitPiece(ChessColor.White, PieceType.King);
                     break;
                 case 'p':
-                    bitPiece = new BitPiece(ChessColor.Black, BitPieceType.Pawn);
+                    bitPiece = new BitPiece(ChessColor.Black, PieceType.Pawn);
                     break;
                 case 'n':
-                    bitPiece = new BitPiece(ChessColor.Black, BitPieceType.Knight);
+                    bitPiece = new BitPiece(ChessColor.Black, PieceType.Knight);
                     break;
                 case 'b':
-                    bitPiece = new BitPiece(ChessColor.Black, BitPieceType.Bishop);
+                    bitPiece = new BitPiece(ChessColor.Black, PieceType.Bishop);
                     break;
                 case 'r':
-                    bitPiece = new BitPiece(ChessColor.Black, BitPieceType.Rook);
+                    bitPiece = new BitPiece(ChessColor.Black, PieceType.Rook);
                     break;
                 case 'q':
-                    bitPiece = new BitPiece(ChessColor.Black, BitPieceType.Queen);
+                    bitPiece = new BitPiece(ChessColor.Black, PieceType.Queen);
                     break;
                 case 'k':
-                    bitPiece = new BitPiece(ChessColor.Black, BitPieceType.King);
+                    bitPiece = new BitPiece(ChessColor.Black, PieceType.King);
                     break;
                 case '.':
                 case ' ':
-                    bitPiece = new BitPiece(ChessColor.Empty, BitPieceType.Empty);
+                    bitPiece = new BitPiece(ChessColor.Empty, PieceType.Empty);
                     break;
                 default:
                     throw new MantaEngineException($"Piece character unknown: {symbol}");

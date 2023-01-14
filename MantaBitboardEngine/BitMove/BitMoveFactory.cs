@@ -18,14 +18,14 @@ namespace MantaBitboardEngine
                 return BitMove.CreateEmptyMove();
             }
 
-            var fromSquare = GetPosition(moveStringUci.Substring(0, 2));
-            var toSquare = GetPosition(moveStringUci.Substring(2, 2));
+            var fromSquare = CommonHelper.GetSquare(moveStringUci.Substring(0, 2));
+            var toSquare = CommonHelper.GetSquare(moveStringUci.Substring(2, 2));
             var promotionPiece = BitHelper.GetBitPieceType(moveStringUci.Length == 5 ? moveStringUci[4] : ' ');
 
             return MakeMove(fromSquare, toSquare, promotionPiece);
         }
 
-        public BitMove MakeMove(Square fromSquare, Square toSquare, BitPieceType promotionPiece)
+        public BitMove MakeMove(Square fromSquare, Square toSquare, PieceType promotionPiece)
         {
             BitPiece capturedPiece;
             Square capturedSquare;
@@ -33,7 +33,7 @@ namespace MantaBitboardEngine
             var movingPiece = _board.GetPiece(fromSquare);
 
             // set captured Piece
-            if (IsEnPassantCapture(movingPiece, fromSquare, toSquare))
+            if (IsEnPassantCapture(movingPiece, toSquare))
             {
                 capturedPiece = _board.GetPiece(fromSquare).Color == ChessColor.White
                     ? _board.GetPiece(toSquare - 8)
@@ -45,7 +45,7 @@ namespace MantaBitboardEngine
             else
             {
                 capturedPiece = _board.GetPiece(toSquare);
-                capturedSquare = capturedPiece.Piece != BitPieceType.Empty ? toSquare : Square.NoSquare;
+                capturedSquare = capturedPiece.Piece != PieceType.Empty ? toSquare : Square.NoSquare;
             }
 
             if (IsWhiteKingSideCastling(movingPiece, fromSquare, toSquare) ||
@@ -63,51 +63,39 @@ namespace MantaBitboardEngine
             return BitMove.CreateCapture(movingPiece.Piece, fromSquare, toSquare, capturedPiece.Piece, capturedSquare, promotionPiece, movingPiece.Color, 0);
         }
 
-        private bool IsEnPassantCapture(BitPiece movingPiece, Square fromSquare, Square toSquare)
+        private bool IsEnPassantCapture(BitPiece movingPiece, Square toSquare)
         {
-            return movingPiece.Piece == BitPieceType.Pawn &&
+            return movingPiece.Piece == PieceType.Pawn &&
                    _board.GetPiece(toSquare).Color == ChessColor.Empty &&
                    _board.BoardState.LastEnPassantSquare == toSquare;
         }
 
-        private Square GetPosition(string fieldString)
-        {
-            if (fieldString.Length != 2)
-            {
-                throw new MantaEngineException($"Illegal field string: {fieldString}");
-            }
-
-            return (Square)(FileCharToFile(fieldString[0]) + 8 * (int.Parse(fieldString[1].ToString()) - 1));
-        }
+        
 
         private bool IsWhiteKingSideCastling(BitPiece movingPiece, Square fromSquare, Square toSquare)
         {
-            return movingPiece.Piece == BitPieceType.King && movingPiece.Color == ChessColor.White &&
+            return movingPiece.Piece == PieceType.King && movingPiece.Color == ChessColor.White &&
                    fromSquare == Square.E1 && toSquare == Square.G1;
         }
 
         private bool IsWhiteQueenSideCastling(BitPiece movingPiece, Square fromSquare, Square toSquare)
         {
-            return movingPiece.Piece == BitPieceType.King && movingPiece.Color == ChessColor.White &&
+            return movingPiece.Piece == PieceType.King && movingPiece.Color == ChessColor.White &&
                    fromSquare == Square.E1 && toSquare == Square.C1;
         }
 
         private bool IsBlackKingSideCastling(BitPiece movingPiece, Square fromSquare, Square toSquare)
         {
-            return movingPiece.Piece == BitPieceType.King && movingPiece.Color == ChessColor.Black &&
+            return movingPiece.Piece == PieceType.King && movingPiece.Color == ChessColor.Black &&
                    fromSquare == Square.E8 && toSquare == Square.G8;
         }
 
         private bool IsBlackQueenSideCastling(BitPiece movingPiece, Square fromSquare, Square toSquare)
         {
-            return movingPiece.Piece == BitPieceType.King && movingPiece.Color == ChessColor.Black &&
+            return movingPiece.Piece == PieceType.King && movingPiece.Color == ChessColor.Black &&
                    fromSquare == Square.E8 && toSquare == Square.C8;
         }
 
-        private static int FileCharToFile(char fileChar)
-        {
-            int file = fileChar - 'a';
-            return file;
-        }
+        
     }
 }

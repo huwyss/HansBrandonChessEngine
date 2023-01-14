@@ -44,7 +44,7 @@ namespace MantaChessEngineTest
         public void CastlingMoveTest_WhenCastlingAndNormalKingMove_ThenEqualsReturnsFalse()
         {
             IMove moveWhiteKingCastl = new CastlingMove(MantaChessEngine.CastlingType.WhiteKingSide, new King(ChessColor.White));
-            IMove moveWhiteQueenCastl = new NormalMove(Piece.MakePiece('K'), 'e', 1, 'g', 1, null);
+            IMove moveWhiteQueenCastl = new NormalMove(Piece.MakePiece(PieceType.King, ChessColor.White ), Square.E1, Square.G1, null);
             Assert.IsFalse(moveWhiteQueenCastl.Equals(moveWhiteKingCastl), "castling and normal move should be unequal");
             Assert.IsFalse(moveWhiteKingCastl.Equals(moveWhiteQueenCastl), "normal and castling move should be unequal");
         }

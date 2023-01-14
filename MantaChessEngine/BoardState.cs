@@ -9,8 +9,7 @@ namespace MantaChessEngine
 {
     public class BoardState
     {
-        private List<int> EnPassantFile { get; set; } // 1..8
-        private List<int> EnPassantRank { get; set; } // 1..8
+        private List<Square> EnPassantSquare { get; set; }
         private List<bool> CastlingRightWhiteQueenSide { get; set; }
         private List<bool> CastlingRightWhiteKingSide { get; set; }
         private List<bool> CastlingRightBlackQueenSide { get; set; }
@@ -32,11 +31,9 @@ namespace MantaChessEngine
         {
             Moves = new List<IMove>();
 
-            EnPassantFile = new List<int>();
-            EnPassantRank = new List<int>();
+            EnPassantSquare = new List<Square>();
 
-            EnPassantFile.Add(0);
-            EnPassantRank.Add(0);
+            EnPassantSquare.Add(Square.NoSquare);
 
             CastlingRightWhiteQueenSide = new List<bool>();
             CastlingRightWhiteKingSide = new List<bool>();
@@ -55,11 +52,10 @@ namespace MantaChessEngine
             MoveCountSincePawnOrCapture = 0;
         }
 
-        public void Add(IMove move, int enPassantFile, int enPassantRank, bool castlingRightWhiteQueenSide, bool castlingRightWhiteKingSide, bool castlingRightBlackQueenSide, bool castlingRightBlackKingSide, ChessColor sideToMove)
+        public void Add(IMove move, Square enPassantSquare, bool castlingRightWhiteQueenSide, bool castlingRightWhiteKingSide, bool castlingRightBlackQueenSide, bool castlingRightBlackKingSide, ChessColor sideToMove)
         {
             Moves.Add(move);
-            EnPassantFile.Add(enPassantFile);
-            EnPassantRank.Add(enPassantRank);
+            EnPassantSquare.Add(enPassantSquare);
             CastlingRightWhiteQueenSide.Add(castlingRightWhiteQueenSide);
             CastlingRightWhiteKingSide.Add(castlingRightWhiteKingSide);
             CastlingRightBlackQueenSide.Add(castlingRightBlackQueenSide);
@@ -71,8 +67,7 @@ namespace MantaChessEngine
         {
             if (Count > 0)
             {
-                EnPassantFile.RemoveAt(Count);
-                EnPassantRank.RemoveAt(Count);
+                EnPassantSquare.RemoveAt(Count);
 
                 CastlingRightWhiteQueenSide.RemoveAt(Count);
                 CastlingRightWhiteKingSide.RemoveAt(Count);
@@ -100,8 +95,7 @@ namespace MantaChessEngine
             }
         }
 
-        public int LastEnPassantFile { get { return EnPassantFile[Count]; } }
-        public int LastEnPassantRank { get { return EnPassantRank[Count]; } }
+        public Square LastEnPassantSquare { get { return EnPassantSquare[Count]; } }
 
         public bool LastCastlingRightWhiteQueenSide { get { return CastlingRightWhiteQueenSide[Count]; } }
         public bool LastCastlingRightWhiteKingSide { get { return CastlingRightWhiteKingSide[Count]; } }

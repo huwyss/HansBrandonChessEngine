@@ -32,8 +32,8 @@ namespace MantaChessEngine
 
         public MantaEngine(EngineType engineType, int hashSize)
         {
-            _moveFactory = new MoveFactory();
             _board = new Board();
+            _moveFactory = new MoveFactory(_board);
             _moveGenerator = new MoveGenerator(_board);
             _moveRatingFactory = new MoveRatingFactory(_moveGenerator);
             _hashtable = new Hashtable(hashSize);

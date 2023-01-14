@@ -16,12 +16,12 @@ namespace MantaChessEngineTest.Doubles
 
         public string GetFenString() { return string.Empty; }
 
-        public Piece GetPiece(int file, int rank)
+        public Piece GetPiece(Square square)
         {
             return null;
         }
 
-        public void SetPiece(Piece piece, int file, int rank)
+        public void SetPiece(Piece piece, Square square)
         {
         }
 
@@ -37,7 +37,7 @@ namespace MantaChessEngineTest.Doubles
         {
         }
 
-        public ChessColor GetColor(int file, int rank)
+        public ChessColor GetColor(Square square)
         {
             return ChessColor.White;
         }
@@ -47,9 +47,9 @@ namespace MantaChessEngineTest.Doubles
             return false;
         }
 
-        public Position GetKing(ChessColor color)
+        public Square GetKing(ChessColor color)
         {
-            return null;
+            return Square.NoSquare;
         }
     }
 }

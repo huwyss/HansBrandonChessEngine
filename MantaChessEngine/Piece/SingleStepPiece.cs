@@ -16,19 +16,18 @@ namespace MantaChessEngine
         {
         }
 
-        public override List<IMove> GetMoves(MoveGenerator moveGen, IBoard board, int file, int rank, bool includeCastling = true)
+        public override List<IMove> GetMoves(MoveGenerator moveGen, IBoard board, Square fromSquare, bool includeCastling = true)
         {
-            int targetRank;
-            int targetFile;
+            Square toSquare;
             bool valid;
             List<IMove> moves = new List<IMove>();
             IEnumerable<string> directionSequences = GetMoveDirectionSequences();
             foreach (string sequence in directionSequences)
             {
-                GetEndPosition(file, rank, sequence, out targetFile, out targetRank, out valid);
-                if (valid && Color != board.GetColor(targetFile, targetRank)) // capture or empty field
+                GetEndPosition(fromSquare, sequence, out toSquare, out valid);
+                if (valid && Color != board.GetColor(toSquare)) // capture or empty field
                 {
-                    moves.Add(MoveFactory.MakeNormalMove(this, file, rank, targetFile, targetRank, board.GetPiece(targetFile, targetRank)));
+                    moves.Add(MoveFactory.MakeNormalMove(this, fromSquare, toSquare, board.GetPiece(toSquare)));
                 }
             }
 

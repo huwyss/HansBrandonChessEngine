@@ -27,7 +27,7 @@ namespace MantaChessEngine
         /// <param name="file">1 to 8</param>
         /// <param name="rank">1 to 8</param>
         /// <returns></returns>
-        Piece GetPiece(int file, int rank);
+        Piece GetPiece(Square square);
 
         /// <summary>
         /// Sets a chess piece to the field.
@@ -35,7 +35,7 @@ namespace MantaChessEngine
         /// <param name="piece">chess piece: p-pawn, k-king, q-queen, r-rook, n-knight, b-bishop, r-rook, ' '-empty. small=black, capital=white</param>
         /// <param name="file">1 to 8</param>
         /// <param name="rank">1 to 8</param>
-        void SetPiece(Piece piece, int file, int rank);
+        void SetPiece(Piece piece, Square square);
 
         /// <summary>
         /// Do a move and update the board
@@ -47,8 +47,8 @@ namespace MantaChessEngine
         /// </summary>
         ////void Back();
 
-        ChessColor GetColor(int file, int rank);
+        ChessColor GetColor(Square square);
 
-        Position GetKing(ChessColor color);
+        Square GetKing(ChessColor color);
     }
 }

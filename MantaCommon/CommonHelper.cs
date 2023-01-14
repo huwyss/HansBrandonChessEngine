@@ -76,6 +76,49 @@ namespace MantaCommon
                    piece == CommonDefinitions.BISHOP ||
                    piece == CommonDefinitions.KNIGHT;
         }
+
+        public static Square GetSquare(string fieldString)
+        {
+            if (fieldString.Length != 2)
+            {
+                throw new MantaEngineException($"Illegal field string: {fieldString}");
+            }
+
+            return (Square)(FileCharToFile(fieldString[0]) + 8 * (int.Parse(fieldString[1].ToString()) - 1));
+        }
+
+        private static int FileCharToFile(char fileChar)
+        {
+            int file = fileChar - 'a';
+            return file;
+        }
+
+        public static PieceType GetPieceType(char symbol)
+        {
+            switch (symbol)
+            {
+                case 'P':
+                case 'p':
+                    return PieceType.Pawn;
+                case 'N':
+                case 'n':
+                    return PieceType.Knight;
+                case 'B':
+                case 'b':
+                    return PieceType.Bishop;
+                case 'R':
+                case 'r':
+                    return PieceType.Rook;
+                case 'Q':
+                case 'q':
+                    return PieceType.Queen;
+                case 'K':
+                case 'k':
+                    return PieceType.King;
+                default:
+                    return PieceType.Empty;
+            }
+        }
     }
 
     public static class CommonDefinitions

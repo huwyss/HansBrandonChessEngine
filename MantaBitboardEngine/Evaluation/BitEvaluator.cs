@@ -14,13 +14,13 @@ namespace MantaBitboardEngine
         {
             _board = board;
             _helperBits = helperBits;
-            _value = new int[(int)BitPieceType.King + 1];
-            _value[(int)BitPieceType.Pawn] = 100;
-            _value[(int)BitPieceType.Knight] = 300;
-            _value[(int)BitPieceType.Bishop] = 300;
-            _value[(int)BitPieceType.Rook] = 500;
-            _value[(int)BitPieceType.Queen] = 900;
-            _value[(int)BitPieceType.King] = 0; // king has only position bonus
+            _value = new int[(int)PieceType.King + 1];
+            _value[(int)PieceType.Pawn] = 100;
+            _value[(int)PieceType.Knight] = 300;
+            _value[(int)PieceType.Bishop] = 300;
+            _value[(int)PieceType.Rook] = 500;
+            _value[(int)PieceType.Queen] = 900;
+            _value[(int)PieceType.King] = 0; // king has only position bonus
 
             _positionBonus = new int[2, 6, 64]; // pawn, knight, bishop, rook, queen, king 
 
@@ -37,7 +37,7 @@ namespace MantaBitboardEngine
 
             for (int color = (int)ChessColor.White; color <= (int)ChessColor.Black; color++)
             {
-                for (int piece = (int)BitPieceType.Pawn; piece <= (int)BitPieceType.King; piece++)
+                for (int piece = (int)PieceType.Pawn; piece <= (int)PieceType.King; piece++)
                 {
                     var whitePieceBit = _board.Bitboard_Pieces[color, piece];
                     while (whitePieceBit != 0)
@@ -54,7 +54,7 @@ namespace MantaBitboardEngine
                             score -= _value[piece] + _positionBonus[color, piece, square];
                         }
 
-                        if (piece == (int)BitPieceType.Knight)
+                        if (piece == (int)PieceType.Knight)
                         {
                             if (color == (int)ChessColor.White)
                             {
@@ -65,7 +65,7 @@ namespace MantaBitboardEngine
                                 blackKnights++;
                             }
                         }
-                        else if (piece == (int)BitPieceType.Bishop)
+                        else if (piece == (int)PieceType.Bishop)
                         {
                             if (color == (int)ChessColor.White)
                             {
@@ -103,23 +103,23 @@ namespace MantaBitboardEngine
 
             for (var i = 0; i < 64; i++)
             {
-                _positionBonus[(int)ChessColor.White, (int)BitPieceType.Pawn, i] = PawnPositionBonus[col + 8 * row];
-                _positionBonus[(int)ChessColor.Black, (int)BitPieceType.Pawn, i] = PawnPositionBonus[i];
+                _positionBonus[(int)ChessColor.White, (int)PieceType.Pawn, i] = PawnPositionBonus[col + 8 * row];
+                _positionBonus[(int)ChessColor.Black, (int)PieceType.Pawn, i] = PawnPositionBonus[i];
 
-                _positionBonus[(int)ChessColor.White, (int)BitPieceType.Knight, i] = KnightPositionBonus[i];
-                _positionBonus[(int)ChessColor.Black, (int)BitPieceType.Knight, i] = KnightPositionBonus[i];
+                _positionBonus[(int)ChessColor.White, (int)PieceType.Knight, i] = KnightPositionBonus[i];
+                _positionBonus[(int)ChessColor.Black, (int)PieceType.Knight, i] = KnightPositionBonus[i];
 
-                _positionBonus[(int)ChessColor.White, (int)BitPieceType.Bishop, i] = BishopPositionBonus[i];
-                _positionBonus[(int)ChessColor.Black, (int)BitPieceType.Bishop, i] = BishopPositionBonus[i];
+                _positionBonus[(int)ChessColor.White, (int)PieceType.Bishop, i] = BishopPositionBonus[i];
+                _positionBonus[(int)ChessColor.Black, (int)PieceType.Bishop, i] = BishopPositionBonus[i];
 
-                _positionBonus[(int)ChessColor.White, (int)BitPieceType.Rook, i] = RookPositionBonus[col + 8 * row];
-                _positionBonus[(int)ChessColor.Black, (int)BitPieceType.Rook, i] = RookPositionBonus[i];
+                _positionBonus[(int)ChessColor.White, (int)PieceType.Rook, i] = RookPositionBonus[col + 8 * row];
+                _positionBonus[(int)ChessColor.Black, (int)PieceType.Rook, i] = RookPositionBonus[i];
 
-                _positionBonus[(int)ChessColor.White, (int)BitPieceType.Queen, i] = QueenPositionBonus[col + 8 * row];
-                _positionBonus[(int)ChessColor.Black, (int)BitPieceType.Queen, i] = QueenPositionBonus[i];
+                _positionBonus[(int)ChessColor.White, (int)PieceType.Queen, i] = QueenPositionBonus[col + 8 * row];
+                _positionBonus[(int)ChessColor.Black, (int)PieceType.Queen, i] = QueenPositionBonus[i];
 
-                _positionBonus[(int)ChessColor.White, (int)BitPieceType.King, i] = KingPositionBonus[col + 8 * row];
-                _positionBonus[(int)ChessColor.Black, (int)BitPieceType.King, i] = KingPositionBonus[i];
+                _positionBonus[(int)ChessColor.White, (int)PieceType.King, i] = KingPositionBonus[col + 8 * row];
+                _positionBonus[(int)ChessColor.Black, (int)PieceType.King, i] = KingPositionBonus[i];
 
                 col++;
                 if (col >= 8)

@@ -9,32 +9,27 @@ namespace MantaChessEngine
 {
     public class EnPassantCaptureMove : MoveBase
     {
-        public EnPassantCaptureMove(Piece movingPiece, char sourceFile, int sourceRank, char targetFile, int targetRank, Piece capturedPiece)
-            : base(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece)
+        public EnPassantCaptureMove(Piece movingPiece, Square fromSquare, Square toSquare, Piece capturedPiece)
+            : base(movingPiece, fromSquare, toSquare, capturedPiece)
         {
         }
 
-        public EnPassantCaptureMove(Piece movingPiece, int sourceFile, int sourceRank, int targetFile, int targetRank, Piece capturedPiece)
-            : base(movingPiece, sourceFile, sourceRank, targetFile, targetRank, capturedPiece)
-        {
-        }
-
-        public override int CapturedRank // for en passant capture it is different from TargetRank
+        public override Square CapturedSquare // for en passant capture it is different from TargetSquare
         {
             get
             {
                 if (MovingColor == ChessColor.White)
                 {
-                    return TargetRank - 1;
+                    return ToSquare - 8;
                 }
 
-                return TargetRank + 1;
+                return ToSquare + 8;
             }
         }
 
         public override void ExecuteMove(IBoard board)
         {
-            board.SetPiece(null /*Definitions.EmptyField*/, CapturedFile, CapturedRank); // remove captured pawn if it is en passant
+            board.SetPiece(null /*Definitions.EmptyField*/, CapturedSquare); // remove captured pawn if it is en passant
             base.ExecuteMove(board);
         }
 

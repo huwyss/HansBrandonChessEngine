@@ -13,32 +13,32 @@ namespace MantaBitboardEngineTest
     {
         public static BitMove White(int file)
         {
-            return BitMove.CreateMove(BitPieceType.Queen, (Square)file - 1, Square.A1, BitPieceType.Empty, ChessColor.White, 0);
+            return BitMove.CreateMove(PieceType.Queen, (Square)file - 1, Square.A1, PieceType.Empty, ChessColor.White, 0);
         }
 
         public static BitMove White(int file, int rank)
         {
-            return BitMove.CreateMove(BitPieceType.Queen, (Square)file - 1, (Square)rank - 1, BitPieceType.Empty, ChessColor.White, 0);
+            return BitMove.CreateMove(PieceType.Queen, (Square)file - 1, (Square)rank - 1, PieceType.Empty, ChessColor.White, 0);
         }
 
         public static BitMove Black(int file)
         {
-            return BitMove.CreateMove(BitPieceType.Queen, (Square)file - 1, Square.A1, BitPieceType.Empty, ChessColor.Black, 0);
+            return BitMove.CreateMove(PieceType.Queen, (Square)file - 1, Square.A1, PieceType.Empty, ChessColor.Black, 0);
         }
 
         public static BitMove Black(int file, int rank)
         {
-            return BitMove.CreateMove(BitPieceType.Queen, (Square)file - 1, (Square)rank - 1, BitPieceType.Empty, ChessColor.Black, 0);
+            return BitMove.CreateMove(PieceType.Queen, (Square)file - 1, (Square)rank - 1, PieceType.Empty, ChessColor.Black, 0);
         }
 
         public static BitMove WhiteCapture(int file, int rank)
         {
-            return BitMove.CreateCapture(BitPieceType.Queen, (Square)file - 1, (Square)rank - 1, BitPieceType.Pawn, Square.A1, BitPieceType.Empty, ChessColor.White, 0);
+            return BitMove.CreateCapture(PieceType.Queen, (Square)file - 1, (Square)rank - 1, PieceType.Pawn, Square.A1, PieceType.Empty, ChessColor.White, 0);
         }
 
         public static BitMove BlackCapture(int file, int rank)
         {
-            return BitMove.CreateCapture(BitPieceType.Queen, (Square)file - 1, (Square)rank - 1, BitPieceType.Pawn, Square.A1, BitPieceType.Empty, ChessColor.Black, 0);
+            return BitMove.CreateCapture(PieceType.Queen, (Square)file - 1, (Square)rank - 1, PieceType.Pawn, Square.A1, PieceType.Empty, ChessColor.Black, 0);
         }
     }
 }

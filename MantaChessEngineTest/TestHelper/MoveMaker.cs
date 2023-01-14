@@ -1,37 +1,38 @@
 ﻿using MantaChessEngine;
+using MantaCommon;
 
 namespace MantaChessEngineTest
 {
     public class MoveMaker
     {
-        public static IMove White(int file)
+        public static IMove White(int x)
         {
-            return new NormalMove(Piece.MakePiece('Q'), file, 0, 0, 0, null);
+            return White(x, 0);
         }
 
-        public static IMove White(int file, int rank)
+        public static IMove White(int x, int y)
         {
-            return new NormalMove(Piece.MakePiece('Q'), file, rank, 0, 0, null);
+            return new NormalMove(Piece.MakePiece(PieceType.Queen, ChessColor.White), (Square)x, (Square)y, null);
         }
 
-        public static IMove Black(int file)
+        public static IMove Black(int x)
         {
-            return new NormalMove(Piece.MakePiece('q'), file, 0, 0, 0, null);
+            return Black(x, 0);
         }
 
-        public static IMove Black(int file, int rank)
+        public static IMove Black(int x, int y)
         {
-            return new NormalMove(Piece.MakePiece('q'), file, rank, 0, 0, null);
+            return new NormalMove(Piece.MakePiece(PieceType.Queen, ChessColor.Black), (Square)x, (Square)y, null);
         }
 
-        public static IMove WhiteCapture(int file, int rank)
+        public static IMove WhiteCapture(int x, int y)
         {
-            return new NormalMove(Piece.MakePiece('Q'), file, rank, 0, 0, Piece.MakePiece('q'));
+            return new NormalMove(Piece.MakePiece(PieceType.Queen, ChessColor.White), (Square)x, (Square)y, Piece.MakePiece(PieceType.Queen, ChessColor.Black));
         }
 
-        public static IMove BlackCapture(int file, int rank)
+        public static IMove BlackCapture(int x, int y)
         {
-            return new NormalMove(Piece.MakePiece('q'), file, rank, 0, 0, Piece.MakePiece('Q'));
+            return new NormalMove(Piece.MakePiece(PieceType.Queen, ChessColor.Black), (Square)x, (Square)y, Piece.MakePiece(PieceType.Queen, ChessColor.White));
         }
     }
 }

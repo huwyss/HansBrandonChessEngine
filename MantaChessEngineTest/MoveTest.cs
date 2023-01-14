@@ -12,37 +12,48 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void ToString_WhenMove_ThenPrintCorrect()
         {
-            Assert.AreEqual("e2e4.", new NormalMove(Piece.MakePiece('p'), 5, 2, 5, 4, null).ToString());
-            Assert.AreEqual("e4d5p", new NormalMove(Piece.MakePiece('p'),5, 4, 4, 5, Piece.MakePiece('p')).ToString());
+            Assert.AreEqual("e2e4.", new NormalMove(Piece.MakePiece(PieceType.Pawn, ChessColor.Black), Square.E2, Square.E4, null).ToString());
+            Assert.AreEqual("e4d5p", new NormalMove(Piece.MakePiece(PieceType.Pawn, ChessColor.Black), Square.E4, Square.D5, Piece.MakePiece(PieceType.Pawn, ChessColor.Black)).ToString());
         }
 
         [TestMethod]
         public void EqualsTest_WhenComparingTwoEqualMoves_ThenEqualsReturnsTrue()
         {
-            Assert.AreEqual(new NormalMove(Piece.MakePiece('p'), 5, 2, 5, 4, Piece.MakePiece('p')), new NormalMove(Piece.MakePiece('p'), 5, 2, 5, 4, Piece.MakePiece('p')));
+            Assert.AreEqual(new NormalMove(Piece.MakePiece(PieceType.Pawn, ChessColor.Black), Square.E2, Square.E4, Piece.MakePiece(PieceType.Pawn, ChessColor.Black)),
+                            new NormalMove(Piece.MakePiece(PieceType.Pawn, ChessColor.Black), Square.E2, Square.E4, Piece.MakePiece(PieceType.Pawn, ChessColor.Black)));
         }
 
         [TestMethod]
         public void EqualsTest_WhenComparingTwoDifferentMoves_ThenReturnsFalse()
         {
-            Assert.AreNotEqual(new NormalMove(Piece.MakePiece('p'), 'e', 2, 'e', 4, Piece.MakePiece('p')), new NormalMove(Piece.MakePiece('p'), 1, 2, 5, 4, Piece.MakePiece('p')));
-            Assert.AreNotEqual(new NormalMove(Piece.MakePiece('p'), 'e', 2, 'e', 4, Piece.MakePiece('p')), new NormalMove(Piece.MakePiece('p'), 5, 1, 5, 4, Piece.MakePiece('p')));
-            Assert.AreNotEqual(new NormalMove(Piece.MakePiece('p'), 'e', 2, 'e', 4, Piece.MakePiece('p')), new NormalMove(Piece.MakePiece('p'), 5, 2, 1, 4, Piece.MakePiece('p')));
-            Assert.AreNotEqual(new NormalMove(Piece.MakePiece('p'), 'e', 2, 'e', 4, Piece.MakePiece('p')), new NormalMove(Piece.MakePiece('p'), 5, 2, 5, 1, Piece.MakePiece('p')));
-            Assert.AreNotEqual(new NormalMove(Piece.MakePiece('p'), 'e', 2, 'e', 4, Piece.MakePiece('p')), new NormalMove(Piece.MakePiece('p'), 5, 2, 5, 4, Piece.MakePiece('r')));
-            Assert.AreNotEqual(new NormalMove(Piece.MakePiece('p'), 'e', 2, 'e', 4, Piece.MakePiece('p')), new NormalMove(Piece.MakePiece('q'), 5, 2, 5, 4, Piece.MakePiece('p')));
+            Assert.AreNotEqual(
+                new NormalMove(Piece.MakePiece(PieceType.Pawn, ChessColor.Black), Square.E2, Square.E4, Piece.MakePiece(PieceType.Pawn, ChessColor.Black)),
+                new NormalMove(Piece.MakePiece(PieceType.Pawn, ChessColor.Black), Square.A2, Square.E4, Piece.MakePiece(PieceType.Pawn, ChessColor.Black)));
+            Assert.AreNotEqual(
+                new NormalMove(Piece.MakePiece(PieceType.Pawn, ChessColor.Black), Square.E2, Square.E4, Piece.MakePiece(PieceType.Pawn, ChessColor.Black)),
+                new NormalMove(Piece.MakePiece(PieceType.Pawn, ChessColor.Black), Square.E1, Square.E4, Piece.MakePiece(PieceType.Pawn, ChessColor.Black)));
+            Assert.AreNotEqual(
+                new NormalMove(Piece.MakePiece(PieceType.Pawn, ChessColor.Black), Square.E2, Square.E4, Piece.MakePiece(PieceType.Pawn, ChessColor.Black)),
+                new NormalMove(Piece.MakePiece(PieceType.Pawn, ChessColor.Black), Square.E2, Square.A4, Piece.MakePiece(PieceType.Pawn, ChessColor.Black)));
+            Assert.AreNotEqual(
+                new NormalMove(Piece.MakePiece(PieceType.Pawn, ChessColor.Black), Square.E2, Square.E4, Piece.MakePiece(PieceType.Pawn, ChessColor.Black)),
+                new NormalMove(Piece.MakePiece(PieceType.Pawn, ChessColor.Black), Square.E2, Square.E1, Piece.MakePiece(PieceType.Pawn, ChessColor.Black)));
+            Assert.AreNotEqual(
+                new NormalMove(Piece.MakePiece(PieceType.Pawn, ChessColor.Black), Square.E2, Square.E4, Piece.MakePiece(PieceType.Pawn, ChessColor.Black)),
+                new NormalMove(Piece.MakePiece(PieceType.Pawn, ChessColor.Black), Square.E2, Square.E4, Piece.MakePiece(PieceType.Rook, ChessColor.Black)));
+            Assert.AreNotEqual(
+                new NormalMove(Piece.MakePiece(PieceType.Pawn, ChessColor.Black), Square.E2, Square.E4, Piece.MakePiece(PieceType.Pawn, ChessColor.Black)),
+                new NormalMove(Piece.MakePiece(PieceType.Queen, ChessColor.Black), Square.E2, Square.E4, Piece.MakePiece(PieceType.Pawn, ChessColor.Black)));
         }
 
         [TestMethod]
         public void ConstructorTest_WhenStringParameter_ThenCorrectObject()
         {
-            IMove move = new NormalMove(Piece.MakePiece('q'), 5, 2, 4, 3, Piece.MakePiece('p'));
-            Assert.AreEqual(Piece.MakePiece('q'), move.MovingPiece);
-            Assert.AreEqual('e'-'a' + 1, move.SourceFile);
-            Assert.AreEqual(2, move.SourceRank);
-            Assert.AreEqual('d'-'a' + 1, move.TargetFile);
-            Assert.AreEqual(3, move.TargetRank);
-            Assert.AreEqual(Piece.MakePiece('p'), move.CapturedPiece);
+            IMove move = new NormalMove(Piece.MakePiece(PieceType.Queen, ChessColor.Black), Square.E2, Square.D3, Piece.MakePiece(PieceType.Pawn, ChessColor.Black));
+            Assert.AreEqual(Piece.MakePiece(PieceType.Queen, ChessColor.Black), move.MovingPiece);
+            Assert.AreEqual(Square.E2, move.FromSquare);
+            Assert.AreEqual(Square.D3, move.ToSquare);
+            Assert.AreEqual(Piece.MakePiece(PieceType.Pawn, ChessColor.Black), move.CapturedPiece);
         }
 
         [TestMethod]
@@ -57,7 +68,7 @@ namespace MantaChessEngineTest
         public void EqualsTest_WhenNormalMoveAndNoLegalMove_ThenNotEqual()
         {
             IMove noLegalMove = new NoLegalMove();
-            IMove normalMove = new NormalMove(Piece.MakePiece('p'), 1, 1, 1, 1, null);
+            IMove normalMove = new NormalMove(Piece.MakePiece(PieceType.Pawn, ChessColor.Black), Square.A1, Square.A1, null);
             Assert.AreNotEqual(noLegalMove, normalMove);
             
             // the other way round
@@ -94,30 +105,11 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void MoveTest_WhenEnPassant_ThenCheckEnPassantCorrect()
         {
-            IMove move = new EnPassantCaptureMove(Piece.MakePiece('p'), 1, 2, 2, 3, Piece.MakePiece('p'));
-            IMove move2 = new NormalMove(Piece.MakePiece('p'), 1, 2, 2, 3, Piece.MakePiece('p'));
+            IMove move = new EnPassantCaptureMove(Piece.MakePiece(PieceType.Pawn, ChessColor.Black), Square.A2, Square.B3, Piece.MakePiece(PieceType.Pawn, ChessColor.Black));
+            IMove move2 = new NormalMove(Piece.MakePiece(PieceType.Pawn, ChessColor.Black), Square.A2, Square.B3, Piece.MakePiece(PieceType.Pawn, ChessColor.Black));
             // Assert.AreEqual("a2b3pe", move.ToString());
             Assert.AreNotEqual(move2, move);
             //Assert.AreEqual(new Move("a2b3pe"), move);
-        }
-
-        [TestMethod]
-        public void MoveTest_WhenNormalMove_ThenEqualsCorrect()
-        {
-            // equal
-            IMove move = new NormalMove(Piece.MakePiece('p'), 'a', 2, 'b', 3, Piece.MakePiece('q'));
-            IMove move2 = new NormalMove(Piece.MakePiece('p'), 1,  2,  2,  3, Piece.MakePiece('q'));
-            Assert.AreEqual(move2, move);
-
-            // not equal different MovingPiece
-            move = new NormalMove(Piece.MakePiece('q'), 'a', 2, 'b', 3, Piece.MakePiece('q'));
-            move2 = new NormalMove(Piece.MakePiece('p'), 1,  2,  2,  3, Piece.MakePiece('q'));
-            Assert.AreNotEqual(move2, move);
-
-            // equal
-            move = new NormalMove(Piece.MakePiece('p'), 'a', 2, 'a', 3, null);
-            move2 = new NormalMove(Piece.MakePiece('p'), 1,  2,  1,  3, null);
-            Assert.AreEqual(move, move2);
         }
     }
 }

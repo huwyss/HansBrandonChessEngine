@@ -65,7 +65,10 @@ namespace MantaChessEngine
             {
                 for (int file0 = 0; file0 < 8; file0++)
                 {
-                    _board[8*rank0 + file0] = Piece.MakePiece(position[8*(7 - rank0) + file0]);
+                    var pieceSymbol = position[8 * (7 - rank0) + file0];
+                    var pieceType = CommonHelper.GetPieceType(pieceSymbol);
+                    var color = Helper.GetPieceColor(pieceSymbol);
+                    _board[8*rank0 + file0] = Piece.MakePiece(pieceType, color);
                 }
             }
         }
@@ -83,10 +86,12 @@ namespace MantaChessEngine
             }
 
             SetPosition(positionInfo.PositionString);
+            var enpassantSquare = positionInfo.EnPassantFile != '\0'
+                ? (Square)(positionInfo.EnPassantFile - '0' - 1 + 8 * positionInfo.EnPassantRank)
+                : Square.NoSquare;
             BoardState.Add(
                 null,
-                positionInfo.EnPassantFile - '0',
-                positionInfo.EnPassantRank,
+                enpassantSquare,
                 positionInfo.CastlingRightWhiteQueenSide,
                 positionInfo.CastlingRightWhiteKingSide,
                 positionInfo.CastlingRightBlackQueenSide,
@@ -113,9 +118,9 @@ namespace MantaChessEngine
         /// <param name="file">1 to 8</param>
         /// <param name="rank">1 to 8</param>
         /// <returns></returns>
-        public Piece GetPiece(int file, int rank)
+        public Piece GetPiece(Square square)
         {
-            return _board[8*(rank - 1) + file - 1];
+            return _board[(int)square];
         }
 
         /// <summary>
@@ -124,9 +129,9 @@ namespace MantaChessEngine
         /// <param name="piece">chess piece: p-pawn, k-king, q-queen, r-rook, n-knight, b-bishop, r-rook, ' '-empty. small=black, capital=white</param>
         /// <param name="file">1 to 8</param>
         /// <param name="rank">1 to 8</param>
-        public void SetPiece(Piece piece, int file, int rank)
+        public void SetPiece(Piece piece, Square square)
         {
-            _board[8*(rank - 1) + file - 1] = piece;
+            _board[(int)square] = piece;
         }
 
         /// <summary>
@@ -142,9 +147,9 @@ namespace MantaChessEngine
             nextMove.ExecuteMove(this);
         }
 
-        public ChessColor GetColor(int file, int rank)
+        public ChessColor GetColor(Square square)
         {
-            Piece piece = GetPiece(file, rank);
+            Piece piece = GetPiece(square);
             return piece != null ? piece.Color : ChessColor.Empty;
         }
 
@@ -153,14 +158,20 @@ namespace MantaChessEngine
             get
             {
                 string boardString = "";
+                var row = 7;
+                var col = 0;
 
-                for (int rank = 8; rank >= 1; rank--)
+                for (int i = 0; i < 64; i++)
                 {
-                    for (int file = 1; file <= 8; file++)
-                    {
-                        Piece piece = GetPiece(file, rank);
+                    var square = (Square)(col + 8 * row);
+                    var piece = GetPiece(square);
 
-                        boardString += piece!=null ? piece.Symbol : CommonDefinitions.EmptyField;
+                    boardString += piece!=null ? piece.Symbol : CommonDefinitions.EmptyField;
+                    col++;
+                    if (col >= 8)
+                    {
+                        row--;
+                        col = 0;
                     }
                 }
 
@@ -173,26 +184,41 @@ namespace MantaChessEngine
             get
             {
                 string boardString = "";
+                var row = 7;
+                var col = 0;
 
                 boardString += "    a  b  c  d  e  f  g  h\n";
                 boardString += "  +------------------------+\n";
 
-                for (int rank = 8; rank >= 1; rank--)
+                for (int i = 0; i < 64; i++)
                 {
-                    boardString += rank + " |";
-                    for (int file = 1; file <= 8; file++)
+                    if (col == 0)
                     {
-                        Piece piece = GetPiece(file, rank);
-                        boardString += " ";
-                        boardString += piece != null ? piece.Symbol : CommonDefinitions.EmptyField;
-                        boardString += " ";
+                        boardString += (row + 1) + " |";
                     }
 
-                    boardString += "| "+ rank + "\n";
+                    var square = (Square)(col + 8 * row);
+                    var piece = GetPiece(square);
+                    
+                    boardString += " ";
+                    boardString += piece != null ? piece.Symbol : CommonDefinitions.EmptyField;
+                    boardString += " ";
 
-                    if (rank != 1)
+
+                    if (col == 7)
                     {
-                        boardString += "  |                        |\n";
+                        boardString += "| " + (row + 1) + "\n";
+                    }
+
+                    col++;
+                    if (col >= 8)
+                    {
+                        row--;
+                        col = 0;
+                        if (row >= 0)
+                        {
+                            boardString += "  |                        |\n";
+                        }
                     }
                 }
 
@@ -212,27 +238,18 @@ namespace MantaChessEngine
             }
         }
 
-        public Position GetKing(ChessColor color)
+        public Square GetKing(ChessColor color)
         {
-            for (int rank = 1; rank <= 8; rank++)
+            for (int i = 0; i < 64; i++)
             {
-                for (int file = 1; file <= 8; file++)
+                var king = GetPiece((Square)i) as King;
+                if (king != null && king.Color == color)
                 {
-                    var king = GetPiece(file, rank) as King;
-                    if (king != null && king.Color == color)
-                    {
-                        return new Position { Rank = rank, File = file };
-                    }
+                    return (Square)i;
                 }
             }
 
-            return null;
+            return Square.NoSquare;
         }
     }
-
-    public class Position
-    {
-        public int Rank { get; set; }
-        public int File { get; set; }
-    }           
 }

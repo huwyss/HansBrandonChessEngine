@@ -12,7 +12,7 @@ namespace MantaCommon
 		public Bitboard HashLock { get; set; }
 		public Square From { get; set; }
 		public Square To { get; set; }
-		public BitPieceType PromotionPiece { get; set; }
+		public PieceType PromotionPiece { get; set; }
 		public int Level { get; set; }
 		public int Score { get; set; }
 		public HashEntryType HashEntryType { get; set; }
@@ -26,8 +26,8 @@ namespace MantaCommon
 	public interface IHashtable
 	{
 		Bitboard CurrentKey { get; }
-		void AddKey(ChessColor color, BitPieceType piece, Square square);
-		void AddHash(ChessColor color, int level, int score, HashEntryType type, Square from, Square to, BitPieceType promotionPiece);
+		void AddKey(ChessColor color, PieceType piece, Square square);
+		void AddHash(ChessColor color, int level, int score, HashEntryType type, Square from, Square to, PieceType promotionPiece);
 		HashEntry LookupPvMove(ChessColor color);
 	}
 }

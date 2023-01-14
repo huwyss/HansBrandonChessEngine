@@ -7,12 +7,12 @@ namespace MantaBitboardEngine
     {
         // capture constructor
         private BitMove(
-            BitPieceType movingPiece,
+            PieceType movingPiece,
             Square fromSquare,
             Square toSquare,
-            BitPieceType capturedPiece,
+            PieceType capturedPiece,
             Square capturedSquare,
-            BitPieceType promotionPiece,
+            PieceType promotionPiece,
             CastlingType castling,
             ChessColor movingColor,
             byte value)
@@ -29,12 +29,12 @@ namespace MantaBitboardEngine
         }
 
         public static BitMove CreateCapture(
-            BitPieceType movingPiece,
+            PieceType movingPiece,
             Square fromSquare,
             Square toSquare,
-            BitPieceType capturedPiece,
+            PieceType capturedPiece,
             Square capturedSquare,
-            BitPieceType promotionPiece,
+            PieceType promotionPiece,
             ChessColor movingColor,
             byte value)
         {
@@ -43,19 +43,19 @@ namespace MantaBitboardEngine
 
         // move constructor
         public static BitMove CreateMove(
-            BitPieceType movingPiece,
+            PieceType movingPiece,
             Square fromSquare,
             Square toSquare,
-            BitPieceType promotionPiece,
+            PieceType promotionPiece,
             ChessColor movingColor,
             byte value)
         {
-            return new BitMove(movingPiece, fromSquare, toSquare, BitPieceType.Empty, Square.NoSquare, promotionPiece, CastlingType.None, movingColor, value);
+            return new BitMove(movingPiece, fromSquare, toSquare, PieceType.Empty, Square.NoSquare, promotionPiece, CastlingType.None, movingColor, value);
         }
 
         public static BitMove CreateEmptyMove()
         {
-            return CreateMove(BitPieceType.Empty, Square.NoSquare, Square.NoSquare, BitPieceType.Empty, ChessColor.Empty, 255);
+            return CreateMove(PieceType.Empty, Square.NoSquare, Square.NoSquare, PieceType.Empty, ChessColor.Empty, 255);
         }
 
         // castling constructor
@@ -68,32 +68,32 @@ namespace MantaBitboardEngine
             {
                 if (castling == CastlingType.KingSide)
                 {
-                    return new BitMove(BitPieceType.King, Square.E1, Square.G1, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, castling, movingColor, value);
+                    return new BitMove(PieceType.King, Square.E1, Square.G1, PieceType.Empty, Square.NoSquare, PieceType.Empty, castling, movingColor, value);
                 }
                 else
                 {
-                    return new BitMove(BitPieceType.King, Square.E1, Square.C1, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, castling, movingColor, value);
+                    return new BitMove(PieceType.King, Square.E1, Square.C1, PieceType.Empty, Square.NoSquare, PieceType.Empty, castling, movingColor, value);
                 }
             }
             else
             {
                 if (castling == CastlingType.KingSide)
                 {
-                    return new BitMove(BitPieceType.King, Square.E8, Square.G8, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, castling, movingColor, value);
+                    return new BitMove(PieceType.King, Square.E8, Square.G8, PieceType.Empty, Square.NoSquare, PieceType.Empty, castling, movingColor, value);
                 }
                 else
                 {
-                    return new BitMove(BitPieceType.King, Square.E8, Square.C8, BitPieceType.Empty, Square.NoSquare, BitPieceType.Empty, castling, movingColor, value);
+                    return new BitMove(PieceType.King, Square.E8, Square.C8, PieceType.Empty, Square.NoSquare, PieceType.Empty, castling, movingColor, value);
                 }
             }
         }
 
-        public BitPieceType MovingPiece { get; }
+        public PieceType MovingPiece { get; }
         public Square FromSquare { get; }
         public Square ToSquare { get; }
-        public BitPieceType CapturedPiece { get; }
+        public PieceType CapturedPiece { get; }
         public Square CapturedSquare { get; }
-        public BitPieceType PromotionPiece { get; }
+        public PieceType PromotionPiece { get; }
         public CastlingType Castling { get; }
         public ChessColor MovingColor { get; }
         public byte Value { get; }
@@ -125,7 +125,7 @@ namespace MantaBitboardEngine
 
         public bool IsCapture()
         {
-            return CapturedPiece != BitPieceType.Empty;
+            return CapturedPiece != PieceType.Empty;
         }
     }
 
@@ -133,25 +133,25 @@ namespace MantaBitboardEngine
     {
         public static bool IsCaptureMove(this BitMove move)
         {
-            return move.CapturedPiece != BitPieceType.Empty;
+            return move.CapturedPiece != PieceType.Empty;
         }
 
         public static bool IsPromotionMove(this BitMove move)
         {
-            return move.PromotionPiece != BitPieceType.Empty; 
+            return move.PromotionPiece != PieceType.Empty; 
         }
 
         public static bool IsEnpassantCapture(this BitMove move)
         {
-            return move.MovingPiece == BitPieceType.Pawn &&
-                move.CapturedPiece != BitPieceType.Empty &&
+            return move.MovingPiece == PieceType.Pawn &&
+                move.CapturedPiece != PieceType.Empty &&
                 move.CapturedSquare != move.ToSquare;
         }
 
         public static string ToPrintString(this BitMove move)
         {
             var builder = new StringBuilder();
-            builder.Append(move.MovingPiece != BitPieceType.Pawn ? BitHelper.GetSymbol(move.MovingColor, move.MovingPiece).ToString() : "");
+            builder.Append(move.MovingPiece != PieceType.Pawn ? BitHelper.GetSymbol(move.MovingColor, move.MovingPiece).ToString() : "");
             builder.Append(move.FromSquare);
             builder.Append(move.IsCaptureMove() ? "x" : "-");
             builder.Append(move.ToSquare);

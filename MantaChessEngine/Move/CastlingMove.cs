@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MantaCommon;
 
 namespace MantaChessEngine
 {
@@ -18,44 +19,34 @@ namespace MantaChessEngine
     {
         private CastlingType _castlingType;
 
-        int _rookOriginalFile = 0;
-        int _rookOriginalRank = 0;
-        int _rookCastledFile = 0;
-        int _rookCastledRank = 0;
+        Square _rookOriginal = Square.NoSquare;
+        Square _rookCastled = Square.NoSquare;
 
         public CastlingMove(CastlingType castlingType, Piece king)
-            : base(null, 0, 0, 0, 0, null)
+            : base(null, Square.NoSquare, Square.NoSquare, null)
         {
             _castlingType = castlingType;
             switch (castlingType)
             {
                 case CastlingType.WhiteKingSide:
                     MovingPiece = king;
-                    SourceFile = Helper.FileCharToFile('e');
-                    SourceRank = 1;
-                    TargetFile = Helper.FileCharToFile('g');
-                    TargetRank = 1;
+                    FromSquare = Square.E1;
+                    ToSquare = Square.G1;
                     break;
                 case CastlingType.WhiteQueenSide:
                     MovingPiece = king;
-                    SourceFile = Helper.FileCharToFile('e');
-                    SourceRank = 1;
-                    TargetFile = Helper.FileCharToFile('c');
-                    TargetRank = 1;
+                    FromSquare = Square.E1;
+                    ToSquare = Square.C1;
                     break;
                 case CastlingType.BlackKingSide:
                     MovingPiece = king;
-                    SourceFile = Helper.FileCharToFile('e');
-                    SourceRank = 8;
-                    TargetFile = Helper.FileCharToFile('g');
-                    TargetRank = 8;
+                    FromSquare = Square.E8;
+                    ToSquare = Square.G8;
                     break;
                 case CastlingType.BlackQueenSide:
                     MovingPiece = king;
-                    SourceFile = Helper.FileCharToFile('e');
-                    SourceRank = 8;
-                    TargetFile = Helper.FileCharToFile('c');
-                    TargetRank = 8;
+                    FromSquare = Square.E8;
+                    ToSquare = Square.C8;
                     break;
             }
         }
@@ -82,9 +73,9 @@ namespace MantaChessEngine
                     break;
             }
 
-            var rookPiece = board.GetPiece(_rookOriginalFile, _rookOriginalRank);
-            board.SetPiece(rookPiece, _rookCastledFile, _rookCastledRank); // move rook next to king
-            board.SetPiece(null, _rookOriginalFile, _rookOriginalRank); // remove old rook
+            var rookPiece = board.GetPiece(_rookOriginal);
+            board.SetPiece(rookPiece, _rookCastled); // move rook next to king
+            board.SetPiece(null, _rookOriginal); // remove old rook
 
             base.ExecuteMove(board);
         }
@@ -111,43 +102,35 @@ namespace MantaChessEngine
                     break;
             }
 
-            var rookPiece = board.GetPiece(_rookCastledFile, _rookCastledRank);
-            board.SetPiece(rookPiece, _rookOriginalFile, _rookOriginalRank); // move rook next to king
-            board.SetPiece(null, _rookCastledFile, _rookCastledRank); // remove old rook
+            var rookPiece = board.GetPiece(_rookCastled);
+            board.SetPiece(rookPiece, _rookOriginal); // move rook next to king
+            board.SetPiece(null, _rookCastled); // remove old rook
 
             base.UndoMove(board);
         }
 
         private void SetWhiteKingSideRook()
         {
-            _rookOriginalFile = Helper.FileCharToFile('h');
-            _rookOriginalRank = 1;
-            _rookCastledFile = Helper.FileCharToFile('f');
-            _rookCastledRank = 1;
+            _rookOriginal = Square.H1;
+            _rookCastled = Square.F1;
         }
 
         private void SetWhiteQueenSideRook()
         {
-            _rookOriginalFile = Helper.FileCharToFile('a');
-            _rookOriginalRank = 1;
-            _rookCastledFile = Helper.FileCharToFile('d');
-            _rookCastledRank = 1;
+            _rookOriginal = Square.A1;
+            _rookCastled = Square.D1;
         }
 
         private void SetBlackKingSideRook()
         {
-            _rookOriginalFile = Helper.FileCharToFile('h');
-            _rookOriginalRank = 8;
-            _rookCastledFile = Helper.FileCharToFile('f');
-            _rookCastledRank = 8;
+            _rookOriginal = Square.H8;
+            _rookCastled = Square.F8;
         }
 
         private void SetBlackQueenSideRook()
         {
-            _rookOriginalFile = Helper.FileCharToFile('a');
-            _rookOriginalRank = 8;
-            _rookCastledFile = Helper.FileCharToFile('d');
-            _rookCastledRank = 8;
+            _rookOriginal = Square.A8;
+            _rookCastled = Square.D8;
         }
 
         public override bool Equals(System.Object obj)

@@ -4,15 +4,12 @@ namespace MantaChessEngine
 {
     public interface IMove : IGenericMove
     {
-        Piece CapturedPiece { get; }
-        int CapturedFile { get; }
-        int CapturedRank { get; }
-        ////ChessColor MovingColor { get; }
         Piece MovingPiece { get; }
-        int SourceFile { get; }
-        int SourceRank { get; }
-        int TargetFile { get; }
-        int TargetRank { get; }
+        Square FromSquare { get; }
+        Square ToSquare { get; }
+        Piece CapturedPiece { get; }
+        Square CapturedSquare { get; }
+        
         int GetMoveImportance();
         string ToPrintString();
         string ToUciString();

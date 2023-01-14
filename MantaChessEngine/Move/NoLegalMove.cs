@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using MantaCommon;
 namespace MantaChessEngine
 {
     public class NoLegalMove : MoveBase
     {
-        public NoLegalMove() : base(null, 'a', 1, 'a', 1, null)
+        public NoLegalMove() : base(null, Square.NoSquare, Square.NoSquare, null)
         { }
 
         public override bool Equals(System.Object obj)

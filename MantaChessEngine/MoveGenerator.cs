@@ -12,7 +12,7 @@ namespace MantaChessEngine
     {
         public IEnumerable<IMove> GetAllCaptures(ChessColor color)
         {
-            throw new System.NotImplementedException();
+            return Enumerable.Empty<IMove>();
         }
 
         private readonly IBoard _board;

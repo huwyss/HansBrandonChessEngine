@@ -15,6 +15,8 @@ namespace MantaChessEngine
             Color = color;
         }
 
+        public abstract PieceType PieceType { get; }
+
         public abstract char Symbol { get; }
 
         public char UniversalSymbol => Symbol.ToString().ToUpper()[0];

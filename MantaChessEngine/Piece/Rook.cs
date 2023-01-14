@@ -21,6 +21,7 @@ namespace MantaChessEngine
             }
         }
 
+        public override PieceType PieceType => PieceType.Rook;
         public override IEnumerable<string> GetMoveDirectionSequences()
         {
             return new List<string>() { "u", "r", "d", "l" }; // up, right, down, left

@@ -10,7 +10,6 @@ namespace MantaChessEngine
         Piece CapturedPiece { get; }
         Square CapturedSquare { get; }
         
-        int GetMoveImportance();
         string ToPrintString();
         string ToUciString();
         void ExecuteMove(IBoard board);

@@ -55,8 +55,6 @@
     <Compile Include="BoardState.cs" />
     <Compile Include="Interfaces\IMoveFilter.cs" />
     <Compile Include="Interfaces\IMoveOrder.cs" />
-    <Compile Include="MoveOrder\FilterCapturesOnly.cs" />
-    <Compile Include="MoveOrder\OrderPvAndImportance.cs" />
     <Compile Include="Move\CastlingMove.cs" />
     <Compile Include="Move\EnPassantCaptureMove.cs" />
     <Compile Include="Interfaces\IMove.cs" />
@@ -79,7 +77,6 @@
     <Compile Include="Search\MoveRating.cs" />
     <Compile Include="Search\MoveRatingConverter.cs" />
     <Compile Include="Search\MoveRatingFactory.cs" />
-    <Compile Include="Search\SearchAlphaBeta.cs" />
     <Compile Include="Search\SearchMinimax.cs" />
     <Compile Include="Search\SearchRandom.cs" />
   </ItemGroup>

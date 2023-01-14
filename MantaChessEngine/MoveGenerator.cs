@@ -10,6 +10,8 @@ namespace MantaChessEngine
 {
     public class MoveGenerator : IMoveGenerator<IMove>
     {
+        IMoveValues _values;
+
         public IEnumerable<IMove> GetAllCaptures(ChessColor color)
         {
             return Enumerable.Empty<IMove>();
@@ -20,34 +22,12 @@ namespace MantaChessEngine
         public MoveGenerator(IBoard board)
         {
             _board = board;
-        }
-
-        /// <summary>
-        /// Manta has grown up and now is able to return the legal moves only
-        /// </summary>
-        public IEnumerable<IMove> GetLegalMoves(ChessColor color)
-        {
-            var pseudolegalMoves = GetAllMoves(color);
-            var legalMoves = new List<IMove>();
-
-            foreach (var move in pseudolegalMoves)
-            {
-                _board.Move(move);
-                var kingPosition = _board.GetKing(color);
-                if (!IsAttacked(color, kingPosition))
-                {
-                    legalMoves.Add(move);
-                }
-
-                _board.Back();
-            }
-
-            return legalMoves;
+            _values = new MoveValues();
         }
 
         public IEnumerable<IMove> GetAllMoves(ChessColor color)
         {
-            return GetAllMoves(color, true, true);
+            return GetAllMoves(color, true, true).OrderByDescending(m => m.GetMoveValue(_values));
         }
 
         /// <summary>
@@ -70,7 +50,7 @@ namespace MantaChessEngine
                 if (_board.GetColor(square) == color)
                 {
                     Piece piece = _board.GetPiece(square);
-                        
+
                     if (piece is King)
                     {
                         kingFound = true;
@@ -207,7 +187,35 @@ namespace MantaChessEngine
 
             return false;
         }
+    }
 
-        
+    public static class MoveValueExtension
+    {
+        public static int GetMoveValue(this IMove move, IMoveValues val)
+        {
+            int importance;
+            if (move.CapturedPiece != null && move.PromotionPiece != PieceType.Empty)
+            {
+                importance = val.CapturePromotionValue;
+            }
+            else if (move.PromotionPiece != PieceType.Empty)
+            {
+                importance = val.PromotionValue;
+            }
+            else if (move.CapturedPiece != null)
+            {
+                importance = val.CaptureValues[(int)move.CapturedPiece.PieceType, (int)move.MovingPiece.PieceType];
+            }
+            else if (move.MovingPiece is Pawn)
+            {
+                importance = val.PawnMoveValue;
+            }
+            else
+            {
+                importance = val.GeneralMoveValue;
+            }
+
+            return importance;
+        }
     }
 }

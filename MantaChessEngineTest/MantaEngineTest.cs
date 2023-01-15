@@ -2,6 +2,7 @@
 using MantaChessEngine;
 using MantaCommon;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace MantaChessEngineTest
 {
@@ -129,7 +130,7 @@ namespace MantaChessEngineTest
         {
             var engine = new MantaEngine(EngineType.MinimaxPosition, 256);
             engine.SetMaxSearchDepth(depth);
-            engine.SetBoard(new Board());
+            engine.SetBoard(new Board(new Mock<IHashtable>().Object));
             string boardString = "........" +
                                  "........" +
                                  "........" +

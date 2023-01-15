@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using MantaCommon;
 
 namespace MantaChessEngine
@@ -32,11 +34,11 @@ namespace MantaChessEngine
 
         public MantaEngine(EngineType engineType, int hashSize)
         {
-            _board = new Board();
+            _hashtable = new Hashtable(hashSize);
+            _board = new Board(_hashtable);
             _moveFactory = new MoveFactory(_board);
             _moveGenerator = new MoveGenerator(_board);
             _moveRatingFactory = new MoveRatingFactory(_moveGenerator);
-            _hashtable = new Hashtable(hashSize);
 
             switch (engineType)
             {
@@ -276,7 +278,52 @@ namespace MantaChessEngine
 
         public string GetPvMovesFromHashtable(ChessColor color)
         {
-            return "";
+            var emptyMove = new NoLegalMove();
+            var currentColor = color;
+            HashEntry movePVHash;
+            IMove currentPvMove = emptyMove;
+            string pvMoves = "";
+            var numberPly = 0;
+            var encounteredPositions = new List<UInt64>();
+
+            do
+            {
+                movePVHash = _hashtable.LookupPvMove(currentColor);
+                if (movePVHash != null)
+                {
+                    currentPvMove = _moveFactory.MakeMove(movePVHash.From, movePVHash.To, movePVHash.PromotionPiece);
+                    var allMoves = _moveGenerator.GetAllMoves(currentColor);
+
+                    if (allMoves.Contains(currentPvMove))
+                    {
+                        _board.Move(currentPvMove);
+                        var currentPosition = _hashtable.CurrentKey;
+
+                        if (_moveGenerator.IsCheck(currentColor) ||
+                            encounteredPositions.Contains(currentPosition)) // we have already been at this position so the moves are cyclic.
+                        {
+                            _board.Back();
+                            break;
+                        }
+
+                        encounteredPositions.Add(currentPosition);
+                        pvMoves += currentPvMove.ToUciString() + " ";
+                        numberPly++;
+                        currentColor = CommonHelper.OtherColor(currentColor);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            } while (movePVHash != null && currentPvMove != emptyMove);
+
+            for (var i = 0; i < numberPly; i++)
+            {
+                _board.Back();
+            }
+
+            return pvMoves;
         }
     }
 }

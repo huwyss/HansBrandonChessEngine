@@ -14,7 +14,8 @@ namespace MantaChessEngine
 
         public IEnumerable<IMove> GetAllCaptures(ChessColor color)
         {
-            return Enumerable.Empty<IMove>();
+            var moves = GetAllMoves(color);
+            return moves.Where(m => m.CapturedPiece != null);
         }
 
         private readonly IBoard _board;

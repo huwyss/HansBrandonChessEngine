@@ -6,6 +6,7 @@ namespace MantaChessEngine
 {
     public class Board : IBoard
     {
+        private readonly IHashtable _hashtable;
         private readonly FenParser _fenParser;
         private IMove _undoneMove = null;
 
@@ -25,8 +26,9 @@ namespace MantaChessEngine
         /// <summary>
         /// Constructor. Board is empty.
         /// </summary>
-        public Board()
+        public Board(IHashtable hashtable)
         {
+            _hashtable = hashtable;
             _board = new Piece[64];
 
             for (int i = 0; i < 64; i++)
@@ -131,7 +133,27 @@ namespace MantaChessEngine
         /// <param name="rank">1 to 8</param>
         public void SetPiece(Piece piece, Square square)
         {
+            if (piece == null)
+            {
+                throw new MantaEngineException($"SetPiece called with null is not allowed! on square: {square}");
+            }
+
             _board[(int)square] = piece;
+
+            _hashtable.AddKey(piece.Color, piece.PieceType, square);
+        }
+
+        public void RemovePiece(Square square)
+        {
+            var deletedPiece = GetPiece(square);
+            if (deletedPiece == null)
+            {
+                throw new MantaEngineException($"RemovePiece called but the square is already empty! square: {square}");
+            }
+
+            _board[(int)square] = null;
+
+            _hashtable.AddKey(deletedPiece.Color, deletedPiece.PieceType, square);
         }
 
         /// <summary>

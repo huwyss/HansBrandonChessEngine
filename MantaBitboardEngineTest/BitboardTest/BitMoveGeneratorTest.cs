@@ -588,7 +588,7 @@ namespace MantaBitboardEngineTest
         [TestMethod, Ignore]
         public void IsMoveValidTest_WhenValidMoveWhite_ThenTrue()
         {
-            Board board = new Board();
+            var board = new Board(new Mock<IHashtable>().Object);
             MoveGenerator target = new MoveGenerator(board);
             string position = ".......k" +
                               "........" +
@@ -607,7 +607,7 @@ namespace MantaBitboardEngineTest
         [TestMethod, Ignore]
         public void IsMoveValidTest_WhenInvalidMoveWhite_ThenFalse()
         {
-            Board board = new Board();
+            var board = new Board(new Mock<IHashtable>().Object);
             MoveGenerator target = new MoveGenerator(board);
             string position = ".......k" +
                               "........" +
@@ -626,7 +626,7 @@ namespace MantaBitboardEngineTest
         [TestMethod, Ignore]
         public void IsMoveValidTest_WhenValidMoveBlack_ThenTrue()
         {
-            Board board = new Board();
+            var board = new Board(new Mock<IHashtable>().Object);
             MoveGenerator target = new MoveGenerator(board);
             string position = ".......k" +
                               "..p....." +
@@ -649,7 +649,7 @@ namespace MantaBitboardEngineTest
         [TestMethod, Ignore]
         public void IsMoveValidTest_WhenWrongSideMoves_ThenFalse()
         {
-            Board board = new Board();
+            var board = new Board(new Mock<IHashtable>().Object);
             MoveGenerator target = new MoveGenerator(board);
             board.SetInitialPosition();
 
@@ -664,7 +664,7 @@ namespace MantaBitboardEngineTest
         [TestMethod, Ignore]
         public void GetCorrectMoveTest_Whene2e4_ThenAddDot()
         {
-            var board = new Board();
+            var board = new Board(new Mock<IHashtable>().Object);
             var factory = new MoveFactory(board);
             MoveGenerator target = new MoveGenerator(board);
             board.SetInitialPosition();
@@ -676,7 +676,7 @@ namespace MantaBitboardEngineTest
         [TestMethod, Ignore]
         public void GetCorrectMoveTest_WhenCaptureNormal_ThenAddCapturedPiece()
         {
-            var board = new Board();
+            var board = new Board(new Mock<IHashtable>().Object);
             var factory = new MoveFactory(board);
             string position = "...k...." +
                               "........" +
@@ -695,7 +695,7 @@ namespace MantaBitboardEngineTest
         [TestMethod, Ignore]
         public void GetCorrectMoveTest_WhenCaptureEnPassant_ThenAddCapturedPiece()
         {
-            var board = new Board();
+            var board = new Board(new Mock<IHashtable>().Object);
             var factory = new MoveFactory(board);
             string position = "...k...." +
                               "..p....." +
@@ -715,7 +715,7 @@ namespace MantaBitboardEngineTest
         [TestMethod, Ignore]
         public void GetCorrectMoveTest_WhenPromotion_ThenReturnPromotionMove()
         {
-            var board = new Board();
+            var board = new Board(new Mock<IHashtable>().Object);
             var factory = new MoveFactory(board);
             string position = ".......k" +
                               "P......." +

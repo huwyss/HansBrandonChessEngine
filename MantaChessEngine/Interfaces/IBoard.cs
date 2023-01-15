@@ -37,6 +37,8 @@ namespace MantaChessEngine
         /// <param name="rank">1 to 8</param>
         void SetPiece(Piece piece, Square square);
 
+        void RemovePiece(Square square);
+
         /// <summary>
         /// Do a move and update the board
         /// </summary>

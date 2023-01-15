@@ -25,6 +25,10 @@ namespace MantaChessEngineTest.Doubles
         {
         }
 
+        public void RemovePiece(Square square)
+        {
+        }
+
         public void Move(IMove nextMove)
         {
         }

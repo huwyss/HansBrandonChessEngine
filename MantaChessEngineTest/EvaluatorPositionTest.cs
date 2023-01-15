@@ -2,16 +2,24 @@
 using MantaChessEngine;
 using MantaCommon;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace MantaChessEngineTest
 {
     [TestClass]
     public class EvaluatorPositionTest
     {
+        private Board _board;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            _board = new Board(new Mock<IHashtable>().Object);
+        }
+
         [TestMethod]
         public void EvaluateTest_WhenPawnInCenter_Then1_2()
         {
-            Board board = new Board();
             string position = "........" +
                               "........" +
                               "........" +
@@ -20,9 +28,9 @@ namespace MantaChessEngineTest
                               "........" +
                               "........" +
                               "........";
-            board.SetPosition(position);
+            _board.SetPosition(position);
 
-            var target = new EvaluatorPosition(board);
+            var target = new EvaluatorPosition(_board);
             var score = target.Evaluate();
 
             Assert.AreEqual(115, score);
@@ -31,7 +39,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenPawnIn3rdRank_Then1_1()
         {
-            Board board = new Board();
             string position = "........" +
                               "........" +
                               "........" +
@@ -40,9 +47,9 @@ namespace MantaChessEngineTest
                               "....P..." +
                               "........" +
                               "........";
-            board.SetPosition(position);
+            _board.SetPosition(position);
 
-            var target = new EvaluatorPosition(board);
+            var target = new EvaluatorPosition(_board);
             var score = target.Evaluate();
 
             Assert.AreEqual(110, score);
@@ -51,7 +58,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenKnightIsAtBorder_ThenItsAShame()
         {
-            Board board = new Board();
             string position = "..k..K.." +
                               "........" +
                               "........" +
@@ -60,9 +66,9 @@ namespace MantaChessEngineTest
                               "........" +
                               ".......N" +
                               "........";
-            board.SetPosition(position);
+            _board.SetPosition(position);
 
-            var target = new EvaluatorPosition(board);
+            var target = new EvaluatorPosition(_board);
             var score = target.Evaluate();
 
             Assert.AreEqual(300 - 5, score);
@@ -71,7 +77,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenKnightIsNotAtBorder_ThenItsOk()
         {
-            Board board = new Board();
             string position = "........" +
                               "........" +
                               "........" +
@@ -80,9 +85,9 @@ namespace MantaChessEngineTest
                               "........" +
                               "....N..." +
                               "........";
-            board.SetPosition(position);
+            _board.SetPosition(position);
 
-            var target = new EvaluatorPosition(board);
+            var target = new EvaluatorPosition(_board);
             var score = target.Evaluate();
 
             Assert.AreEqual(300, score);
@@ -91,7 +96,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenWhiteHasTwoBishopAndBlackHasBishopAndKnight_ThenWhiteBetter()
         {
-            Board board = new Board();
             string position = "........" +
                               "....bn.." +
                               "........" +
@@ -100,9 +104,9 @@ namespace MantaChessEngineTest
                               "........" +
                               "....BB.." +
                               "........";
-            board.SetPosition(position);
+            _board.SetPosition(position);
 
-            var target = new EvaluatorPosition(board);
+            var target = new EvaluatorPosition(_board);
             var score = target.Evaluate();
 
             Assert.AreEqual(true, score > 0.1f, "Two bishops should be better than bishop and knight.");
@@ -111,7 +115,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenBlackHasDoubleBishop_ThenBlackBetter()
         {
-            Board board = new Board();
             string position = "........" +
                               "....bb.." +
                               "........" +
@@ -120,9 +123,9 @@ namespace MantaChessEngineTest
                               "........" +
                               "....NB.." +
                               "........";
-            board.SetPosition(position);
+            _board.SetPosition(position);
 
-            var target = new EvaluatorPosition(board);
+            var target = new EvaluatorPosition(_board);
             var score = target.Evaluate();
 
             Assert.AreEqual(true, score < -0.1f, "Two bishops should be better than bishop and knight.");
@@ -131,7 +134,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenWhiteDidCastle_ThenWhiteBetter()
         {
-            Board board = new Board();
             string position = "rnbqk..r" +
                               "ppppppbp" +
                               ".....np." +
@@ -140,21 +142,21 @@ namespace MantaChessEngineTest
                               ".....NP." +
                               "PPPPPPBP" +
                               "RNBQK..R";
-            board.SetPosition(position);
+            _board.SetPosition(position);
 
             // white castling
-            board.Move(new CastlingMove(MantaChessEngine.CastlingType.WhiteKingSide, new King(ChessColor.White)));
-            var target = new EvaluatorPosition(board);
+            _board.Move(new CastlingMove(MantaChessEngine.CastlingType.WhiteKingSide, new King(ChessColor.White)));
+            var target = new EvaluatorPosition(_board);
             var score = target.Evaluate();
             Assert.AreEqual(true, score > 0.1f, "White did castling. so white should be better.");
 
             // black castling
-            board.Move(new CastlingMove(MantaChessEngine.CastlingType.BlackKingSide, new King(ChessColor.Black)));
+            _board.Move(new CastlingMove(MantaChessEngine.CastlingType.BlackKingSide, new King(ChessColor.Black)));
             score = target.Evaluate();
             Assert.AreEqual(true, score == 0, "White and Black did castling. They are equal.");
 
             // take black move back
-            board.Back();
+            _board.Back();
             score = target.Evaluate();
             Assert.AreEqual(true, score > 0.1f, "Black castling was taken back. so white should be better.");
         }

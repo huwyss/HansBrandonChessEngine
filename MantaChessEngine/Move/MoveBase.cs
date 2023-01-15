@@ -128,8 +128,13 @@ namespace MantaChessEngine
         
         public virtual void ExecuteMove(IBoard board)
         {
+            if (CapturedPiece != null)
+            {
+                board.RemovePiece(CapturedSquare);
+            }
+
             board.SetPiece(MovingPiece, ToSquare); // set MovingPiece to new position (and overwrite captured piece)
-            board.SetPiece(null, FromSquare); // empty MovingPiece's old position
+            board.RemovePiece(FromSquare); // empty MovingPiece's old position
 
             SetEnPassantFields(this, out Square enPassantSquare);
 
@@ -162,10 +167,11 @@ namespace MantaChessEngine
         public virtual void UndoMove(IBoard board)
         {
             board.SetPiece(MovingPiece, FromSquare);
-            board.SetPiece(null, /*Definitions.EmptyField,*/ ToSquare);     // TargetFile is equal to CapturedFile
+            board.RemovePiece(ToSquare);
+
             if (CapturedPiece != null)
             {
-                board.SetPiece(CapturedPiece, CapturedSquare); // TargetRank differs from TargetRank for en passant capture
+                board.SetPiece(CapturedPiece, CapturedSquare); // CapturedSquare differs from ToSquare for en passant capture
             }
 
             board.BoardState.Back();
@@ -196,10 +202,5 @@ namespace MantaChessEngine
                 }
             }
         }
-
-        
-
-        
-
     }
 }

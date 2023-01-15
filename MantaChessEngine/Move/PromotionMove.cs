@@ -91,14 +91,20 @@ namespace MantaChessEngine
         {
             base.ExecuteMove(board);
 
-            // replace pawn with promotion piece (queen, rook, bishop or knight)
-            _pawn = board.GetPiece(FromSquare);
+            // Store the pawn for UndoMove()
+            _pawn = board.GetPiece(ToSquare); 
+                                              
+            // Replace pawn with promotion piece (queen, rook, bishop or knight)
+            board.RemovePiece(ToSquare); // 
             board.SetPiece(_promotionPiece, ToSquare); 
         }
 
         public override void UndoMove(IBoard board)
         {
+            // Replace promotion piece with stored pawn
+            board.RemovePiece(ToSquare);
             board.SetPiece(_pawn, ToSquare);
+
             base.UndoMove(board);
         }
     }

@@ -73,7 +73,7 @@ namespace MantaConsole
 
             for (int i = 0; i < runStatisticGames; i++)
             {
-                Board board = new Board();
+                Board board = new Board(new Hashtable(1024 * 1024));
                 board.SetInitialPosition();
 
                 //board.SetPosition("........" +

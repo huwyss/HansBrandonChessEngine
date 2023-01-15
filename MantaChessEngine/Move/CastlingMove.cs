@@ -75,7 +75,7 @@ namespace MantaChessEngine
 
             var rookPiece = board.GetPiece(_rookOriginal);
             board.SetPiece(rookPiece, _rookCastled); // move rook next to king
-            board.SetPiece(null, _rookOriginal); // remove old rook
+            board.RemovePiece(_rookOriginal); // remove old rook
 
             base.ExecuteMove(board);
         }
@@ -103,8 +103,8 @@ namespace MantaChessEngine
             }
 
             var rookPiece = board.GetPiece(_rookCastled);
-            board.SetPiece(rookPiece, _rookOriginal); // move rook next to king
-            board.SetPiece(null, _rookCastled); // remove old rook
+            board.SetPiece(rookPiece, _rookOriginal); // move rook back to original square
+            board.RemovePiece(_rookCastled); // remove castled rook
 
             base.UndoMove(board);
         }

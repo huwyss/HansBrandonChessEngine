@@ -1,16 +1,25 @@
 ﻿using System;
 using MantaChessEngine;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MantaCommon;
+using Moq;
 
 namespace MantaChessEngineTest
 {
     [TestClass]
     public class EvaluatorSimpleTest
     {
+        private Board _board;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            _board = new Board(new Mock<IHashtable>().Object);
+        }
+
         [TestMethod]
         public void EvaluateTest_WhenOneWhitePawn_ThenWhite1_Black0()
         {
-            Board board = new Board();
             string position = "........" +
                               "........" +
                               "........" +
@@ -19,9 +28,9 @@ namespace MantaChessEngineTest
                               "........" +
                               "........" +
                               "P.......";
-            board.SetPosition(position);
+            _board.SetPosition(position);
 
-            var target = new EvaluatorSimple(board);
+            var target = new EvaluatorSimple(_board);
             var score = target.Evaluate();
 
             Assert.AreEqual(100, score);
@@ -30,7 +39,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenBlackAndWhitePawn_ThenWhite2_Black2()
         {
-            Board board = new Board();
             string position = "p......p" +
                               "........" +
                               "........" +
@@ -39,9 +47,9 @@ namespace MantaChessEngineTest
                               "........" +
                               "........" +
                               "P......P";
-            board.SetPosition(position);
+            _board.SetPosition(position);
 
-            var target = new EvaluatorSimple(board);
+            var target = new EvaluatorSimple(_board);
             var score = target.Evaluate();
 
             Assert.AreEqual(0, score);
@@ -50,7 +58,6 @@ namespace MantaChessEngineTest
         [TestMethod]
         public void EvaluateTest_WhenInitialPosition_ThenScoreCorrect()
         {
-            Board board = new Board();
             string position = "....k..." + // black a8-h8
                               "........" +
                               "........" +
@@ -59,9 +66,9 @@ namespace MantaChessEngineTest
                               "........" +
                               "PPPPPPPP" +
                               "RNBQKBNR"; // white a1-h1
-            board.SetPosition(position);
+            _board.SetPosition(position);
 
-            var target = new EvaluatorSimple(board);
+            var target = new EvaluatorSimple(_board);
             var score = target.Evaluate();
 
             var expectedScore = 8 * Definitions.ValuePawn +

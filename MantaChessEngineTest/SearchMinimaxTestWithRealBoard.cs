@@ -4,6 +4,7 @@ using MantaChessEngine;
 using MantaChessEngineTest.Doubles;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MantaCommon;
+using Moq;
 
 namespace MantaChessEngineTest
 {
@@ -25,7 +26,7 @@ namespace MantaChessEngineTest
         [TestInitialize]
         public void Setup()
         {
-            _board = new Board();
+            _board = new Board(new Mock<IHashtable>().Object);
             _evaluator = new EvaluatorSimple(_board);
             _gen = new MoveGenerator(_board);
         }

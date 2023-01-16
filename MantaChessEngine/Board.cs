@@ -33,7 +33,7 @@ namespace MantaChessEngine
 
             for (int i = 0; i < 64; i++)
             {
-                _board[i] = null; // Definitions.EmptyField;
+                _board[i] = null;
             }
 
             BoardState = new BoardState();

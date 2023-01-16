@@ -63,6 +63,7 @@
     <Compile Include="Doubles\FakeMoveGenerator.cs" />
     <Compile Include="Doubles\FakeMoveGeneratorMulitlevel.cs" />
     <Compile Include="Doubles\SearchMinimaxDouble_SearchLevelOverwritten.cs" />
+    <Compile Include="Hashtest.cs" />
     <Compile Include="SelectiveDepthSearchTest.cs" />
     <Compile Include="AlphaBetaPruningTest.cs" />
     <Compile Include="FenParserTest.cs" />

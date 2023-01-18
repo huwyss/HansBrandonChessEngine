@@ -1,5 +1,4 @@
 ﻿using System;
-using static MantaChessEngine.Definitions;
 using MantaCommon;
 
 namespace MantaChessEngine
@@ -37,7 +36,7 @@ namespace MantaChessEngine
             }
 
             BoardState = new BoardState();
-            InitVariables();
+            BoardState.Clear();
 
             _fenParser = new FenParser();
         }
@@ -48,14 +47,11 @@ namespace MantaChessEngine
         public void SetInitialPosition()
         {
             SetPosition(initPosition);
-            InitVariables();
-        }
-
-        private void InitVariables()
-        {
             BoardState.Clear();
         }
 
+        // Note: SetPosition must use RemovePiece() first then SetPiece().
+        // It needs to make sure that the hashtable.CurrentKey is the same every time the same position is set.
         public void SetPosition(string position)
         {
             if (position.Length != 64)
@@ -63,6 +59,17 @@ namespace MantaChessEngine
                 return;
             }
 
+            // remove all pieces from the board
+            for (var square = Square.A1; square <= Square.H8; square++)
+            {
+                var pieceToDelete = GetPiece(square);
+                if (pieceToDelete != null)
+                {
+                    RemovePiece(square);
+                }
+            }
+
+            // set the pieces from the position string
             for (int rank0 = 0; rank0 < 8; rank0++)
             {
                 for (int file0 = 0; file0 < 8; file0++)
@@ -70,7 +77,13 @@ namespace MantaChessEngine
                     var pieceSymbol = position[8 * (7 - rank0) + file0];
                     var pieceType = CommonHelper.GetPieceType(pieceSymbol);
                     var color = Helper.GetPieceColor(pieceSymbol);
-                    _board[8*rank0 + file0] = Piece.MakePiece(pieceType, color);
+
+                    var square = (Square)(8 * rank0 + file0);
+                    var piece = Piece.MakePiece(pieceType, color);
+                    if (piece != null)
+                    {
+                        SetPiece(piece, square);
+                    }
                 }
             }
         }

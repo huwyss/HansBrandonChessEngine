@@ -54,6 +54,7 @@
     <Compile Include="BitboardTest\BitboardMoveTest.cs" />
     <Compile Include="BitboardTest\EvaluatorPositionTest.cs" />
     <Compile Include="BitboardTest\HelperBitboardsTest.cs" />
+    <Compile Include="HashtableTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Search\GenericAlphaBetaPruningTest.cs" />
     <Compile Include="Search\AssertHelperBitboard.cs" />

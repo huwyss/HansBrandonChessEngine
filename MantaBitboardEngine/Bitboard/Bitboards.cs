@@ -238,7 +238,18 @@ namespace MantaBitboardEngine
         public void SetPosition(string position)
         {
             BoardState.SetState(Square.NoSquare, true, true, true, true, ChessColor.White);
-            ClearAllPieces();
+
+            // Remove Pieces
+            for (Square square = Square.A1; square <= Square.H8; square++)
+            {
+                var pieceToRemove = GetPiece(square);
+                if (pieceToRemove.Piece != PieceType.Empty)
+                {
+                    RemovePiece(square);
+                }
+            }
+             
+            // Set Pieces
             var row = 7;
             var col = 0;
 

@@ -123,6 +123,7 @@ namespace MantaBitboardEngine
 
         public string GetPvMovesFromHashtable(ChessColor color)
         {
+            var key = _hashtable.CurrentKey;
             var emptyMove = BitMove.CreateEmptyMove();
             var currentColor = color;
             HashEntry movePVHash;

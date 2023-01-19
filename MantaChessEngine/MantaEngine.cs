@@ -278,6 +278,7 @@ namespace MantaChessEngine
 
         public string GetPvMovesFromHashtable(ChessColor color)
         {
+            var key = _hashtable.CurrentKey;
             var emptyMove = new NoLegalMove();
             var currentColor = color;
             HashEntry movePVHash;

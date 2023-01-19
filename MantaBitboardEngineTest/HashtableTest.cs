@@ -1,29 +1,29 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MantaChessEngine;
+using MantaBitboardEngine;
 using MantaCommon;
 
-namespace MantaChessEngineTest
+namespace MantaBitboardEngineTest
 {
     [TestClass]
     public class HashtableTest
     {
         IHashtable _hash;
-        IBoard _board;
-        IMoveFactory<IMove> _moveFactory;
+        Bitboards _board;
+        IMoveFactory<BitMove> _moveFactory;
 
         [TestInitialize]
         public void Setup()
         {
             _hash = new Hashtable(1024);
-            _board = new Board(_hash);
-            _moveFactory = new MoveFactory(_board);
+            _board = new Bitboards(_hash);
+            _moveFactory = new BitMoveFactory(_board);
         }
 
         [TestMethod]
         public void SetPieceAndRemovePieceResultsInOriginalHashKeyTest()
         {
             var keyEmpty = _hash.CurrentKey;
-            _board.SetPiece(Piece.MakePiece(PieceType.Pawn, ChessColor.White), Square.A2);
+            _board.SetPiece(ChessColor.White, PieceType.Pawn, Square.A2);
 
             var keyWithPawn = _hash.CurrentKey;
             Assert.AreNotEqual(keyEmpty, keyWithPawn, "Keys should differ.");

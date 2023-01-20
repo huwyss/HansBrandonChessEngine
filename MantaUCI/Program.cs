@@ -235,7 +235,7 @@ namespace MantaUCI
         {
             _engine = GetMantaBitboardEngine();
 
-            //// _engine = GetMantaEngine();
+            ////_engine = GetMantaEngine();
         }
 
         private static IMantaEngine GetMantaBitboardEngine()

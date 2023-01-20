@@ -158,7 +158,6 @@ namespace MantaChessEngine
         public UciMoveRating DoBestMove()
         {
             IMoveRating<IMove> nextMove = _search.Search(_board.BoardState.SideToMove);
-            _board.Move(nextMove.Move);
             _log.Debug("Score: " + nextMove.Score);
 
             UciMoveRating uciRating = MoveRatingConverter.NewFrom(nextMove);

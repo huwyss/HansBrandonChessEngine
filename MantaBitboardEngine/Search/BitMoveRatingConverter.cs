@@ -9,6 +9,13 @@ namespace MantaBitboardEngine
         public static UciMoveRating NewFrom(IMoveRating<BitMove> moveRating)
         {
             var uciMoveRating = new UciMoveRating();
+
+            if (moveRating.SearchAborted)
+            {
+                uciMoveRating.SearchAborted = true;
+                return uciMoveRating;
+            }
+
             uciMoveRating.Move = moveRating.Move.ToUciString();
             uciMoveRating.MovingColor = moveRating.Move.MovingColor;
             uciMoveRating.PrincipalVariation = new List<string>();

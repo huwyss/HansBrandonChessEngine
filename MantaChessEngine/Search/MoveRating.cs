@@ -31,6 +31,8 @@ namespace MantaChessEngine
 
         public bool Stallmate { get; set; }
 
+        public bool SearchAborted { get; set; }
+
         public MoveRating()
         {
             Score = 0;

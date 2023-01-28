@@ -24,5 +24,6 @@ namespace MantaCommon
         int PruningCount { get; set; }
         bool IsEquallyGood(IMoveRating<TMove> otherRating);
         bool IsBetter(ChessColor color, IMoveRating<TMove> otherRating);
+        bool SearchAborted { get; set; }
     }
 }

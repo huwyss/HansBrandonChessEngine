@@ -13,8 +13,9 @@ namespace MantaCommon
 
         ////public bool Move(string moveStringUser)
         bool UndoMove();
-        UciMoveRating DoBestMove(ChessColor color);
-        UciMoveRating DoBestMove();
+        UciMoveRating CalculateBestMove(ChessColor color);
+        UciMoveRating CalculateBestMove(int maxMoveTime);
+        void AbortSearch();
         ChessColor SideToMove();
         bool IsCheck(ChessColor color);
         void Back();

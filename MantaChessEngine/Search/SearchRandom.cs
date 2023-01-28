@@ -42,5 +42,9 @@ namespace MantaChessEngine
         public void ClearPreviousPV()
         {
         }
+
+        public void AbortSearch()
+        {
+        }
     }
 }

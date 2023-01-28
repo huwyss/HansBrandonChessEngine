@@ -15,5 +15,7 @@ namespace MantaCommon
         void SetAdditionalSelectiveDepth(int additionalDepth);
 
         void ClearPreviousPV();
+
+        void AbortSearch();
     }
 }

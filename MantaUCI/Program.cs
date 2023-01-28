@@ -45,7 +45,7 @@ namespace MantaUCI
         static string[] _movesFromInitPosition = new string[0];
         static Stopwatch _stopwatch = new Stopwatch();
         static string _fenString = "";
-
+        static bool _aborting;
         static void Main(string[] args)
         {
             CreateEngine();
@@ -146,16 +146,20 @@ namespace MantaUCI
                     if (inputWords.Length >= 2 && inputWords[1].Equals("depth")) // go depth x
                     {
                         var depth = int.Parse(input.Substring(input.IndexOf("depth") + "depth".Length + 1));
-                        AnswerBestMove(depth);
+                        CalculateBestMove(depth);
+                    }
+                    else if(inputWords.Length >= 2 && inputWords[1].Equals("movetime")) // go movetime 1000 [ms]
+                    {
+                        var movetime = int.Parse(input.Substring(input.IndexOf("movetime") + "movetime".Length + 1));
+                        CalculateBestMoveTime(movetime);
                     }
                     else
                     {
                         // could be:
                         //   go
-                        //   go movetime 1000 [ms]
-                        //   go wtime w btime x winc y binc z (w, x, y, z in ms)
+                        //   //   go wtime w btime x winc y binc z (w, x, y, z in ms)
                         //   go wtime w btime x winc 0 binc movestogo y (w, x in ms, y number of moves ==> moves to do in time w)
-                        AnswerBestMove(7);
+                        CalculateBestMove(7);
                     }
                 }
                 else if (command.Equals("quit"))
@@ -193,42 +197,71 @@ namespace MantaUCI
             }
         }
 
-        private static void AnswerBestMove(int depth)
+        private static int _depth = 0;
+        private static void CalculateBestMove_depth()
+        {
+            CalculateBestMove(_depth);
+        }
+
+        private static void CalculateBestMove(int depth)
         {
             UciMoveRating bestMove = null;
             _engine.ClearPreviousPV();
-            
+            _aborting = false;
+
+            SetStartPosition();
+            DoMoves();
+
             for (int currentDepth = 1; currentDepth <= depth; currentDepth++)
             {
-                SetStartPosition();
-                DoMoves();
-                 
+                if (_aborting)
+                {
+                    break;
+                }
+
                 _engine.SetMaxSearchDepth(currentDepth);
                 _engine.SetAdditionalSelectiveDepth(3);
 
                 _stopwatch.Restart();
-                bestMove = _engine.DoBestMove();
-                _stopwatch.Stop();
-                var scoreFromEngine = bestMove.MovingColor == ChessColor.White
-                    ? bestMove.Score
-                    : - bestMove.Score;
-
-                string principalVariation = string.Empty;
-                foreach (var move in bestMove.PrincipalVariation)
+                var currentMove = _engine.CalculateBestMove(0);
+                if (!currentMove.SearchAborted)
                 {
-                    principalVariation += move + " ";
+                    bestMove = currentMove;
+
+                    _stopwatch.Stop();
+                    var scoreFromEngine = bestMove.MovingColor == ChessColor.White
+                        ? bestMove.Score
+                        : -bestMove.Score;
+
+                    ////string principalVariation = string.Empty;
+                    ////foreach (var move in bestMove.PrincipalVariation)
+                    ////{
+                    ////    principalVariation += move + " ";
+                    ////}
+
+                    var pvMoveString = _engine.GetPvMovesFromHashtable(bestMove.MovingColor);
+
+                    var duration = _stopwatch.ElapsedMilliseconds;
+                    var nps = duration != 0 ? (int)(1000 * (long)bestMove.EvaluatedPositions / duration) : 0;
+
+                    ////Console.WriteLine("info depth " + bestMove.Depth + " seldepth " + bestMove.SelectiveDepth + " score cp " + scoreFromEngine + " nodes " + bestMove.EvaluatedPositions + " nps " + nps + " time " + duration + " pv " + principalVariation);
+                    Console.WriteLine("info depth " + bestMove.Depth + " seldepth " + bestMove.SelectiveDepth + " score cp " + scoreFromEngine + " nodes " + bestMove.EvaluatedPositions + " nps " + nps + " time " + duration + " pv " + pvMoveString);
                 }
-
-                var pvMoveString = _engine.GetPvMovesFromHashtable(bestMove.MovingColor);
-
-                var duration = _stopwatch.ElapsedMilliseconds;
-                var nps = duration != 0 ? (int)(1000 * (long)bestMove.EvaluatedPositions / duration) : 0;
-
-                ////Console.WriteLine("info depth " + bestMove.Depth + " seldepth " + bestMove.SelectiveDepth + " score cp " + scoreFromEngine + " nodes " + bestMove.EvaluatedPositions + " nps " + nps + " time " + duration + " pv " + principalVariation);
-                Console.WriteLine("info depth " + bestMove.Depth + " seldepth " + bestMove.SelectiveDepth + " score cp " + scoreFromEngine + " nodes " + bestMove.EvaluatedPositions + " nps " + nps + " time " + duration + " pv " + pvMoveString);
             }
             
             Console.WriteLine("bestmove " + bestMove.Move);
+        }
+
+        private static void CalculateBestMoveTime(int moveTime)
+        {
+            _depth = 20;
+            var worker = new Thread(new ThreadStart(CalculateBestMove_depth));
+            worker.Start();
+            Thread.Sleep(moveTime);
+            _aborting = true;
+            _engine.AbortSearch();
+            
+            worker.Join();
         }
 
         private static void CreateEngine()
@@ -255,6 +288,5 @@ namespace MantaUCI
 
             return engine;
         }
-
     }
 }

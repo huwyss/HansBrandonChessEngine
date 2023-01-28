@@ -11,6 +11,10 @@ namespace MantaChessEngine
     {
         private readonly IMoveGenerator<IMove> _moveGenerator;
 
+        private const int ScoreWhiteWins = 10000;
+        private const int ScoreBlackWins = -10000;
+        private const int SignificantFactor = 8; // fast multiplier
+
         public MoveRatingFactory(IMoveGenerator<IMove> moveGenerator)
         {
             _moveGenerator = moveGenerator;
@@ -74,8 +78,9 @@ namespace MantaChessEngine
             };
         }
 
-        private const int ScoreWhiteWins = 10000;
-        private const int ScoreBlackWins = -10000;
-        private const int SignificantFactor = 8; // fast multiplier
+        public IMoveRating<IMove> CreateMoveRatingSearchAborted()
+        {
+            return new MoveRating() { SearchAborted = true };
+        }
     }
 }

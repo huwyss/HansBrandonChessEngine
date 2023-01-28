@@ -13,7 +13,7 @@ using MantaCommon;
  * - evaluation: isolated pawns
  * - evaluation: passed pawns
  * - evaluation: rooks and open and semiopen lines
- * - time management: can play moves in specified time
+ * - King safety
  * - move repetition
  * 
  * ok - Generate capture moves
@@ -22,6 +22,8 @@ using MantaCommon;
  * ok - hashtable for PV
  * ok - tests for search in bitboard
  * ok - use search for Bitboard and non-bitboard
+ * ok - hashtable for legacy and bitboard engine
+ * ok - time management: can play moves in specified time
  */
 
 

@@ -98,7 +98,7 @@ namespace MantaBitboardEngine
             return true;
         }
 
-        public UciMoveRating DoBestMove(ChessColor color)
+        public UciMoveRating CalculateBestMove(ChessColor color)
         {
             IMoveRating<BitMove> nextMove = _search.Search(color);
             _log.Debug("Score: " + nextMove.Score);
@@ -108,7 +108,7 @@ namespace MantaBitboardEngine
             return uciRating;
         }
 
-        public UciMoveRating DoBestMove()
+        public UciMoveRating CalculateBestMove(int maxMoveTime)
         {
             IMoveRating<BitMove> nextMove = _search.Search(_board.BoardState.SideToMove);
             _log.Debug("Score: " + nextMove.Score);
@@ -116,6 +116,11 @@ namespace MantaBitboardEngine
             UciMoveRating uciRating = BitMoveRatingConverter.NewFrom(nextMove);
 
             return uciRating;
+        }
+
+        public void AbortSearch()
+        {
+            _search.AbortSearch();
         }
 
         public string GetPvMovesFromHashtable(ChessColor color)

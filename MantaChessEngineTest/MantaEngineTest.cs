@@ -24,7 +24,7 @@ namespace MantaChessEngineTest
                                  "RNBQKBNR";
             engine.SetPosition(boardString);
 
-            engine.DoBestMove(ChessColor.White);
+            engine.CalculateBestMove(ChessColor.White);
 
             string actualBoard = engine.GetString();
             string expectedBoard = "rnb.kbnr" +
@@ -53,7 +53,7 @@ namespace MantaChessEngineTest
                                  "RNB.KBNR";
             engine.SetPosition(boardString);
 
-            engine.DoBestMove(ChessColor.Black);
+            engine.CalculateBestMove(ChessColor.Black);
 
             string actualBoard = engine.GetString();
             string expectedBoard = "rnbqkbnr" +
@@ -99,7 +99,7 @@ namespace MantaChessEngineTest
                                  "...K....";
             engine.SetPosition(boardString);
 
-            var actualMove = engine.DoBestMove(ChessColor.White);
+            var actualMove = engine.CalculateBestMove(ChessColor.White);
 
             string actualBoard = engine.GetString();
             string expectedBoard = boardString;
@@ -141,7 +141,7 @@ namespace MantaChessEngineTest
                                  "K.......";
             engine.SetPosition(boardString);
 
-            var actualMove = engine.DoBestMove(ChessColor.White);
+            var actualMove = engine.CalculateBestMove(ChessColor.White);
             
             string actualBoard = engine.GetString();
             string expectedBoard = boardString;
@@ -164,7 +164,7 @@ namespace MantaChessEngineTest
                                  ".......K"; // king is in check and must escape. only move is Kh1g1
             engine.SetPosition(boardString);
 
-            var actualMove = engine.DoBestMove(ChessColor.White);
+            var actualMove = engine.CalculateBestMove(ChessColor.White);
 
             Assert.AreEqual("h1g1", actualMove.Move, "should be h1g1");
         }

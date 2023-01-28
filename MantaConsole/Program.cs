@@ -186,7 +186,7 @@ namespace MantaConsole
                         // computer move for white
                         if (!whiteHuman && whiteEngine.SideToMove() == ChessColor.White)
                         {
-                            moveComputer = whiteEngine.DoBestMove(ChessColor.White);
+                            moveComputer = whiteEngine.CalculateBestMove(ChessColor.White);
 
                             if (!quiet && moveComputer.Move != "")
                             {
@@ -219,7 +219,7 @@ namespace MantaConsole
                         // computer move for black
                         else if (!blackHuman && whiteEngine.SideToMove() == ChessColor.Black)
                         {
-                            moveComputer = blackEngine.DoBestMove(ChessColor.Black);
+                            moveComputer = blackEngine.CalculateBestMove(ChessColor.Black);
 
                             if (!quiet && moveComputer.Move != "")
                             {

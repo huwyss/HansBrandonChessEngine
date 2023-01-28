@@ -31,6 +31,8 @@ namespace MantaBitboardEngine
 
         public bool Stallmate { get; set; }
 
+        public bool SearchAborted { get; set; }
+
         public BitMoveRating()
         {
             Score = 0;

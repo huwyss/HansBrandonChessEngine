@@ -8,4 +8,15 @@ namespace MantaCommon
             : base(message)
         { }
     }
+
+    public class MantaSearchAbortedException : MantaEngineException
+    {
+        public int AbortedOnLevel { get; set; }
+
+        public MantaSearchAbortedException(string message, int abortedOnLevel)
+        : base(message)
+        {
+            AbortedOnLevel = abortedOnLevel;
+        }
+    }
 }

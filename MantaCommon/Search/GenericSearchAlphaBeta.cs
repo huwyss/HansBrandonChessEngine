@@ -31,6 +31,8 @@ namespace MantaCommon
         private int evaluatedPositions;
         private int _pruningCount;
 
+        private bool _abortSearch;
+
         public GenericSearchAlphaBeta(ISearchableBoard<TMove> board, IEvaluator evaluator, IMoveGenerator<TMove> moveGenerator, IHashtable hashtable, IMoveFactory<TMove> moveFactory, IMoveRatingFactory<TMove> moveRatingFactory, int maxDepth)
         {
             _board = board;
@@ -42,6 +44,7 @@ namespace MantaCommon
             _moveRatingFactory = moveRatingFactory;
 
             _maxDepth = maxDepth;
+            _abortSearch = false;
 
             UpdateSelectiveDepth();
         }
@@ -84,49 +87,63 @@ namespace MantaCommon
         /// <returns>best move for color.</returns>
         public IMoveRating<TMove> Search(ChessColor color)
         {
-            _pruningCount = 0;
-            evaluatedPositions = 0;
-
-            var succeed = false;
-
-            IMoveRating<TMove> moveRating = null;
-
-            var windowHalfSize = AspirationWindowHalfSizeInitial;
-
-            var alphaStart = _previousPV != null ? _previousPV.Score - windowHalfSize : int.MinValue;
-            var betaStart = _previousPV != null ? _previousPV.Score + windowHalfSize : int.MaxValue;
-
-            while (!succeed)
+            try
             {
-                moveRating = SearchLevel(color, 1, alphaStart, betaStart);
+                _abortSearch = false;
+                _pruningCount = 0;
+                evaluatedPositions = 0;
 
-                _log.Debug("evaluated positons: " + evaluatedPositions);
-                moveRating.EvaluatedPositions = evaluatedPositions;
-                moveRating.Depth = _maxDepth;
-                moveRating.PruningCount = _pruningCount;
+                var succeed = false;
 
-                _previousPV = moveRating;
+                IMoveRating<TMove> moveRating = null;
 
-                if (moveRating.Score >= betaStart)
+                var windowHalfSize = AspirationWindowHalfSizeInitial;
+
+                var alphaStart = _previousPV != null ? _previousPV.Score - windowHalfSize : int.MinValue;
+                var betaStart = _previousPV != null ? _previousPV.Score + windowHalfSize : int.MaxValue;
+
+                while (!succeed)
                 {
-                    Console.WriteLine($"info Search failed high. Score >= BetaStart. Score: {moveRating.Score}, Alpha: {alphaStart}, Beta: {betaStart}");
-                    windowHalfSize *= windowHalfSize / 5; // 50 -> 500 -> 50'000
-                    betaStart += windowHalfSize;
+                    moveRating = SearchLevel(color, 1, alphaStart, betaStart);
+
+                    _log.Debug("evaluated positons: " + evaluatedPositions);
+                    moveRating.EvaluatedPositions = evaluatedPositions;
+                    moveRating.Depth = _maxDepth;
+                    moveRating.PruningCount = _pruningCount;
+
+                    _previousPV = moveRating;
+
+                    if (moveRating.Score >= betaStart)
+                    {
+                        Console.WriteLine($"info Search failed high. Score >= BetaStart. Score: {moveRating.Score}, Alpha: {alphaStart}, Beta: {betaStart}");
+                        windowHalfSize *= windowHalfSize / 5; // 50 -> 500 -> 50'000
+                        betaStart += windowHalfSize;
+                    }
+                    else if (moveRating.Score <= alphaStart)
+                    {
+                        Console.WriteLine($"info Search failed low. Score <= AlphaStart. Score: {moveRating.Score}, Alpha: {alphaStart}, Beta: {betaStart}");
+                        windowHalfSize *= windowHalfSize / 5; // 50 -> 500 -> 50'000
+                        alphaStart -= windowHalfSize;
+                    }
+                    else
+                    {
+                        succeed = true;
+                    }
                 }
-                else if (moveRating.Score <= alphaStart)
-                {
-                    Console.WriteLine($"info Search failed low. Score <= AlphaStart. Score: {moveRating.Score}, Alpha: {alphaStart}, Beta: {betaStart}");
-                    windowHalfSize *= windowHalfSize / 5; // 50 -> 500 -> 50'000
-                    alphaStart -= windowHalfSize;
-                }
-                else
-                {
-                    succeed = true;
-                }
+
+                moveRating.SelectiveDepth = moveRating.PrincipalVariation.Count();
+                return moveRating;
             }
+            catch (MantaSearchAbortedException ex)
+            {
+                var level = ex.AbortedOnLevel;
+                for (var i = 1; i < level; i++)
+                {
+                    _board.Back();
+                }
 
-            moveRating.SelectiveDepth = moveRating.PrincipalVariation.Count();
-            return moveRating;
+                return _moveRatingFactory.CreateMoveRatingSearchAborted();
+            }
         }
 
         /// <summary>
@@ -140,6 +157,11 @@ namespace MantaCommon
         /// <param name="level">Start level of search </param>
         internal virtual IMoveRating<TMove> SearchLevel(ChessColor color, int level, int alpha, int beta)
         {
+            if (_abortSearch)
+            {
+                throw new MantaSearchAbortedException($"Aborted Search on level {level}", level);
+            }
+
             IMoveRating<TMove> bestRating = _moveRatingFactory.CreateMoveRatingWithWorstScore(color);
             IMoveRating<TMove> currentRating = _moveRatingFactory.CreateMoveRating();
 
@@ -259,6 +281,11 @@ namespace MantaCommon
             _hashtable.AddHash(color, level, bestRating.Score, HashEntryType.Exact, bestRating.Move.FromSquare, bestRating.Move.ToSquare, bestRating.Move.PromotionPiece);
 
             return bestRating;
+        }
+
+        public void AbortSearch()
+        {
+            _abortSearch = true;
         }
     }
 }

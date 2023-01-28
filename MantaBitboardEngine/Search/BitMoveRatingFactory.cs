@@ -11,6 +11,10 @@ namespace MantaBitboardEngine
     {
         private readonly IMoveGenerator<BitMove> _moveGenerator;
 
+        private const int ScoreWhiteWins = 10000;
+        private const int ScoreBlackWins = -10000;
+        private const int SignificantFactor = 8; // fast multiplier
+
         public BitMoveRatingFactory(IMoveGenerator<BitMove> moveGenerator)
         {
             _moveGenerator = moveGenerator;
@@ -74,8 +78,9 @@ namespace MantaBitboardEngine
             };
         }
 
-        private const int ScoreWhiteWins = 10000;
-        private const int ScoreBlackWins = -10000;
-        private const int SignificantFactor = 8; // fast multiplier
+        public IMoveRating<BitMove> CreateMoveRatingSearchAborted()
+        {
+            return new BitMoveRating() { SearchAborted = true };
+        }
     }
 }

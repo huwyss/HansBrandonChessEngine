@@ -33,6 +33,8 @@ namespace MantaCommon
 
         public bool Stallmate { get; set; }
 
+        public bool SearchAborted { get; set; }
+
         public UciMoveRating()
         {
             Score = 0;

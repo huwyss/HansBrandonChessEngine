@@ -15,5 +15,7 @@ namespace MantaCommon
         IMoveRating<TMove> CreateMoveRatingWithWorstScore(ChessColor color);
 
         IMoveRating<TMove> CreateMoveRatingForGameEnd(ChessColor color, int curentLevel);
+
+        IMoveRating<TMove> CreateMoveRatingSearchAborted();
     }
 }

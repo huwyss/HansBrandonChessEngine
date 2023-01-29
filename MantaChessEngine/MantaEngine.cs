@@ -167,6 +167,7 @@ namespace MantaChessEngine
 
         public void AbortSearch()
         {
+            _search.AbortSearch();
         }
 
         public ChessColor SideToMove()

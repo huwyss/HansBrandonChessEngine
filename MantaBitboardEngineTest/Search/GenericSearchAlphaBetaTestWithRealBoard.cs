@@ -74,7 +74,7 @@ namespace MantaBitboardEngineTest
                                  "K.......";
             _board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart); // level 2
+            var bestRatingActual = target.SearchLevel(ChessColor.White, 2, AlphaStart, BetaStart); // level 2
             var badMove = BitMove.CreateCapture(PieceType.Bishop, Square.F4, Square.E5, PieceType.Pawn, Square.E5, PieceType.Empty, ChessColor.White, 0);
 
             Assert.AreNotEqual(badMove, bestRatingActual.Move, "White bishop should not capture pawn.");
@@ -104,7 +104,7 @@ namespace MantaBitboardEngineTest
                                  //"........" +
                                  //"K.......";
 
-            var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart); // level 3
+            var bestRatingActual = target.SearchLevel(ChessColor.White, 3, AlphaStart, BetaStart); // level 3
 
             var expectedMove = BitMove.CreateCapture(PieceType.Bishop, Square.F4, Square.E5, PieceType.Pawn, Square.E5, PieceType.Empty, ChessColor.White, 0);
             var expectedMove2 = BitMove.CreateCapture(PieceType.Knight, Square.F3, Square.E5, PieceType.Pawn, Square.E5, PieceType.Empty, ChessColor.White, 0);
@@ -130,7 +130,7 @@ namespace MantaBitboardEngineTest
                                  "K.......";
             _board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart); // level 4
+            var bestRatingActual = target.SearchLevel(ChessColor.White, 4, AlphaStart, BetaStart); // level 4
             var badMove = BitMove.CreateCapture(PieceType.Bishop, Square.F4, Square.E5, PieceType.Pawn, Square.E5, PieceType.Empty, ChessColor.White, 0);
             var badMove2 = BitMove.CreateCapture(PieceType.Knight, Square.F3, Square.E5, PieceType.Pawn, Square.E5, PieceType.Empty, ChessColor.White, 0);
 
@@ -153,7 +153,7 @@ namespace MantaBitboardEngineTest
                                  "........";
             _board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart); // level 3
+            var bestRatingActual = target.SearchLevel(ChessColor.White, 3, AlphaStart, BetaStart); // level 3
 
             var wrongMove = BitMove.CreateCapture(PieceType.Rook, Square.H8, Square.E8, PieceType.Queen, Square.E8, PieceType.Empty, ChessColor.White, 0);
             var wrongMove2 = BitMove.CreateCapture(PieceType.King, Square.E4, Square.D5, PieceType.Bishop, Square.E8, PieceType.Empty, ChessColor.White, 0);
@@ -176,7 +176,7 @@ namespace MantaBitboardEngineTest
                                  "...K....";
             _board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart); // level 3
+            var bestRatingActual = target.SearchLevel(ChessColor.White, 3, AlphaStart, BetaStart); // level 3
             var expectedMove = BitMove.CreateEmptyMove();
 
             Assert.AreEqual(expectedMove, bestRatingActual.Move, "White is check mate. no legal move possible.");
@@ -221,7 +221,7 @@ namespace MantaBitboardEngineTest
                                  "K.......";
             _board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(ChessColor.Black, 1, AlphaStart, BetaStart); // level 2
+            var bestRatingActual = target.SearchLevel(ChessColor.Black, 2, AlphaStart, BetaStart); // level 2
             var badMove = BitMove.CreateCapture(PieceType.Bishop, Square.F6, Square.E5, PieceType.Pawn, Square.E5, PieceType.Empty, ChessColor.Black, 0);
 
             Assert.AreNotEqual(badMove, bestRatingActual.Move, "Black bishop should not capture pawn.");
@@ -251,7 +251,7 @@ namespace MantaBitboardEngineTest
             //"........" +
             //"K.......";
 
-            var bestRatingActual = target.SearchLevel(ChessColor.Black, 1, AlphaStart, BetaStart); // level 3
+            var bestRatingActual = target.SearchLevel(ChessColor.Black, 3, AlphaStart, BetaStart); // level 3
             var expectedMove = BitMove.CreateCapture(PieceType.Bishop, Square.D6, Square.E5, PieceType.Pawn, Square.E5, PieceType.Empty, ChessColor.Black, 0);
             var expectedMove2 = BitMove.CreateCapture(PieceType.Knight, Square.D7, Square.E5, PieceType.Pawn, Square.E5, PieceType.Empty, ChessColor.Black, 0);
 
@@ -276,7 +276,7 @@ namespace MantaBitboardEngineTest
                                  "K.......";
             _board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(ChessColor.Black, 1, AlphaStart, BetaStart); // level 4
+            var bestRatingActual = target.SearchLevel(ChessColor.Black, 4, AlphaStart, BetaStart); // level 4
             var badMove = BitMove.CreateCapture(PieceType.Bishop, Square.D6, Square.E5, PieceType.Pawn, Square.E5, PieceType.Empty, ChessColor.Black, 0);
             var badMove2 = BitMove.CreateCapture(PieceType.Knight, Square.D7, Square.E5, PieceType.Pawn, Square.E5, PieceType.Empty, ChessColor.Black, 0);
 
@@ -303,7 +303,7 @@ namespace MantaBitboardEngineTest
                                  "K.......";
             _board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart);
+            var bestRatingActual = target.SearchLevel(ChessColor.White, 2, AlphaStart, BetaStart);
 
             AssertHelperBitboard.StallMate(bestRatingActual);
             Assert.AreEqual(BitMove.CreateEmptyMove(), bestRatingActual.Move, "Should be NoLegalMove, white is stalemate");
@@ -323,7 +323,7 @@ namespace MantaBitboardEngineTest
                                  "K.......";
             _board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart);
+            var bestRatingActual = target.SearchLevel(ChessColor.White, 2, AlphaStart, BetaStart);
 
             Assert.AreEqual(BitMove.CreateEmptyMove(), bestRatingActual.Move, "Should be NoLegalMove, white is checkmate");
             AssertHelperBitboard.BlackWins(bestRatingActual);
@@ -343,7 +343,7 @@ namespace MantaBitboardEngineTest
                                  "R.BnK..R";
             _board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(ChessColor.Black, 1, AlphaStart, BetaStart);
+            var bestRatingActual = target.SearchLevel(ChessColor.Black, 2, AlphaStart, BetaStart);
 
             Assert.AreEqual(BitMove.CreateEmptyMove(), bestRatingActual.Move, "Should be NoLegalMove, Black is checkmate");
             AssertHelperBitboard.WhiteWins(bestRatingActual);
@@ -364,7 +364,7 @@ namespace MantaBitboardEngineTest
                                  "K.......";
             _board.SetPosition(boardString);
 
-            var bestRatingActual = target.SearchLevel(ChessColor.Black, 1, AlphaStart, BetaStart);
+            var bestRatingActual = target.SearchLevel(ChessColor.Black, 4, AlphaStart, BetaStart);
 
             var expectedMove = BitMove.CreateMove(PieceType.Queen, Square.H2, Square.B2, PieceType.Empty, ChessColor.Black, 0);
 

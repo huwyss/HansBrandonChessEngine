@@ -64,13 +64,14 @@ namespace MantaCommon
             UpdateSelectiveDepth();
         }
 
+        // Note: _selectiveDepth <= 0
         private void UpdateSelectiveDepth()
         {
             _selectiveDepth = _additionalSelectiveDepth <= 0
-                ? _maxDepth
+                ? 0
                 : (_maxDepth + _additionalSelectiveDepth) % 2 == 0
-                    ? _maxDepth + _additionalSelectiveDepth
-                    : _maxDepth + _additionalSelectiveDepth + 1;
+                    ? -_additionalSelectiveDepth
+                    : -_additionalSelectiveDepth - 1;
         }
 
         public void ClearPreviousPV()
@@ -104,7 +105,7 @@ namespace MantaCommon
 
                 while (!succeed)
                 {
-                    moveRating = SearchLevel(color, 1, alphaStart, betaStart);
+                    moveRating = SearchLevel(color, _maxDepth, alphaStart, betaStart);
 
                     _log.Debug("evaluated positons: " + evaluatedPositions);
                     moveRating.EvaluatedPositions = evaluatedPositions;
@@ -168,7 +169,7 @@ namespace MantaCommon
             var hasLegalMoves = false; // we do not know yet if there are legal moves
 
             List<TMove> movesToEvaluate;
-            if (level <= _maxDepth)
+            if (level > 0)
             {
                 movesToEvaluate = _moveGenerator.GetAllMoves(color).ToList();
             }
@@ -214,15 +215,15 @@ namespace MantaCommon
 
                 hasLegalMoves = true;
 
-                if (level < _maxDepth || (level < _selectiveDepth && currentMove.IsCapture())) // we need to do more move levels...
-                //// if (level < _maxDepth)
-                //// if (level < _selectiveDepth)
+                if (level > 1 || (level > _selectiveDepth + 1 && currentMove.IsCapture())) // we need to do more move levels...
+                //// if (level > 1)
+                //// if (level > _selectiveDepth + 1)
                 {
-                    currentRating = SearchLevel(CommonHelper.OtherColor(color), level + 1, alpha, beta); // recursive...
+                    currentRating = SearchLevel(CommonHelper.OtherColor(color), level - 1, alpha, beta); // recursive...
 
                     if (currentRating == null) // we are in a level > maxdepth and tried to find a capture move but there was no capture move.
                     {
-                        currentRating = _moveRatingFactory.CreateMoveRating(_evaluator.Evaluate(), level);
+                        currentRating = _moveRatingFactory.CreateMoveRating(_evaluator.Evaluate(), -level + _maxDepth + 1);
                         evaluatedPositions++;
                     }
 
@@ -231,7 +232,7 @@ namespace MantaCommon
                 else // we reached the bottom of the tree and evaluate the position
                 {
                     currentRating.Score = _evaluator.Evaluate();
-                    currentRating.EvaluationLevel = level;
+                    currentRating.EvaluationLevel = -level + _maxDepth + 1;
                     evaluatedPositions++;
                     _board.Back();
                 }
@@ -239,7 +240,7 @@ namespace MantaCommon
                 // update the best move in the current level
                 if (currentRating.IsBetter(color, bestRating))
                 {
-                    if (level == _maxDepth && currentRating.EvaluationLevel < bestRating.EvaluationLevel)
+                    if (level == 0 && currentRating.EvaluationLevel > bestRating.EvaluationLevel)
                     {
                         currentRating.PrincipalVariation.Clear(); // wir löschen zu oft. Warum werden meistens (?) alle auf depth > maxDepth gelöscht ?
                     }
@@ -271,7 +272,7 @@ namespace MantaCommon
             // no legal moves means the game is over. It is either stall mate or check mate.
             if (!hasLegalMoves)
             {
-                return _moveRatingFactory.CreateMoveRatingForGameEnd(color, level);
+                return _moveRatingFactory.CreateMoveRatingForGameEnd(color, -level + _maxDepth + 1);
             }
 
             bestRating.Alpha = alpha;

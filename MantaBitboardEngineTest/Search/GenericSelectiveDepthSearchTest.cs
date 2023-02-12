@@ -47,7 +47,7 @@ namespace MantaBitboardEngineTest
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { false, false, false, false });
 
             var target = new GenericSearchAlphaBeta<BitMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 2);
-            var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart);
+            var bestRatingActual = target.SearchLevel(ChessColor.White, 2, AlphaStart, BetaStart);
 
             Assert.AreEqual(-300, bestRatingActual.Score);
             Assert.AreEqual(bestMoveWhite, bestRatingActual.Move);
@@ -85,8 +85,8 @@ namespace MantaBitboardEngineTest
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { false/*2a*/, false/*2b*/, false/*2c*/, false/*2d*/ });
 
             var target = new GenericSearchAlphaBeta<BitMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 2);
-            target.SetAdditionalSelectiveDepth(1); // selectiveDepth = 4
-            var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart);
+            target.SetAdditionalSelectiveDepth(1); // selectiveDepth = -2
+            var bestRatingActual = target.SearchLevel(ChessColor.White, 2, AlphaStart, BetaStart);
 
             Assert.AreEqual(400, bestRatingActual.Score);
             Assert.AreEqual(bestMoveWhite, bestRatingActual.Move);
@@ -123,8 +123,8 @@ namespace MantaBitboardEngineTest
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { false/*2a*/, false/*2b*/, false/*2c*/, false/*2d*/ });
 
             var target = new GenericSearchAlphaBeta<BitMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 2);
-            target.SetAdditionalSelectiveDepth(1); // selectiveDepth = 4
-            var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart);
+            target.SetAdditionalSelectiveDepth(1); // selectiveDepth = -2
+            var bestRatingActual = target.SearchLevel(ChessColor.White, 2, AlphaStart, BetaStart);
 
             Assert.AreEqual(400, bestRatingActual.Score);
             Assert.AreEqual(bestMoveWhite, bestRatingActual.Move);
@@ -161,8 +161,8 @@ namespace MantaBitboardEngineTest
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { false/*2a*/, false/*2b*/, false/*2c*/, false/*2d*/ });
 
             var target = new GenericSearchAlphaBeta<BitMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 2);
-            target.SetAdditionalSelectiveDepth(1); // selectiveDepth = 4
-            var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart);
+            target.SetAdditionalSelectiveDepth(1); // selectiveDepth = -2
+            var bestRatingActual = target.SearchLevel(ChessColor.White, 2, AlphaStart, BetaStart);
 
             Assert.AreEqual(5, evalFake.EvaluateCalledCounter);
 
@@ -200,8 +200,8 @@ namespace MantaBitboardEngineTest
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { false/*2a*/, false/*2b*/, false/*2c*/, false/*2d*/ });
 
             var target = new GenericSearchAlphaBeta<BitMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 2);
-            target.SetAdditionalSelectiveDepth(1); // selectiveDepth = 4
-            var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart);
+            target.SetAdditionalSelectiveDepth(1); // selectiveDepth = -2
+            var bestRatingActual = target.SearchLevel(ChessColor.White, 2, AlphaStart, BetaStart);
 
             Assert.AreEqual(5, evalFake.EvaluateCalledCounter);
 
@@ -242,8 +242,8 @@ namespace MantaBitboardEngineTest
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { false/*2a*/, false/*2b*/, false/*2c*/, false/*2d*/ });
 
             var target = new GenericSearchAlphaBeta<BitMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 2);
-            target.SetAdditionalSelectiveDepth(1); // selectiveDepth = 4
-            var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart);
+            target.SetAdditionalSelectiveDepth(1); // selectiveDepth = -2
+            var bestRatingActual = target.SearchLevel(ChessColor.White, 2, AlphaStart, BetaStart);
 
             Assert.AreEqual(5, evalFake.EvaluateCalledCounter);
 
@@ -284,8 +284,8 @@ namespace MantaBitboardEngineTest
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { false/*2a*/, false/*2b*/, false/*2c*/, false/*2d*/ });
 
             var target = new GenericSearchAlphaBeta<BitMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 2);
-            target.SetAdditionalSelectiveDepth(1); // selectiveDepth = 4
-            var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart);
+            target.SetAdditionalSelectiveDepth(1); // selectiveDepth = -2
+            var bestRatingActual = target.SearchLevel(ChessColor.White, 2, AlphaStart, BetaStart);
 
             Assert.AreEqual(5, evalFake.EvaluateCalledCounter);
 

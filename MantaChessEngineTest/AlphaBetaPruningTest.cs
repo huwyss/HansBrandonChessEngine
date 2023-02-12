@@ -50,7 +50,7 @@ namespace MantaChessEngineTest
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { false, false, false });
 
             var target = new GenericSearchAlphaBeta<IMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 2);
-            var bestRatingActual = target.SearchLevel(ChessColor.Black, 1, AlphaStart, BetaStart);
+            var bestRatingActual = target.SearchLevel(ChessColor.Black, 2, AlphaStart, BetaStart);
 
             Assert.AreEqual(300, bestRatingActual.Score);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
@@ -75,7 +75,7 @@ namespace MantaChessEngineTest
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { false, false, false, false });
 
             var target = new GenericSearchAlphaBeta<IMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 2);
-            var bestRatingActual = target.SearchLevel(ChessColor.Black, 1, AlphaStart, BetaStart);
+            var bestRatingActual = target.SearchLevel(ChessColor.Black, 2, AlphaStart, BetaStart);
 
             Assert.AreEqual(300, bestRatingActual.Score);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
@@ -100,7 +100,7 @@ namespace MantaChessEngineTest
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { false, false, false });
 
             var target = new GenericSearchAlphaBeta<IMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 2);
-            var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart);
+            var bestRatingActual = target.SearchLevel(ChessColor.White, 2, AlphaStart, BetaStart);
 
             Assert.AreEqual(-300, bestRatingActual.Score);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
@@ -126,7 +126,7 @@ namespace MantaChessEngineTest
 
 
             var target = new GenericSearchAlphaBeta<IMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 2);
-            var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart);
+            var bestRatingActual = target.SearchLevel(ChessColor.White, 2, AlphaStart, BetaStart);
 
             Assert.AreEqual(-300, bestRatingActual.Score);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
@@ -159,7 +159,7 @@ namespace MantaChessEngineTest
 
 
             var target = new GenericSearchAlphaBeta<IMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 3);
-            var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart);
+            var bestRatingActual = target.SearchLevel(ChessColor.White, 3, AlphaStart, BetaStart);
 
             Assert.AreEqual(400, bestRatingActual.Score);
             Assert.AreEqual(bestMove, bestRatingActual.Move);
@@ -190,7 +190,7 @@ namespace MantaChessEngineTest
             moveGenFake.SetIsChecks(ChessColor.Black, new List<bool>() { false, false, false });
 
             var target = new GenericSearchAlphaBeta<IMove>(boardMock, evalFake, moveGenFake, hashMock, null, moveRatingFactory, 3);
-            var bestRatingActual = target.SearchLevel(ChessColor.White, 1, AlphaStart, BetaStart);
+            var bestRatingActual = target.SearchLevel(ChessColor.White, 3, AlphaStart, BetaStart);
 
             Assert.AreEqual(300, bestRatingActual.Score);
             Assert.AreEqual(bestMove, bestRatingActual.Move);

@@ -20,7 +20,9 @@ namespace MantaCommon
 
 	public enum HashEntryType
 	{
-		Exact = 0
+		Exact = 0,
+		Alpha = 1,
+		Beta = 2,			
 	}
 
 	public interface IHashtable

@@ -1,10 +1,10 @@
-# Manta Chess Engine
+# Hans-Brandon Chess Engine
 
 A strong chess engine or at least it is supposed to beat me.
 
 ## Current Status
 
-Manta Chess Engine is reasonably playing. It beats Nelson from chess.com.
+Hans-Brandon Chess Engine is reasonably playing. It beats Nelson from chess.com.
 
 ### Implemented features:
 - Limited implementation of UCI. 

@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C9070427-C3C3-4274-9997-4DE71BAE9CFA}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>PerformanceMeter</RootNamespace>
-    <AssemblyName>PerformanceMeter</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <ProjectGuid>{A559F438-282F-4769-B295-2CEFA266D3A6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HBCommonTest</RootNamespace>
+    <AssemblyName>HBCommonTest</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,21 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\HansBrandonBitboardEngine\HansBrandonBitboardEngine.csproj">
-      <Project>{c52486da-4c3f-4431-a99c-9c9191d47f51}</Project>
-      <Name>HansBrandonBitboardEngine</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HansBrandonChessEngine\HansBrandonChessEngine.csproj">
-      <Project>{64c19389-904b-4c0b-8dfb-8a907931c056}</Project>
-      <Name>HansBrandonChessEngine</Name>
-    </ProjectReference>
     <ProjectReference Include="..\HBCommon\HBCommon.csproj">
       <Project>{a16f618c-7e58-4d1a-9864-989affba87ee}</Project>
       <Name>HBCommon</Name>

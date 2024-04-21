@@ -1,14 +1,14 @@
 ﻿using System;
-using MantaChessEngine;
-using MantaBitboardEngine;
-using MantaCommon;
+using HansBrandonChessEngine;
+using HansBrandonBitboardEngine;
+using HBCommon;
 using System.Diagnostics;
 
 namespace PerformanceMeter
 {
     class Program
     {
-        static IMantaEngine _engine = null;
+        static IHansBrandonEngine _engine = null;
         static Stopwatch _stopwatch = new Stopwatch();
         static Stopwatch _stopwatchTotal = new Stopwatch();
 
@@ -75,18 +75,18 @@ namespace PerformanceMeter
 
         private static void CreateEngine()
         {
-            var engine = new MantaEngine();
-            ////_engine = new MantaEngine(EngineType.AlphaBeta);
-            ////_engine = new MantaEngine(EngineType.MinimaxPosition);
-            ////_engine = new MantaEngine(EngineType.Random);
+            var engine = new HansBrandonEngine();
+            ////_engine = new HansBrandonEngine(EngineType.AlphaBeta);
+            ////_engine = new HansBrandonEngine(EngineType.MinimaxPosition);
+            ////_engine = new HansBrandonEngine(EngineType.Random);
             engine.SetMaxSearchDepth(3);
 
-            _engine = engine as IMantaEngine;
+            _engine = engine as IHansBrandonEngine;
         }
 
         private static void CreateBitboardEngine()
         {
-            _engine = new MantaBitboardEngine.MantaBitboardEngine();
+            _engine = new HansBrandonBitboardEngine.HansBrandonBitboardEngine();
         }
     }
 }
